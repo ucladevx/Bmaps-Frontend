@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Hello Quora</title>
+
+  <script src="https://unpkg.com/react@15/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+  <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+
+    const HelloQuora = function(props) {
+      return (
+        <h1>Why, hello there Quora.</h1>
+      );
+    }
+
+    ReactDOM.render(
+      <HelloQuora />,
+      document.getElementById("content")
+    );
+  </script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v0.40.0/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.40.0/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+  <div id="content">
+  </div>
+  <div id='map' style='width: 400px; height: 300px;'></div>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidGFuemVlbGEiLCJhIjoiY2o5OTh0enVlMHBtNjMybHM1a2FxZjd6NCJ9.BluyLPr5_3NWWF9dMwkmvA';
+    var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v10'
+    });
+    </script>
+</body>
+</html>
