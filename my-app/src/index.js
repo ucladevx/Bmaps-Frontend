@@ -6,11 +6,7 @@ import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 import MapboxGL from 'mapbox-gl'
 
 //COMPONENTs
-import MapDisplay from './components/mapDisplay'
-
-// // ES5
-// var Layer = ReactMapboxGl.Layer;
-// var Feature = ReactMapboxGl.Feature;
+// import MapDisplay from './components/mapDisplay'
 
 const Map = ReactMapboxGl({
   accessToken: "pk.eyJ1IjoidGFuemVlbGEiLCJhIjoiY2o5OTh0enVlMHBtNjMybHM1a2FxZjd6NCJ9.BluyLPr5_3NWWF9dMwkmvA"
