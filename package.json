@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ucladevx/Mappening-Frontend/issues"
   },
-  "homepage": "https://github.com/ucladevx/Mappening-Frontend#readme"
+  "homepage": "https://github.com/ucladevx/Mappening-Frontend#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
