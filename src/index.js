@@ -8,6 +8,10 @@ import MapboxGL from 'mapbox-gl'
 //COMPONENTs
 // import MapDisplay from './components/mapDisplay'
 
+// // ES5
+// var Layer = ReactMapboxGl.Layer;
+// var Feature = ReactMapboxGl.Feature;
+
 const Map = ReactMapboxGl({
   accessToken: "pk.eyJ1IjoidGFuemVlbGEiLCJhIjoiY2o5OTh0enVlMHBtNjMybHM1a2FxZjd6NCJ9.BluyLPr5_3NWWF9dMwkmvA"
 });
@@ -28,8 +32,6 @@ const App = () =>{
                   <Feature coordinates={[-0.481747846041145, 51.3233379650232]}/>
                 </Layer>
             </Map>
-            <MapDisplay/>
-            <h1>Yess</h1>
         </div>
     )
 }
