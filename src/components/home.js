@@ -5,7 +5,7 @@ import MapboxGL from 'mapbox-gl'
 
 import EventsList from './eventsList'
 
-const URL_ARTISTS = 'http://localhost:3004/artists'
+const URL_ARTISTS = 'http://localhost:5000/events'
 const Map = ReactMapboxGl({
   accessToken: "pk.eyJ1IjoidGFuemVlbGEiLCJhIjoiY2o5OTh0enVlMHBtNjMybHM1a2FxZjd6NCJ9.BluyLPr5_3NWWF9dMwkmvA"
 });
