@@ -2,36 +2,14 @@ import React, { Component } from 'react'
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 import MapboxGL from 'mapbox-gl'
 
-
-import EventsList from './eventsList'
-
-const URL_ARTISTS = 'http://localhost:5000/events'
 const Map = ReactMapboxGl({
   accessToken: "pk.eyJ1IjoidGFuemVlbGEiLCJhIjoiY2o5OTh0enVlMHBtNjMybHM1a2FxZjd6NCJ9.BluyLPr5_3NWWF9dMwkmvA"
 });
 
-class Home extends Component {
-    constructor(props){
-        super(props);
-
-        this.state = {
-            events:''
-        }
-    }
-
-    componentDidMount(){
-        fetch(URL_ARTISTS,{
-            method:'GET'
-        })
-        .then(response => response.json())
-        .then(json => {
-            console.log(json)
-        })
-    }
+class MapDisplay extends Component {
     render() {
         return(
             <div>
-                <EventsList></EventsList>
                 <Map
                   style="mapbox://styles/mapbox/streets-v9"
                   containerStyle={{
@@ -51,4 +29,4 @@ class Home extends Component {
     }
 }
 
-export default Home;
+export default MapDisplay;

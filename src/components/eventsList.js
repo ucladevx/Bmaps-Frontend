@@ -8,3 +8,23 @@ const EventsList = (props) => {
 }
 
 export default EventsList;
+
+
+// import React from 'react'
+// import { Link } from 'react-router-dom'
+//
+// const EventsList = (props) => {
+//     console.log(props)
+//
+//
+//     const list = () => {
+//
+//     }
+//     return (
+//         <div className="eventsList">
+//             {list(props)}
+//         </div>
+//     )
+// }
+//
+// export default EventsList;
