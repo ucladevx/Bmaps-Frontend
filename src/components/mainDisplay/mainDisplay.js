@@ -5,8 +5,8 @@ import { BrowserRouter, Route } from 'react-router-dom'
 
 //COMPONENTs
 // import MapDisplay from './components/mapDisplay'
-import MapDisplay from './mapDisplay';
-import EventsList from './eventsList'
+import MapDisplay from './map/mapDisplay';
+import EventsList from './sidebar/eventsList'
 const URL_ARTISTS = 'http://localhost:5000/events'
 
 class MainDisplay extends Component {
