@@ -1,30 +1,36 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const EventsList = (props) => {
-    console.log(props)
+
+
+    const list = ({allEvents}) => {
+        console.log("haha")
+        console.log(allEvents)
+        if (allEvents){
+            return allEvents.map((item)=>{
+                const style = {
+                        background:`url('/images/covers/${item.cover}.jpg') no-repeat`
+                    }
+                return (
+                    <Link key={item.id} to={`/event/${item.id}`}
+                        className="event_item"
+                        style={style}
+                        >
+                        <div>{item.name}</div>
+                    </Link>
+                )
+            })
+        }
+
+    }
     return (
-        <div>List</div>
+        <div className="eventsList">
+            <h4>Browse the events</h4>
+            {list(props)}
+            <div>hahah</div>
+        </div>
     )
 }
 
 export default EventsList;
-
-
-// import React from 'react'
-// import { Link } from 'react-router-dom'
-//
-// const EventsList = (props) => {
-//     console.log(props)
-//
-//
-//     const list = () => {
-//
-//     }
-//     return (
-//         <div className="eventsList">
-//             {list(props)}
-//         </div>
-//     )
-// }
-//
-// export default EventsList;

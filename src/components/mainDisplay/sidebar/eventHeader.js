@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 
-
-class Event extends Component {
+class EventHeader extends Component {
     render() {
         return(
             <div>
-            Hello
+            eventheader
             </div>
         )
     }
 }
 
-export default Event;
+export default EventHeader;
