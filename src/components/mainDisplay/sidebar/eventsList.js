@@ -8,10 +8,16 @@ const EventsList = (props) => {
         console.log("haha")
         console.log(allEvents)
         if (allEvents){
-            console.log("hehe")
             return allEvents.map((item)=>{
+                const style = {
+                        background:`url('/images/covers/${item.cover}.jpg') no-repeat`
+                    }
                 return (
-                    <div>Item</div>
+                    <Link key={item.id} to={`/artist/${item.id}`}
+                        className="artist_item"
+                        style={style}>
+                        <div>{item.name}</div>
+                    </Link>
                 )
             })
         }

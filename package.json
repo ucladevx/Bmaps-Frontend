@@ -7,6 +7,7 @@
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "react-mapbox-gl": "^2.7.0",
+    "react-router": "^4.0.0",
     "react-router-dom": "^4.0.0",
     "react-scripts": "1.0.14",
     "webpack": "^3.8.1"

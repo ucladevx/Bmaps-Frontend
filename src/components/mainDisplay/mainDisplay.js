@@ -5,6 +5,7 @@ import { BrowserRouter, Route } from 'react-router-dom'
 
 //COMPONENTs
 // import MapDisplay from './components/mapDisplay'
+import Navbar from './../header/navbar'
 import MapDisplay from './map/mapDisplay';
 import EventsList from './sidebar/eventsList'
 const URL_ARTISTS = 'http://localhost:3004/artists'
@@ -34,12 +35,9 @@ class MainDisplay extends Component {
     render() {
         return(
             <div>
+                <Navbar></Navbar>
                 <EventsList allEvents={this.state.events}></EventsList>
-                <BrowserRouter>
-                    <div>
-                        <Route exact path="/" component={MapDisplay}/>
-                    </div>
-                </BrowserRouter>
+                <MapDisplay></MapDisplay>
             </div>
         )
     }
