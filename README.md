@@ -15,7 +15,14 @@ Clone this repository with `git clone https://github.com/ucladevx/Mappening-Fron
 * `npm install` to install packages. Install any necessary peer dependencies.
 
 * Run [Mappening-Backend] (https://github.com/ucladevx/Mappening-Backend)
-    * Navigate to http://localhost:5000/events
+    * Navigate to http://localhost:5000/api/events
+* OR
+* Run fake json server in case backend doesn't appear to work (testing purposes)
+    * Modify src/components/mainDisplay/mainDisplay.js:
+      * `const URL_EVENTS = "http://localhost:3004/artists"`
+    * Run`json-server --watch db.json --port 3004`
+    * Navigate to http://localhost:3004/artists
+
 
 * Run react app `npm start`
     * Navigate to http://localhost:8000
