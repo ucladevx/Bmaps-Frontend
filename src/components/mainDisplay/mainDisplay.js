@@ -7,13 +7,12 @@ import { BrowserRouter, Route } from 'react-router-dom'
 // import MapDisplay from './components/mapDisplay'
 import MapDisplay from './map/mapDisplay';
 import EventsList from './sidebar/eventsList'
-const URL_ARTISTS = 'http://localhost:5000/events'
+const URL_ARTISTS = 'http://localhost:3004/artists'
 
 class MainDisplay extends Component {
 
     constructor(props){
         super(props);
-
         this.state = {
             events:''
         }
@@ -25,14 +24,17 @@ class MainDisplay extends Component {
         })
         .then(response => response.json())
         .then(json => {
-            console.log(json)
+            this.setState({
+                events: json
+            })
+
         })
     }
 
     render() {
         return(
             <div>
-                <EventsList></EventsList>
+                <EventsList allEvents={this.state.events}></EventsList>
                 <BrowserRouter>
                     <div>
                         <Route exact path="/" component={MapDisplay}/>
