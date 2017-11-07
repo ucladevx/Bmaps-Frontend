@@ -8,7 +8,7 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import Navbar from './../header/navbar'
 import MapDisplay from './map/mapDisplay';
 import EventsList from './sidebar/eventsList'
-const URL_ARTISTS = 'http://localhost:3004/artists'
+const URL_ARTISTS = 'http://localhost:8000/events'
 
 class MainDisplay extends Component {
 
