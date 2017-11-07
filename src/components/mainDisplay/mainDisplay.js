@@ -8,7 +8,8 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import Navbar from './../header/navbar'
 import MapDisplay from './map/mapDisplay';
 import EventsList from './sidebar/eventsList'
-const URL_ARTISTS = 'http://localhost:8000/events'
+const URL_EVENTS = 'http://localhost:5000/api/events'
+ // const URL_EVENTS = 'http://localhost:3004/artists'
 
 class MainDisplay extends Component {
 
@@ -20,7 +21,7 @@ class MainDisplay extends Component {
     }
 
     componentDidMount(){
-        fetch(URL_ARTISTS,{
+        fetch(URL_EVENTS,{
             method:'GET'
         })
         .then(response => response.json())
