@@ -1,24 +1,37 @@
 {
   "name": "mappening-frontend",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "mapbox-gl": "^0.40.1",
-    "react": "^15.6.2",
-    "react-dom": "^15.6.2",
-    "react-mapbox-gl": "^2.7.0",
-    "react-router": "^4.0.0",
-    "react-router-dom": "^4.0.0",
-    "react-scripts": "1.0.14",
-    "webpack": "^3.8.1"
-  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node Server.js"
   },
-  "devDependencies": {
-    "react-app-rewired": "^1.3.3"
-  }
+  "dependencies": {
+    "animate-on-scroll": "^1.2.3",
+    "body-parser": "^1.18.2",
+    "express": "latest",
+    "handlebars": "^4.0.10",
+    "hbs": "^4.0.1",
+    "morgan": "^1.8.2",
+    "nconf": "^0.8.4",
+    "nodemailer": "^4.0.1",
+    "nodemailer-mailgun-transport": "^1.3.5",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "xoauth2": "^1.2.0"
+  },
+  "engines": {
+    "node": "6.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ucladevx/Mappening-Frontend"
+  },
+  "author": "",
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "ISC"
 }
