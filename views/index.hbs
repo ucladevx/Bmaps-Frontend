@@ -1,3 +1,21 @@
 {{> header}}
 
+<h1>Handlebars JS Example</h1>
+<script id="some-template" type="text/x-handlebars-template"> <table>
+    <thead>
+        <th>Name</th>
+        <th>Job Title</th>
+        <th>Twitter</th>
+    </thead>
+    <tbody>
+        \{{#each artists}}
+        <tr>
+            <td>\{{this.name}}</td>
+        </tr>
+        \{{/each}}
+    </tbody>
+</table>
+</script>
+
+
 {{> footer}}
