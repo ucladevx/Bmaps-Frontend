@@ -4,7 +4,7 @@
 <div class="container home-container">
     <div class="row home-row">
     <div id="events-mount" class="col-sm-4 col-md-4"></div>
-    <div class="map-display col-sm-8 col-md-8">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</div>
+    <div class="map-display col-sm-8 col-md-8" id="map"></div>
     </div>
 </div>
 
@@ -38,6 +38,126 @@
         \{{/each}}
     </div>
 </script>
+
+
+
+
+
+
+<!-- <div id='map'></div> -->
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiaGVsYXJhYmF3eSIsImEiOiJjajUxN3k2d3MwMGg4MnFxZHhjcjYxN2U4In0.0OSl71QURA_P9d32r982Zw';
+
+var bounds = [[-118.465029, 34.062096], // Southwest coordinates
+			  [-118.423661, 34.079206]];  // Northeast coordinates
+
+var map = new mapboxgl.Map({
+	container: 'map',
+	style: 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
+	center: [-118.445320, 34.066915],
+	//maxBounds: bounds,
+	zoom: 15,
+	pitch: 60
+
+});
+
+map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    fitBoundsOptions: {maxZoom: 17.7, speed: .3},
+    trackUserLocation: true
+}));
+
+map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.FullscreenControl());
+
+
+// 3D Display Function
+function threeDDisplay() {
+
+   // Insert the layer beneath any symbol layer.
+    var layers = map.getStyle().layers.reverse();
+    var labelLayerIdx = layers.findIndex(function (layer) {
+        return layer.type !== 'symbol';
+    });
+    var labelLayerId = labelLayerIdx !== -1 ? layers[labelLayerIdx].id : undefined;
+    map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15,
+        'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': {
+                'type': 'identity',
+                'property': 'height'
+            },
+            'fill-extrusion-base': {
+                'type': 'identity',
+                'property': 'min_height'
+            },
+            'fill-extrusion-opacity': 0
+        }
+    }, labelLayerId);
+}
+
+// Add geolocate control to the map.
+
+function startMap() {
+	threeDDisplay();
+	map.flyTo({center: [-118.445320, 34.066915], zoom: 16.31, speed: .15});
+	setTimeout(function() {map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', .6);}, 2100);
+
+}
+
+
+map.on('load', startMap);
+
+
+// Navigating map with game-like controls
+
+	// pixels the map pans when the up or down arrow is clicked
+    var deltaDistance = 100;
+
+    // degrees the map rotates when the left or right arrow is clicked
+    var deltaDegrees = 25;
+
+    function easing(t) {
+        return t * (2 - t);
+    }
+
+    map.on('load', function() {
+        map.getCanvas().focus();
+
+        map.getCanvas().addEventListener('keydown', function(e) {
+            e.preventDefault();
+            if (e.which === 38) { // up
+                map.panBy([0, -deltaDistance], {
+                    easing: easing
+                });
+            } else if (e.which === 40) { // down
+                map.panBy([0, deltaDistance], {
+                    easing: easing
+                });
+            } else if (e.which === 37) { // left
+                map.easeTo({
+                    bearing: map.getBearing() - deltaDegrees,
+                    easing: easing
+                });
+            } else if (e.which === 39) { // right
+                map.easeTo({
+                    bearing: map.getBearing() + deltaDegrees,
+                    easing: easing
+                });
+            }
+        }, true);
+    });
+
+</script>
+
 
 
 {{> footer}}
