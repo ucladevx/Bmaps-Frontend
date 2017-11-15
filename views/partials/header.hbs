@@ -5,9 +5,10 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600" rel="stylesheet">    <link href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/modal.css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
 </head>
@@ -32,7 +33,30 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/signup">sign up </a></li>
+                    <li>
+                      <a id="sign-up-button">sign up</a>
+                      <div class="modal" id="sign-up-modal"> 
+                        <div class="modal-content">
+                        <!-- <div class="field"> -->
+                          <div class="modal-field" id="close">&times;</div>
+                          <div class="modal-field">SIGN UP</div>
+                          <div class="modal-field field">
+                            <input type="text" placeholder="Email Address">
+                          </div>
+                          <div class="modal-field field">
+                            <input type="text" placeholder="First Name">
+                          </div>
+                          <div class="modal-field field">
+                            <input type="text" placeholder="Last Name">
+                          </div>
+                          <div class="modal-field field">
+                            <input type="text" placeholder="Create a password">
+                          </div>
+                          <div class="modal-field field" id="create-button">Create account
+                          </div>
+                        <!-- </div> -->
+                      </div>                    
+                    </li>
                     <li class=""><a href="/login" style="color: rgb(255,24,59);">login</a></li>
                   </ul>
                 </div><!-- /.navbar-collapse -->
