@@ -1,0 +1,131 @@
+body {
+    font:15px arial,sans-serif;
+    background: rgb(251, 250, 250);
+    margin-top: 100px;
+    font-family: 'Poppins', sans-serif;
+}
+h1 {
+    margin: 0 0 10px 0;
+    padding: 5px;
+    font-size: 24px;
+    background-color: #999;
+    color: #fff;
+}
+table {
+    margin: 10px;
+}
+th, td {
+    padding: 5px;
+    border: 1px solid #999;
+}
+th {
+    background: #ccc;
+}
+tr:nth-child(odd) {
+    background: #eee;
+}
+td a {
+    color: #000;
+    text-decoration: underline;
+}
+
+/*NAVBAR*/
+.nav-container {
+    margin-left: 14px;
+}
+
+.navbar-default{
+    background-color: rgb(251, 250, 250);
+    border-color: rgb(191,191,191);
+}
+
+.navbar-default .navbar-nav > .active{
+   /*color: #000;*/
+  background: rgb(216,216,216);
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+     /*color: #000;*/
+     background: rgb(216,216,216);
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: rgb(128,128,128);
+    font-weight: 600;
+}
+
+#navbar-brand{
+    color: rgb(51,91,255);
+    font-weight: 600;
+}
+
+#nav-logo{
+    display: inline-block;
+}
+
+ul li {
+    border-radius: 100px;
+    margin: 10px;
+}
+
+li a {
+    border-radius: 100px;
+}
+
+/*SIDEBAR*/
+
+#events-mount{
+    margin-left: 30px;
+    width: 25%;
+    min-width: 260px;
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: -1px 1px 1px #888888;
+    border-color: rgb(207,207,207);
+}
+
+.sidebar{
+}
+
+.sidebar-header{
+    background-color: rgb(223,222,221);
+    padding-top: 4%;
+    padding-bottom: 1%;
+    box-shadow: -1px 1px 1px rgb(207,207,207);
+    text-align: center;
+    color: rgb(70,70,70);
+}
+
+.sidebar-event{
+    padding: 5%;
+    display: flex;
+}
+
+.sidebar-event-img{
+    object-fit: cover;
+    width: 90px;
+    height: 90px;
+    margin-right: 5%;
+}
+
+.sidebar-event-details {
+    font-size: 11px;
+}
+
+.sidebar-event-details p {
+    margin-bottom: 0px;
+}
+
+.sidebar-event-name {
+    color: rgb(255,24,59);
+}
+
+/* Using only background gradients */
+
+.seperator
+{
+    height: 2px;
+    background-image: radial-gradient(#CCC, #FFF), radial-gradient(#CCC, #FFF);
+    background-position: 0, 100%, 0, 100%;
+}

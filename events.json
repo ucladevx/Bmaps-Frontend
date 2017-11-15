@@ -1,0 +1,515 @@
+{
+"events":[
+  {
+    "_id": "140162759870150",
+    "category": "EVENT_MUSIC",
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/22853372_1532441836844932_7678042518657267438_n.jpg?oh=66640b17a5c401134a00c659b61a5d35&oe=5A626185",
+    "description": "Free Admission!\n\nA concert featuring compositions by Herb Alpert Award recipient and flutist Nicole Mitchell. Mitchell is joined by three-time Grammy Award-winner Billy Childs on piano, vocal legend Dwight Trible, and internationally renowned bass player Mark Dresser.\n\nMitchell is an award-winning creative flutist, composer, bandleader, educator and transdisciplinary conceptualist. Mitchell believes in the transformational power of music, and she seeks to build alternative worlds that bridge the familiar with the unknown. Her mission as a flutist has been to raise respect for the instrument by developing a new improvisational language that incorporates her voice with the flute. The founder of Black Earth Ensemble, Mitchell composes for contemporary ensembles of varied instrumentation and size, while incorporating improvisation and a wide aesthetic expression. She is a Professor of Music at University of California, Irvine.\n\nParking for Jan Popper Theater is in Parking Structure 2. Find maps and parking rates here.",
+    "end_time": "2017-11-08T23:00:00-0800",
+    "event_name": "Nicole Mitchell Quartet",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-08T20:00:00-0800",
+    "stats": {
+      "attending": 0,
+      "declined": 0,
+      "maybe": 0,
+      "noreply": 0
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": "All in One Place. Performance. Scholarship. Innovation. ",
+      "category": "Performance & Event Venue",
+      "categoryList": [
+        "Performance & Event Venue",
+        "School"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22135380_1507371272685322_2716028351226784119_o.jpg?oh=f9bdf5e4055e3800b51961efc16a0733&oe=5A6B5ABB",
+      "emails": [
+        "communications@schoolofmusic.ucla.edu"
+      ],
+      "id": "1088648777890909",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.0709452,
+        "longitude": -118.4397549,
+        "state": "CA",
+        "street": "445 Charles E. Young Drive",
+        "zip": "90095"
+      },
+      "name": "UCLA Herb Alpert School of Music",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/13921211_1088653157890471_2459200741387644123_n.jpg?oh=e8b6df6c1057a299cac410e2f7ad8f7b&oe=5AA1CEE6"
+    }
+    },
+  {
+    "_id": "531209667221818",
+    "category": "EVENT_MUSIC",
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22548707_10156266400335656_5968088918595943334_o.jpg?oh=9153914c8cce858c7045a9db3a7d8b04&oe=5AA0BE8F",
+    "description": "The UCLA Music of China Ensemble, presents concerts, lectures, and instrument demonstrations. For this event, the ensemble will play traditional and contemporary Chinese music including Kun Opera singing; silk and bamboo music; and solos on Dizi, Erhu, and Zheng.\n\n --\n\nFowler Out Loud is an evening concert series that invites UCLA students from various disciplines to perform at the museum. \n\nSupport for Fowler Out Loud comes from the UCLA Office of Residential Life.\n\nParking available in UCLA Lot 4, 221 Westwood Plaza, directly off Sunset Blvd | $12/day",
+    "end_time": "2017-11-08T19:00:00-0800",
+    "event_name": "Fowler Out Loud: UCLA Music of China Ensemble",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-08T18:00:00-0800",
+    "stats": {
+      "attending": 8,
+      "declined": 0,
+      "maybe": 92,
+      "noreply": 8
+    },
+    "ticketing": {
+      "ticket_uri": "https://www.fowler.ucla.edu/visit/"
+    },
+    "venue": {
+      "about": "The Fowler enhances understanding and appreciation of the diverse peoples through dynamic exhibitions, publications, and public programs, informed by interdisciplinary approaches and the perspectives of the cultures represented. ",
+      "category": "Art Museum",
+      "categoryList": [
+        "Art Museum",
+        "Education"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/23116831_10156309113575656_7893318967009540208_o.jpg?oh=ad757c195fee330f373d5ef507db6eb6&oe=5A9BD344",
+      "emails": [
+        "fowlerinfo@arts.ucla.edu"
+      ],
+      "id": "80305275655",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.072799102735,
+        "longitude": -118.44342845522,
+        "state": "CA",
+        "street": "308 Charles E Young Dr W",
+        "zip": "90095"
+      },
+      "name": "Fowler Museum at UCLA",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/11059723_10153791830185656_7513972757589909434_n.jpg?oh=cfa2ec865d09f43f481665b39315f369&oe=5A9F4AEE"
+    }
+  },
+  {
+    "_id": "760419277483912",
+    "category": null,
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/23172602_1219182294848718_5982071354808405174_n.jpg?oh=121a4c8a8bb7023a6c6110162cdd1715&oe=5AAC4959",
+    "description": null,
+    "end_time": "2017-11-08T20:00:00-0800",
+    "event_name": "Transferable skills for undocumented students",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-08T18:00:00-0800",
+    "stats": {
+      "attending": 3,
+      "declined": 0,
+      "maybe": 17,
+      "noreply": 249
+    },
+    "ticketing": {
+      "ticket_uri": "https://goo.gl/forms/S7zQoaFcoOmHqymW2"
+    },
+    "venue": {
+      "about": "The Bruin Resource Center\u2019s (BRC) Undocumented Student Program offers caring and personalized support to undergraduate and graduate undocumented students.",
+      "category": "School",
+      "categoryList": [
+        "School",
+        "College & University",
+        "Social Service"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/22549965_1204833652950249_5554381348804075981_n.png?oh=4247ae03cabfbe1e464b946cf72c342b&oe=5A9DF7C3",
+      "emails": [
+        "vgarcia@saonet.ucla.edu"
+      ],
+      "id": "346518745448415",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.07100666,
+        "longitude": -118.44475819,
+        "state": "CA",
+        "street": "220 Westwood Pz SAC B44",
+        "zip": "90095"
+      },
+      "name": "Undocumented Student Program at UCLA",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/22687660_1205389069561374_8688957279368348250_n.png?oh=923f70ba9cefe7fb4020b146761cf60c&oe=5A6CFE0C"
+    }
+  },
+  {
+    "_id": "1704485632917755",
+    "category": null,
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22769677_1915682665114184_1916242436535194902_o.jpg?oh=1f9948b858857b9cf0271359978da873&oe=5A68034A",
+    "description": "Come and learn how to transfer your skills to any employer. \nFree food will be provided.\n\nRVSP: tinyurl/undoctransferableskills\nMore Info: http://career.ucla.edu//Portals/14/Documents/PDF/FeaturedOpportunities/transferableskills.pdf",
+    "end_time": "2017-11-08T20:00:00-0800",
+    "event_name": "Transferable Skills for Undocumented Students",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-08T18:00:00-0800",
+    "stats": {
+      "attending": 1,
+      "declined": 0,
+      "maybe": 0,
+      "noreply": 0
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": "Welcome to the UCLA Career Center page!  Our wall highlights upcoming UCLA career events, informative articles/videos, and fun career-related posts! ",
+      "category": "College & University",
+      "categoryList": [
+        "College & University",
+        "Social Service",
+        "College & University"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/23244534_1929422973740153_9075834478750479693_n.png?oh=cce610d49b7017269cbf4f3225ea8dd4&oe=5A9D2651",
+      "emails": null,
+      "id": "256011207748013",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.068504189379,
+        "longitude": -118.44500398626,
+        "state": "CA",
+        "street": "501 Westwood Plz",
+        "zip": "90095-1573"
+      },
+      "name": "UCLA Career Center",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/11011638_1105126686169790_5402558896629945445_n.png?oh=4f90d9fa0ba3255cd8f89130da131f5e&oe=5AA3753C"
+    }
+  },
+  {
+    "_id": "1676330749064986",
+    "category": "EVENT_NETWORKING",
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22904882_10155040025916658_8007064290383787795_o.jpg?oh=a304ee9296875779bcfb3f5f84ed11ea&oe=5A6449C3",
+    "description": "The aerospace industry is in a period of transformation from a smaller number of typically large \u201ctraditional\u201d aerospace & defense companies (i.e. Boeing, Northrop Grumman) to include a proliferation of small and not so small commercial \u201cNewSpace\u201d companies (or \u201cSpace 2.0\u201d or private spaceflight\u201d, i.e. Virgin Orbit, Millennium, Facebook etc). \n\nThis panel of Industry experts explores how companies adapt and innovate product development in the NewSpace economy.\nIn addition to technology and product development, the panel will include coverage of business models and financing.\n\nConfirmed Speakers:\nJames Myers ('94) \u2013 Sector VP, Northrop Grumman Corp.\nRichard Milford ('04) \u2013 Sr. Director System Engineering, Virgin Orbit\nJason Kim ('09) \u2013 VP Strategic Planning, Millennium\nJim Adams ('05) \u2013 Partner, PwC Strategy\nMario Furtado ('12) \u2013 Sr. Principal Systems Engineer, Raytheon\n\nModerated by: \nAmir Blachman ('03) \u2013 VP Strategic Development, Axiom Space",
+    "end_time": "2017-11-08T20:30:00-0800",
+    "event_name": "Innovation in Aerospace Panel",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-08T18:00:00-0800",
+    "stats": {
+      "attending": 21,
+      "declined": 0,
+      "maybe": 59,
+      "noreply": 9
+    },
+    "ticketing": {
+      "ticket_uri": "https://www.eventbrite.com/e/innovation-in-aerospace-panel-registration-39098479605?aff=efbeventtix"
+    },
+    "venue": {
+      "about": "UCLA Anderson School of Management, regarded among the leading business schools in the world, is a community of people who Think in the Next.",
+      "category": "College & University",
+      "categoryList": [
+        "College & University",
+        "School",
+        "College & University"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22496026_10155005295101658_1330222034614329414_o.jpg?oh=94821813eb55859bff021f1775ad0ea8&oe=5AA37208",
+      "emails": null,
+      "id": "27122771657",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.073685471718,
+        "longitude": -118.44369565023,
+        "state": "CA",
+        "street": "110 WESTWOOD Plz Ste C-501",
+        "zip": "90095-1481"
+      },
+      "name": "UCLA Anderson School of Management",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/1557578_10151865700796658_2056990454_n.png?oh=c7bc9f15d9e4fb87188c74fb953801a8&oe=5A6690FD"
+    }
+  },
+  {
+    "_id": "744729675719911",
+    "category": "EVENT_FITNESS",
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22904581_1736195433354398_1956885659576518358_o.jpg?oh=07546fe3f7db713081184e43f5659e6d&oe=5A62F2B3",
+    "description": "Our very own Belden Long is leading our NorCal Donation C2! All proceeds will go to Cardinal Newman High School, Belden's former high school campus, that was severly damaged by the NorCal fires. Saya and Anna will be there for extra hands on adjustments and assists.",
+    "end_time": "2017-11-08T19:45:00-0800",
+    "event_name": "NorCal Fires Donation C2",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-08T18:45:00-0800",
+    "stats": {
+      "attending": 14,
+      "declined": 0,
+      "maybe": 13,
+      "noreply": 71
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": null,
+      "category": "Yoga Studio",
+      "categoryList": [
+        "Yoga Studio"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/23231619_10154332173332168_5459213727635029923_n.jpg?oh=53c62999986e1bbf8bf9dcbb8d4ba2eb&oe=5A6C4929",
+      "emails": [
+        "ca-westwood@corepoweryoga.com"
+      ],
+      "id": "1500120066961937",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.061991588453,
+        "longitude": -118.44441764071,
+        "state": "CA",
+        "street": "1031 Glendon Avenue",
+        "zip": "90024"
+      },
+      "name": "CorePower Yoga",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/13076849_1531051283868815_844046897403603508_n.jpg?oh=9ca95a3d93db6a58514c1b6abbd13038&oe=5AA4856C"
+    }
+  },
+  {
+    "_id": "477469989302017",
+    "category": null,
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/q92/s720x720/21950042_481277345584380_6281341300903501471_o.jpg?oh=77973e4cfec4a8e2f19a11974853639f&oe=5A65284C",
+    "description": "Join us for a full album sing-along of \"Hamilton\"! In celebration of its LA run at the Pantages Theatre, all students are invited to come bask in their love for the musical by singing along to the amazing soundtrack!\n\nSign up to be a song-leader here: https://sa.ucla.edu/forms/p/ZDFoJ\n\nFeel free to sign up with friends & spread the word!  #BruinsGoHam",
+    "end_time": "2017-11-08T22:00:00-0800",
+    "event_name": "Hamilton Sing-Along!",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-08T19:00:00-0800",
+    "stats": {
+      "attending": 58,
+      "declined": 0,
+      "maybe": 95,
+      "noreply": 273
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": "This is the Hedrick Summit Community Page for updates on events, important notices, and more!\nLike Us! (:",
+      "category": "Community Organization",
+      "categoryList": [
+        "Community Organization",
+        "College & University",
+        "Campus Building"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/11951898_885844664838116_5118596343504080851_n.jpg?oh=9652c7dbffc035e212149af5b7163a6a&oe=5AA881C3",
+      "emails": [
+        "summitrd@orl.ucla.edu"
+      ],
+      "id": "885811684841414",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.0738139,
+        "longitude": -118.4529409,
+        "state": "CA",
+        "street": "250 De Neve Dr",
+        "zip": "90024-1315"
+      },
+      "name": "UCLA Hedrick Summit",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/11904660_885837638172152_3115097102235388638_n.png?oh=65b7d58e68da58d36ba27a342fc21b89&oe=5AA08EAE"
+    }
+  },
+  {
+    "_id": "121913018482719",
+    "category": null,
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/22491762_1480020928718422_6624198796844842084_n.jpg?oh=d623a827db36a0ae4a9a148385022d4f&oe=5A615959",
+    "description": "Celebrate 2017 with Clarins. \n3 course luncheon inclusive of bubbly and gorgeous gifting \nR495 per person \nCall Lindiwe on 031 561 2211 or email Lindiwe.nduli@tsogosun.com",
+    "end_time": null,
+    "event_name": "A celebration of 2017 with Clarins",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-09T12:00:00+0200",
+    "stats": {
+      "attending": 4,
+      "declined": 0,
+      "maybe": 48,
+      "noreply": 0
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": "The Beverly Hills Hotel ,five star boutique resort hotel in Umhlanga Kwa Zulu Natal. Welcome to our gracious home ",
+      "category": "Hotel Resort",
+      "categoryList": [
+        "Hotel Resort",
+        "Family Style Restaurant",
+        "Cafe"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22424182_872646462910775_6957440935596244346_o.jpg?oh=b61f12bb7637e1f3d1e3c46f8ee472b6&oe=5AAD54A9",
+      "emails": [
+        "beverlyhills.reservations@tsogosun.com"
+      ],
+      "id": "151655318343230",
+      "location": {
+        "city": "Umhlanga Rocks",
+        "country": "South Africa",
+        "latitude": -29.72719,
+        "longitude": 31.0879,
+        "street": "1 Lighthouse Road",
+        "zip": "4320"
+      },
+      "name": "The Beverly Hills",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/10882302_388661141309312_1680322586836385382_n.jpg?oh=72864a554354fb00a894736e5256df7d&oe=5A6707FC"
+    }
+  },
+  {
+    "_id": "127545397957809",
+    "category": "EVENT_CAUSE",
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22904565_1686429271387929_2733626486066814204_o.jpg?oh=3666f9485ceba967137137332e601042&oe=5A6C1707",
+    "description": "Join the Veterans Resource Center on November 9th between 11:00am and 1:00pm for our third annual Warrior Games! This event looks to raise awareness of the unique needs and experiences of the veteran population while building meaningful connections between the UCLA community and vets.\n\nSome activites will include:\n-Free food and drinks\n-Obstacle courses\n-Fitness tests\n-Carnival games\n-Photo booth\n\nAll are welcome at the event! We hope to see you there!",
+    "end_time": "2017-11-09T13:00:00-0800",
+    "event_name": "Third Annual Warrior Games",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-09T11:00:00-0800",
+    "stats": {
+      "attending": 20,
+      "declined": 0,
+      "maybe": 26,
+      "noreply": 68
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": "The UCLA Martial Arts Program is one of the largest and most diverse programs in the country. Find out more at www.recreation.ucla.edu/martialarts",
+      "category": "Martial Arts School",
+      "categoryList": [
+        "Martial Arts School",
+        "College & University"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/13248352_1021298267905969_2598233145854181449_o.jpg?oh=10318d59716179e18b5688840ee23662&oe=5A9DE95C",
+      "emails": [
+        "pmccarthy@recreation.ucla.edu"
+      ],
+      "id": "186209584748179",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.06694,
+        "longitude": -118.44729,
+        "state": "CA",
+        "street": "2131 John Wooden Center",
+        "zip": "90095"
+      },
+      "name": "UCLA Martial Arts",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/c0.28.200.200/p200x200/10649947_829416683760796_2487451870144748020_n.png?oh=b4d16889a76a96a4d5f6f99842a581bf&oe=5A6880C8"
+    }
+  },
+  {
+    "_id": "1819286311433472",
+    "category": null,
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/23333968_1220033778096903_8547132153286326036_o.jpg?oh=369d304bd21fe81abd62fc5f948114fd&oe=5A9C4882",
+    "description": "Do you have questions about how to build your own credit as Undocuemented?\nplease come and learn about credit options and more! \n\nEvery Thrusday from 12pm-2pm the Financial Wellness Program will be having drop in hours to assist students with financial issues. Also, ask more questions about\n- budgeting,\n-tips to save\n-home ownership\n- investment\nand please don't for get, we are here to help you!",
+    "end_time": "2017-11-09T14:00:00-0800",
+    "event_name": "Financial Wellness Program Drop in hours",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-09T12:00:00-0800",
+    "stats": {
+      "attending": 0,
+      "declined": 0,
+      "maybe": 1,
+      "noreply": 0
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": "The Bruin Resource Center\u2019s (BRC) Undocumented Student Program offers caring and personalized support to undergraduate and graduate undocumented students.",
+      "category": "School",
+      "categoryList": [
+        "School",
+        "College & University",
+        "Social Service"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/22549965_1204833652950249_5554381348804075981_n.png?oh=4247ae03cabfbe1e464b946cf72c342b&oe=5A9DF7C3",
+      "emails": [
+        "vgarcia@saonet.ucla.edu"
+      ],
+      "id": "346518745448415",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.07100666,
+        "longitude": -118.44475819,
+        "state": "CA",
+        "street": "220 Westwood Pz SAC B44",
+        "zip": "90095"
+      },
+      "name": "Undocumented Student Program at UCLA",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/22687660_1205389069561374_8688957279368348250_n.png?oh=923f70ba9cefe7fb4020b146761cf60c&oe=5A6CFE0C"
+    }
+  },
+  {
+    "_id": "150769032200054",
+    "category": "EVENT_HEALTH",
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/23376294_1708179792533988_2690233734755258043_n.jpg?oh=2c98ccfe0a4e11c531d6b9dffb7f24d9&oe=5AAA6951",
+    "description": "FREE FLU SHOTS from the UCLA Arthur Ashe Student Health & Wellness Center at the ANDERSON SCHOOL COURTYARD!\n\nWhat causes chills, muscle aches, a fever, and can last 4-6 weeks? If you guessed \u201cthe flu,\u201d you're absolutely correct! And those are just some of the symptoms that might keep you out of class and away from those study sessions. Here\u2019s a pro tip: Avoid the flu all together with a flu shot from the Ashe Center! Getting a flu shot is a fast, easy way to protect yourself and to ensure that you don\u2019t miss class and fall behind academically.\n\nJoin us for our Annual Flu Fair events on campus to receive your free flu shot:\n\nVisit our Ashe Center website Event Calendar for additional pop up flu fair dates.\n\n*NEXT MONDAY, NOVEMBER 13, FLU FAIR WILL BE HELD AT THE LAW SCHOOL COURTYARD.\n\nIf you can\u2019t make it to our Flu Fairs, you can schedule an appointment for a free flu shot online, by phone or in person at The Ashe Center.\n\nFor additional Flu Fair dates, or to make a flu shot appointment, visit: http://www.studenthealth.ucla.edu/",
+    "end_time": "2017-11-09T16:00:00-0800",
+    "event_name": "Ashe@Anderson Pop-Up Flu Fair",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-09T13:00:00-0800",
+    "stats": {
+      "attending": 0,
+      "declined": 0,
+      "maybe": 1,
+      "noreply": 0
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": "A comprehensive, multi-specialty student health center and outpatient facility available for all registered UCLA students.",
+      "category": "Hospital",
+      "categoryList": [
+        "Hospital",
+        "College & University"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/14079774_1256734037678568_6839342082447332456_n.png?oh=12995628e061ab14e00f559440126079&oe=5A9FEA71",
+      "emails": [
+        "shsmail@ashe.ucla.edu"
+      ],
+      "id": "135590933126223",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.071435347434,
+        "longitude": -118.44465593749,
+        "state": "CA",
+        "street": "221 Westwood Plz",
+        "zip": "90095"
+      },
+      "name": "UCLA Arthur Ashe Student Health & Wellness Center",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/12274521_1080789555273018_4109487526719454172_n.png?oh=eaa84bb70865dde55899322dde66cb78&oe=5AAE6FA9"
+    }
+  },
+  {
+    "_id": "501289056910020",
+    "category": null,
+    "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/23316259_1220040268096254_7037716292335049856_n.jpg?oh=e4634d964642104eb57015be58b36ae8&oe=5AAEFD7E",
+    "description": "Alma Sanchez our Assessment Coordinator and Education Advisor will be having Office Hours every Thursday from 2:00pm- 3:30pm. If you have questions about masters programs especially in the education program and the academic planning please reach her out",
+    "end_time": "2017-11-09T15:30:00-0800",
+    "event_name": "Education Advisor Hours at USP",
+    "free_food": "No",
+    "is_cancelled": false,
+    "start_time": "2017-11-09T14:00:00-0800",
+    "stats": {
+      "attending": 0,
+      "declined": 0,
+      "maybe": 0,
+      "noreply": 0
+    },
+    "ticketing": "None",
+    "venue": {
+      "about": "The Bruin Resource Center\u2019s (BRC) Undocumented Student Program offers caring and personalized support to undergraduate and graduate undocumented students.",
+      "category": "School",
+      "categoryList": [
+        "School",
+        "College & University",
+        "Social Service"
+      ],
+      "coverPicture": "https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/22549965_1204833652950249_5554381348804075981_n.png?oh=4247ae03cabfbe1e464b946cf72c342b&oe=5A9DF7C3",
+      "emails": [
+        "vgarcia@saonet.ucla.edu"
+      ],
+      "id": "346518745448415",
+      "location": {
+        "city": "Los Angeles",
+        "country": "United States",
+        "latitude": 34.07100666,
+        "longitude": -118.44475819,
+        "state": "CA",
+        "street": "220 Westwood Pz SAC B44",
+        "zip": "90095"
+      },
+      "name": "Undocumented Student Program at UCLA",
+      "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/22687660_1205389069561374_8688957279368348250_n.png?oh=923f70ba9cefe7fb4020b146761cf60c&oe=5A6CFE0C"
+    }
+  }
+]
+}
