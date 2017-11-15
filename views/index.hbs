@@ -1,19 +1,19 @@
 {{> header}}
 
-<h1>Handlebars JS Example</h1>
+
+<div id="events-mount"></div>
 <script id="some-template" type="text/x-handlebars-template"> <table>
-    <thead>
-        <th>Name</th>
-        <th>Job Title</th>
-        <th>Twitter</th>
-    </thead>
-    <tbody>
-        \{{#each artists}}
-        <tr>
-            <td>\{{this.name}}</td>
-        </tr>
+    <div class="sidebar">
+        \{{#each events}}
+        <div class="sidebar-event">
+            <img src="\{{this.cover_picture}}" class="sidebar-event-img"></img>
+            <div class="sidebar-event-details">
+                <div>\{{this.event_name}}</div>
+
+            </div>
+        </div>
         \{{/each}}
-    </tbody>
+    </div>
 </table>
 </script>
 

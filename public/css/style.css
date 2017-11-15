@@ -1,5 +1,7 @@
 body {
     font:15px arial,sans-serif;
+    background: rgb(237, 237, 237);
+    margin-top: 100px;
 }
 h1 {
     margin: 0 0 10px 0;
@@ -24,4 +26,30 @@ tr:nth-child(odd) {
 td a {
     color: #000;
     text-decoration: underline;
+}
+
+#events-mount{
+    margin-left: 4%;
+    background: rgb(216,216,216);
+    width: 30%;
+}
+
+.sidebar{
+}
+
+.sidebar-event{
+    padding: 10%;
+    display: flex;
+}
+
+.sidebar-event-img{
+    object-fit: cover;
+    width:100px;
+    height:100px;
+    margin-right: 10%;
+}
+
+.sidebar-event-details {
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
 }

@@ -1,8 +1,9 @@
 $(document).ready(function() {
     var source = $("#some-template").html();
     var template = Handlebars.compile(source);
-    $.getJSON("http://localhost:3004/artists", function(data) {
+    $.getJSON("http://localhost:3004/events", function(data) {
 
+        console.log("hellur");
         console.log(data);
         var html = ''; // we declare the variable that we'll be using to store our information
         var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
@@ -15,8 +16,8 @@ $(document).ready(function() {
         Handlebars.registerHelper('fullName', function(person) {
           return person.firstName + " " + person.lastName;
         });
-        $('body').append(template({
-            artists: data
+        $('#events-mount').append(template({
+            events: data
         }));
 
 
