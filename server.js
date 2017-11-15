@@ -63,6 +63,9 @@ router.get("/",function(req,res){
     res.render('index');
 });
 
+router.get("/map",function(req,res){
+    res.render('map');
+});
 
 app.use("/",router);
 

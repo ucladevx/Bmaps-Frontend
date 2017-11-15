@@ -536,3 +536,7 @@
 ::1 - - [15/Nov/2017:08:55:16 +0000] "GET /favicon.ico HTTP/1.1" 304 - "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
 ::1 - - [15/Nov/2017:09:00:47 +0000] "GET / HTTP/1.1" 200 4480 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
 ::1 - - [15/Nov/2017:09:00:50 +0000] "GET /favicon.ico HTTP/1.1" 304 - "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+::1 - - [15/Nov/2017:22:51:25 +0000] "GET / HTTP/1.1" 200 4478 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36"
+::1 - - [15/Nov/2017:22:51:27 +0000] "GET /favicon.ico HTTP/1.1" 200 1561 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36"
+::1 - - [15/Nov/2017:22:51:36 +0000] "GET /map HTTP/1.1" 200 3723 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36"
+::1 - - [15/Nov/2017:22:51:36 +0000] "GET /favicon.ico HTTP/1.1" 304 - "http://localhost:8000/map" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36"
