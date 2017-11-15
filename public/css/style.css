@@ -163,3 +163,10 @@ li a {
     background-image: radial-gradient(#CCC, #FFF), radial-gradient(#CCC, #FFF);
     background-position: 0, 100%, 0, 100%;
 }
+
+/*BODY*/
+#map {
+    top:0;
+    bottom:0;
+    width: 100%;
+}
