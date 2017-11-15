@@ -2,6 +2,7 @@ body {
     font:15px arial,sans-serif;
     background: rgb(237, 237, 237);
     margin-top: 100px;
+    font-family: 'Poppins', sans-serif;
 }
 h1 {
     margin: 0 0 10px 0;
@@ -28,10 +29,39 @@ td a {
     text-decoration: underline;
 }
 
+/*NAVBAR*/
+.navbar-default{
+    background-color: rgb(237, 237, 237);
+    border-color: transparent;
+}
+
+.navbar-default .navbar-nav > .active{
+   /*color: #000;*/
+  background: rgb(216,216,216);
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+     /*color: #000;*/
+     background: rgb(216,216,216);
+}
+
+ul li {
+    border-radius: 100px;
+    margin: 10px;
+}
+
+li a {
+    border-radius: 100px;
+}
+
+/*SIDEBAR*/
+
 #events-mount{
     margin-left: 4%;
     background: rgb(216,216,216);
     width: 30%;
+    min-width: 260px;
 }
 
 .sidebar{
@@ -51,5 +81,4 @@ td a {
 
 .sidebar-event-details {
     font-size: 13px;
-    font-family: 'Poppins', sans-serif;
 }

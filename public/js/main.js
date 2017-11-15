@@ -20,13 +20,6 @@ $(document).ready(function() {
             events: data
         }));
 
-
-
-
-
-
-
-
         // $.each(data.recenttracks.track, function(i, item) {
         //     if(counter == 1) {
         //         songTitle = item.name;
