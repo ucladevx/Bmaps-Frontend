@@ -1,3 +1,27 @@
 {{> header}}
 
+
+<div id="events-mount"></div>
+<script id="some-template" type="text/x-handlebars-template">
+    <div class="sidebar-header">
+        <p>all categories <span class="caret"></span></p>
+    </div>
+    <div class="sidebar">
+        \{{#each events}}
+        <div class="sidebar-event">
+            <img src="\{{this.cover_picture}}" class="sidebar-event-img"></img>
+            <div class="sidebar-event-details">
+                <p class="sidebar-event-name">\{{this.event_name}}</p>
+                <p class="sidebar-event-date">\{{this.start_time}}</p>
+                <p class="sidebar-event-location">\{{this.venue.location.street}}</p>
+                <p class="sidebar-event-category">\{{this.category}}</p>
+            </div>
+
+        </div>
+        <div class="seperator"></div>
+        \{{/each}}
+    </div>
+</script>
+
+
 {{> footer}}
