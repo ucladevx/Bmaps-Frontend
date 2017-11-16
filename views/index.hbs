@@ -104,18 +104,30 @@ function threeDDisplay() {
     }, labelLayerId);
 }
 
+/*function displayPoints() {
+  map.addLayer({
+    "id": "eventstest2",
+    "type": "circle",
+    "source": "composite",
+    "source-layer": "eventstest2",
+    "layout": {
+        "visibility": "visible"
+    },
+    "paint": {}
+  });
+}*/
 // Add geolocate control to the map.
 
 function startMap() {
 	threeDDisplay();
 	map.flyTo({center: [-118.445320, 34.066915], zoom: 16.31, speed: .15});
 	setTimeout(function() {map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', .6);}, 2100);
-
+  map.setLayoutProperty('eventstest', 'visibility', 'visible');
 }
 
 
 map.on('load', startMap);
-
+map.on('load', displayPoints);
 
 // Navigating map with game-like controls
 
