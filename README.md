@@ -5,6 +5,7 @@ A single platform for events all over campus. Mappening helps raise awareness of
 
 ## Prerequisites
 Clone this repository with `git clone https://github.com/ucladevx/Mappening-Frontend.git`
+Have nodemon installed with `npm install -g nodemon`
 
 ## Built With
 * Mapbox: Open source mapping platform for custom designed maps
@@ -14,15 +15,17 @@ Clone this repository with `git clone https://github.com/ucladevx/Mappening-Fron
 * `cd` to the repository.
 * `npm install` to install packages.
 
-* Run [Mappening-Backend] (https://github.com/ucladevx/Mappening-Backend)
-    * Navigate to http://localhost:5000/api/events
+* Check if backend is already deployed in AWS
+    * Navigate to http://52.53.197.64/api/v1/events
+    * If not running, run [Mappening-Backend](https://github.com/ucladevx/Mappening-Backend) locally according to the instructions in the README
+        * Navigate to http://localhost/api/v1/events
+        * Modify public/js/main.js
+        * `$.getJSON("http://localhost/api/v1/events", function(data)`
 * OR
 * Run static json server from this repo (testing purposes)
     * Modify public/js/main.js
       * `$.getJSON("http://localhost:3004/events", function(data)`
     * Run`json-server --watch events.json --port 3004`
     * Navigate to http://localhost:3004/events
-
-
-* Run app `nodemon`
+* Run app with `nodemon`
     * Navigate to http://localhost:8000
