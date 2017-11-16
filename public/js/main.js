@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var source = $("#some-template").html();
     var template = Handlebars.compile(source);
-    $.getJSON("http://localhost:3004/events", function(data)
+    $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
 
         console.log("hellur");
