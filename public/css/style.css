@@ -40,13 +40,11 @@ td a {
 }
 
 .navbar-default .navbar-nav > .active{
-   /*color: #000;*/
   background: rgb(216,216,216);
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-     /*color: #000;*/
      background: rgb(216,216,216);
 }
 
@@ -64,9 +62,30 @@ td a {
     display: inline-block;
 }
 
+#navBarSearchForm input[type=text]{
+    width:800px !important;
+}
+
+@media (max-width: 1168px){
+    #navBarSearchForm input[type=text]{
+        width:600px !important;
+    }
+}
+
+@media (max-width: 968px){
+    #navBarSearchForm input[type=text]{
+        width:400px !important;
+    }
+}
+
+@media (max-width: 768px){
+    #navBarSearchForm input[type=text]{
+        width: 100% !important;
+    }
+}
+
 ul li {
     border-radius: 100px;
-    margin: 10px;
 }
 
 li a {
@@ -75,14 +94,25 @@ li a {
 
 /*SIDEBAR*/
 
+.home-container{
+    width: 90%;
+}
+
+.home-row{
+    display: flex;
+}
+
 #events-mount{
-    margin-left: 30px;
-    width: 25%;
+    /*margin-left: 30px;*/
+    /*width: 25%;*/
     min-width: 260px;
     border-width: 1px;
     border-style: solid;
     box-shadow: -1px 1px 1px #888888;
     border-color: rgb(207,207,207);
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-right: 2%;
 }
 
 .sidebar{
@@ -121,6 +151,10 @@ li a {
     color: rgb(255,24,59);
 }
 
+.dropdown-menu {
+    width: 100%;
+}
+
 /* Using only background gradients */
 
 .seperator
@@ -128,4 +162,11 @@ li a {
     height: 2px;
     background-image: radial-gradient(#CCC, #FFF), radial-gradient(#CCC, #FFF);
     background-position: 0, 100%, 0, 100%;
+}
+
+/*BODY*/
+#map {
+    top:0;
+    bottom:0;
+    width: 100%;
 }
