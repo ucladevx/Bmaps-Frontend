@@ -2,14 +2,14 @@
 "events":[
   {
     "_id": "140162759870150",
-    "category": "EVENT_MUSIC",
+    "category": "music",
     "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/22853372_1532441836844932_7678042518657267438_n.jpg?oh=66640b17a5c401134a00c659b61a5d35&oe=5A626185",
     "description": "Free Admission!\n\nA concert featuring compositions by Herb Alpert Award recipient and flutist Nicole Mitchell. Mitchell is joined by three-time Grammy Award-winner Billy Childs on piano, vocal legend Dwight Trible, and internationally renowned bass player Mark Dresser.\n\nMitchell is an award-winning creative flutist, composer, bandleader, educator and transdisciplinary conceptualist. Mitchell believes in the transformational power of music, and she seeks to build alternative worlds that bridge the familiar with the unknown. Her mission as a flutist has been to raise respect for the instrument by developing a new improvisational language that incorporates her voice with the flute. The founder of Black Earth Ensemble, Mitchell composes for contemporary ensembles of varied instrumentation and size, while incorporating improvisation and a wide aesthetic expression. She is a Professor of Music at University of California, Irvine.\n\nParking for Jan Popper Theater is in Parking Structure 2. Find maps and parking rates here.",
     "end_time": "2017-11-08T23:00:00-0800",
     "event_name": "Nicole Mitchell Quartet",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-08T20:00:00-0800",
+    "start_time": "Nov 8 | 8 PM",
     "stats": {
       "attending": 0,
       "declined": 0,
@@ -44,14 +44,14 @@
     },
   {
     "_id": "531209667221818",
-    "category": "EVENT_MUSIC",
+    "category": "music",
     "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22548707_10156266400335656_5968088918595943334_o.jpg?oh=9153914c8cce858c7045a9db3a7d8b04&oe=5AA0BE8F",
     "description": "The UCLA Music of China Ensemble, presents concerts, lectures, and instrument demonstrations. For this event, the ensemble will play traditional and contemporary Chinese music including Kun Opera singing; silk and bamboo music; and solos on Dizi, Erhu, and Zheng.\n\n --\n\nFowler Out Loud is an evening concert series that invites UCLA students from various disciplines to perform at the museum. \n\nSupport for Fowler Out Loud comes from the UCLA Office of Residential Life.\n\nParking available in UCLA Lot 4, 221 Westwood Plaza, directly off Sunset Blvd | $12/day",
     "end_time": "2017-11-08T19:00:00-0800",
     "event_name": "Fowler Out Loud: UCLA Music of China Ensemble",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-08T18:00:00-0800",
+    "start_time": "Nov 8 | 6PM",
     "stats": {
       "attending": 8,
       "declined": 0,
@@ -95,7 +95,7 @@
     "event_name": "Transferable skills for undocumented students",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-08T18:00:00-0800",
+    "start_time": "Nov 8 | 6 PM",
     "stats": {
       "attending": 3,
       "declined": 0,
@@ -140,7 +140,7 @@
     "event_name": "Transferable Skills for Undocumented Students",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-08T18:00:00-0800",
+    "start_time": "Nov 8 | 6 PM",
     "stats": {
       "attending": 1,
       "declined": 0,
@@ -174,14 +174,14 @@
   },
   {
     "_id": "1676330749064986",
-    "category": "EVENT_NETWORKING",
+    "category": "networking",
     "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22904882_10155040025916658_8007064290383787795_o.jpg?oh=a304ee9296875779bcfb3f5f84ed11ea&oe=5A6449C3",
     "description": "The aerospace industry is in a period of transformation from a smaller number of typically large \u201ctraditional\u201d aerospace & defense companies (i.e. Boeing, Northrop Grumman) to include a proliferation of small and not so small commercial \u201cNewSpace\u201d companies (or \u201cSpace 2.0\u201d or private spaceflight\u201d, i.e. Virgin Orbit, Millennium, Facebook etc). \n\nThis panel of Industry experts explores how companies adapt and innovate product development in the NewSpace economy.\nIn addition to technology and product development, the panel will include coverage of business models and financing.\n\nConfirmed Speakers:\nJames Myers ('94) \u2013 Sector VP, Northrop Grumman Corp.\nRichard Milford ('04) \u2013 Sr. Director System Engineering, Virgin Orbit\nJason Kim ('09) \u2013 VP Strategic Planning, Millennium\nJim Adams ('05) \u2013 Partner, PwC Strategy\nMario Furtado ('12) \u2013 Sr. Principal Systems Engineer, Raytheon\n\nModerated by: \nAmir Blachman ('03) \u2013 VP Strategic Development, Axiom Space",
     "end_time": "2017-11-08T20:30:00-0800",
     "event_name": "Innovation in Aerospace Panel",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-08T18:00:00-0800",
+    "start_time": "Nov 8 | 6 PM",
     "stats": {
       "attending": 21,
       "declined": 0,
@@ -217,14 +217,14 @@
   },
   {
     "_id": "744729675719911",
-    "category": "EVENT_FITNESS",
+    "category": "fitness",
     "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22904581_1736195433354398_1956885659576518358_o.jpg?oh=07546fe3f7db713081184e43f5659e6d&oe=5A62F2B3",
     "description": "Our very own Belden Long is leading our NorCal Donation C2! All proceeds will go to Cardinal Newman High School, Belden's former high school campus, that was severly damaged by the NorCal fires. Saya and Anna will be there for extra hands on adjustments and assists.",
     "end_time": "2017-11-08T19:45:00-0800",
     "event_name": "NorCal Fires Donation C2",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-08T18:45:00-0800",
+    "start_time": "Nov 8 | 6:45 PM",
     "stats": {
       "attending": 14,
       "declined": 0,
@@ -265,7 +265,7 @@
     "event_name": "Hamilton Sing-Along!",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-08T19:00:00-0800",
+    "start_time": "Nov 8 | 7 PM",
     "stats": {
       "attending": 58,
       "declined": 0,
@@ -308,7 +308,7 @@
     "event_name": "A celebration of 2017 with Clarins",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-09T12:00:00+0200",
+    "start_time": "Nov 9 | 12 PM",
     "stats": {
       "attending": 4,
       "declined": 0,
@@ -343,14 +343,14 @@
   },
   {
     "_id": "127545397957809",
-    "category": "EVENT_CAUSE",
+    "category": "cause",
     "cover_picture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22904565_1686429271387929_2733626486066814204_o.jpg?oh=3666f9485ceba967137137332e601042&oe=5A6C1707",
     "description": "Join the Veterans Resource Center on November 9th between 11:00am and 1:00pm for our third annual Warrior Games! This event looks to raise awareness of the unique needs and experiences of the veteran population while building meaningful connections between the UCLA community and vets.\n\nSome activites will include:\n-Free food and drinks\n-Obstacle courses\n-Fitness tests\n-Carnival games\n-Photo booth\n\nAll are welcome at the event! We hope to see you there!",
     "end_time": "2017-11-09T13:00:00-0800",
     "event_name": "Third Annual Warrior Games",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-09T11:00:00-0800",
+    "start_time": "Nov 9 | 11 AM",
     "stats": {
       "attending": 20,
       "declined": 0,
@@ -392,7 +392,7 @@
     "event_name": "Financial Wellness Program Drop in hours",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-09T12:00:00-0800",
+    "start_time": "Nov 9 | 12 PM",
     "stats": {
       "attending": 0,
       "declined": 0,
@@ -428,14 +428,14 @@
   },
   {
     "_id": "150769032200054",
-    "category": "EVENT_HEALTH",
+    "category": "health",
     "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/23376294_1708179792533988_2690233734755258043_n.jpg?oh=2c98ccfe0a4e11c531d6b9dffb7f24d9&oe=5AAA6951",
     "description": "FREE FLU SHOTS from the UCLA Arthur Ashe Student Health & Wellness Center at the ANDERSON SCHOOL COURTYARD!\n\nWhat causes chills, muscle aches, a fever, and can last 4-6 weeks? If you guessed \u201cthe flu,\u201d you're absolutely correct! And those are just some of the symptoms that might keep you out of class and away from those study sessions. Here\u2019s a pro tip: Avoid the flu all together with a flu shot from the Ashe Center! Getting a flu shot is a fast, easy way to protect yourself and to ensure that you don\u2019t miss class and fall behind academically.\n\nJoin us for our Annual Flu Fair events on campus to receive your free flu shot:\n\nVisit our Ashe Center website Event Calendar for additional pop up flu fair dates.\n\n*NEXT MONDAY, NOVEMBER 13, FLU FAIR WILL BE HELD AT THE LAW SCHOOL COURTYARD.\n\nIf you can\u2019t make it to our Flu Fairs, you can schedule an appointment for a free flu shot online, by phone or in person at The Ashe Center.\n\nFor additional Flu Fair dates, or to make a flu shot appointment, visit: http://www.studenthealth.ucla.edu/",
     "end_time": "2017-11-09T16:00:00-0800",
     "event_name": "Ashe@Anderson Pop-Up Flu Fair",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-09T13:00:00-0800",
+    "start_time": "Nov 9 | 1 PM",
     "stats": {
       "attending": 0,
       "declined": 0,
@@ -477,7 +477,7 @@
     "event_name": "Education Advisor Hours at USP",
     "free_food": "No",
     "is_cancelled": false,
-    "start_time": "2017-11-09T14:00:00-0800",
+    "start_time": "Nov 9 | 2 PM",
     "stats": {
       "attending": 0,
       "declined": 0,
