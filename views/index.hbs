@@ -81,7 +81,6 @@ function threeDDisplay() {
     var labelLayerIdx = layers.findIndex(function (layer) {
         return layer.type !== 'symbol';
     });
-    var labelLayerId = labelLayerIdx !== -1 ? layers[labelLayerIdx].id : undefined;
     map.addLayer({
         'id': '3d-buildings',
         'source': 'composite',
@@ -101,7 +100,49 @@ function threeDDisplay() {
             },
             'fill-extrusion-opacity': 0
         }
-    }, labelLayerId);
+    }, "eventstest");
+}
+
+/*function displayPoints() {
+  map.addLayer({
+    "id": "eventstest2",
+    "type": "circle",
+    "source": "composite",
+    "source-layer": "eventstest2",
+    "layout": {
+        "visibility": "visible"
+    },
+    "paint": {}
+  });
+}*/
+
+function hoverPopup() {
+  // Create a popup, but don't add it to the map yet.
+  var popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+  });
+
+  map.on('mouseenter', 'eventstest', function(e) {
+      // Change the cursor style as a UI indicator.
+      map.getCanvas().style.cursor = 'pointer';
+
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(e.lngLat)
+          .setHTML(e.description)
+          .addTo(map);
+
+  });
+
+  map.on('mouseleave', 'eventstest', function() {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+  });
+
+  map.on('click', 'eventstest', function (e) {
+    map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+});
 }
 
 // Add geolocate control to the map.
@@ -110,12 +151,12 @@ function startMap() {
 	threeDDisplay();
 	map.flyTo({center: [-118.445320, 34.066915], zoom: 16.31, speed: .15});
 	setTimeout(function() {map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', .6);}, 2100);
-
+  map.setLayoutProperty('eventstest', 'visibility', 'visible');
 }
 
 
 map.on('load', startMap);
-
+map.on('load', hoverPopup);
 
 // Navigating map with game-like controls
 
