@@ -54,7 +54,7 @@ td a {
 }
 
 #navbar-brand{
-    color: rgb(51,91,255);
+    color: rgb(0,193,211);
     font-weight: 600;
 }
 
@@ -90,6 +90,14 @@ ul li {
 
 li a {
     border-radius: 100px;
+}
+
+#navBarSearchForm div input[type=text] {
+    margin: 0px;
+}
+
+.input-group-addon{
+    background: white;
 }
 
 /*SIDEBAR*/
@@ -151,6 +159,7 @@ li a {
 
 .sidebar-event-name {
     color: rgb(255,24,59);
+    font-weight: bold;
 }
 
 .dropdown-menu {
