@@ -25,12 +25,12 @@
     <div class="sidebar">
         \{{#each events}}
         <div class="sidebar-event">
-            <img src="\{{this.cover_picture}}" class="sidebar-event-img"></img>
+            <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
             <div class="sidebar-event-details">
-                <p class="sidebar-event-name">\{{this.event_name}}</p>
-                <p class="sidebar-event-date">\{{this.start_time}}</p>
-                <p class="sidebar-event-location">\{{this.venue.location.street}}</p>
-                <p class="sidebar-event-category">\{{this.category}}</p>
+                <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
+                <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
+                <p class="sidebar-event-location">\{{this.properties.venue.location.street}}</p>
+                <p class="sidebar-event-category">\{{this.properties.category}}</p>
             </div>
 
         </div>
