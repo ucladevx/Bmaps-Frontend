@@ -4,7 +4,14 @@
 <div class="container home-container">
     <div class="row home-row">
     <div id="events-mount" class="col-sm-4 col-md-4"></div>
-    <div class="map-display col-sm-8 col-md-8" id="map"></div>
+    <div class="map-display col-sm-8 col-md-8" id="map">
+      <div class='map-overlay top'>
+          <div class='map-overlay-inner'>
+              <input id='slider' type='range' min='0' max='48' step='1' value='24' />
+
+          </div>
+      </div>
+    </div>
     </div>
 </div>
 
@@ -44,18 +51,19 @@
 
 
 
-<!-- <div id='map'></div> -->
+<!--<div id='map'></div>-->
+
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGVsYXJhYmF3eSIsImEiOiJjajUxN3k2d3MwMGg4MnFxZHhjcjYxN2U4In0.0OSl71QURA_P9d32r982Zw';
 
-var bounds = [[-118.465029, 34.062096], // Southwest coordinates
-			  [-118.423661, 34.079206]];  // Northeast coordinates
+/*var bounds = [[-118.6, 33.9]], // Southwest coordinates
+			       [-118.4, 34.1]];  // Northeast coordinates*/
 
 var map = new mapboxgl.Map({
 	container: 'map',
 	style: 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
 	center: [-118.445320, 34.066915],
-	//maxBounds: bounds,
+	maxBounds: [[-118.48, 34.05],[-118.4, 34.1]],
 	zoom: 15,
 	pitch: 60
 
@@ -165,7 +173,7 @@ map.on('load', hoverPopup);
 
     // degrees the map rotates when the left or right arrow is clicked
     var deltaDegrees = 25;
-
+    var deltaZoom = .5;
     function easing(t) {
         return t * (2 - t);
     }
@@ -193,7 +201,17 @@ map.on('load', hoverPopup);
                     bearing: map.getBearing() + deltaDegrees,
                     easing: easing
                 });
-            }
+            } else if (e.which === 32) { // zoom in (space)
+                map.easeTo({
+                    zoom: map.getZoom() + deltaZoom,
+                    easing: easing
+                });
+            } else if (e.which === 8) { // zoom out (backspace)
+                map.easeTo({
+                    zoom: map.getZoom() - deltaZoom,
+                    easing: easing
+                });
+           }
         }, true);
     });
 
