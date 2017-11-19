@@ -194,6 +194,12 @@ a.mapboxgl-ctrl-logo {
 }
 
 /* SLIDER */
+/* #slider{
+  padding-right: 0%;
+  background: -webkit-repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+  background: -moz-repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+  background: repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+} */
 .map-overlay {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     position: absolute;
@@ -203,6 +209,18 @@ a.mapboxgl-ctrl-logo {
     padding-right: 2%;
     z-index: 1;
     opacity: .5;
+}
+
+option{
+  min-height:10px;
+  white-space: normal;
+  padding: 1.24%;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+datalist{
+  display: flex;
 }
 
 .map-overlay:hover {
@@ -241,5 +259,6 @@ a.mapboxgl-ctrl-logo {
     width: 100%;
     position: relative;
     margin: 0;
-    cursor: ew-resize;
+    cursor: pointer;
+    bottom: 6.5px;
 }
