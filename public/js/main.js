@@ -21,6 +21,7 @@ $(document).ready(function() {
             events: data.features
         }));
 
+
         // $.each(data.recenttracks.track, function(i, item) {
         //     if(counter == 1) {
         //         songTitle = item.name;
@@ -57,4 +58,14 @@ $(document).ready(function() {
 
 
     });
+    var inputBox = document.getElementById('search-input');
+    inputBox.onkeyup = function(){
+        console.log(inputBox.value)
+
+        $.getJSON("http://52.53.197.64/api/v1/search/"+inputBox.value, function(data){
+            console.log(data);
+        })
+
+    }
+
 }); // close document ready function
