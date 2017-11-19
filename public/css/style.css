@@ -30,6 +30,10 @@ td a {
 }
 
 /*NAVBAR*/
+.navbar {
+    z-index: 100;
+}
+
 .nav-container {
     margin-left: 14px;
 }

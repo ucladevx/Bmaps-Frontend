@@ -1,6 +1,9 @@
 $(document).ready(function() {
     var source = $("#some-template").html();
     var template = Handlebars.compile(source);
+
+    initModal();
+
     $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
 
