@@ -87,10 +87,11 @@ body.locked{
 }
 
 .event-friends {
-	width: 270px;
+	width: 100%;
 	max-width: 100%;
 	display: table;
 	margin: 0 auto;
+	justify-content: center;
 	/*transform: translateX(50%, 50%);*/
 }
 
