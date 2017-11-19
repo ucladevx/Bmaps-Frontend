@@ -48,12 +48,20 @@ body.locked{
 }
 
 .modal-x {
+	position: fixed;
 	font-weight: lighter;
 	font-size: 40px;
 	height: 30px;
+	opacity: .6;
 	float: left;
 	-webkit-transform: translate(-50%, -50%);
 			transform: translate(-125%, -125%);
+
+}
+
+.modal-x:hover {
+	opacity: 1;
+	transition: 0.2s;
 }
 
 .event-left {
@@ -83,6 +91,8 @@ body.locked{
 	max-width: 100%;
 	display: inline;
 	float: left;
+	align-items: center;
+	transform: translateX(50%, 50%);
 }
 
 .event-friend-block {
@@ -91,8 +101,8 @@ body.locked{
   	align-items: center;
   	justify-content: center;
   	margin: 0px 0px 0px 0px;
-  	width: 45px;
-  	height: 45px;
+  	width: calc(100% / 6);;
+  	height: calc(100% / 6);;
 }
 
 .event-friend-circle{
@@ -105,7 +115,7 @@ body.locked{
 	width: 30px;
 	border-radius: 20px;
 	box-shadow: 0px 1px 5px 0 rgba(34, 36, 38, 0.3);
-	padding: 10px;
+	/*padding: 15px;*/
 }
 
 .btn-facebook{

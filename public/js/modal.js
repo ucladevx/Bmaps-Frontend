@@ -36,4 +36,7 @@ var initModal = function(){
 		hideModal('all');
 		showModal('event');
 	});
+	$('.modal-x').click(function(){
+		hideModal('all');
+	});
 };
