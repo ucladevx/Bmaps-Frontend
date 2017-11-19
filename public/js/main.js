@@ -1,17 +1,19 @@
 $(document).ready(function() {
     var source = $("#some-template").html();
     var template = Handlebars.compile(source);
+
     initModal();
-    $.getJSON("http://localhost:3004/events", function(data)
+
+    $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
 
         console.log("hellur");
-        console.log(data);
+        // console.log(data);
         var html = ''; // we declare the variable that we'll be using to store our information
         var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
 
-        $.each(data, function(i,item){
-            console.log(item.name);
+        $.each(data.features, function(i,item){
+            console.log(item.properties.event_name);
 
         });
 
@@ -19,7 +21,7 @@ $(document).ready(function() {
           return person.firstName + " " + person.lastName;
         });
         $('#events-mount').append(template({
-            events: data
+            events: data.features
         }));
 
         // $.each(data.recenttracks.track, function(i, item) {
