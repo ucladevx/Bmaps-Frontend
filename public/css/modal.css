@@ -87,12 +87,11 @@ body.locked{
 }
 
 .event-friends {
-	width: 100%;
+	width: 270px;
 	max-width: 100%;
-	display: inline;
-	float: left;
-	align-items: center;
-	transform: translateX(50%, 50%);
+	display: table;
+	margin: 0 auto;
+	/*transform: translateX(50%, 50%);*/
 }
 
 .event-friend-block {
@@ -101,8 +100,8 @@ body.locked{
   	align-items: center;
   	justify-content: center;
   	margin: 0px 0px 0px 0px;
-  	width: calc(100% / 6);;
-  	height: calc(100% / 6);;
+  	width: 45px;
+  	height: 45px;
 }
 
 .event-friend-circle{
@@ -115,19 +114,21 @@ body.locked{
 	width: 30px;
 	border-radius: 20px;
 	box-shadow: 0px 1px 5px 0 rgba(34, 36, 38, 0.3);
-	/*padding: 15px;*/
+	padding: 15px;
 }
 
 .btn-facebook{
-	display: inline-block;
+	display: table;
 	width: 90%;
+	max-width: 100%;
 	background-color: #3b5998;
 	border-radius: 5px;
 	text-align: center;
 	line-height: 30px;
-	margin: 10px;
-	transform: translateX(50%, 50%);
-
+	-webkit-align-self: center; /* Safari 7.0+ */
+    align-self: center;
+	margin: 0 auto;
+	
 }
 
 .btn-facebook .fb-text{
