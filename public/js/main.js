@@ -59,13 +59,29 @@ $(document).ready(function() {
 
     });
     var inputBox = document.getElementById('search-input');
-    inputBox.onkeyup = function(){
-        console.log(inputBox.value)
+    let list = document.getElementById('searchList');
+    inputBox.onkeyup = function(e){
+        console.log(inputBox.value);
+        // console.log(e);
+        if (e.which == 13){ //detects enter
+            e.preventDefault();
+            $('.input-group-addon').click();
+        }
 
-        $.getJSON("http://52.53.197.64/api/v1/search/"+inputBox.value, function(data){
+        var keyUrl = "http://52.53.197.64/api/v1/search/"+inputBox.value;
+        $.getJSON(keyUrl, function(data){
+            while (list.firstChild) {
+                list.removeChild(myNode.firstChild);
+            }
             console.log(data);
-        })
+            $.each(data, function(i,item){
+                console.log(item.event_name);
+                let option = document.createElement('option');
+                option.value = item.event_name;
+                list.appendChild(option);
+            });
 
+        })
     }
 
 }); // close document ready function
