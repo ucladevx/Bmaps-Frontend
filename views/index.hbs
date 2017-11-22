@@ -1,6 +1,5 @@
 {{> header}}
 
-
 <div class="container home-container">
     <div class="row home-row">
     <div id="events-mount" class="col-sm-4 col-md-4"></div>
@@ -8,8 +7,8 @@
     </div>
 </div>
 
-
-<script id="some-template" type="text/x-handlebars-template">
+<script id="sidebar-event-template" type="text/x-handlebars-template">
+    <!--  Sidebar Static Categories-->
     <div class="dropdown sidebar-header">
       <p data-toggle="dropdown">
           all categories
@@ -22,7 +21,10 @@
         <li><a href="#">health</a></li>
       </ul>
   </div>
+  <!--  Sidebar Events-->
     <div class="sidebar">
+        <!-- `events` is passed from main.js's API Call -->
+        <!-- We iterate through each of these objects and append them using the template -->
         \{{#each events}}
         <div class="sidebar-event">
             <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
@@ -32,7 +34,6 @@
                 <p class="sidebar-event-location">\{{this.properties.venue.location.street}}</p>
                 <p class="sidebar-event-category">\{{this.properties.category}}</p>
             </div>
-
         </div>
         <div class="seperator"></div>
         \{{/each}}
