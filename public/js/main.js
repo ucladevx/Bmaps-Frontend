@@ -13,7 +13,7 @@ $(document).ready(function() {
             console.log(item.properties.event_name);
         });
         //Mount the object holding events into the index.html at #events-mount
-        $('#events-mount').append(eventsTemplate({
+        $('#events-mount').html(eventsTemplate({
             events: data.features
         }));
 
@@ -81,10 +81,10 @@ $(document).ready(function() {
             //Iterate through all of the elemnts given by the API search
             $.each(data, function(i,item){
                 if (i < 15){
-                    console.log(item.event_name);
+                    console.log(item.properties.event_name);
                     //Append those elements onto the datalist for the input box
                     let option = document.createElement('option');
-                    option.value = item.event_name;
+                    option.value = item.properties.event_name;
                     list.appendChild(option);
                 }
             });
