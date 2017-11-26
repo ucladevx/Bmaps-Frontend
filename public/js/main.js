@@ -2,27 +2,33 @@ $(document).ready(function() {
     var source = $("#some-template").html();
     var template = Handlebars.compile(source);
 
-    initModal();
-
     $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
 
-        console.log("hellur");
+        //console.log("hellur");
         // console.log(data);
         var html = ''; // we declare the variable that we'll be using to store our information
         var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
 
         $.each(data.features, function(i,item){
-            console.log(item.properties.event_name);
+            //console.log(item.properties);
+            //console.log(item.properties.event_name);
 
+        });
+
+        Handlebars.registerHelper('json', function(context) {
+            return JSON.stringify(context).replace(/"/g, '&quot;');
         });
 
         Handlebars.registerHelper('fullName', function(person) {
           return person.firstName + " " + person.lastName;
         });
+
         $('#events-mount').append(template({
             events: data.features
         }));
+
+        initModal();
 
         // $.each(data.recenttracks.track, function(i, item) {
         //     if(counter == 1) {

@@ -8,7 +8,6 @@
     </div>
 </div>
 
-
 <script id="some-template" type="text/x-handlebars-template">
     <div class="dropdown sidebar-header">
       <p data-toggle="dropdown">
@@ -21,10 +20,10 @@
         <li><a href="#">cause</a></li>
         <li><a href="#">health</a></li>
       </ul>
-  </div>
+    </div>
     <div class="sidebar">
         \{{#each events}}
-        <div class="sidebar-event">
+        <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="showModal('sign-up', \{{{json this.properties}}})">
             <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
             <div class="sidebar-event-details">
                 <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
@@ -32,8 +31,7 @@
                 <p class="sidebar-event-location">\{{this.properties.venue.location.street}}</p>
                 <p class="sidebar-event-category">\{{this.properties.category}}</p>
             </div>
-
-        </div>
+        </a>
         <div class="seperator"></div>
         \{{/each}}
     </div>
