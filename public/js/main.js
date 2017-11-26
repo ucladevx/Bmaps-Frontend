@@ -63,13 +63,10 @@ $(document).ready(function() {
         console.log(inputBox.value);
         console.log(e);
         //13 is the code value for `Enter` (74: j)
-        e.preventDefault();
         if (e.which == 13){
-            // e.preventDefault(); //currently does nothing
-            $('#search-results').append(searchResultsTemplate({
+            $('#search-results').html(searchResultsTemplate({
                 searchEvents: dataObj
             }));
-
             return false;
         }
         //Pass the current keys into the search API
@@ -77,9 +74,9 @@ $(document).ready(function() {
         $.getJSON(keyUrl, function(data){
             //Clear the list and restart everytime we get a new input
             while (list.firstChild) {
-                list.removeChild(myNode.firstChild);
+                list.removeChild(list.firstChild);
             }
-            console.log(data);
+            console.log("SEARCH BOX" + data);
             dataObj = data;
             //Iterate through all of the elemnts given by the API search
             $.each(data, function(i,item){
