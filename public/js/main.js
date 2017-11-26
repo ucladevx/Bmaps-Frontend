@@ -1,7 +1,9 @@
 $(document).ready(function() {
     //After website is loaded, use handlebars to parse the html in the sidebar template in the index.html
-    var source = $("#sidebar-event-template").html();
-    var template = Handlebars.compile(source);
+    var eventsSource = $("#sidebar-event-template").html();
+    var eventsTemplate = Handlebars.compile(eventsSource);
+    var searchSource = $("#search-results-template").html();
+    var searchResultsTemplate = Handlebars.compile(searchSource);
     //Make a get request to the events to load them into the sidebar using handlebars
     $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
@@ -10,7 +12,7 @@ $(document).ready(function() {
             console.log(item.properties.event_name);
         });
         //Mount the object holding events into the index.html at #events-mount
-        $('#events-mount').append(template({
+        $('#events-mount').append(eventsTemplate({
             events: data.features
         }));
 
@@ -54,14 +56,20 @@ $(document).ready(function() {
     //Setting up datalist with searhbox
     var inputBox = document.getElementById('search-input');
     let list = document.getElementById('searchList');
+    var dataObj = ""
     //Detecting a key change in search and capturing it as "e"
     inputBox.onkeyup = function(e){
         console.log(inputBox.value);
         console.log(e);
-        //13 is the code value for `Enter`
+        //13 is the code value for `Enter` (74: j)
+        e.preventDefault();
         if (e.which == 13){
-            e.preventDefault(); //currently does nothing
-            $('.input-group-addon').click();
+            // e.preventDefault(); //currently does nothing
+            $('#search-results').append(searchResultsTemplate({
+                searchEvents: dataObj
+            }));
+
+            return false;
         }
         //Pass the current keys into the search API
         var keyUrl = "http://52.53.197.64/api/v1/search/"+inputBox.value;
@@ -71,13 +79,16 @@ $(document).ready(function() {
                 list.removeChild(myNode.firstChild);
             }
             console.log(data);
+            dataObj = data;
             //Iterate through all of the elemnts given by the API search
             $.each(data, function(i,item){
-                console.log(item.event_name);
-                //Append those elements onto the datalist for the input box
-                let option = document.createElement('option');
-                option.value = item.event_name;
-                list.appendChild(option);
+                if (i < 15){
+                    console.log(item.event_name);
+                    //Append those elements onto the datalist for the input box
+                    let option = document.createElement('option');
+                    option.value = item.event_name;
+                    list.appendChild(option);
+                }
             });
         })
     }
