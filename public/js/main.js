@@ -6,8 +6,10 @@ $(document).ready(function() {
     var searchSource = $("#search-results-template").html();
     var searchResultsTemplate = Handlebars.compile(searchSource);
     //Make a get request to the events to load them into the sidebar using handlebars
+    var defaultData = ""
     $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
+        defaultData = data.features;
         //iterate through each of the elements in the API json object
         $.each(data.features, function(i,item){
             console.log(item.properties.event_name);
@@ -60,13 +62,23 @@ $(document).ready(function() {
     var dataObj = ""
     //Detecting a key change in search and capturing it as "e"
     inputBox.onkeyup = function(e){
-        console.log(inputBox.value);
+        console.log("INPUT BOX VALUE" + inputBox.value);
         console.log(e);
         //13 is the code value for `Enter` (74: j)
         if (e.which == 13){
-            $('#search-results').html(searchResultsTemplate({
-                searchEvents: dataObj
-            }));
+            // $('#search-results').html(searchResultsTemplate({
+            //     searchEvents: dataObj
+            // }));
+            if (inputBox.value == "") {
+                $('#events-mount').html(eventsTemplate({
+                    events: defaultData
+                }));
+            }
+            else {
+                $('#events-mount').html(eventsTemplate({
+                    events: dataObj
+                }));
+            }
             return false;
         }
         //Pass the current keys into the search API
