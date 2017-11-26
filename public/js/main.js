@@ -1,5 +1,6 @@
 $(document).ready(function() {
     //After website is loaded, use handlebars to parse the html in the sidebar template in the index.html
+    $('#searchForm').attr('action', 'javascript:void(0);');
     var eventsSource = $("#sidebar-event-template").html();
     var eventsTemplate = Handlebars.compile(eventsSource);
     var searchSource = $("#search-results-template").html();
