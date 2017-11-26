@@ -7,6 +7,8 @@ $(document).ready(function() {
     var searchResultsTemplate = Handlebars.compile(searchSource);
     //Make a get request to the events to load them into the sidebar using handlebars
     var defaultData = ""
+    // initModal();
+
     $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
         defaultData = data.features;

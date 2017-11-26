@@ -12,6 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
+    <script src="../js/modal.js"></script>
 </head>
 <body>
     <!-- Navbar -->
@@ -33,41 +34,21 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a id="sign-up-button">sign up</a>
-                        <div class="modal" id="sign-up-modal">
-                            <div class="modal-content">
-                                <!-- <div class="field"> -->
-                                <div class="modal-field" id="close">&times;</div>
-                                <div class="modal-field">SIGN UP</div>
-                                <div class="modal-field field">
-                                    <input type="text" placeholder="Email Address">
-                                </div>
-                                <div class="modal-field field">
-                                    <input type="text" placeholder="First Name">
-                                </div>
-                                <div class="modal-field field">
-                                    <input type="text" placeholder="Last Name">
-                                </div>
-                                <div class="modal-field field">
-                                    <input type="text" placeholder="Create a password">
-                                </div>
-                                <div class="modal-field field" id="create-button">Create account
-                                </div>
-                                <!-- </div> -->
-                            </div>
-                        </li>
-                        <li class=""><a href="/login" style="color: rgb(255,24,59);">login</a></li>
-                    </ul>
-                    <!-- Search Box -->
-                    <form class="navbar-form" id="searchForm">
-                        <div class="form-group" style="display:inline;" id="navBarSearchForm">
-                            <div class="input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                                <input type="text" list="searchList" class="form-control" id="search-input" placeholder="search for an event...">
-                                <datalist id="searchList"></datalist>
-                            </div>
-                        </div>
-                    </form>
+                      <a class="sign-up sign-up-trigger-modal" id="sign-up-button">sign up</a>
+                      <!-- <div class="btn-main sign-up sign-up-trigger-modal">SIGN UP NOW</div> -->
+                    </li>
+                    <li class=""><a href="/login" style="color: rgb(255,24,59);">login</a></li>
+                  </ul>
+                  <!-- Search Box -->
+                  <form class="navbar-form" id="searchForm">
+                      <div class="form-group" style="display:inline;" id="navBarSearchForm">
+                          <div class="input-group">
+                              <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                              <input type="text" list="searchList" class="form-control" id="search-input" placeholder="search for an event...">
+                              <datalist id="searchList"></datalist>
+                          </div>
+                      </div>
+                  </form>
                 </div>
             </div>
         </nav>
