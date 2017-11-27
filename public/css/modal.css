@@ -7,6 +7,14 @@ body.locked{
 	display: none;
 }
 
+/*.sign-up-trigger-modal{
+	background-color: red;
+}*/
+.sign-up-trigger-modal:hover{
+	box-shadow: 0px 1px 4px 0 rgba(34, 36, 38, 0.3);
+	opacity: 0.7;
+}
+
 .modal-container .overlay{
 	position: fixed;
 	height: 100%;
@@ -129,6 +137,7 @@ body.locked{
 	-webkit-align-self: center; /* Safari 7.0+ */
     align-self: center;
 	margin: 0 auto;
+	margin-top: 10px;
 	
 }
 

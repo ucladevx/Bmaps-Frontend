@@ -8,23 +8,40 @@ $(document).ready(function() {
     //Make a get request to the events to load them into the sidebar using handlebars
     var defaultData = ""
 
-    initModal();
-
     $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
+        // console.log(data);
+        var html = ''; // we declare the variable that we'll be using to store our information
+        var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
+
         defaultData = data.features;
         //iterate through each of the elements in the API json object
         $.each(data.features, function(i,item){
+            //console.log(item.properties);
             console.log(item.properties.event_name);
+
         });
+
+        Handlebars.registerHelper('json', function(context) {
+            return JSON.stringify(context).replace(/"/g, '&quot;');
+        });
+
+        Handlebars.registerHelper('fullName', function(person) {
+          return person.firstName + " " + person.lastName;
+        });
+
         //Mount the object holding events into the index.html at #events-mount
         $('#events-mount').html(eventsTemplate({
             events: data.features
         }));
 
+        initModal();
+
+
         //OLD CODE THAT MAY BE USEFUL IN THE FUTURE
         // var html = ''; // we declare the variable that we'll be using to store our information
         // var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
+
         // $.each(data.recenttracks.track, function(i, item) {
         //     if(counter == 1) {
         //         songTitle = item.name;
