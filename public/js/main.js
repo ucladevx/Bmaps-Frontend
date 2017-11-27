@@ -1,18 +1,24 @@
 $(document).ready(function() {
-    var source = $("#some-template").html();
-    var template = Handlebars.compile(source);
+    //After website is loaded, use handlebars to parse the html in the sidebar template in the index.html
+    $('#searchForm').attr('action', 'javascript:void(0);');
+    var eventsSource = $("#sidebar-event-template").html();
+    var eventsTemplate = Handlebars.compile(eventsSource);
+    var searchSource = $("#search-results-template").html();
+    var searchResultsTemplate = Handlebars.compile(searchSource);
+    //Make a get request to the events to load them into the sidebar using handlebars
+    var defaultData = ""
 
     $.getJSON("http://52.53.197.64/api/v1/events", function(data)
     {
-
-        //console.log("hellur");
         // console.log(data);
         var html = ''; // we declare the variable that we'll be using to store our information
         var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
 
+        defaultData = data.features;
+        //iterate through each of the elements in the API json object
         $.each(data.features, function(i,item){
             //console.log(item.properties);
-            //console.log(item.properties.event_name);
+            console.log(item.properties.event_name);
 
         });
 
@@ -23,12 +29,18 @@ $(document).ready(function() {
         Handlebars.registerHelper('fullName', function(person) {
           return person.firstName + " " + person.lastName;
         });
-
-        $('#events-mount').append(template({
+      
+        //Mount the object holding events into the index.html at #events-mount
+        $('#events-mount').html(template({
             events: data.features
         }));
 
         initModal();
+
+
+        //OLD CODE THAT MAY BE USEFUL IN THE FUTURE
+        // var html = ''; // we declare the variable that we'll be using to store our information
+        // var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
 
         // $.each(data.recenttracks.track, function(i, item) {
         //     if(counter == 1) {
@@ -63,7 +75,51 @@ $(document).ready(function() {
         //     $('.showSong').append(embedHtml);
         //
         // });
-
-
     });
+    //Setting up datalist with searhbox
+    var inputBox = document.getElementById('search-input');
+    let list = document.getElementById('searchList');
+    var dataObj = ""
+    //Detecting a key change in search and capturing it as "e"
+    inputBox.onkeyup = function(e){
+        console.log("INPUT BOX VALUE" + inputBox.value);
+        console.log(e);
+        //13 is the code value for `Enter` (74: j)
+        if (e.which == 13){
+            // $('#search-results').html(searchResultsTemplate({
+            //     searchEvents: dataObj
+            // }));
+            if (inputBox.value == "") {
+                $('#events-mount').html(eventsTemplate({
+                    events: defaultData
+                }));
+            }
+            else {
+                $('#events-mount').html(eventsTemplate({
+                    events: dataObj
+                }));
+            }
+            return false;
+        }
+        //Pass the current keys into the search API
+        var keyUrl = "http://52.53.197.64/api/v1/search/"+inputBox.value;
+        $.getJSON(keyUrl, function(data){
+            //Clear the list and restart everytime we get a new input
+            while (list.firstChild) {
+                list.removeChild(list.firstChild);
+            }
+            console.log("SEARCH BOX" + data);
+            dataObj = data;
+            //Iterate through all of the elemnts given by the API search
+            $.each(data, function(i,item){
+                if (i < 15){
+                    console.log(item.properties.event_name);
+                    //Append those elements onto the datalist for the input box
+                    let option = document.createElement('option');
+                    option.value = item.properties.event_name;
+                    list.appendChild(option);
+                }
+            });
+        })
+    }
 }); // close document ready function

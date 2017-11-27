@@ -1,14 +1,25 @@
 {{> header}}
 
-
 <div class="container home-container">
+    <!-- Sidebar Search Results -->
+    <div id="search-results"></div>
     <div class="row home-row">
-    <div id="events-mount" class="col-sm-4 col-md-4"></div>
-    <div class="map-display col-sm-8 col-md-8" id="map"></div>
+        <div id="events-mount" class="col-sm-4 col-md-4"></div>
+        <div class="map-display col-sm-8 col-md-8" id="map"></div>
     </div>
 </div>
 
-<script id="some-template" type="text/x-handlebars-template">
+
+<script id="search-results-template" type="text/x-handlebars-template">
+    <div>
+        \{{#each searchEvents}}
+        <div>\{{this.properties.event_name}}</div>
+        \{{/each}}
+    </div>
+</script>
+
+<script id="sidebar-event-template" type="text/x-handlebars-template">
+    <!--  Sidebar Static Categories-->
     <div class="dropdown sidebar-header">
       <p data-toggle="dropdown">
           all categories
@@ -20,8 +31,12 @@
         <li><a href="#">cause</a></li>
         <li><a href="#">health</a></li>
       </ul>
-    </div>
+
+  </div>
+  <!--  Sidebar Events-->
     <div class="sidebar">
+        <!-- `events` is passed from main.js's API Call -->
+        <!-- We iterate through each of these objects and append them using the template -->
         \{{#each events}}
         <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="showModal('sign-up', \{{{json this.properties}}})">
             <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
@@ -37,12 +52,6 @@
     </div>
 </script>
 
-
-
-
-
-
-<!-- <div id='map'></div> -->
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGVsYXJhYmF3eSIsImEiOiJjajUxN3k2d3MwMGg4MnFxZHhjcjYxN2U4In0.0OSl71QURA_P9d32r982Zw';
 
