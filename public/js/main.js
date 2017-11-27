@@ -29,9 +29,9 @@ $(document).ready(function() {
         Handlebars.registerHelper('fullName', function(person) {
           return person.firstName + " " + person.lastName;
         });
-      
+
         //Mount the object holding events into the index.html at #events-mount
-        $('#events-mount').html(template({
+        $('#events-mount').html(eventsTemplate({
             events: data.features
         }));
 
