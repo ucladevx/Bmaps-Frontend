@@ -89,11 +89,84 @@ var map = new mapboxgl.Map({
 	container: 'map',
 	style: 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
 	center: [-118.445320, 34.066915],
-	maxBounds: [[-118.48, 34.05],[-118.4, 34.1]],
+	//maxBounds: [[-118.48, 34.05],[-118.4, 34.1]],
 	zoom: 15,
 	pitch: 60
 
 });
+
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
+
+//var url = 'https://wanderdrone.appspot.com/';
+//var url = 'testdata.json';
+//var url = '/public/views/testdata.json';
+// var url = {"geometry": {"type": "Point", "coordinates": [-149.48924262193523, -49.320149598576961]}, "type": "Feature", "properties": {}};
+
+var url = {"geometry": { "coordinates": [-118.4397549,34.0709452],"type": "Point"},
+      "id": "140162759870150",
+      "properties": {
+        "category": "EVENT_MUSIC",
+        "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/22853372_1532441836844932_7678042518657267438_n.jpg?oh=66640b17a5c401134a00c659b61a5d35&oe=5A626185",
+        "end_time": "2017-11-08T23:00:00-0800",
+        "event_name": "Nicole Mitchell Quartet",
+        "free_food": "No",
+        "is_cancelled": false,
+        "start_time": "2017-11-08T20:00:00-0800",
+        "stats": {
+          "attending": 0,
+          "declined": 0,
+          "maybe": 0,
+          "noreply": 0
+        },
+        "ticketing": "None",
+        "venue": {
+          "about": "All in One Place. Performance. Scholarship. Innovation. ",
+          "category": "Performance & Event Venue",
+          "categoryList": [
+            "Performance & Event Venue",
+            "School"
+          ],
+          "coverPicture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22135380_1507371272685322_2716028351226784119_o.jpg?oh=f9bdf5e4055e3800b51961efc16a0733&oe=5A6B5ABB",
+          "emails": [
+            "communications@schoolofmusic.ucla.edu"
+          ],
+          "id": "1088648777890909",
+          "location": {
+            "city": "Los Angeles",
+            "country": "United States",
+            "latitude": 34.0709452,
+            "longitude": -118.4397549,
+            "state": "CA",
+            "street": "445 Charles E. Young Drive",
+            "zip": "90095"
+          },
+          "name": "UCLA Herb Alpert School of Music",
+          "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/13921211_1088653157890471_2459200741387644123_n.jpg?oh=e8b6df6c1057a299cac410e2f7ad8f7b&oe=5AA1CEE6"
+        }
+      },
+      "type": "Feature"
+    };
+
+
+map.on('load', function () {
+    window.setInterval(function() {
+        map.getSource('drone').setData(url);
+    }, 2000);
+
+    map.addSource('drone', { type: 'geojson', data: url });
+    map.addLayer({
+        "id": "drone",
+        "type": "symbol",
+        "source": "drone",
+        "layout": {
+            "icon-image": "rocket-15"
+        }
+    });
+});
+
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
 
 map.addControl(new mapboxgl.GeolocateControl({
     positionOptions: {
@@ -179,7 +252,35 @@ function hoverPopup() {
 });
 }
 
-// Add geolocate control to the map.
+// Hover popup 2
+function hoverPopup2() {
+  // Create a popup, but don't add it to the map yet.
+  var popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+  });
+
+  map.on('mouseenter', 'drone', function(e) {
+      // Change the cursor style as a UI indicator.
+      map.getCanvas().style.cursor = 'pointer';
+
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(e.lngLat)
+          .setHTML(e.event_name)
+          .addTo(map);
+
+  });
+
+  map.on('mouseleave', 'drone', function() {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+  });
+
+  map.on('click', 'drone', function (e) {
+    map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+});
+}
 
 function startMap() {
 	threeDDisplay();
@@ -191,6 +292,7 @@ function startMap() {
 
 map.on('load', startMap);
 map.on('load', hoverPopup);
+map.on('load', hoverPopup2);
 
 // Navigating map with game-like controls
 
