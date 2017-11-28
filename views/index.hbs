@@ -8,33 +8,6 @@
       <div class='map-overlay top'>
           <div class='map-overlay-inner'>
               <input id='slider' type='range' min='0' max='48' step='1' value='24' list='tickmarks'/>
-              <!--<datalist id='tickmarks'>
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-                <option>13</option>
-                <option>14</option>
-                <option>15</option>
-                <option>16</option>
-                <option>17</option>
-                <option>18</option>
-                <option>19</option>
-                <option>20</option>
-                <option>21</option>
-                <option>22</option>
-                <option>23</option>
-              </datalist>-->
-
           </div>
       </div>
     </div>
@@ -55,6 +28,8 @@
         <li><a href="#">health</a></li>
       </ul>
   </div>
+
+
     <div class="sidebar">
         \{{#each events}}
         <div class="sidebar-event">
@@ -98,57 +73,7 @@ var map = new mapboxgl.Map({
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 
-//var url = 'https://wanderdrone.appspot.com/';
-//var url = 'testdata.json';
-//var url = '/public/views/testdata.json';
-// var url = {"geometry": {"type": "Point", "coordinates": [-149.48924262193523, -49.320149598576961]}, "type": "Feature", "properties": {}};
-
-var url = {"geometry": { "coordinates": [-118.4397549,34.0709452],"type": "Point"},
-      "id": "140162759870150",
-      "properties": {
-        "category": "EVENT_MUSIC",
-        "cover_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/22853372_1532441836844932_7678042518657267438_n.jpg?oh=66640b17a5c401134a00c659b61a5d35&oe=5A626185",
-        "end_time": "2017-11-08T23:00:00-0800",
-        "event_name": "Nicole Mitchell Quartet",
-        "free_food": "No",
-        "is_cancelled": false,
-        "start_time": "2017-11-08T20:00:00-0800",
-        "stats": {
-          "attending": 0,
-          "declined": 0,
-          "maybe": 0,
-          "noreply": 0
-        },
-        "ticketing": "None",
-        "venue": {
-          "about": "All in One Place. Performance. Scholarship. Innovation. ",
-          "category": "Performance & Event Venue",
-          "categoryList": [
-            "Performance & Event Venue",
-            "School"
-          ],
-          "coverPicture": "https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/22135380_1507371272685322_2716028351226784119_o.jpg?oh=f9bdf5e4055e3800b51961efc16a0733&oe=5A6B5ABB",
-          "emails": [
-            "communications@schoolofmusic.ucla.edu"
-          ],
-          "id": "1088648777890909",
-          "location": {
-            "city": "Los Angeles",
-            "country": "United States",
-            "latitude": 34.0709452,
-            "longitude": -118.4397549,
-            "state": "CA",
-            "street": "445 Charles E. Young Drive",
-            "zip": "90095"
-          },
-          "name": "UCLA Herb Alpert School of Music",
-          "profilePicture": "https://scontent.xx.fbcdn.net/v/t1.0-1/13921211_1088653157890471_2459200741387644123_n.jpg?oh=e8b6df6c1057a299cac410e2f7ad8f7b&oe=5AA1CEE6"
-        }
-      },
-      "type": "Feature"
-    };
-
-
+var url = 'http://52.53.197.64/api/v1/events';
 map.on('load', function () {
     window.setInterval(function() {
         map.getSource('drone').setData(url);
@@ -223,35 +148,6 @@ function threeDDisplay() {
   });
 }*/
 
-function hoverPopup() {
-  // Create a popup, but don't add it to the map yet.
-  var popup = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false
-  });
-
-  map.on('mouseenter', 'eventstest', function(e) {
-      // Change the cursor style as a UI indicator.
-      map.getCanvas().style.cursor = 'pointer';
-
-      // Populate the popup and set its coordinates
-      // based on the feature found.
-      popup.setLngLat(e.lngLat)
-          .setHTML(e.description)
-          .addTo(map);
-
-  });
-
-  map.on('mouseleave', 'eventstest', function() {
-      map.getCanvas().style.cursor = '';
-      popup.remove();
-  });
-
-  map.on('click', 'eventstest', function (e) {
-    map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
-});
-}
-
 // Hover popup 2
 function hoverPopup2() {
   // Create a popup, but don't add it to the map yet.
@@ -266,8 +162,8 @@ function hoverPopup2() {
 
       // Populate the popup and set its coordinates
       // based on the feature found.
-      popup.setLngLat(e.lngLat)
-          .setHTML(e.event_name)
+      popup.setLngLat(e.features[0].geometry.coordinates)
+          .setHTML(e.features[0].properties.event_name)
           .addTo(map);
 
   });
@@ -284,14 +180,13 @@ function hoverPopup2() {
 
 function startMap() {
 	threeDDisplay();
-	map.flyTo({center: [-118.445320, 34.066915], zoom: 16.31, speed: .15});
+	map.flyTo({center: [-118.445320, 34.066915], zoom: 16.2, speed: .15});
 	setTimeout(function() {map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', .6);}, 2100);
-  map.setLayoutProperty('eventstest', 'visibility', 'visible');
+  //map.setLayoutProperty('eventstest', 'visibility', 'visible');
 }
 
 
 map.on('load', startMap);
-map.on('load', hoverPopup);
 map.on('load', hoverPopup2);
 
 // Navigating map with game-like controls
