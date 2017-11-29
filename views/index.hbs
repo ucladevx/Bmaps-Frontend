@@ -17,7 +17,9 @@
 
 <script>
 
-// MAP //
+////////////////////////////////////////////////
+///////////////////// MAP //////////////////////
+////////////////////////////////////////////////
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGVsYXJhYmF3eSIsImEiOiJjajUxN3k2d3MwMGg4MnFxZHhjcjYxN2U4In0.0OSl71QURA_P9d32r982Zw';
 
@@ -31,22 +33,45 @@ var map = new mapboxgl.Map({
 
 });
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
 
-var url = 'http://52.53.197.64/api/v1/events';
+////////////////////////////////////////////////
+/////////////////// LOAD DATA //////////////////
+////////////////////////////////////////////////
+
+var events = 'http://52.53.197.64/api/v1/events'; // json we are pulling from for event info
 map.on('load', function () {
-    window.setInterval(function() {
-        map.getSource('drone').setData(url);
-    }, 2000);
 
-    map.addSource('drone', { type: 'geojson', data: url });
-    map.addLayer({
+    map.addSource('events', { type: 'geojson', data: events });
+
+    // Making layers (based on categorization)
+  /*  events.features.forEach(function(feature) {
+            var symbol = features.properties.category; // category name -> icon
+            var layerID = 'poi-' + symbol;
+
+            // Add a layer for this symbol type if it hasn't been added already.
+            if (!map.getLayer(layerID)) {
+                map.addLayer({
+                    "id": layerID,
+                    "type": "symbol",
+                    "source": "events",
+                    "layout": {
+                        "icon-image": "/icons/" + symbol + ".svg",
+                        "icon-allow-overlap": true
+                    },
+                    "filter": ["==", "icon", symbol]
+                });
+
+            }
+        });*/
+
+  /* REVERT TO THIS IF categorization does not work*/
+   map.addLayer({
         "id": "drone",
         "type": "symbol",
-        "source": "drone",
+        "source": "events",
         "layout": {
-            "icon-image": "rocket-15",
+            "icon-image": "star-15",
+            "icon-size": 1.5,
             "icon-allow-overlap": true
         }
     });
