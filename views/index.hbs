@@ -15,38 +15,6 @@
 </div>
 
 
-<script id="some-template" type="text/x-handlebars-template">
-    <div class="dropdown sidebar-header">
-      <p data-toggle="dropdown">
-          all categories
-      <span class="caret"></span></p>
-      <ul class="dropdown-menu">
-        <li><a href="#">music</a></li>
-        <li><a href="#">networking</a></li>
-        <li><a href="#">fitness</a></li>
-        <li><a href="#">cause</a></li>
-        <li><a href="#">health</a></li>
-      </ul>
-  </div>
-
-
-    <div class="sidebar">
-        \{{#each events}}
-        <div class="sidebar-event">
-            <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
-            <div class="sidebar-event-details">
-                <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
-                <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
-                <p class="sidebar-event-location">\{{this.properties.venue.location.street}}</p>
-                <p class="sidebar-event-category">\{{this.properties.category}}</p>
-            </div>
-
-        </div>
-        <div class="seperator"></div>
-        \{{/each}}
-    </div>
-</script>
-
 
 
 
@@ -180,7 +148,7 @@ function hoverPopup2() {
 
 function startMap() {
 	threeDDisplay();
-	map.flyTo({center: [-118.445320, 34.066915], zoom: 16.2, speed: .15});
+	map.flyTo({center: [-118.445320, 34.066915], zoom: 15.8, speed: .15});
 	setTimeout(function() {map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', .6);}, 2100);
   //map.setLayoutProperty('eventstest', 'visibility', 'visible');
 }
@@ -238,7 +206,47 @@ map.on('load', hoverPopup2);
         }, true);
     });
 
+    // sidebar click
+    function goToLocation(x,y) {
+      map.flyTo({center: [x, y], zoom: 20, speed: 1}); // test coordinates till fix
+
+    }
+
 </script>
+
+
+<script id="some-template" type="text/x-handlebars-template">
+    <div class="dropdown sidebar-header">
+      <p data-toggle="dropdown">
+          all categories
+      <span class="caret"></span></p>
+      <ul class="dropdown-menu">
+        <li><a href="#">music</a></li>
+        <li><a href="#">networking</a></li>
+        <li><a href="#">fitness</a></li>
+        <li><a href="#">cause</a></li>
+        <li><a href="#">health</a></li>
+      </ul>
+  </div>
+
+
+    <div class="sidebar">
+        \{{#each events}}
+        <div class="sidebar-event" onclick=goToLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})>
+            <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
+            <div class="sidebar-event-details">
+                <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
+                <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
+                <p class="sidebar-event-location">\{{this.properties.venue.location.street}}</p>
+                <p class="sidebar-event-category">\{{this.properties.category}}</p>
+            </div>
+
+        </div>
+        <div class="seperator"></div>
+        \{{/each}}
+    </div>
+</script>
+
 
 
 
