@@ -187,3 +187,82 @@ li a {
     width: 100%;
     height: 100%;
 }
+
+/* getting rid of mapbox logos */
+a.mapboxgl-ctrl-logo {
+  height: 0;
+}
+
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+  height: 0;
+}
+
+/* SLIDER */
+/* #slider{
+  padding-right: 0%;
+  background: -webkit-repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+  background: -moz-repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+  background: repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+} */
+.map-overlay {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    position: absolute;
+    width: 98%;
+    bottom: 0;
+    padding-left: 2%;
+    padding-right: 2%;
+    z-index: 1;
+    opacity: .5;
+}
+
+option{
+  min-height:10px;
+  white-space: normal;
+  padding: 1.24%;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+datalist{
+  display: flex;
+}
+
+.map-overlay:hover {
+    opacity: .85;
+}
+
+.map-overlay:active {
+    opacity: 1;
+}
+
+.map-overlay .map-overlay-inner {
+    background-color: #fff;
+    box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+}
+
+
+.map-overlay h2 {
+    line-height: 24px;
+    display: block;
+    margin: 0 0 10px;
+}
+
+.map-overlay .legend .bar {
+    height: 10px;
+    width: 100%;
+    background: linear-gradient(to right, #FCA107, #7F3121);
+}
+
+.map-overlay input {
+    background-color: transparent;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    bottom: 6.5px;
+}
