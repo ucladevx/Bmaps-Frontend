@@ -134,7 +134,8 @@ function hoverPopup() {
   // Create a popup, but don't add it to the map yet.
     var popup = new mapboxgl.Popup({
         closeButton: false,
-        closeOnClick: false
+        closeOnClick: false,
+        offset: {'bottom':[15,0]}
     });
 
     map.on('mouseenter', 'drone', function(e) {
@@ -142,8 +143,9 @@ function hoverPopup() {
          map.getCanvas().style.cursor = 'pointer';
          // Populate the popup and set its coordinates
          // based on the feature found.
+         var text = e.features[0].properties.event_name + "<br>" + e.features[0].properties.start_time
          popup.setLngLat(e.features[0].geometry.coordinates)
-             .setHTML(e.features[0].properties.event_name)
+             .setHTML(text)
              .addTo(map);
      });
      map.on('mouseleave', 'drone', function() {
