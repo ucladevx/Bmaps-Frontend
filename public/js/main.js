@@ -17,13 +17,12 @@ $(document).ready(function() {
         defaultData = data.features;
         //iterate through each of the elements in the API json object
         $.each(data.features, function(i,item){
-
             var dateOfStart = new Date(item.properties.start_time);
             console.log("start date: " + formatDate(dateOfStart));
             item.properties.start_time = formatDate(dateOfStart);
 
-            if (item.properties.end_time != false){
-                // console.log(item.properties.end_time);
+            if (item.properties.end_time != "<No End Time>"){
+                console.log(item.properties.end_time);
                 var dateOfEnd = new Date(item.properties.end_time);
                 console.log("end date: " + formatDate(dateOfEnd));
             }
