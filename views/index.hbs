@@ -68,7 +68,7 @@ map.on('load', function () {
         });*/
   /* REVERT TO THIS IF categorization does not work*/
    map.addLayer({
-        "id": "drone",
+        "id": "eventlayer",
         "type": "symbol",
         "source": "events",
         "layout": {
@@ -138,7 +138,7 @@ function hoverPopup() {
         offset: {'bottom':[15,0]}
     });
 
-    map.on('mouseenter', 'drone', function(e) {
+    map.on('mouseenter', 'eventlayer', function(e) {
          // Change the cursor style as a UI indicator.
          map.getCanvas().style.cursor = 'pointer';
          // Populate the popup and set its coordinates
@@ -148,11 +148,11 @@ function hoverPopup() {
              .setHTML(text)
              .addTo(map);
      });
-     map.on('mouseleave', 'drone', function() {
+     map.on('mouseleave', 'eventlayer', function() {
          map.getCanvas().style.cursor = '';
          popup.remove();
      });
-     map.on('click', 'drone', function (e) {
+     map.on('click', 'eventlayer', function (e) {
        map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
    });
 }
@@ -179,6 +179,8 @@ map.on('load', hoverPopup);
     // degrees the map rotates when the left or right arrow is clicked
     var deltaDegrees = 25;
 
+    var deltaZoom = .5;
+
     function easing(t) {
         return t * (2 - t);
     }
@@ -204,7 +206,17 @@ map.on('load', hoverPopup);
                     bearing: map.getBearing() + deltaDegrees,
                     easing: easing
                 });
-            }
+            } else if (e.which === 32) { // zoom in (space)
+                map.easeTo({
+                    zoom: map.getZoom() + deltaZoom,
+                    easing: easing
+                });
+            } else if (e.which === 8) { // zoom out (backspace)
+                map.easeTo({
+                    zoom: map.getZoom() - deltaZoom,
+                    easing: easing
+                });
+           }
         }, true);
     });
 
