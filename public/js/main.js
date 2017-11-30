@@ -8,7 +8,7 @@ $(document).ready(function() {
     //Make a get request to the events to load them into the sidebar using handlebars
     var defaultData = ""
 
-    $.getJSON("http://52.53.197.64/api/v1/events", function(data)
+    $.getJSON("http://54.193.65.104/api/v1/events", function(data)
     {
         // console.log(data);
         var html = ''; // we declare the variable that we'll be using to store our information
