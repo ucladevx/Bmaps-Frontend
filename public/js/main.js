@@ -18,7 +18,32 @@ $(document).ready(function() {
         //iterate through each of the elements in the API json object
         $.each(data.features, function(i,item){
             //console.log(item.properties);
-            console.log(item.properties.event_name);
+            var dateOfEvent = new Date(item.properties.start_time);
+            console.log("formatted date: " + formatDate(dateOfEvent));
+            function getMonthNameFromMonthNumber(monthNumber){
+                var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+                return monthNames[monthNumber];
+            }
+            function formatHour(hour){
+                if (hour > 12){
+                    hour -= 12;
+                    return hour + " PM";
+                }
+                else{
+                    return hour + " AM";
+                }
+            }
+            function formatDate(date) {
+                var month = date.getMonth();
+                var day = date.getDate();
+                var hour = date.getHours();
+                var minutes = date.getMinutes();
+                if (day < 10){
+                    day = "0" + day;
+                }
+                return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
+            }
+
 
         });
 
