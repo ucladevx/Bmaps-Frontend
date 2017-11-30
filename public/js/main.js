@@ -18,14 +18,17 @@ $(document).ready(function() {
         //iterate through each of the elements in the API json object
         $.each(data.features, function(i,item){
             var dateOfStart = new Date(item.properties.start_time);
-            console.log("start date: " + formatDate(dateOfStart));
-            item.properties.start_time = formatDate(dateOfStart);
+            var dateOfEnd = new Date(item.properties.end_time);
+            // console.log("start date: " + formatDate(dateOfStart));
 
+            //changing value of start_time to proper parsing
             if (item.properties.end_time != "<No End Time>"){
-                console.log(item.properties.end_time);
-                var dateOfEnd = new Date(item.properties.end_time);
-                console.log("end date: " + formatDate(dateOfEnd));
+                item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours());
             }
+            else {
+                item.properties.start_time = formatDate(dateOfStart);
+            }
+
             function getMonthNameFromMonthNumber(monthNumber){
                 var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
                 return monthNames[monthNumber];
@@ -43,14 +46,11 @@ $(document).ready(function() {
                 var month = date.getMonth();
                 var day = date.getDate();
                 var hour = date.getHours();
-                var minutes = date.getMinutes();
                 if (day < 10){
                     day = "0" + day;
                 }
                 return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
             }
-
-
         });
 
         Handlebars.registerHelper('json', function(context) {
