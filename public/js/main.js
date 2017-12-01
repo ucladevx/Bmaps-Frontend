@@ -14,45 +14,12 @@ $(document).ready(function() {
         var html = ''; // we declare the variable that we'll be using to store our information
         var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
 
-        defaultData = data.features;
         //iterate through each of the elements in the API json object
         $.each(data.features, function(i,item){
-            var dateOfStart = new Date(item.properties.start_time);
-            var dateOfEnd = new Date(item.properties.end_time);
-            // console.log("start date: " + formatDate(dateOfStart));
-
-            //changing value of start_time to proper parsing
-            if (item.properties.end_time != "<No End Time>"){
-                item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours());
-            }
-            else {
-                item.properties.start_time = formatDate(dateOfStart);
-            }
-
-            function getMonthNameFromMonthNumber(monthNumber){
-                var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-                return monthNames[monthNumber];
-            }
-            function formatHour(hour){
-                if (hour > 12){
-                    hour -= 12;
-                    return hour + " PM";
-                }
-                else{
-                    return hour + " AM";
-                }
-            }
-            function formatDate(date) {
-                var month = date.getMonth();
-                var day = date.getDate();
-                var hour = date.getHours();
-                if (day < 10){
-                    day = "0" + day;
-                }
-                return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
-            }
+            formatDateItem(item);
         });
 
+        defaultData = data.features;
         Handlebars.registerHelper('json', function(context) {
             return JSON.stringify(context).replace(/"/g, '&quot;');
         });
@@ -117,9 +84,16 @@ $(document).ready(function() {
         console.log(e);
         //13 is the code value for `Enter` (74: j)
         if (e.which == 13){
-            // $('#search-results').html(searchResultsTemplate({
-            //     searchEvents: dataObj
-            // }));
+
+            console.log("**DEFAULT DATA**");
+            $.each(defaultData, function(i, item){
+                console.log(item.properties.event_name);
+            })
+            console.log("**DATA OBJ**");
+            $.each(dataObj, function(i, item){                
+                console.log(item.properties.event_name);
+            })
+
             if (inputBox.value == "") {
                 $('#events-mount').html(eventsTemplate({
                     events: defaultData
@@ -139,10 +113,9 @@ $(document).ready(function() {
             while (list.firstChild) {
                 list.removeChild(list.firstChild);
             }
-            console.log("SEARCH BOX" + data);
-            dataObj = data;
             //Iterate through all of the elemnts given by the API search
             $.each(data, function(i,item){
+                formatDateItem(item);
                 if (i < 15){
                     console.log(item.properties.event_name);
                     //Append those elements onto the datalist for the input box
@@ -151,6 +124,7 @@ $(document).ready(function() {
                     list.appendChild(option);
                 }
             });
+            dataObj = data;
         })
     }
 }); // close document ready function
