@@ -1,0 +1,28 @@
+.img-err {
+    width: 400px;
+}
+
+h1 {
+    font-size: 70px;
+    color: #000120;
+    line-height: 1.5em;
+    margin: 0px;
+    background-color: transparent;
+}
+
+.site-wrapper {
+    max-width: 90%;
+    margin: auto;
+}
+
+.background-404 {
+    background-color: rgb(244, 240, 233);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 93vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

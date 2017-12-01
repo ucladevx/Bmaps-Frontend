@@ -5,7 +5,7 @@ function showModal(modal, prop){
 		case 'sign-up':
 			$('.sign-up-modal-container').removeClass('hide');
 			document.getElementById("modal-image").src = prop.cover_picture;
-			document.getElementById("event-month").innerHTML = prop.start_time.split(" ")[2];
+			document.getElementById("event-month").innerHTML = prop.start_time.split(" ")[0];
 			document.getElementById("event-day").innerHTML = prop.start_time.split(" ")[1];
 			document.getElementById("event-title").innerHTML = prop.event_name;
 			document.getElementById("event-location").innerHTML = prop.venue.location.street;

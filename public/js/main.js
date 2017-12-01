@@ -8,7 +8,7 @@ $(document).ready(function() {
     //Make a get request to the events to load them into the sidebar using handlebars
     var defaultData = ""
 
-    $.getJSON("http://52.53.197.64/api/v1/events", function(data)
+    $.getJSON("http://54.193.65.104/api/v1/events", function(data)
     {
         // console.log(data);
         var html = ''; // we declare the variable that we'll be using to store our information
@@ -133,7 +133,7 @@ $(document).ready(function() {
             return false;
         }
         //Pass the current keys into the search API
-        var keyUrl = "http://52.53.197.64/api/v1/search/"+inputBox.value;
+        var keyUrl = "http://54.193.65.104/api/v1/search/"+inputBox.value;
         $.getJSON(keyUrl, function(data){
             //Clear the list and restart everytime we get a new input
             while (list.firstChild) {
