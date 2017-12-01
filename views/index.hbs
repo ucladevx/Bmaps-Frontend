@@ -7,9 +7,9 @@
     <div id="events-mount" class="col-sm-4 col-md-4"></div>
     <div class="map-display col-sm-8 col-md-8" id="map">
       <div class='map-overlay top'>
-          <div class='map-overlay-inner'>
+          <!-- <div class='map-overlay-inner'>
               <input id='slider' type='range' min='0' max='48' step='1' value='24' list='tickmarks'/>
-          </div>
+          </div> -->
       </div>
     </div>
     </div>
@@ -154,6 +154,7 @@ function hoverPopup() {
      });
      map.on('click', 'eventlayer', function (e) {
        map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+       showModal('sign-up', e.properties);
    });
 }
 
