@@ -164,8 +164,8 @@ body.locked{
 
 .event-right {
 	display: block;
-	max-width: 325px;
-	width: 50%;
+	max-width: 400px;
+	width: 55%;
 	padding: 0px 0px 10px 30px;
 	overflow: auto;
 }

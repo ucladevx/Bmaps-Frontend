@@ -154,6 +154,7 @@ function hoverPopup() {
      });
      map.on('click', 'eventlayer', function (e) {
        map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+       showModal('sign-up', e.features[0].properties);
    });
 }
 
@@ -251,7 +252,7 @@ function zoomToEventLocation(x, y) {
       <!-- `events` is passed from main.js's API Call -->
       <!-- We iterate through each of these objects and append them using the template -->
       \{{#each events}}
-      <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="showModal('sign-up', \{{{json this.properties}}}); zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
+      <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
           <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
           <div class="sidebar-event-details">
               <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
