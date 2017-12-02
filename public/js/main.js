@@ -114,7 +114,7 @@ $(document).ready(function() {
                 list.removeChild(list.firstChild);
             }
             //Iterate through all of the elemnts given by the API search
-            $.each(data, function(i,item){
+            $.each(data.features, function(i,item){
                 formatDateItem(item);
                 if (i < 15){
                     console.log(item.properties.event_name);
@@ -124,7 +124,7 @@ $(document).ready(function() {
                     list.appendChild(option);
                 }
             });
-            dataObj = data;
+            dataObj = data.features;
         })
     }
 }); // close document ready function
