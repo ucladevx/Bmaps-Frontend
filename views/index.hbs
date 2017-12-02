@@ -7,9 +7,13 @@
     <div id="events-mount" class="col-sm-4 col-md-4"></div>
     <div class="map-display col-sm-8 col-md-8" id="map">
       <div class='map-overlay top'>
-          <!-- <div class='map-overlay-inner'>
-              <input id='slider' type='range' min='0' max='48' step='1' value='24' list='tickmarks'/>
-          </div> -->
+          <div class='map-overlay-inner'>
+            <p id="leftArrow" display="-webkit-inline-box" onclick="previousDay()"></p>
+            <p id="relativeDay"><br></p>
+            <p id="currDate"></p>
+            <p id="rightArrow"style="display:inline" onclick="nextDay()"></p>
+              <!--input id='slider' type='range' min='0' max='48' step='1' value='24' list='tickmarks'/-->
+          </div>
       </div>
     </div>
     </div>
@@ -24,8 +28,6 @@
 </script>
 
 <script>
-
-
 ////////////////////////////////////////////////
 ///////////////////// MAP //////////////////////
 ////////////////////////////////////////////////
@@ -160,10 +162,12 @@ function hoverPopup() {
          map.getCanvas().style.cursor = 'pointer';
          // Populate the popup and set its coordinates
          // based on the feature found.
-         var text = e.features[0].properties.event_name + "<br>" + formatDate(new Date(e.features[0].properties.start_time));
          popup.setLngLat(e.features[0].geometry.coordinates)
-             .setHTML(text)
+             .setHTML('<p id=popupEvent></p> <p id=popupDate></p>')
              .addTo(map);
+
+        document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
+        document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
      });
      map.on('mouseleave', 'eventlayer', function() {
          map.getCanvas().style.cursor = '';
@@ -179,11 +183,58 @@ function hoverPopup() {
 ////////////////////////////////////////////////
 /////////////// START UP THE MAP ///////////////
 ////////////////////////////////////////////////
+// TODAY //
+var today = new Date();
+var todayD = today.getDate();
+var todayM = today.getMonth(); //January is 0!
+
+var d = todayD;
+var m = todayM;
+
+var currDay = today;
+
+function nextDay() {
+  currDay.setDate(currDay.getDate() + 1);
+  d = currDay.getDate();
+  m = currDay.getMonth();
+  updateDate();
+}
+
+function previousDay() {
+  currDay.setDate(currDay.getDate() - 1);
+  d = currDay.getDate();
+  m = currDay.getMonth();
+  updateDate();
+}
+
+function updateDate() {
+  console.log("Today: " +todayD + "Curr: " +d)
+  console.log("Check: " +  d == todayD && m == todayM)
+    if (d == todayD && m == todayM) {
+      document.getElementById("leftArrow").style.display = "none";
+      document.getElementById("relativeDay").innerHTML =  "today";
+    } else {
+      if (d == (todayD + 1)) {
+        document.getElementById("relativeDay").innerHTML =  "tomorrow";
+      } else {
+        document.getElementById("relativeDay").innerHTML = (d - todayD) +" days from today";
+      }
+      document.getElementById("leftArrow").style.display = "inline";
+    }
+
+    document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
+}
 
 function startMap() {
 	threeDDisplay();
 	map.flyTo({center: [-118.445320, 34.066915], zoom: 15.8, speed: .15});
 	setTimeout(function() {map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', .6);}, 2100);
+
+  document.getElementById("leftArrow").innerHTML = "&#9664;";
+  document.getElementById("rightArrow").innerHTML = "&#9658;";
+  updateDate();
+
+
 }
 map.on('load', startMap);
 map.on('load', hoverPopup);
