@@ -16,7 +16,7 @@ Have nodemon installed with `npm install -g nodemon`
 * `npm install` to install packages.
 
 * Check if backend is already deployed in AWS
-    * Navigate to http://54.193.65.104/api/v1/events
+    * Navigate to http://52.53.72.98/api/v1/events
     * If not running, run [Mappening-Backend](https://github.com/ucladevx/Mappening-Backend) locally according to the instructions in the README
         * Navigate to http://localhost/api/v1/events
         * Modify public/js/main.js
