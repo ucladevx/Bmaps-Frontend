@@ -45,7 +45,7 @@ var map = new mapboxgl.Map({
 /////////////////// LOAD DATA //////////////////
 ////////////////////////////////////////////////
 
-var events = 'http://54.193.65.104/api/v1/events'; // json we are pulling from for event info
+var events = 'http://52.53.72.98/api/v1/events'; // json we are pulling from for event info
 map.on('load', function () {
     map.addSource('events', { type: 'geojson', data: events });
     // Making layers (based on categorization)
@@ -154,7 +154,11 @@ function hoverPopup() {
      });
      map.on('click', 'eventlayer', function (e) {
        map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+<<<<<<< HEAD
        showModal('sign-up', e.properties);
+=======
+       showModal('sign-up', e.features[0].properties);
+>>>>>>> b95ee8018a00a708829cd4a5750d7f75753ded46
    });
 }
 
@@ -252,7 +256,7 @@ function zoomToEventLocation(x, y) {
       <!-- `events` is passed from main.js's API Call -->
       <!-- We iterate through each of these objects and append them using the template -->
       \{{#each events}}
-      <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="showModal('sign-up', \{{{json this.properties}}}); zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
+      <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
           <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
           <div class="sidebar-event-details">
               <p class="sidebar-event-name">\{{this.properties.event_name}}</p>

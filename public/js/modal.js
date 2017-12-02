@@ -8,6 +8,7 @@ function showModal(modal, prop){
 			document.getElementById("event-month").innerHTML = prop.start_time.split(" ")[0];
 			document.getElementById("event-day").innerHTML = prop.start_time.split(" ")[1];
 			document.getElementById("event-title").innerHTML = prop.event_name;
+			document.getElementById("event-time").innerHTML = prop.start_time.split("|")[1];
 			document.getElementById("event-location").innerHTML = prop.venue.location.street;
 			document.getElementById("event-description").innerHTML = prop.description;
 			break;
