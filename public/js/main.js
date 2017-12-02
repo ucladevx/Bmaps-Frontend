@@ -90,7 +90,7 @@ $(document).ready(function() {
                 console.log(item.properties.event_name);
             })
             console.log("**DATA OBJ**");
-            $.each(dataObj, function(i, item){                
+            $.each(dataObj, function(i, item){
                 console.log(item.properties.event_name);
             })
 

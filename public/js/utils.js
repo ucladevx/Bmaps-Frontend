@@ -1,9 +1,8 @@
 function formatDateItem(item) {
     var dateOfStart = new Date(item.properties.start_time);
     var dateOfEnd = new Date(item.properties.end_time);
-    
     //changing value of start_time to proper parsing
-    if (item.properties.end_time != "<No End Time>"){
+    if (item.properties.end_time != "<NONE>"){
         item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours());
     }
     else {
