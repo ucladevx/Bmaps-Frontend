@@ -238,6 +238,9 @@ Picking Date
   position: absolute;
   display: inline-block;
   bottom: 45;
+  font-weight:bolder;
+  -webkit-text-stroke: .05px #FCFCFC;
+  -webkit-text-fill-color: #000000;
 }
 
 #currDate {
@@ -245,6 +248,9 @@ Picking Date
   position: relative;
   display: inline-block;
   padding: initial;
+  font-weight:bolder;
+  -webkit-text-stroke: .05px #FCFCFC;
+  -webkit-text-fill-color: #000000;
 }
 
 p {

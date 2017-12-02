@@ -216,6 +216,9 @@ function updateDate() {
     } else {
       if (d == (todayD + 1)) {
         document.getElementById("relativeDay").innerHTML =  "tomorrow";
+      } else if (d == (todayD + 7)) {
+        document.getElementById("relativeDay").innerHTML = "in a week";
+        document.getElementById("rightArrow").style.display = "none";
       } else {
         document.getElementById("relativeDay").innerHTML = (d - todayD) +" days from today";
       }
