@@ -67,15 +67,32 @@ map.on('load', function () {
             }
         });*/
   /* REVERT TO THIS IF categorization does not work*/
-   map.addLayer({
+
+  /**** map.addLayer({
         "id": "eventlayer",
         "type": "symbol",
         "source": "events",
         "layout": {
-            "icon-image": "star-15",
-            "icon-size": 1.5,
+            "icon-image": "triangle-15",
+            "icon-size": 2.3,
             "icon-allow-overlap": true
         }
+    }); */
+
+    map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
+        if (error) throw error;
+        map.addImage('pin', image);
+        map.addLayer({
+            "id": "eventlayer",
+            "type": "symbol",
+            "source":"events",
+            "layout": {
+                "icon-image": "pin",
+                "icon-size":.06,
+                "icon-allow-overlap": true
+
+            }
+        });
     });
 });
 
@@ -143,7 +160,7 @@ function hoverPopup() {
          map.getCanvas().style.cursor = 'pointer';
          // Populate the popup and set its coordinates
          // based on the feature found.
-         var text = e.features[0].properties.event_name + "<br>" + e.features[0].properties.start_time
+         var text = e.features[0].properties.event_name + "<br>" + formatDate(new Date(e.features[0].properties.start_time));
          popup.setLngLat(e.features[0].geometry.coordinates)
              .setHTML(text)
              .addTo(map);
@@ -154,11 +171,8 @@ function hoverPopup() {
      });
      map.on('click', 'eventlayer', function (e) {
        map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
-<<<<<<< HEAD
-       showModal('sign-up', e.properties);
-=======
+    //   showModal('sign-up', e.properties);
        showModal('sign-up', e.features[0].properties);
->>>>>>> b95ee8018a00a708829cd4a5750d7f75753ded46
    });
 }
 
