@@ -212,7 +212,7 @@ a.mapboxgl-ctrl-logo {
     padding-left: 2%;
     padding-right: 2%;
     z-index: 1;
-    opacity: .5;
+    opacity: 1;
 }
 
 option{
@@ -227,18 +227,43 @@ datalist{
   display: flex;
 }
 
-.map-overlay:hover {
-    opacity: .85;
+/*
+Picking Date
+*/
+#leftArrow {
+  left:0;
 }
 
-.map-overlay:active {
-    opacity: 1;
+#relativeDay {
+  position: absolute;
+  display: inline-block;
+  bottom: 45;
+  font-weight:bolder;
+  -webkit-text-stroke: .05px #FCFCFC;
+  -webkit-text-fill-color: #000000;
 }
 
+#currDate {
+  font-size: 20;
+  position: relative;
+  display: inline-block;
+  padding: initial;
+  font-weight:bolder;
+  -webkit-text-stroke: .05px #FCFCFC;
+  -webkit-text-fill-color: #000000;
+}
+
+p {
+  display: inline-block;
+}
 .map-overlay .map-overlay-inner {
-    background-color: #fff;
-    box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
-    border-radius: 3px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    font-size: 13;
+    letter-spacing: 2px;
+    font-weight: bold;
+    vertical-align: middle;
+    line-height: 10px;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 15px;
@@ -265,4 +290,18 @@ datalist{
     margin: 0;
     cursor: pointer;
     bottom: 6.5px;
+}
+
+/*
+Formatting popup
+*/
+
+#popupDate {
+  color: red;
+}
+.mapboxgl-popup {
+  font-family: 'Poppins', sans-serif;
+  max-width: 165;
+  text-align: center;
+  padding: inherit;
 }
