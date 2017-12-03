@@ -129,7 +129,7 @@ $(document).ready(function() {
     }
     // media query event handler
     if (matchMedia) {
-      const mq = window.matchMedia("(min-width: 500px)");
+      const mq = window.matchMedia("(min-width: 767px)");
       mq.addListener(WidthChange);
       WidthChange(mq);
     }
@@ -144,8 +144,6 @@ $(document).ready(function() {
       } else {
         // window width is less than 500px
         $("#events-mount").appendTo("#mobile-mount");
-
       }
-
     }
 }); // close document ready function
