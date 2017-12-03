@@ -127,4 +127,25 @@ $(document).ready(function() {
             dataObj = data.features;
         })
     }
+    // media query event handler
+    if (matchMedia) {
+      const mq = window.matchMedia("(min-width: 500px)");
+      mq.addListener(WidthChange);
+      WidthChange(mq);
+    }
+
+    // media query change
+    function WidthChange(mq) {
+      if (mq.matches) {
+        // window width is at least 500px
+        $("#events-mount").appendTo("#regular-mount");
+        $("#map").appendTo("#regular-mount");
+
+      } else {
+        // window width is less than 500px
+        $("#events-mount").appendTo("#mobile-mount");
+
+      }
+
+    }
 }); // close document ready function
