@@ -21,6 +21,8 @@ function formatDate(date) {
     return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
 }
 function formatDateItem(item) {
+    // console.log("entered formatDateItem");
+    // console.log(item)
     var dateOfStart = new Date(item.properties.start_time);
     var dateOfEnd = new Date(item.properties.end_time);
     //changing value of start_time to proper parsing

@@ -175,8 +175,14 @@ function hoverPopup() {
      });
      map.on('click', 'eventlayer', function (e) {
        map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+       // console.log(e);
+       // console.log(e.features);
+       // console.log(e.features[0]);
+       // console.log(e.features[0].properties)
     //   showModal('sign-up', e.properties);
-       showModal('sign-up', e.features[0].properties);
+      formatDateItem(e.features[0]);
+      console.log(e.features[0]);
+      showModal('sign-up', e.features[0]);
    });
 }
 
