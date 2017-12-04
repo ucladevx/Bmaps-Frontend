@@ -3,20 +3,36 @@
 <div class="container home-container">
     <!-- Sidebar Search Results -->
     <div id="search-results"></div>
-    <div class="row home-row">
-    <div id="events-mount" class="col-sm-4 col-md-4"></div>
-    <div class="map-display col-sm-8 col-md-8" id="map">
-      <div class='map-overlay top'>
-          <div class='map-overlay-inner'>
-            <p id="leftArrow" display="-webkit-inline-box" onclick="previousDay()"></p>
-            <p id="relativeDay"><br></p>
-            <p id="currDate"></p>
-            <p id="rightArrow"style="display:inline" onclick="nextDay()"></p>
-              <!--input id='slider' type='range' min='0' max='48' step='1' value='24' list='tickmarks'/-->
-          </div>
-      </div>
+    <div class="row home-row" id="regular-mount">
+            <div class="sidebar-mount col-sm-4 col-md-4">
+                <!--  Sidebar Static Categories-->
+                <div class="dropdown sidebar-header">
+                  <p data-toggle="dropdown">
+                      all categories
+                  <span class="caret"></span></p>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">music</a></li>
+                    <li><a href="#">networking</a></li>
+                    <li><a href="#">fitness</a></li>
+                    <li><a href="#">cause</a></li>
+                    <li><a href="#">health</a></li>
+                  </ul>
+              </div>
+                <div id="events-mount"></div>
+            </div>
+            <div class="map-display col-sm-8 col-md-8" id="map">
+              <div class='map-overlay top'>
+                  <div class='map-overlay-inner'>
+                    <p id="leftArrow" display="-webkit-inline-box" onclick="previousDay()"></p>
+                    <p id="relativeDay"><br></p>
+                    <p id="currDate"></p>
+                    <p id="rightArrow"style="display:inline" onclick="nextDay()"></p>
+                      <!--input id='slider' type='range' min='0' max='48' step='1' value='24' list='tickmarks'/-->
+                  </div>
+              </div>
+            </div>
     </div>
-    </div>
+    <div class="row home-row" id="mobile-mount"></div>
 </div>
 
 <script id="search-results-template" type="text/x-handlebars-template">
@@ -306,19 +322,6 @@ function zoomToEventLocation(x, y) {
 
 <!--  Sidebar Events-->
 <script id="sidebar-event-template" type="text/x-handlebars-template">
-    <!--  Sidebar Static Categories-->
-    <div class="dropdown sidebar-header">
-      <p data-toggle="dropdown">
-          all categories
-      <span class="caret"></span></p>
-      <ul class="dropdown-menu">
-        <li><a href="#">music</a></li>
-        <li><a href="#">networking</a></li>
-        <li><a href="#">fitness</a></li>
-        <li><a href="#">cause</a></li>
-        <li><a href="#">health</a></li>
-      </ul>
-  </div>
 
   <div class="sidebar">
       <!-- `events` is passed from main.js's API Call -->

@@ -116,16 +116,17 @@ li a {
 }
 
 #events-mount{
-    /*margin-left: 30px;*/
-    /*width: 25%;*/
-    min-width: 260px;
-    border-width: 1px;
-    border-style: solid;
-    box-shadow: -1px 1px 1px #888888;
-    border-color: rgb(207,207,207);
+    height: 100%;
+}
+.sidebar-mount{
+    margin-right: 4%;
+    min-width: 270px;
     padding-left: 0px;
     padding-right: 0px;
-    margin-right: 2%;
+    box-shadow: -1px 1px 1px #888888;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(207,207,207);
 }
 
 .sidebar{
