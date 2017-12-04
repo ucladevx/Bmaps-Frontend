@@ -37,7 +37,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidHJpbmFrYXQiLCJhIjoiY2phczZjMDRoNG9lMTMxbnEzM
 
 var map = new mapboxgl.Map({
 	container: 'map',
-	style: 'mapbox://styles/trinakat/cjashcgwq7rfo2srstatrxhyi', // 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
+	style: 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3', // UCLA Campus Buildings (restricted by the border)
+  // 'mapbox://styles/trinakat/cjashcgwq7rfo2srstatrxhyi', // UCLA Buildings
+  // 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
 	center: [-118.445320, 34.066915],
   maxBounds: [[-118.46, 34.056],[-118.428, 34.079]],
 	zoom: 15,
@@ -127,7 +129,8 @@ function threeDDisplay() {
     map.addLayer({
         'id': 'ucla-buildings',
         'source': 'composite',
-        'source-layer': 'UCLA_Buildings',
+        'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
+        // 'source-layer': 'UCLA_Buildings', // UCLA Buildings
         'filter': ['==', 'extrude', 'true'],
         'type': 'fill-extrusion',
         'minzoom': 15,
