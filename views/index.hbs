@@ -133,11 +133,12 @@ function threeDDisplay() {
         'minzoom': 15,
         'paint': {
             'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': {
-                'type': 'identity',
-                'property': 'height'
-            },
-            'fill-extrusion-base': 20, 
+            'fill-extrusion-height': 20,
+            // 'fill-extrusion-base': "20", {
+            //     'type': 'identity',
+            //     'property': 'min_height'
+            // },
+            'fill-extrusion-base': 0,
             'fill-extrusion-opacity': 0
         }
     }, "eventstest");
