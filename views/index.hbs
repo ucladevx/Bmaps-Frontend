@@ -5,20 +5,8 @@
     <div id="search-results"></div>
     <div class="row home-row" id="regular-mount">
             <div class="sidebar-mount col-sm-4 col-md-4">
-                <!--  Sidebar Static Categories-->
-                <div class="dropdown sidebar-header">
-                  <p data-toggle="dropdown">
-                      all categories
-                  <span class="caret"></span></p>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">music</a></li>
-                    <li><a href="#">networking</a></li>
-                    <li><a href="#">fitness</a></li>
-                    <li><a href="#">cause</a></li>
-                    <li><a href="#">health</a></li>
-                  </ul>
-              </div>
-                <div id="events-mount"></div>
+              <div id="categ-dropdown-mount"></div>
+              <div id="events-mount"></div>
             </div>
             <div class="map-display col-sm-8 col-md-8" id="map">
               <div class='map-overlay top'>
@@ -34,6 +22,19 @@
     </div>
     <div class="row home-row" id="mobile-mount"></div>
 </div>
+
+<script id="category-dropdown-template" type="text/x-handlebars-template">
+    <div class="dropdown sidebar-header">
+        <p data-toggle="dropdown">
+            all categories
+        <span class="caret"></span></p>
+        <ul class="dropdown-menu">
+        \{{#each categDrop}}
+            <li><a href="#">\{{this}}</a></li>
+        \{{/each}}
+        </ul>
+    </div>
+</script>
 
 <script id="search-results-template" type="text/x-handlebars-template">
     <div>

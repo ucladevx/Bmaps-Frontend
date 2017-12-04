@@ -5,12 +5,24 @@ $(document).ready(function() {
     var eventsTemplate = Handlebars.compile(eventsSource);
     var searchSource = $("#search-results-template").html();
     var searchResultsTemplate = Handlebars.compile(searchSource);
+    var categDropSource = $("#category-dropdown-template").html();
+    var categDropTemplate = Handlebars.compile(categDropSource);
     //Make a get request to the events to load them into the sidebar using handlebars
     var defaultData = ""
 
+    $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
+        $.each(data, function(i,item){
+            console.log(item);
+        });
+        var splitData = chunkArray(data.categories, 1);
+         
+        $('#categ-dropdown-mount').html(categDropTemplate({
+            categDrop: splitData
+        }));
+    })
+
     $.getJSON("http://52.53.72.98/api/v1/events", function(data)
     {
-        // console.log(data);
         var html = ''; // we declare the variable that we'll be using to store our information
         var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
 
