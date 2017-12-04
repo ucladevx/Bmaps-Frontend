@@ -138,12 +138,12 @@ $(document).ready(function() {
     function WidthChange(mq) {
       if (mq.matches) {
         // window width is at least 500px
-        $("#events-mount").appendTo("#regular-mount");
+        $(".sidebar-mount").appendTo("#regular-mount");
         $("#map").appendTo("#regular-mount");
 
       } else {
         // window width is less than 500px
-        $("#events-mount").appendTo("#mobile-mount");
+        $(".sidebar-mount").appendTo("#mobile-mount");
       }
     }
 }); // close document ready function
