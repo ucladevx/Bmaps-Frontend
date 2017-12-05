@@ -181,6 +181,11 @@ li a {
     background-position: 0, 100%, 0, 100%;
 }
 
+#categ-dropdown-text{
+    padding-left: 25%;
+    padding-right: 25%;
+}
+
 /*BODY*/
 #map {
     top:0;
