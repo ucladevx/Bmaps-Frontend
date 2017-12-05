@@ -12,8 +12,20 @@ $(document).ready(function() {
 
     $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
 
-        function filterCategory(e){
-            console.log("wtf: "+e);
+        function filterCategory(categoryName){
+            console.log("wtf: "+categoryName);
+            let keyUrl = "http://52.53.72.98/api/v1/event-category/" + categoryName;
+            $.getJSON(keyUrl,function(data){
+
+                $.each(data.features, function(i,item){
+                    formatDateItem(item);
+                });
+
+                $('#events-mount').html(eventsTemplate({
+                    events: data.features
+                }));
+
+            })
         }
 
         $.each(data.categories, function(i,item){
@@ -138,7 +150,7 @@ $(document).ready(function() {
             return false;
         }
         //Pass the current keys into the search API
-        var keyUrl = "http://52.53.72.98/api/v1/search/"+inputBox.value;
+        let keyUrl = "http://52.53.72.98/api/v1/search/"+inputBox.value;
         $.getJSON(keyUrl, function(data){
             //Clear the list and restart everytime we get a new input
             while (list.firstChild) {
