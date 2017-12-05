@@ -22,12 +22,17 @@
     </div>
 </div>
 
-
-<script id="search-results-template" type="text/x-handlebars-template">
-    <div>
-        \{{#each searchEvents}}
-        <div>\{{this.properties.event_name}}</div>
+<!-- CATEGORY NAMES HANDLEBARS SCRIPT-->
+<script id="category-dropdown-template" type="text/x-handlebars-template">
+    <div class="dropdown sidebar-header">
+        <p data-toggle="dropdown">
+            all categories
+        <span class="caret"></span></p>
+        <ul class="dropdown-menu">
+        \{{#each categDrop}}
+            <li><a class="categName">\{{this.category}}</a></li>
         \{{/each}}
+        </ul>
     </div>
 </script>
 
@@ -306,24 +311,8 @@ function zoomToEventLocation(x, y) {
 }
 </script>
 
-
-<script id="category-dropdown-template" type="text/x-handlebars-template">
-    <div class="dropdown sidebar-header">
-        <p data-toggle="dropdown">
-            all categories
-        <span class="caret"></span></p>
-        <ul class="dropdown-menu">
-        \{{#each categDrop}}
-            <li><a class="categName">\{{this.category}}</a></li>
-        \{{/each}}
-        </ul>
-    </div>
-</script>
-
-
-<!--  Sidebar Events-->
+<!--  SIDEBAR EVENTS HANDLEBARS SCRIPT-->
 <script id="sidebar-event-template" type="text/x-handlebars-template">
-
   <div class="sidebar">
       <!-- `events` is passed from main.js's API Call -->
       <!-- We iterate through each of these objects and append them using the template -->

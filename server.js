@@ -17,7 +17,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
-
 // log requests to stdout and also
 // log HTTP requests to a file in combined format
 var accessLogStream = fs.createWriteStream(__dirname + '/access.log', { flags: 'a' });
@@ -28,31 +27,6 @@ app.set('port', (process.env.PORT || 8000));
 app.set('view engine', 'hbs');
 
 hbs.registerPartials(__dirname + '/views/partials');
-
-app.options('*', cors())
-
-
-// Add headers
-app.use(function (req, res, next) {
-    console.log("do you enter");
-
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000/api/events');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
-    next();
-});
-
 
 router.use(function (req,res,next) {
   console.log("/" + req.method);
