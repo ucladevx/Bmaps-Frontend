@@ -28,7 +28,7 @@ $(document).ready(function() {
                     }));
                 })
             }
-            $(dropdownBarText).html(categoryName+"<span class=caret></span>");
+            $(dropdownBarText).html(categoryName+"&nbsp;<span class=caret></span>");
         }
         //Add default option to categories object
         data.categories.unshift({"category":"all categories"});
