@@ -5,13 +5,14 @@ $(document).ready(function() {
     var eventsTemplate = Handlebars.compile(eventsSource);
     var categDropSource = $("#category-dropdown-template").html();
     var categDropTemplate = Handlebars.compile(categDropSource);
-    var defaultData = ""
+    var defaultData = "";
 
     //GET request to load filtered by category events into sidebar
     $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
+        let dropdownBarText = "";
         //Filters sidebar with either stored default events or filtered events from API
         function filterCategory(categoryName){
-            if (categoryName == "All"){
+            if (categoryName == "all categories"){
                 $('#events-mount').html(eventsTemplate({
                     events: defaultData
                 }));
@@ -27,11 +28,13 @@ $(document).ready(function() {
                     }));
                 })
             }
+            $(dropdownBarText).html(categoryName+"<span class=caret></span>");
         }
         //Add default option to categories object
-        data.categories.unshift({"category":"All"});
+        data.categories.unshift({"category":"all categories"});
         $.each(data.categories, function(i,item){
             console.log(item.category);
+            item.category = item.category.toLowerCase();
         });
         //Mount categories object into dropdown using handlebars
         $('#categ-dropdown-mount').html(categDropTemplate({
@@ -39,6 +42,8 @@ $(document).ready(function() {
         }));
         //Capture all elements of CategoryName and add onclick to update sidebar
         var categNames = document.getElementsByClassName("categName");
+        dropdownBarText = document.getElementById('categ-dropdown-text');
+        console.log("dropdownbarText" + dropdownBarText.innerHTML);
         $.each(categNames, function(i, item ){
             item.addEventListener("click",function(){filterCategory(item.innerHTML)});
         })
