@@ -3,14 +3,50 @@ $(document).ready(function() {
     $('#searchForm').attr('action', 'javascript:void(0);');
     var eventsSource = $("#sidebar-event-template").html();
     var eventsTemplate = Handlebars.compile(eventsSource);
-    var searchSource = $("#search-results-template").html();
-    var searchResultsTemplate = Handlebars.compile(searchSource);
-    //Make a get request to the events to load them into the sidebar using handlebars
+    var categDropSource = $("#category-dropdown-template").html();
+    var categDropTemplate = Handlebars.compile(categDropSource);
     var defaultData = ""
 
+    //GET request to load filtered by category events into sidebar
+    $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
+        //Filters sidebar with either stored default events or filtered events from API
+        function filterCategory(categoryName){
+            if (categoryName == "All"){
+                $('#events-mount').html(eventsTemplate({
+                    events: defaultData
+                }));
+            }
+            else {
+                let keyUrl = "http://52.53.72.98/api/v1/event-category/" + categoryName;
+                $.getJSON(keyUrl,function(data){
+                    $.each(data.features, function(i,item){
+                        formatDateItem(item);
+                    });
+                    $('#events-mount').html(eventsTemplate({
+                        events: data.features
+                    }));
+                })
+            }
+        }
+        //Add default option to categories object
+        data.categories.unshift({"category":"All"});
+        $.each(data.categories, function(i,item){
+            console.log(item.category);
+        });
+        //Mount categories object into dropdown using handlebars
+        $('#categ-dropdown-mount').html(categDropTemplate({
+            categDrop: data.categories
+        }));
+        //Capture all elements of CategoryName and add onclick to update sidebar
+        var categNames = document.getElementsByClassName("categName");
+        $.each(categNames, function(i, item ){
+            item.addEventListener("click",function(){filterCategory(item.innerHTML)});
+        })
+    })
+
+    //GET request to load events into the sidebar using handlebars
     $.getJSON("http://52.53.72.98/api/v1/events", function(data)
     {
-        // console.log(data);
         var html = ''; // we declare the variable that we'll be using to store our information
         var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
 
@@ -32,47 +68,7 @@ $(document).ready(function() {
         $('#events-mount').html(eventsTemplate({
             events: data.features
         }));
-
         initModal();
-
-
-        //OLD CODE THAT MAY BE USEFUL IN THE FUTURE
-        // var html = ''; // we declare the variable that we'll be using to store our information
-        // var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
-
-        // $.each(data.recenttracks.track, function(i, item) {
-        //     if(counter == 1) {
-        //         songTitle = item.name;
-        //         artist = item.artist['#text'];
-        //         html += 'Currently listening to: <span><a href="' + item.url + '" target="_blank">' + songTitle + '</a> - ' + artist + '</span>';
-        //         console.log("haha" + html);
-        //         console.log(songTitle);
-        //     } // close the if statement
-        //     counter++ // add 1 to the counter variable each time the each loop runs
-        // }); // close each loop
-        //
-        // $('.listening-to h5').append(html); // print the information to the document - here I look for the h5 tag inside the div with a class of 'listening-to' and use the jQuery append method to insert the information we've stored in the html variable inside the h5 tag.
-        //
-        // songTitle2 = songTitle.split(' ').join('%20');
-        // artist2 =  artist.split(' ').join('%20');
-        //
-        // songhtml = "https://api.spotify.com/v1/search?q=track:" + songTitle2 + "%20artist:" + artist2 + "&limit=1&type=track"
-        // console.log("wassup");
-        // console.log(songhtml);
-        // $.getJSON(songhtml, function(data){
-        //
-        //     $.each(data.tracks.items, function(i, item){
-        //         id = item.id;
-        //         console.log(id);
-        //     });
-        //
-        //     var iframeSrc = "https://embed.spotify.com/?uri=spotify:track:" + id
-        //     console.log(iframeSrc);
-        //     var embedHtml = '<iframe src="' + iframeSrc + '" frameborder="0" allowtransparency="true"></iframe>';
-        //     console.log(embedHtml);
-        //     $('.showSong').append(embedHtml);
-        //
-        // });
     });
     //Setting up datalist with searhbox
     var inputBox = document.getElementById('search-input');
@@ -107,7 +103,7 @@ $(document).ready(function() {
             return false;
         }
         //Pass the current keys into the search API
-        var keyUrl = "http://52.53.72.98/api/v1/search/"+inputBox.value;
+        let keyUrl = "http://52.53.72.98/api/v1/search/"+inputBox.value;
         $.getJSON(keyUrl, function(data){
             //Clear the list and restart everytime we get a new input
             while (list.firstChild) {
