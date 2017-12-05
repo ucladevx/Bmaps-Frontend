@@ -13,44 +13,39 @@ $(document).ready(function() {
     $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
 
         function filterCategory(categoryName){
-            console.log("wtf: "+categoryName);
-            let keyUrl = "http://52.53.72.98/api/v1/event-category/" + categoryName;
-            $.getJSON(keyUrl,function(data){
-
-                $.each(data.features, function(i,item){
-                    formatDateItem(item);
-                });
-
+            if (categoryName == "All"){
                 $('#events-mount').html(eventsTemplate({
-                    events: data.features
+                    events: defaultData
                 }));
+            }
+            else {
+                let keyUrl = "http://52.53.72.98/api/v1/event-category/" + categoryName;
+                $.getJSON(keyUrl,function(data){
+                    $.each(data.features, function(i,item){
+                        formatDateItem(item);
+                    });
 
-            })
+                    $('#events-mount').html(eventsTemplate({
+                        events: data.features
+                    }));
+                })
+            }
         }
 
+        data.categories.unshift({"category":"All"});
         $.each(data.categories, function(i,item){
             console.log(item.category);
         });
-        // var splitData = chunkArray(data.categories, 1);
         $('#categ-dropdown-mount').html(categDropTemplate({
             categDrop: data.categories
         }));
         var categNames = document.getElementsByClassName("categName");
         console.log(categNames);
         $.each(categNames, function(i, item ){
-            // console.log(item);
             item.addEventListener("click",function(){filterCategory(item.innerHTML)});
         })
 
     })
-    // function filterCategory(e){
-    //     alert(e.target.id);
-    // }
-
-    // $(document).click(function(event) {
-    //     var text = $(event.target).text();
-    // });
-
 
     $.getJSON("http://52.53.72.98/api/v1/events", function(data)
     {
