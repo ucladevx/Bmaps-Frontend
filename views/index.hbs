@@ -23,6 +23,7 @@
     <div class="row home-row" id="mobile-mount"></div>
 </div>
 
+
 <script id="search-results-template" type="text/x-handlebars-template">
     <div>
         \{{#each searchEvents}}
@@ -305,12 +306,11 @@ function zoomToEventLocation(x, y) {
   map.flyTo({center: [x, y], zoom: 17, speed: .85});
 }
 
-function filterCategory(){
-    alert("haha");
+function filterCategory(pls){
+    console.log("ahf");
 }
 
 </script>
-
 
 
 <script id="category-dropdown-template" type="text/x-handlebars-template">
@@ -320,11 +320,12 @@ function filterCategory(){
         <span class="caret"></span></p>
         <ul class="dropdown-menu">
         \{{#each categDrop}}
-            <li><a onclick="filterCategory();" class="categName">\{{this.category}}</a></li>
+            <li><a class="categName">\{{this.category}}</a></li>
         \{{/each}}
         </ul>
     </div>
 </script>
+
 
 <!--  Sidebar Events-->
 <script id="sidebar-event-template" type="text/x-handlebars-template">

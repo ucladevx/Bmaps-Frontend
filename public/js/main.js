@@ -19,11 +19,12 @@ $(document).ready(function() {
         $('#categ-dropdown-mount').html(categDropTemplate({
             categDrop: data.categories
         }));
-        // var categNames = document.getElementsByClassName("categName");
-        // console.log(categNames);
-        // $.each(categNames, function(i, item ){
-        //     console.log(item);
-        // })
+        var categNames = document.getElementsByClassName("categName");
+        console.log(categNames);
+        $.each(categNames, function(i, item ){
+            // console.log(item);
+            item.addEventListener("click",function() { console.log(item.innerHTML) });
+        })
 
     })
     // function filterCategory(e){
