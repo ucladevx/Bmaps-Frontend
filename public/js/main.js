@@ -12,6 +12,10 @@ $(document).ready(function() {
 
     $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
 
+        function filterCategory(e){
+            console.log("wtf: "+e);
+        }
+
         $.each(data.categories, function(i,item){
             console.log(item.category);
         });
@@ -23,14 +27,13 @@ $(document).ready(function() {
         console.log(categNames);
         $.each(categNames, function(i, item ){
             // console.log(item);
-            item.addEventListener("click",function() { console.log(item.innerHTML) });
+            item.addEventListener("click",function(){filterCategory(item.innerHTML)});
         })
 
     })
     // function filterCategory(e){
     //     alert(e.target.id);
     // }
-
 
     // $(document).click(function(event) {
     //     var text = $(event.target).text();
