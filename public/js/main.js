@@ -11,15 +11,30 @@ $(document).ready(function() {
     var defaultData = ""
 
     $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
+
         $.each(data, function(i,item){
             console.log(item);
         });
         var splitData = chunkArray(data.categories, 1);
-         
         $('#categ-dropdown-mount').html(categDropTemplate({
             categDrop: splitData
         }));
+        var categNames = document.getElementsByClassName("categName");
+        console.log(categNames);
+        // $.each(categNames, function(i, item ){
+        //     console.log(item);
+        // })
+
     })
+    // function filterCategory(e){
+    //     alert(e.target.id);
+    // }
+
+
+    // $(document).click(function(event) {
+    //     var text = $(event.target).text();
+    // });
+
 
     $.getJSON("http://52.53.72.98/api/v1/events", function(data)
     {

@@ -30,7 +30,7 @@
         <span class="caret"></span></p>
         <ul class="dropdown-menu">
         \{{#each categDrop}}
-            <li><a href="#">\{{this}}</a></li>
+            <li><a onclick="return filterCategory();" class="categName">\{{this}}</a></li>
         \{{/each}}
         </ul>
     </div>
@@ -318,7 +318,25 @@ function zoomToEventLocation(x, y) {
   map.flyTo({center: [x, y], zoom: 17, speed: .85});
 }
 
+function filterCategory(){
+    alert("haha");
+}
 
+</script>
+
+
+
+<script id="category-dropdown-template" type="text/x-handlebars-template">
+    <div class="dropdown sidebar-header">
+        <p data-toggle="dropdown">
+            all categories
+        <span class="caret"></span></p>
+        <ul class="dropdown-menu">
+        \{{#each categDrop}}
+            <li><a onclick="return filterCategory();" class="categName">\{{this}}</a></li>
+        \{{/each}}
+        </ul>
+    </div>
 </script>
 
 <!--  Sidebar Events-->
