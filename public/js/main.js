@@ -12,15 +12,15 @@ $(document).ready(function() {
 
     $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
 
-        $.each(data, function(i,item){
-            console.log(item);
+        $.each(data.categories, function(i,item){
+            console.log(item.category);
         });
-        var splitData = chunkArray(data.categories, 1);
+        // var splitData = chunkArray(data.categories, 1);
         $('#categ-dropdown-mount').html(categDropTemplate({
-            categDrop: splitData
+            categDrop: data.categories
         }));
-        var categNames = document.getElementsByClassName("categName");
-        console.log(categNames);
+        // var categNames = document.getElementsByClassName("categName");
+        // console.log(categNames);
         // $.each(categNames, function(i, item ){
         //     console.log(item);
         // })

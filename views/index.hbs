@@ -23,19 +23,6 @@
     <div class="row home-row" id="mobile-mount"></div>
 </div>
 
-<script id="category-dropdown-template" type="text/x-handlebars-template">
-    <div class="dropdown sidebar-header">
-        <p data-toggle="dropdown">
-            all categories
-        <span class="caret"></span></p>
-        <ul class="dropdown-menu">
-        \{{#each categDrop}}
-            <li><a onclick="return filterCategory();" class="categName">\{{this}}</a></li>
-        \{{/each}}
-        </ul>
-    </div>
-</script>
-
 <script id="search-results-template" type="text/x-handlebars-template">
     <div>
         \{{#each searchEvents}}
@@ -333,7 +320,7 @@ function filterCategory(){
         <span class="caret"></span></p>
         <ul class="dropdown-menu">
         \{{#each categDrop}}
-            <li><a onclick="return filterCategory();" class="categName">\{{this}}</a></li>
+            <li><a onclick="filterCategory();" class="categName">\{{this.category}}</a></li>
         \{{/each}}
         </ul>
     </div>
