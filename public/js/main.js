@@ -140,10 +140,13 @@ $(document).ready(function() {
         // window width is at least 500px
         $(".sidebar-mount").appendTo("#regular-mount");
         $("#map").appendTo("#regular-mount");
-
+        $("#nav-non-collapse").removeClass("pull-right");
+        $("#nav-non-collapse").addClass("pull-left");
       } else {
         // window width is less than 500px
         $(".sidebar-mount").appendTo("#mobile-mount");
+        $("#nav-non-collapse").removeClass("pull-left");
+        $("#nav-non-collapse").removeClass("pull-right");
       }
     }
 }); // close document ready function

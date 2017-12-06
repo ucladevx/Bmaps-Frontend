@@ -37,8 +37,24 @@
                 </a>
             </div>
 
-            <div class="navbar-header pull-right">
+            <!-- 'Sticky' (non-collapsing) right-side menu item(s) -->
+            <div class="navbar-header" id="nav-non-collapse">
 
+                <ul class="nav pull-left">
+                    <li class="pull-left">
+                        <!-- Search Box -->
+                        <form class="navbar-form" style="display:inline-block" id="searchForm">
+                            <div class="form-group" style="display:inline;" id="navBarSearchForm">
+                                <div class="input-group right-inner-addon">
+                                    <span class="input-group-addon" id="searchIcon"><span class="glyphicon glyphicon-search"></span></span>
+                                    <input type="text" list="searchList" class="form-control" autocomplete="off" id="search-input" placeholder="search for an event...">
+                                    <datalist id="searchList"></datalist>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+
+                </ul>
                 <!-- Required bootstrap placeholder for the collapsed menu -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
@@ -50,23 +66,13 @@
 
             <!-- The collapsing items -->
             <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-
+                <!-- pull-right keeps the dropdown in line -->
+                <ul class="nav navbar-nav navbar-right pull-right">
                     <li>
                       <a class="" id="sign-up-button">sign up</a>
                     </li>
                     <li class=""><a href="/login" style="color: rgb(255,24,59);">login</a></li>
                   </ul>
-                  <!-- Search Box -->
-                  <form class="navbar-form" style="display:inline-block" id="searchForm">
-                      <div class="form-group" style="display:inline;" id="navBarSearchForm">
-                          <div class="input-group right-inner-addon">
-                              <span class="input-group-addon" id="searchIcon"><span class="glyphicon glyphicon-search"></span></span>
-                              <input type="text" list="searchList" class="form-control" autocomplete="off" id="search-input" placeholder="search for an event...">
-                              <datalist id="searchList"></datalist>
-                          </div>
-                      </div>
-                  </form>
 
                 </div>
             </div>
