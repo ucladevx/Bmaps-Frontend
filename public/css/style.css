@@ -143,9 +143,11 @@ li a {
     color: rgb(70,70,70);
 }
 
-.sidebar-event{
+.sidebar-event {
+    width: 100%;
     padding: 5%;
-    display: flex;
+    box-sizing: border-box;
+    display: inline-block;
 }
 
 .sidebar-event-img{
@@ -153,10 +155,14 @@ li a {
     width: 90px;
     height: 90px;
     margin-right: 5%;
+    vertical-align: top;
 }
 
 .sidebar-event-details {
     font-size: 11px;
+    width: 120px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .sidebar-event-details p {
