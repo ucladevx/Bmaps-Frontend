@@ -40,12 +40,15 @@
 ////////////////////////////////////////////////
 ///////////////////// MAP //////////////////////
 ////////////////////////////////////////////////
+// Buildings Tileset: trinakat.cjasdkzxp4sg333mhtqv9vugy-7iaym
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiaGVsYXJhYmF3eSIsImEiOiJjajUxN3k2d3MwMGg4MnFxZHhjcjYxN2U4In0.0OSl71QURA_P9d32r982Zw';
+mapboxgl.accessToken = 'pk.eyJ1IjoidHJpbmFrYXQiLCJhIjoiY2phczZjMDRoNG9lMTMxbnEzMnAyemtqMyJ9.9BNijLx_oyyU2LmboUczTw'; // 'pk.eyJ1IjoiaGVsYXJhYmF3eSIsImEiOiJjajUxN3k2d3MwMGg4MnFxZHhjcjYxN2U4In0.0OSl71QURA_P9d32r982Zw';
 
 var map = new mapboxgl.Map({
 	container: 'map',
-	style: 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
+	style: 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3', // UCLA Campus Buildings (restricted by the border)
+  // 'mapbox://styles/trinakat/cjashcgwq7rfo2srstatrxhyi', // UCLA Buildings
+  // 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
 	center: [-118.445320, 34.066915],
   maxBounds: [[-118.46, 34.056],[-118.428, 34.079]],
 	zoom: 15,
@@ -186,23 +189,26 @@ function threeDDisplay() {
         return layer.type !== 'symbol';
     });
     map.addLayer({
-        'id': '3d-buildings',
+        'id': 'ucla-buildings',
         'source': 'composite',
-        'source-layer': 'building',
+        'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
+        // 'source-layer': 'UCLA_Buildings', // UCLA Buildings
         'filter': ['==', 'extrude', 'true'],
         'type': 'fill-extrusion',
         'minzoom': 15,
         'paint': {
             'fill-extrusion-color': '#aaa',
             'fill-extrusion-height': {
-                'type': 'identity',
-                'property': 'height'
+                'property': 'height',
+                'type': 'identity'                
             },
             'fill-extrusion-base': {
+                'property': 'min_height',
                 'type': 'identity',
-                'property': 'min_height'
             },
-            'fill-extrusion-opacity': 0
+            // 'fill-extrusion-height': 20,
+            // 'fill-extrusion-base': 0,
+            'fill-extrusion-opacity': 0.5
         }
     }, "eventstest");
 }
@@ -255,7 +261,7 @@ function hoverPopup() {
 function startMap() {
 	threeDDisplay();
 	map.flyTo({center: [-118.445320, 34.066915], zoom: 15.8, speed: .15});
-	setTimeout(function() {map.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', .6);}, 2100);
+	setTimeout(function() {map.setPaintProperty('ucla-buildings', 'fill-extrusion-opacity', .6);}, 2100);
 
   document.getElementById("leftArrow").innerHTML = "&#9664;";
   document.getElementById("rightArrow").innerHTML = "&#9658;";
