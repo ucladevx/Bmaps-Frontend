@@ -146,7 +146,7 @@ $(document).ready(function() {
         // window width is less than 500px
         $(".sidebar-mount").appendTo("#mobile-mount");
         $("#nav-non-collapse").removeClass("pull-left");
-        $("#nav-non-collapse").removeClass("pull-right");
+        $("#nav-non-collapse").addClass("pull-right");
       }
     }
 }); // close document ready function
