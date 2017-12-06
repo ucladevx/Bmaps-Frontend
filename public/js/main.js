@@ -77,23 +77,16 @@ $(document).ready(function() {
     //Setting up datalist with searhbox
     var inputBox = document.getElementById('search-input');
     let list = document.getElementById('searchList');
+    let icon = document.getElementById('searchIcon');
+    console.log(icon);
+
     var dataObj = ""
     //Detecting a key change in search and capturing it as "e"
     inputBox.onkeyup = function(e){
         console.log("INPUT BOX VALUE" + inputBox.value);
         console.log(e);
-        //13 is the code value for `Enter` (74: j)
-        if (e.which == 13){
 
-            console.log("**DEFAULT DATA**");
-            $.each(defaultData, function(i, item){
-                console.log(item.properties.event_name);
-            })
-            console.log("**DATA OBJ**");
-            $.each(dataObj, function(i, item){
-                console.log(item.properties.event_name);
-            })
-
+        function mountSearchResults(){
             if (inputBox.value == "") {
                 $('#events-mount').html(eventsTemplate({
                     events: defaultData
@@ -105,6 +98,13 @@ $(document).ready(function() {
                 }));
             }
             return false;
+        }
+
+        //Search icon will also cause mounting
+        icon.addEventListener("click",function(){mountSearchResults()});
+        //13 is the code value for `Enter` (74: j)
+        if (e.which == 13){
+            mountSearchResults();
         }
         //Pass the current keys into the search API
         var keyUrl = "http://52.53.72.98/api/v1/search/"+inputBox.value;
