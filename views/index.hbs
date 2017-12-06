@@ -52,11 +52,64 @@ var map = new mapboxgl.Map({
 	pitch: 60
 });
 
+
+////////////////////////////////////////////////
+//////////////// DATE HANDLING //////////////////
+////////////////////////////////////////////////
+
+var today = new Date();
+var todayD = today.getDate();
+var todayM = today.getMonth(); //January is 0!
+
+var d = todayD;
+var m = todayM;
+
+var currDay = today;
+
+function nextDay() {
+  currDay.setDate(currDay.getDate() + 1);
+  d = currDay.getDate();
+  m = currDay.getMonth();
+  updateDate();
+}
+
+function previousDay() {
+  currDay.setDate(currDay.getDate() - 1);
+  d = currDay.getDate();
+  m = currDay.getMonth();
+  updateDate();
+}
+
+function updateDate() {
+  console.log("Today: " +todayD + "Curr: " +d)
+  console.log("Check: " +  d == todayD && m == todayM)
+    if (d == todayD && m == todayM) {
+      document.getElementById("leftArrow").style.display = "none";
+      document.getElementById("rightArrow").style.display = "inline";
+      document.getElementById("relativeDay").innerHTML =  "today";
+    } else {
+      if (d == (todayD + 1)) {
+        document.getElementById("relativeDay").innerHTML =  "tomorrow";
+      } else if (d == (todayD + 7)) {
+        document.getElementById("relativeDay").innerHTML = "in a week";
+        document.getElementById("rightArrow").style.display = "none";
+      } else {
+        document.getElementById("relativeDay").innerHTML = (d - todayD) +" days from today";
+      }
+      document.getElementById("leftArrow").style.display = "inline";
+    }
+
+    document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
+    // update source
+     map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/' + d + ' ' + getMonthNameFromMonthNumber(m));
+}
+
+
 ////////////////////////////////////////////////
 /////////////////// LOAD DATA //////////////////
 ////////////////////////////////////////////////
 
-var events = 'http://52.53.72.98/api/v1/events'; // json we are pulling from for event info
+var events = 'http://52.53.72.98/api/v1/event-date/' + d +' ' + getMonthNameFromMonthNumber(m); // json we are pulling from for event info
 map.on('load', function () {
     map.addSource('events', { type: 'geojson', data: events });
     // Making layers (based on categorization)
@@ -198,50 +251,6 @@ function hoverPopup() {
 ////////////////////////////////////////////////
 /////////////// START UP THE MAP ///////////////
 ////////////////////////////////////////////////
-// TODAY //
-var today = new Date();
-var todayD = today.getDate();
-var todayM = today.getMonth(); //January is 0!
-
-var d = todayD;
-var m = todayM;
-
-var currDay = today;
-
-function nextDay() {
-  currDay.setDate(currDay.getDate() + 1);
-  d = currDay.getDate();
-  m = currDay.getMonth();
-  updateDate();
-}
-
-function previousDay() {
-  currDay.setDate(currDay.getDate() - 1);
-  d = currDay.getDate();
-  m = currDay.getMonth();
-  updateDate();
-}
-
-function updateDate() {
-  console.log("Today: " +todayD + "Curr: " +d)
-  console.log("Check: " +  d == todayD && m == todayM)
-    if (d == todayD && m == todayM) {
-      document.getElementById("leftArrow").style.display = "none";
-      document.getElementById("relativeDay").innerHTML =  "today";
-    } else {
-      if (d == (todayD + 1)) {
-        document.getElementById("relativeDay").innerHTML =  "tomorrow";
-      } else if (d == (todayD + 7)) {
-        document.getElementById("relativeDay").innerHTML = "in a week";
-        document.getElementById("rightArrow").style.display = "none";
-      } else {
-        document.getElementById("relativeDay").innerHTML = (d - todayD) +" days from today";
-      }
-      document.getElementById("leftArrow").style.display = "inline";
-    }
-
-    document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
-}
 
 function startMap() {
 	threeDDisplay();
