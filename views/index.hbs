@@ -76,6 +76,20 @@ function nextDay() {
   updateDate();
 }
 
+function filterDayInSidebar(){
+    var eventsSource = $("#sidebar-event-template").html();
+    var eventsTemplate = Handlebars.compile(eventsSource);
+    let keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + ' ' + getMonthNameFromMonthNumber(m);
+    $.getJSON(keyUrl,function(data){
+        $.each(data.features, function(i,item){
+            formatDateItem(item);
+        });
+        $('#events-mount').html(eventsTemplate({
+            events: data.features
+        }));
+    })
+}
+
 function previousDay() {
   currDay.setDate(currDay.getDate() - 1);
   d = currDay.getDate();
@@ -84,6 +98,7 @@ function previousDay() {
 }
 
 function updateDate() {
+  filterDayInSidebar();
   console.log("Today: " +todayD + "Curr: " +d)
   console.log("Check: " +  d == todayD && m == todayM)
     if (d == todayD && m == todayM) {
@@ -200,7 +215,7 @@ function threeDDisplay() {
             'fill-extrusion-color': '#aaa',
             'fill-extrusion-height': {
                 'property': 'height',
-                'type': 'identity'                
+                'type': 'identity'
             },
             'fill-extrusion-base': {
                 'property': 'min_height',
