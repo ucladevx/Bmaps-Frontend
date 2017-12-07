@@ -48,3 +48,17 @@ function chunkArray(myArray, chunk_size){
 
     return tempArray;
 }
+
+function filterDayInSidebar(){
+    var eventsSource = $("#sidebar-event-template").html();
+    var eventsTemplate = Handlebars.compile(eventsSource);
+    let keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + ' ' + getMonthNameFromMonthNumber(m);
+    $.getJSON(keyUrl,function(data){
+        $.each(data.features, function(i,item){
+            formatDateItem(item);
+        });
+        $('#events-mount').html(eventsTemplate({
+            events: data.features
+        }));
+    })
+}
