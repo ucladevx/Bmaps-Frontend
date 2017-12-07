@@ -84,6 +84,7 @@ function previousDay() {
 }
 
 function updateDate() {
+  filterDayInSidebar();
   console.log("Today: " +todayD + "Curr: " +d)
   console.log("Check: " +  d == todayD && m == todayM)
     if (d == todayD && m == todayM) {
@@ -200,7 +201,7 @@ function threeDDisplay() {
             'fill-extrusion-color': '#aaa',
             'fill-extrusion-height': {
                 'property': 'height',
-                'type': 'identity'                
+                'type': 'identity'
             },
             'fill-extrusion-base': {
                 'property': 'min_height',
