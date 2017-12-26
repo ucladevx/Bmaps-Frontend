@@ -1,26 +1,4 @@
-<!-- SCRIPTS -->
-<script src='https://api.mapbox.com/mapbox-gl-js/v0.40.0/mapbox-gl.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script src="../js/main.js"></script>
-<script src="../js/utils.js"></script>
-<script src="../js/modal.js"></script>
-<!-- CATEGORY NAMES HANDLEBARS SCRIPT-->
-<script id="category-dropdown-template" type="text/x-handlebars-template">
-    <div class="dropdown sidebar-header">
-        <p data-toggle="dropdown" id="categ-dropdown-text">
-            all categories &nbsp;
-        <span class="caret"></span></p>
-        <ul class="dropdown-menu">
-        \{{#each categDrop}}
-            <li><a class="categName">\{{this.category}}</a></li>
-        \{{/each}}
-        </ul>
-    </div>
-</script>
-
-<script>
+$(document).ready(function() {
 ////////////////////////////////////////////////
 ///////////////////// MAP //////////////////////
 ////////////////////////////////////////////////
@@ -315,31 +293,4 @@ map.on('load', hoverPopup);
 function zoomToEventLocation(x, y) {
   map.flyTo({center: [x, y], zoom: 17, speed: .85});
 }
-</script>
-
-<!--  SIDEBAR EVENTS HANDLEBARS SCRIPT-->
-<script id="sidebar-event-template" type="text/x-handlebars-template">
-  <div class="sidebar">
-      <!-- `events` is passed from main.js's API Call -->
-      <!-- We iterate through each of these objects and append them using the template -->
-      \{{#each events}}
-      <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
-          <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
-          <div class="sidebar-event-details">
-              <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
-              <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
-              <p class="sidebar-event-location">\{{this.properties.venue.location.street}}</p>
-              <p class="sidebar-event-category">\{{this.properties.category}}</p>
-          </div>
-      </a>
-      <div class="seperator"></div>
-      \{{/each}}
-  </div>
-</script>
-<script src="../js/modal.js"></script>
-
-<footer>
-</footer>
-
-</body>
-</html>
+)};
