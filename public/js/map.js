@@ -1,4 +1,3 @@
-$(document).ready(function() {
 ////////////////////////////////////////////////
 ///////////////////// MAP //////////////////////
 ////////////////////////////////////////////////
@@ -293,4 +292,3 @@ map.on('load', hoverPopup);
 function zoomToEventLocation(x, y) {
   map.flyTo({center: [x, y], zoom: 17, speed: .85});
 }
-)};
