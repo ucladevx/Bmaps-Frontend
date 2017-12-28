@@ -21,6 +21,8 @@ function formatDate(date) {
     return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
 }
 function formatDateItem(item) {
+    // console.log("entered formatDateItem");
+    // console.log(item)
     var dateOfStart = new Date(item.properties.start_time);
     var dateOfEnd = new Date(item.properties.end_time);
     //changing value of start_time to proper parsing
@@ -30,4 +32,33 @@ function formatDateItem(item) {
     else {
         item.properties.start_time = formatDate(dateOfStart);
     }
+}
+
+function chunkArray(myArray, chunk_size){
+    var index = 0;
+    var arrayLength = myArray.length;
+    var tempArray = [];
+    console.log(myArray);
+
+    for (index = 0; index < arrayLength; index += chunk_size) {
+        myChunk = myArray.slice(index, index+chunk_size);
+        // Do something if you want with the group
+        tempArray.push(myChunk);
+    }
+
+    return tempArray;
+}
+
+function filterDayInSidebar(){
+    var eventsSource = $("#sidebar-event-template").html();
+    var eventsTemplate = Handlebars.compile(eventsSource);
+    let keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + ' ' + getMonthNameFromMonthNumber(m);
+    $.getJSON(keyUrl,function(data){
+        $.each(data.features, function(i,item){
+            formatDateItem(item);
+        });
+        $('#events-mount').html(eventsTemplate({
+            events: data.features
+        }));
+    })
 }
