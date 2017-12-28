@@ -1,83 +1,48 @@
-<!-- // -->
-
-<div class="container footer-container">
-    <div class="text-center center-block footer-block">
-        <br />
-        <!-- <a href="http://facebook.us13.list-manage.com/subscribe?u=a6bd9370a45ed22657eb7af16&id=d96251281c"><i id="social-nl" class="fa fa-calendar fa-2x social"></i></a>
-        <a href="https://www.facebook.com/uclawatt/"><i id="social-fb" class="fa fa-facebook-square fa-2x social"></i></a>
-        <a href="https://www.flickr.com/photos/143450762@N06/"><i id="social-fl" class="fa fa-flickr fa-2x social"></i></a>
-        <a href="mailto:wie.ieee.@gmail.com"><i id="social-em" class="fa fa-envelope fa-2x social"></i></a> -->
+<!-- SCRIPTS -->
+<script src='https://api.mapbox.com/mapbox-gl-js/v0.40.0/mapbox-gl.js'></script>
+<script src="../js/handlebars.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<!-- <script src="vendor/jquery/jquery.min.js"></script> -->
+<!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+<script src="../js/main.js"></script>
+<script src="../js/utils.js"></script>
+<!-- CATEGORY NAMES HANDLEBARS SCRIPT-->
+<script id="category-dropdown-template" type="text/x-handlebars-template">
+    <div class="dropdown sidebar-header">
+        <p data-toggle="dropdown" id="categ-dropdown-text">
+            all categories &nbsp;
+        <span class="caret"></span></p>
+        <ul class="dropdown-menu">
+        \{{#each categDrop}}
+            <li><a class="categName">\{{this.category}}</a></li>
+        \{{/each}}
+        </ul>
     </div>
-</div>
-<!-- <script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';}(jQuery));var $mcj = jQuery.noConflict(true);</script> -->
-
+</script>
+<script src="../js/map.js"></script>
+<!--  SIDEBAR EVENTS HANDLEBARS SCRIPT-->
+<script id="sidebar-event-template" type="text/x-handlebars-template">
+  <div class="sidebar">
+      <!-- `events` is passed from main.js's API Call -->
+      <!-- We iterate through each of these objects and append them using the template -->
+      \{{#each events}}
+      <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
+          <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
+          <div class="sidebar-event-details">
+              <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
+              <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
+              <p class="sidebar-event-location">\{{this.properties.venue.location.street}}</p>
+              <p class="sidebar-event-category">\{{this.properties.category}}</p>
+          </div>
+      </a>
+      <div class="seperator"></div>
+      \{{/each}}
+  </div>
+</script>
 <script src="../js/modal.js"></script>
 
 <footer>
-  <div class="modal-container hide sign-up-modal-container">
-    <div class="my-modal sign-up-modal">
-      <div class="modal-x">&times</div>
-      <img class="event-image" src="" id="modal-image">
-      <div class="event-left">
-        <div class="event-title" id="event-month"></div>
-        <div class="event-title" id="event-day"></div>
-        <div class="event-text" id="event-time"></div>
-        <div class="event-text" id="event-location"></div>
-        <!-- <div class="event-image"> -->
-          <!-- <img class="event-image" src="" id="modal-image"> -->
-<!--         </div> -->
-        <!-- <div class="event-text">Friends Going</div>
-        <div class="event-friends">
-          <div class="event-friend-block">
-            <div class="event-friend-circle">
-              <img src="img/map-icon.png" width="" height="20">
-            </div>
-          </div>
-          <div class="event-friend-block">
-            <div class="event-friend-circle">
-              <img src="img/map-icon.png" width="" height="20">
-            </div>
-          </div>
-          <div class="event-friend-block">
-            <div class="event-friend-circle">
-              <img src="img/map-icon.png" width="" height="20">
-            </div>
-          </div>
-          <div class="event-friend-block">
-            <div class="event-friend-circle">
-              <img src="img/map-icon.png" width="" height="20">
-            </div>
-          </div>
-          <div class="event-friend-block">
-            <div class="event-friend-circle">
-              <img src="img/map-icon.png" width="" height="20">
-            </div>
-          </div>
-          <div class="event-friend-block">
-            <div class="event-friend-circle">
-              <img src="img/map-icon.png" width="" height="20">
-            </div>
-          </div>
-        </div>
-        <div class="btn-facebook">
-          <div class="fb-text">Connect with Facebook</div>
-        </div>
- -->
-      </div> <!-- event-left -->
-      <div class="event-right">
-        <!-- <div class="event-date" id="event-month"></div>
-        <div class="event-date" id="event-day"></div> -->
-        <div class="event-title" id="event-title"></div>
-        <!-- <div class="event-text" id="event-time"></div>
-        <div class="event-text" id="event-location"></div> -->
-<!--         <div class="event-text"></div> -->
-        <div class="event-text">Event Description</div>
-        <div class="event-text" id="event-description">No event description has been written at this time.</div>
-      </div>
-
-    </div> <!-- modal sign-up-modal -->
-    <div class="overlay" onClick="hideModal('sign-up')"></div>
-  </div> <!-- modal-container hide sign-up-modal-container -->
 </footer>
 
 </body>
