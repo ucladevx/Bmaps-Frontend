@@ -24,9 +24,11 @@ var map = new mapboxgl.Map({
 var today = new Date();
 var todayD = today.getDate();
 var todayM = today.getMonth(); //January is 0!
+var todayY = today.getFullYear();
 
 var d = todayD;
 var m = todayM;
+var y = todayY;
 
 var currDay = today;
 
@@ -66,7 +68,7 @@ function updateDate() {
 
     document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
     // update source
-     map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/' + d + ' ' + getMonthNameFromMonthNumber(m));
+     map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y);
 }
 
 
