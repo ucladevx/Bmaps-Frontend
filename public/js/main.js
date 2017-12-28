@@ -33,7 +33,6 @@ $(document).ready(function() {
         //Add default option to categories object
         data.categories.unshift({"category":"all categories"});
         $.each(data.categories, function(i,item){
-            console.log(item.category);
             item.category = item.category.toLowerCase();
         });
         //Mount categories object into dropdown using handlebars
