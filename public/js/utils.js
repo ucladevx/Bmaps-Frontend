@@ -45,7 +45,6 @@ function chunkArray(myArray, chunk_size){
         // Do something if you want with the group
         tempArray.push(myChunk);
     }
-
     return tempArray;
 }
 
