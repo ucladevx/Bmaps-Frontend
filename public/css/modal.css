@@ -6,9 +6,6 @@ body.locked{
 	display: none;
 }
 
-/*.sign-up-trigger-modal{
-	background-color: red;
-}*/
 .sign-up-trigger-modal:hover{
 	box-shadow: 0px 1px 4px 0 rgba(34, 36, 38, 0.3);
 	opacity: 0.7;
@@ -34,35 +31,40 @@ body.locked{
 .sign-up-modal {
 /*	width: 65%;
 	height: 80%;*/
-	width: 50%;
-	height: 80%;
+	width: 55%;
+	height: 85%;
+	overflow: scroll;
 }
 
 .my-modal{
 	z-index: 750;
-	position: absolute;
+	position: fixed;
 	background: white;
 	box-shadow: 0px 1px 4px 0 rgba(34, 36, 38, 0.3);
-	padding: 50px;
+	padding: 65px;
 	border-radius: 2px;
 	-webkit-transform: translate(-50%, -50%);
 			transform: translate(-50%, -50%);
 
 	left: 50%;
 	top: 50%;
-	overflow: hidden;
 }
 
 .modal-x {
 	position: fixed;
-	font-weight: lighter;
+	opacity: 0.7;
+	float: right;
+	top: 0;
+	right: 0;
+	transform: translate(-100%, 100%);
+	height: 25px;
+/*	font-weight: lighter;
 	font-size: 40px;
 	opacity: .6;
 	float: right;
-	/*-webkit-transform: translate(150%, 150%);*/
 	transform: translate(-100%, 0%);
 	top: 0;
-	right: 0;
+	right: 0;*/
 
 }
 
@@ -75,15 +77,15 @@ body.locked{
 	display: inline-block;
 	vertical-align: top;
 	max-width: 325px;
-	width: 30%;
-	height: 100%;
-	padding: 20px 0px 0px 0px;
+	width: 35%;
+	/*height: 100%;*/
+	/*padding: 20px 0px 0px 0px;*/
 /*	margin-right: 5%;*/
 }
 
 .event-image {
 	object-fit: cover;
-	height: 50%;
+	height: 220px;
 	width: 100%;
 	/*border: 1px solid grey;*/
 	box-shadow: 0px 1px 4px 0 rgba(34, 36, 38, 0.3);
@@ -97,18 +99,18 @@ body.locked{
 	font-weight: 500;
 	letter-spacing: 1px;
 	color: rgb(83, 83, 83);
-	padding: 15px 10px 0px 0px;
+	padding: 3px 0px 0px 0px;
 }
 
 .event-right {
 	display: inline-block;
 	/*vertical-align: right;*/
 	max-width: 400px;
-	width: 69%;
-	height: 50%;
+	width: 64%;
+	/*height: 50%;*/
 	max-height: 250px;
 	overflow: scroll;
-	margin: 20px 0px 0px 0px;
+	/*margin: 20px 0px 0px 0px;*/
 }
 
 .event-date {
@@ -120,18 +122,10 @@ body.locked{
 }
 
 .event-title {
-	font-size: 26px;
+	font-size: 24px;
 	font-weight: 600;
 	letter-spacing: 2px;
-	margin: 0px 0px 0px 0px;
-}
-
-#event-time{
-	padding: 0px 20px 0px 0px;
-}
-
-#event-location{
-	padding: 0px 10px 0px 0px;
+	margin: 15px 0px 12px 0px;
 }
 
 #event-description {
@@ -140,93 +134,27 @@ body.locked{
 	margin: 0px 0px 10px 0px;
 }
 
-
-.event-friends {
-	width: 100%;
-	max-width: 100%;
-	display: table;
-	margin: 0 auto;
-	justify-content: center;
-	/*transform: translateX(50%, 50%);*/
-}
-
-.event-friend-block {
-	display: flex;
-	float: left;
-  	align-items: center;
-  	justify-content: center;
-  	margin: 0px 0px 0px 0px;
-  	width: 45px;
-  	height: 45px;
-}
-
-.event-friend-circle{
-	position: absolute;
-	display: flex;
-    align-items: center;
-    justify-content: center;
-	cursor: pointer;
-	height: 30px;
-	width: 30px;
-	border-radius: 20px;
-	box-shadow: 0px 1px 5px 0 rgba(34, 36, 38, 0.3);
-	padding: 15px;
-}
-
-.btn-facebook{
-	display: table;
-	width: 90%;
-	max-width: 100%;
-	background-color: #3b5998;
-	border-radius: 5px;
-	text-align: center;
-	line-height: 30px;
-	-webkit-align-self: center; /* Safari 7.0+ */
-    align-self: center;
-	margin: 0 auto;
-	margin-top: 10px;
-	
-}
-
-.btn-facebook .fb-text{
-	color: white;
-	font-size: 14px;
-	font-weight: bold;
-	letter-spacing: 1px;
-}
-
 @media (max-width: 768px) {
-  .btn-facebook {
-  	margin: 5px;
-  	line-height: 20px;
-  }
-  .btn-facebook .fb-text {
-    font-size: 10px;
-  }
+
 }
 
-
-
-
-
-
-
-/* Random stuff */
-
-.modal-field-content{
-	margin-top: 15px;
-
-	.field{
-		input:focus{
-			outline: none !important;
-		}
+@media (max-width: 992px) {
+	.event-title{
+		font-size: 18px;
 	}
-	.chat_modal{
-		text-align: center;
+	.my-modal{
+		padding: 40px;
 	}
-
+	.modal-x{
+		height: 15px;
+	}
+	.event-text{
+		font-size: 11px;
+	}
+	#event-description{
+		font-size: 10px;
+	}
 }
 
-.modal-field-content.padded{
-	padding-bottom: 10px;
-}
+
+

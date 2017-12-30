@@ -67,8 +67,8 @@ function updateDate() {
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	// update source
-	map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y);
-	// map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/12%20Dec%202017');
+	// map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y);
+	map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/29%20Dec%202017');
 }
 
 
