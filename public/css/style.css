@@ -57,6 +57,10 @@ td a {
     font-weight: 600;
 }
 
+.navbar-form{
+    display: inline-block;
+}
+
 #navbar-brand{
     color: rgb(0,193,211);
     font-weight: 600;
@@ -83,8 +87,11 @@ td a {
 }
 
 @media (max-width: 768px){
+    .navbar-form{
+        display: none;
+    }
+
     #navBarSearchForm input[type=text]{
-        /*width: 100% !important;*/
         width: 200px !important;
     }
     #searchForm{
@@ -128,7 +135,6 @@ li a {
     height: 100%;
 }
 .sidebar-mount{
-    margin-right: 4%;
     min-width: 270px;
     padding-left: 0px;
     padding-right: 0px;
