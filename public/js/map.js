@@ -21,10 +21,13 @@ var map = new mapboxgl.Map({
 //////////////// DATE HANDLING //////////////////
 ////////////////////////////////////////////////
 
-var today = new Date();
+var today = new Date(); //this is being changed somewhere and I can't figure out where
 var todayD = today.getDate();
 var todayM = today.getMonth(); //January is 0!
 var todayY = today.getFullYear();
+
+let todayDate = new Date();
+let milliDay = 86400000;
 
 var d = todayD;
 var m = todayM;
@@ -48,20 +51,19 @@ function previousDay() {
 
 function updateDate() {
   filterDayInSidebar();
-  console.log("Today: " +todayD + "Curr: " +d)
-  console.log("Check: " +  d == todayD && m == todayM)
-    if (d == todayD && m == todayM) {
+    if (todayDate.getTime() == currDay.getTime()) {
       document.getElementById("leftArrow").style.display = "none";
       document.getElementById("rightArrow").style.display = "inline";
       document.getElementById("relativeDay").innerHTML =  "today";
-    } else {
-      if (d == (todayD + 1)) {
+    }
+	else {
+      if (currDay.getTime() == (todayDate.getTime() + milliDay)) {
         document.getElementById("relativeDay").innerHTML =  "tomorrow";
-      } else if (d == (todayD + 7)) {
+	} else if (currDay.getTime() == (todayDate.getTime() + 7*milliDay)) {
         document.getElementById("relativeDay").innerHTML = "in a week";
         document.getElementById("rightArrow").style.display = "none";
       } else {
-        document.getElementById("relativeDay").innerHTML = (d - todayD) +" days from today";
+        document.getElementById("relativeDay").innerHTML = ((currDay.getTime()-todayDate.getTime())/milliDay) +" days from today";
       }
       document.getElementById("leftArrow").style.display = "inline";
     }
