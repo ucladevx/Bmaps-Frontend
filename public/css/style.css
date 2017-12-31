@@ -71,31 +71,27 @@ td a {
 }
 
 #navBarSearchForm input[type=text]{
-    width:800px !important;
+    width:600px !important;
 }
 
-@media (max-width: 1168px){
-    #navBarSearchForm input[type=text]{
-        width:600px !important;
-    }
-}
-
-@media (max-width: 968px){
+@media (max-width: 1000px){
     #navBarSearchForm input[type=text]{
         width:400px !important;
     }
 }
 
-@media (max-width: 768px){
-    .navbar-form{
+@media (max-width: 800px){
+    #navBarSearchForm input[type=text]{
+        width:200px !important;
+    }
+}
+
+@media (max-width: 767px){
+    #search-input{
         display: none;
     }
-
-    #navBarSearchForm input[type=text]{
-        width: 200px !important;
-    }
     #searchForm{
-        width: 240px;
+        width: 39px;
         border-top: 0px;
         border-bottom: 0px;
         padding: 0px;
