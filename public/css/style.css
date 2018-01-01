@@ -87,6 +87,9 @@ td a {
 }
 
 @media (max-width: 767px){
+    .navbar-collapse .navbar-nav{
+        float: none !important;
+    }
     #search-input{
         display: none;
     }
