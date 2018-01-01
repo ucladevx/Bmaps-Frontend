@@ -77,8 +77,8 @@ $(document).ready(function() {
     //Setting up datalist with searhbox
     var inputBox = document.getElementById('search-input');
     let list = document.getElementById('searchList');
-    let icon = document.getElementById('searchIcon');
-    console.log(icon);
+    // let icon = document.getElementById('searchIcon');
+    // console.log(icon);
 
     var dataObj = ""
     //Detecting a key change in search and capturing it as "e"
@@ -101,7 +101,7 @@ $(document).ready(function() {
         }
 
         //Search icon will also cause mounting
-        icon.addEventListener("click",function(){mountSearchResults()});
+        // icon.addEventListener("click",function(){mountSearchResults()});
         //13 is the code value for `Enter` (74: j)
         if (e.which == 13){
             mountSearchResults();
