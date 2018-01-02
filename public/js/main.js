@@ -60,14 +60,6 @@ $(document).ready(function() {
         });
 
         defaultData = data.features;
-        Handlebars.registerHelper('json', function(context) {
-            return JSON.stringify(context).replace(/"/g, '&quot;');
-        });
-
-        Handlebars.registerHelper('fullName', function(person) {
-          return person.firstName + " " + person.lastName;
-        });
-
         //Mount the object holding events into the index.html at #events-mount
         $('#events-mount').html(eventsTemplate({
             events: data.features
@@ -77,6 +69,7 @@ $(document).ready(function() {
     //Setting up datalist with searhbox
     var inputBox = document.getElementById('search-input');
     let list = document.getElementById('searchList');
+    var leftIcon = document.getElementById("mobile-left-icon");
     let searchIcon = document.getElementById('searchForm');
     // searchIcon.addEventListener("click",function(){console.log("haha")});
     // $(".mobile-search-display").addEventListener("click", function(){console.log"yah"});
@@ -153,13 +146,25 @@ $(document).ready(function() {
         $("#nav-non-collapse").removeClass("pull-left");
         $(searchIcon).addClass("mobile-search-display");
         searchIcon.addEventListener("click", function(){
-            var navHeader = document.getElementById("navbar-brand-div")
-            var midUl = document.getElementById("non-collapse-ul");
+            let navHeader = document.getElementById("navbar-brand-div")
+            let midUl = document.getElementById("non-collapse-ul");
+            let navToggle = document.getElementById("collapsed-menu");
             $(midUl).removeClass("pull-right");
             navHeader.style.display = "none";
-            inputBox.setAttribute("style", "display: inline-table;");
-            // inputBox.style.display = "inline-table";
-
+            navToggle.style.display = "none";
+            leftIcon.style.display = "inline";
+            inputBox.setAttribute("style", "display: inline-table; width: 600px !important");
+        });
+        leftIcon.addEventListener("click", function(){
+            let navHeader = document.getElementById("navbar-brand-div")
+            let midUl = document.getElementById("non-collapse-ul");
+            let navToggle = document.getElementById("collapsed-menu");
+            console.log("haha");
+            $(midUl).addClass("pull-right");
+            navHeader.style.display = "inline";
+            navToggle.style.display = "inline";
+            leftIcon.style.display = "none";
+            inputBox.setAttribute("style", "display: none; width: 200px !important");
         });
         // $(".mobile-search-display").addEventListener("click", function(){console.log"yah"});
       }

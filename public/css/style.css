@@ -74,6 +74,10 @@ td a {
     width:1000px !important;
 }
 
+#mobile-left-icon{
+    display: none;
+}
+
 @media (max-width: 1400px){
     #navBarSearchForm input[type=text]{
         width:800px !important;
