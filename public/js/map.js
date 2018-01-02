@@ -90,6 +90,15 @@ function filterCategory(categoryName){
 	let eventsSource = $("#sidebar-event-template").html();
 	let eventsTemplate = Handlebars.compile(eventsSource);
 	let dropdownBarText = document.getElementById('categ-dropdown-text');
+	console.log(keyUrl); //curr date
+	$.getJSON(keyUrl,function(data){
+		console.log(data);
+		$.grep( data.features, function( item, i ) {
+		  if (item.properties.category == categoryName.toUpperCase()){
+			  console.log(item);
+		  }
+		});
+	});
 	if (categoryName == "all categories"){
 		$('#events-mount').html(eventsTemplate({
 			events: defaultData
