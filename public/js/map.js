@@ -71,7 +71,7 @@ function updateDate() {
 	map.getSource('events').setData(keyUrl);
 }
 
-function filterDayInSidebar(keyUrl){
+function filterDayInSidebar(){
     let eventsSource = $("#sidebar-event-template").html();
     let eventsTemplate = Handlebars.compile(eventsSource);
     $.getJSON(keyUrl,function(data){
@@ -90,15 +90,6 @@ function filterCategory(categoryName){
 	let eventsSource = $("#sidebar-event-template").html();
 	let eventsTemplate = Handlebars.compile(eventsSource);
 	let dropdownBarText = document.getElementById('categ-dropdown-text');
-	console.log(keyUrl); //curr date
-	$.getJSON(keyUrl,function(data){
-		console.log(data);
-		$.grep( data.features, function( item, i ) {
-		  if (item.properties.category == categoryName.toUpperCase()){
-			  console.log(item);
-		  }
-		});
-	});
 	if (categoryName == "all categories"){
 		$('#events-mount').html(eventsTemplate({
 			events: defaultData
@@ -106,10 +97,12 @@ function filterCategory(categoryName){
 		map.getSource('events').setData(keyUrl);
 	}
 	else {
-		let keyUrl = "http://52.53.72.98/api/v1/event-category/" + categoryName;
 		$.getJSON(keyUrl,function(data){
-			$.each(data.features, function(i,item){
-				formatDateItem(item);
+			data.features = data.features.filter(function(item){
+				if (item.properties.category == categoryName.toUpperCase()){
+					formatDateItem(item);
+					return true;
+				}
 			});
 			$('#events-mount').html(eventsTemplate({
 				events: data.features
