@@ -143,6 +143,8 @@ $(document).ready(function() {
         $(".sidebar-mount").appendTo("#regular-mount");
         $("#map").appendTo("#regular-mount");
         $("#nav-non-collapse").addClass("pull-left");
+        $(inputBox).addClass("regular-search-input");
+        $(inputBox).removeClass("mobile-search-input");
 
         //restore to default search display if not already
         $(midUl).addClass("pull-right");
@@ -155,7 +157,9 @@ $(document).ready(function() {
         // window width is less than 500px
         $(".sidebar-mount").appendTo("#mobile-mount");
         $("#nav-non-collapse").removeClass("pull-left");
-        
+        $(inputBox).removeClass("regular-search-input");
+        $(inputBox).addClass("mobile-search-input");
+
         inputBox.setAttribute("style", "display: none;");
         $(searchIcon).click(function() {
             $(midUl).removeClass("pull-right");
