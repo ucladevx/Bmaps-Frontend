@@ -77,7 +77,11 @@ $(document).ready(function() {
     //Setting up datalist with searhbox
     var inputBox = document.getElementById('search-input');
     let list = document.getElementById('searchList');
-    // let icon = document.getElementById('searchIcon');
+    let searchIcon = document.getElementById('searchForm');
+    // searchIcon.addEventListener("click",function(){console.log("haha")});
+    // $(".mobile-search-display").addEventListener("click", function(){console.log"yah"});
+
+    // $(".mobile-search-display").addEventListener("click", function(){console.log("hahah")});
     // console.log(icon);
 
     var dataObj = ""
@@ -101,7 +105,7 @@ $(document).ready(function() {
         }
 
         //Search icon will also cause mounting
-        // icon.addEventListener("click",function(){mountSearchResults()});
+        // searchIcon.addEventListener("click",function(){mountSearchResults()});
         //13 is the code value for `Enter` (74: j)
         if (e.which == 13){
             mountSearchResults();
@@ -141,10 +145,23 @@ $(document).ready(function() {
         $(".sidebar-mount").appendTo("#regular-mount");
         $("#map").appendTo("#regular-mount");
         $("#nav-non-collapse").addClass("pull-left");
+        $(searchIcon).removeClass("mobile-search-display");
+
       } else {
         // window width is less than 500px
         $(".sidebar-mount").appendTo("#mobile-mount");
         $("#nav-non-collapse").removeClass("pull-left");
+        $(searchIcon).addClass("mobile-search-display");
+        searchIcon.addEventListener("click", function(){
+            var navHeader = document.getElementById("navbar-brand-div")
+            var midUl = document.getElementById("non-collapse-ul");
+            $(midUl).removeClass("pull-right");
+            navHeader.style.display = "none";
+            inputBox.setAttribute("style", "display: inline-table;");
+            // inputBox.style.display = "inline-table";
+
+        });
+        // $(".mobile-search-display").addEventListener("click", function(){console.log"yah"});
       }
     }
 }); // close document ready function
