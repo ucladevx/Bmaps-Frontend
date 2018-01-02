@@ -1,3 +1,5 @@
+/*--------------------------------------- EVERYTHING ---------------------------------------*/
+
 body {
     font:15px arial,sans-serif;
     background: rgb(251, 250, 250);
@@ -29,7 +31,7 @@ td a {
     text-decoration: underline;
 }
 
-/*NAVBAR*/
+/*---------------------------------------NAVBAR---------------------------------------*/
 .navbar {
     z-index: 100;
 }
@@ -39,7 +41,7 @@ td a {
 }
 
 .navbar-default{
-    background-color: rgb(251, 250, 250);
+    background: rgb(251, 250, 250);
     border-color: rgb(191,191,191);
 }
 
@@ -74,66 +76,20 @@ td a {
     display: inline-block;
 }
 
-#navBarSearchForm .regular-search-input{
-    width:1000px !important;
-}
-
-@media (max-width: 1400px){
-    #navBarSearchForm .regular-search-input{
-        width:800px !important;
-    }
-}
-
-@media (max-width: 1200px){
-    #navBarSearchForm .regular-search-input{
-        width:600px !important;
-    }
-}
-
-@media (max-width: 1000px){
-    #navBarSearchForm .regular-search-input{
-        width:400px !important;
-    }
-}
-
-@media (max-width: 800px){
-    #navBarSearchForm .regular-search-input{
-        width:200px !important;
-    }
-}
-
-@media (max-width: 767px){
-    .navbar-collapse .navbar-nav{
-        float: none !important;
-    }
-    #search-input{
-        display: none;
-    }
-    #searchForm{
-        height: 34px;
-        width: 39px;
-        border-top: 0px;
-        border-bottom: 0px;
-        padding: 0px;
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-}
-
-@media (max-width: 767px){
-    #navBarSearchForm .mobile-search-input{
-        /* width: 700px !important; */
-    }
-}
-
-
-
 ul li {
     border-radius: 100px;
 }
 
 li a {
     border-radius: 100px;
+}
+
+/*------------------------------------SEARCH BAR------------------------------------- */
+
+#mobile-left-icon button{
+    border-color: transparent;
+    margin-top: 6px;
+    padding: 10px;
 }
 
 #navBarSearchForm div input[type=text] {
@@ -144,9 +100,97 @@ li a {
     background: white;
 }
 
+/* specifically hide the arrow on focus */
+input::-webkit-calendar-picker-indicator {
+	display: none;
+}
 
+/* MEDIA QUERIES FOR RESIZING SEARCH BAR*/
+/* definitely should be doing it dynamically but attempts were unsucessful */
 
-/* SEARCH BAR */
+#navBarSearchForm input{
+    width:1000px !important;
+}
+
+@media (max-width: 1400px){
+    #navBarSearchForm input{
+        width:800px !important;
+    }
+}
+
+@media (max-width: 1200px){
+    #navBarSearchForm input{
+        width:600px !important;
+    }
+}
+
+@media (max-width: 1000px){
+    #navBarSearchForm input{
+        width:400px !important;
+    }
+}
+
+@media (max-width: 800px){
+    #navBarSearchForm input{
+        width:200px !important;
+    }
+}
+
+@media (max-width: 767px){
+    .navbar-collapse .navbar-nav{
+        float: none !important;
+    }
+    #navBarSearchForm input{
+        outline: none;
+        width: 600px !important;
+        border-color: transparent;
+    }
+    #searchForm{
+        height: 34px;
+        width: 39px;
+        border-top: 0px;
+        border-bottom: 0px;
+        padding: 0px;
+        margin-left: 0px;
+        margin-right: 20px;
+    }
+    .form-control{
+        box-shadow: none;
+    }
+}
+@media (max-width: 700px){
+    #navBarSearchForm input{
+        width: 525px !important;
+    }
+}
+@media (max-width: 600px){
+    #navBarSearchForm input{
+        width: 425px !important;
+    }
+}
+@media (max-width: 500px){
+    #navBarSearchForm input{
+        width: 325px !important;
+    }
+}
+@media (max-width: 400px){
+    #navBarSearchForm input{
+        width: 225px !important;
+    }
+}
+@media (max-width: 300px){
+    #navBarSearchForm input{
+        width: 125px !important;
+    }
+}
+
+@media (max-width: 200px){
+    #navBarSearchForm input{
+        width: 0px !important;
+    }
+}
+
+/* SEARCH ICON*/
 
 .has-feedback .form-control {
   padding-right: 34px;
@@ -206,7 +250,7 @@ li a {
   left: 15px;
 }
 
-/*SIDEBAR*/
+/*-------------------------------------SIDEBAR-------------------------------------*/
 
 .home-container{
     width: 90%;
@@ -293,7 +337,7 @@ li a {
     padding-right: 25%;
 }
 
-/*BODY*/
+/*--------------------------------------MAP--------------------------------------*/
 #map {
     top:0;
     bottom:0;
@@ -338,7 +382,7 @@ a.mapboxgl-ctrl-logo {
   height: 0;
 }
 
-/* SLIDER */
+/*-------------------------------------- SLIDER --------------------------------------*/
 /* #slider{
   padding-right: 0%;
   background: -webkit-repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;

@@ -7,7 +7,7 @@ $(document).ready(function() {
     var categDropTemplate = Handlebars.compile(categDropSource);
     var defaultData = "";
 
-    //GET request to load filtered by category events into sidebar
+    //GET request to load filtered by category events into sidebar header
     $.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
         let dropdownBarText = "";
         //Filters sidebar with either stored default events or filtered events from API
@@ -51,14 +51,10 @@ $(document).ready(function() {
     //GET request to load events into the sidebar using handlebars
     $.getJSON("http://52.53.72.98/api/v1/events", function(data)
     {
-        var html = ''; // we declare the variable that we'll be using to store our information
-        var counter = 1; // we declare a counter variable to use with the if statement in order to limit the result to 1
-
         //iterate through each of the elements in the API json object
         $.each(data.features, function(i,item){
             formatDateItem(item);
         });
-
         defaultData = data.features;
         //Mount the object holding events into the index.html at #events-mount
         $('#events-mount').html(eventsTemplate({
@@ -66,18 +62,13 @@ $(document).ready(function() {
         }));
         initModal();
     });
-    //Setting up datalist with searhbox
-    var inputBox = document.getElementById('search-input');
+    //Setting up datalist with searchBox
+    let inputBox = document.getElementById('search-input');
     let list = document.getElementById('searchList');
-    var leftIcon = document.getElementById("mobile-left-icon");
+    let leftIcon = document.getElementById("mobile-left-icon");
     let searchIcon = document.getElementById('searchForm');
-    // searchIcon.addEventListener("click",function(){console.log("haha")});
-    // $(".mobile-search-display").addEventListener("click", function(){console.log"yah"});
 
-    // $(".mobile-search-display").addEventListener("click", function(){console.log("hahah")});
-    // console.log(icon);
-
-    var dataObj = ""
+    let dataObj = ""
     //Detecting a key change in search and capturing it as "e"
     inputBox.onkeyup = function(e){
         console.log("INPUT BOX VALUE" + inputBox.value);
@@ -136,44 +127,47 @@ $(document).ready(function() {
         let navHeader = document.getElementById("navbar-brand-div")
         let midUl = document.getElementById("non-collapse-ul");
         let navToggle = document.getElementById("collapsed-menu");
-
+        let navbar = document.getElementById("navbar");
 
       if (mq.matches) {
-        // window width is at least 500px
+        // window width is at least 767px
+
+        //Remount map+sidebar horizontally
         $(".sidebar-mount").appendTo("#regular-mount");
         $("#map").appendTo("#regular-mount");
         $("#nav-non-collapse").addClass("pull-left");
-        $(inputBox).addClass("regular-search-input");
-        $(inputBox).removeClass("mobile-search-input");
 
         //restore to default search display if not already
         $(midUl).addClass("pull-right");
         $(navHeader).removeClass("no-display");
         $(navToggle).removeClass("no-display");
         $(leftIcon).addClass("no-display");
-        inputBox.setAttribute("style", "display: inline-table; width: 0");
+        navbar.style.background = "rgb(251, 250, 250)";
+        inputBox.setAttribute("style", "display: inline-table;");
         $(searchIcon).off("click");
       } else {
-        // window width is less than 500px
+        // window width is less than 767px
         $(".sidebar-mount").appendTo("#mobile-mount");
         $("#nav-non-collapse").removeClass("pull-left");
-        $(inputBox).removeClass("regular-search-input");
-        $(inputBox).addClass("mobile-search-input");
 
+        //When inputBox is clicked: will expand all other nav elements will have no display
         inputBox.setAttribute("style", "display: none;");
         $(searchIcon).click(function() {
             $(midUl).removeClass("pull-right");
             $(navHeader).addClass("no-display");
             $(navToggle).addClass("no-display");
             $(leftIcon).removeClass("no-display");
-            inputBox.setAttribute("style", "display: inline-table; width: 600px !important");
+            navbar.style.background = "white";
+            inputBox.setAttribute("style", "display: inline-table;");
         });
+        //When leftIcon is clicked: restore mobile navbar display
         $(leftIcon).click(function(){
             $(midUl).addClass("pull-right");
             $(navHeader).removeClass("no-display");
             $(navToggle).removeClass("no-display");
             $(leftIcon).addClass("no-display");
-            inputBox.setAttribute("style", "display: none; width: 200px !important");
+            navbar.style.background = "rgb(251, 250, 250)";
+            inputBox.setAttribute("style", "display: none;");
         });
       }
     }
