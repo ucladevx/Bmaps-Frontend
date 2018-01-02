@@ -50,7 +50,7 @@ function previousDay() {
 }
 
 function updateDate() {
-	filterDayInSidebar();
+	keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
 	if (todayDate.getTime() == currDay.getTime()) {
 		document.getElementById("leftArrow").style.display = "none";
 		document.getElementById("rightArrow").style.display = "inline";
@@ -67,14 +67,13 @@ function updateDate() {
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	// update source
-	map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y);
-	// map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/12%20Dec%202017');
+	filterDayInSidebar(keyUrl);
+	map.getSource('events').setData(keyUrl);
 }
 
-function filterDayInSidebar(){
-    var eventsSource = $("#sidebar-event-template").html();
-    var eventsTemplate = Handlebars.compile(eventsSource);
-    let keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + ' ' + getMonthNameFromMonthNumber(m);
+function filterDayInSidebar(keyUrl){
+    let eventsSource = $("#sidebar-event-template").html();
+    let eventsTemplate = Handlebars.compile(eventsSource);
     $.getJSON(keyUrl,function(data){
         $.each(data.features, function(i,item){
             formatDateItem(item);
@@ -82,7 +81,34 @@ function filterDayInSidebar(){
         $('#events-mount').html(eventsTemplate({
             events: data.features
         }));
-    })
+		defaultData = data.features;
+    });
+}
+
+//Filters sidebar with either stored default events or filtered events from API
+function filterCategory(categoryName){
+	let eventsSource = $("#sidebar-event-template").html();
+	let eventsTemplate = Handlebars.compile(eventsSource);
+	let dropdownBarText = document.getElementById('categ-dropdown-text');
+	if (categoryName == "all categories"){
+		$('#events-mount').html(eventsTemplate({
+			events: defaultData
+		}));
+		map.getSource('events').setData(keyUrl);
+	}
+	else {
+		let keyUrl = "http://52.53.72.98/api/v1/event-category/" + categoryName;
+		$.getJSON(keyUrl,function(data){
+			$.each(data.features, function(i,item){
+				formatDateItem(item);
+			});
+			$('#events-mount').html(eventsTemplate({
+				events: data.features
+			}));
+			map.getSource('events').setData(keyUrl);
+		});
+	}
+	$(dropdownBarText).html(categoryName+"&nbsp;<span class=caret></span>");
 }
 
 
@@ -90,9 +116,9 @@ function filterDayInSidebar(){
 /////////////////// LOAD DATA //////////////////
 ////////////////////////////////////////////////
 
-var events = 'http://52.53.72.98/api/v1/event-date/' + d +' ' + getMonthNameFromMonthNumber(m); // json we are pulling from for event info
+let keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
 map.on('load', function () {
-	map.addSource('events', { type: 'geojson', data: events });
+	map.addSource('events', { type: 'geojson', data: keyUrl });
 	// Making layers (based on categorization)
 	/*  events.features.forEach(function(feature) {
 	var symbol = features.properties.category; // category name -> icon
@@ -124,21 +150,22 @@ map.on('load', function () {
 }
 }); */
 
-map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
-	if (error) throw error;
-	map.addImage('pin', image);
-	map.addLayer({
-		"id": "eventlayer",
-		"type": "symbol",
-		"source":"events",
-		"layout": {
-			"icon-image": "pin",
-			"icon-size":.06,
-			"icon-allow-overlap": true
+	map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
+		if (error) throw error;
+		map.addImage('pin', image);
+		map.addLayer({
+			"id": "eventlayer",
+			"type": "symbol",
+			"source":"events",
+			"layout": {
+				"icon-image": "pin",
+				"icon-size":.06,
+				"icon-allow-overlap": true
 
-		}
+			}
+		});
 	});
-});
+	initModal();
 });
 
 
