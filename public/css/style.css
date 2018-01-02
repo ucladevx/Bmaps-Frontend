@@ -61,6 +61,10 @@ td a {
     display: inline-block;
 }
 
+.no-display{
+    display: none !important;
+}
+
 #navbar-brand{
     color: rgb(0,193,211);
     font-weight: 600;
@@ -75,7 +79,7 @@ td a {
 }
 
 #mobile-left-icon{
-    display: none;
+    /* display: none; */
 }
 
 @media (max-width: 1400px){

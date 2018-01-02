@@ -133,40 +133,44 @@ $(document).ready(function() {
 
     // media query change
     function WidthChange(mq) {
+        let navHeader = document.getElementById("navbar-brand-div")
+        let midUl = document.getElementById("non-collapse-ul");
+        let navToggle = document.getElementById("collapsed-menu");
+
+
       if (mq.matches) {
         // window width is at least 500px
         $(".sidebar-mount").appendTo("#regular-mount");
         $("#map").appendTo("#regular-mount");
         $("#nav-non-collapse").addClass("pull-left");
-        $(searchIcon).removeClass("mobile-search-display");
 
+        //restore to default search display if not already
+        $(midUl).addClass("pull-right");
+        $(navHeader).removeClass("no-display");
+        $(navToggle).removeClass("no-display");
+        $(leftIcon).addClass("no-display");
+        inputBox.setAttribute("style", "display: inline-table; width: 0");
+        $(searchIcon).off("click");
       } else {
         // window width is less than 500px
         $(".sidebar-mount").appendTo("#mobile-mount");
         $("#nav-non-collapse").removeClass("pull-left");
-        $(searchIcon).addClass("mobile-search-display");
-        searchIcon.addEventListener("click", function(){
-            let navHeader = document.getElementById("navbar-brand-div")
-            let midUl = document.getElementById("non-collapse-ul");
-            let navToggle = document.getElementById("collapsed-menu");
+        
+        inputBox.setAttribute("style", "display: none;");
+        $(searchIcon).click(function() {
             $(midUl).removeClass("pull-right");
-            navHeader.style.display = "none";
-            navToggle.style.display = "none";
-            leftIcon.style.display = "inline";
+            $(navHeader).addClass("no-display");
+            $(navToggle).addClass("no-display");
+            $(leftIcon).removeClass("no-display");
             inputBox.setAttribute("style", "display: inline-table; width: 600px !important");
         });
-        leftIcon.addEventListener("click", function(){
-            let navHeader = document.getElementById("navbar-brand-div")
-            let midUl = document.getElementById("non-collapse-ul");
-            let navToggle = document.getElementById("collapsed-menu");
-            console.log("haha");
+        $(leftIcon).click(function(){
             $(midUl).addClass("pull-right");
-            navHeader.style.display = "inline";
-            navToggle.style.display = "inline";
-            leftIcon.style.display = "none";
+            $(navHeader).removeClass("no-display");
+            $(navToggle).removeClass("no-display");
+            $(leftIcon).addClass("no-display");
             inputBox.setAttribute("style", "display: none; width: 200px !important");
         });
-        // $(".mobile-search-display").addEventListener("click", function(){console.log"yah"});
       }
     }
 }); // close document ready function
