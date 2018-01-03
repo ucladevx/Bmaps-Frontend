@@ -133,6 +133,7 @@ function filterDateByCategory(categoryName){
 inputBox.onkeyup = function(e){
 	let eventsSource = $("#sidebar-event-template").html();
 	let eventsTemplate = Handlebars.compile(eventsSource);
+	let list = document.getElementById('searchList');
 	if (e.which == 13){
 		if (inputBox.value == "") {
 			$('#events-mount').html(eventsTemplate({
