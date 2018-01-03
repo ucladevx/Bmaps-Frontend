@@ -104,28 +104,30 @@ function filterDateByCategory(categoryName){
 	}
 	//Filter and render currDateJSON
 	if(categoryName == "all categories") {
+		map.getSource('events').setData(currDateJSON);
 		$.each(currDateJSON.features, function(i, item ){
 			formatDateItem(item);
 		})
 		$('#events-mount').html(eventsTemplate({
 			events: currDateJSON.features
 		}));
-		map.getSource('events').setData(currDateJSON);
 	}
 	else {
 		//Clone currDateJSON to filteredJSON and filter for category
 		filteredJSON = JSON.parse(JSON.stringify(currDateJSON));
 		filteredJSON.features = filteredJSON.features.filter(function(item){
 			if (item.properties.category == categoryName.toUpperCase()){
-				formatDateItem(item);
 				return true;
 			}
 		});
 		//Render filteredJSON to sidebar and map
+		map.getSource('events').setData(filteredJSON);
+		$.each(filteredJSON.features, function(i, item ){
+			formatDateItem(item);
+		})
 		$('#events-mount').html(eventsTemplate({
 			events: filteredJSON.features
 		}));
-		map.getSource('events').setData(filteredJSON);
 	}
 }
 
@@ -136,11 +138,19 @@ inputBox.onkeyup = function(e){
 	let list = document.getElementById('searchList');
 	if (e.which == 13){
 		if (inputBox.value == "") {
+			map.getSource('events').setData(currDateJSON);
+			$.each(currDateJSON.features, function(i, item ){
+				formatDateItem(item);
+			})
 			$('#events-mount').html(eventsTemplate({
 				events: currDateJSON.features
 			}));
 		}
 		else {
+			map.getSource('events').setData(filteredJSON);
+			$.each(filteredJSON.features, function(i, item ){
+				formatDateItem(item);
+			})
 			$('#events-mount').html(eventsTemplate({
 				events: filteredJSON.features
 			}));
@@ -169,7 +179,6 @@ inputBox.onkeyup = function(e){
 		//Iterate through all of the elemnts given by the API search
 		$.each(filteredJSON.features, function(i,item){
 			if (i < 15){
-				formatDateItem(item);
 				//Append those elements onto the datalist for the input box
 				let option = document.createElement('option');
 				option.value = item.properties.event_name;
