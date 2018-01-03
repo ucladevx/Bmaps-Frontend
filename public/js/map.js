@@ -35,6 +35,7 @@ var y = todayY;
 
 var currDay = today;
 let currCategoryName = "all categories";
+let currDate = "";
 let currDateJSON = {
 	"features": [],
 	"type": "FeatureCollection"
@@ -43,6 +44,11 @@ let filteredJSON = {
 	"features": [],
 	"type": "FeatureCollection"
 }
+
+//Setting up datalist with searchbox
+let inputBox = document.getElementById('search-input');
+let list = document.getElementById('searchList');
+let dataObj = ""
 
 function nextDay() {
 	currDay.setDate(currDay.getDate() + 1);
@@ -79,6 +85,8 @@ function updateDate() {
 	$.getJSON(keyUrl, function(data){
 		//Update currDateJSON since date changed
 		currDateJSON = data;
+		// console.log(getMonthNameFromMonthNumber(m)+ " "+ d + ", " +y);
+		currDate = Date.parse(getMonthNameFromMonthNumber(m)+ " "+ d + ", " +y);
 		//Use stored categoryName when input not selected
 		filterDateByCategory(currCategoryName);
 	});
@@ -97,10 +105,12 @@ function filterDateByCategory(categoryName){
 	}
 	//Filter and render currDateJSON
 	if(categoryName == "all categories") {
+		$.each(currDateJSON.features, function(i, item ){
+			formatDateItem(item);
+		})
 		$('#events-mount').html(eventsTemplate({
 			events: currDateJSON.features
 		}));
-		defaultData = currDateJSON.features;
 		map.getSource('events').setData(currDateJSON);
 	}
 	else {
@@ -120,6 +130,55 @@ function filterDateByCategory(categoryName){
 	}
 }
 
+//Detecting a key change in search and capturing it as "e"
+inputBox.onkeyup = function(e){
+	let eventsSource = $("#sidebar-event-template").html();
+	let eventsTemplate = Handlebars.compile(eventsSource);
+	if (e.which == 13){
+		if (inputBox.value == "") {
+			$('#events-mount').html(eventsTemplate({
+				events: currDateJSON.features
+			}));
+		}
+		else {
+			$('#events-mount').html(eventsTemplate({
+				events: dataObj
+			}));
+		}
+		return false;
+	}
+	//Pass the current input into search API to create datalist
+	let keyUrl = "http://52.53.72.98/api/v1/search/"+inputBox.value;
+	$.getJSON(keyUrl, function(data){
+		//Clear the list and restart everytime we get a new input
+		while (list.firstChild) {
+			list.removeChild(list.firstChild);
+		}
+		//Filter search results before rendering
+		filteredJSON = JSON.parse(JSON.stringify(data));
+		filteredJSON.features = filteredJSON.features.filter(function(item){
+			console.log("currDate: "+currDate);
+			var dateItem = new Date(item.properties.start_time); //your date object
+			dateVal = new Date(dateVal.setHours(0,0,0,0));
+			if (Date.parse(dateVal) == currDate){
+				formatDateItem(item);
+				return true;
+			}
+		});
+
+		//Iterate through all of the elemnts given by the API search
+		$.each(filteredJSON.features, function(i,item){
+			formatDateItem(item);
+			if (i < 15){
+				//Append those elements onto the datalist for the input box
+				let option = document.createElement('option');
+				option.value = item.properties.event_name;
+				list.appendChild(option);
+			}
+		});
+		dataObj = filteredJSON.features;
+	})
+}
 
 ////////////////////////////////////////////////
 /////////////////// LOAD DATA //////////////////

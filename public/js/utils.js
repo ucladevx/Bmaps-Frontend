@@ -24,6 +24,7 @@ function formatDateItem(item) {
     // console.log("entered formatDateItem");
     // console.log(item)
     var dateOfStart = new Date(item.properties.start_time);
+    // console.log(dateOfStart);
     var dateOfEnd = new Date(item.properties.end_time);
     //changing value of start_time to proper parsing
     if (item.properties.end_time != "<NONE>"){
