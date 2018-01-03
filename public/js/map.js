@@ -35,6 +35,14 @@ var y = todayY;
 
 var currDay = today;
 let currCategoryName = "all categories";
+let currDateJSON = {
+	"features": [],
+	"type": "FeatureCollection"
+}
+let filteredJSON = {
+	"features": [],
+	"type": "FeatureCollection"
+}
 
 function nextDay() {
 	currDay.setDate(currDay.getDate() + 1);
@@ -51,7 +59,6 @@ function previousDay() {
 }
 
 function updateDate() {
-	keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
 	if (todayDate.getTime() == currDay.getTime()) {
 		document.getElementById("leftArrow").style.display = "none";
 		document.getElementById("rightArrow").style.display = "inline";
@@ -67,39 +74,50 @@ function updateDate() {
 	}
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
-	// update source
-	filterDateByCategory(currCategoryName);
+	//Update keyURL to current date and send to filtering function
+	keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
+	$.getJSON(keyUrl, function(data){
+		//Update currDateJSON since date changed
+		currDateJSON = data;
+		//Use stored categoryName when input not selected
+		filterDateByCategory(currCategoryName);
+	});
 }
 
 //Filters sidebar with either stored default events or filtered events from API
 function filterDateByCategory(categoryName){
+	//Compile event object
 	let eventsSource = $("#sidebar-event-template").html();
 	let eventsTemplate = Handlebars.compile(eventsSource);
-	let dropdownBarText = document.getElementById('categ-dropdown-text');
-	currCategoryName = categoryName;
-
-	$.getJSON(keyUrl,function(data){
-		if(categoryName == "all categories") {
-			$('#events-mount').html(eventsTemplate({
-				events: data.features
-			}));
-			defaultData = data.features;
-			map.getSource('events').setData(data);
-		}
-		else {
-			data.features = data.features.filter(function(item){
-				if (item.properties.category == categoryName.toUpperCase()){
-					formatDateItem(item);
-					return true;
-				}
-			});
-			$('#events-mount').html(eventsTemplate({
-				events: data.features
-			}));
-			map.getSource('events').setData(data);
-		}
-	});
-	$(dropdownBarText).html(categoryName+"&nbsp;<span class=caret></span>");
+	//Save input categoryName if different
+	if (currCategoryName != categoryName){
+		currCategoryName = categoryName;
+		let dropdownBarText = document.getElementById('categ-dropdown-text');
+		$(dropdownBarText).html(categoryName+"&nbsp;<span class=caret></span>");
+	}
+	//Filter and render currDateJSON
+	if(categoryName == "all categories") {
+		$('#events-mount').html(eventsTemplate({
+			events: currDateJSON.features
+		}));
+		defaultData = currDateJSON.features;
+		map.getSource('events').setData(currDateJSON);
+	}
+	else {
+		//Clone currDateJSON to filteredJSON and filter for category
+		filteredJSON = JSON.parse(JSON.stringify(currDateJSON));
+		filteredJSON.features = filteredJSON.features.filter(function(item){
+			if (item.properties.category == categoryName.toUpperCase()){
+				formatDateItem(item);
+				return true;
+			}
+		});
+		//Render filteredJSON to sidebar and map
+		$('#events-mount').html(eventsTemplate({
+			events: filteredJSON.features
+		}));
+		map.getSource('events').setData(filteredJSON);
+	}
 }
 
 
@@ -141,22 +159,22 @@ map.on('load', function () {
 }
 }); */
 
-	map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
-		if (error) throw error;
-		map.addImage('pin', image);
-		map.addLayer({
-			"id": "eventlayer",
-			"type": "symbol",
-			"source":"events",
-			"layout": {
-				"icon-image": "pin",
-				"icon-size":.06,
-				"icon-allow-overlap": true
+map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
+	if (error) throw error;
+	map.addImage('pin', image);
+	map.addLayer({
+		"id": "eventlayer",
+		"type": "symbol",
+		"source":"events",
+		"layout": {
+			"icon-image": "pin",
+			"icon-size":.06,
+			"icon-allow-overlap": true
 
-			}
-		});
+		}
 	});
-	initModal();
+});
+initModal();
 });
 
 

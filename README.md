@@ -9,7 +9,8 @@ Have nodemon installed with `npm install -g nodemon`
 
 ## Built With
 * Mapbox: Open source mapping platform for custom designed maps
-* Node: Javascript runtime built on Chrome
+* Node.js: Javascript runtime built on Chrome
+* Handlebars.js: Templating language that separates view and code
 
 ## How To Run
 * `cd` to the repository.
@@ -21,11 +22,5 @@ Have nodemon installed with `npm install -g nodemon`
         * Navigate to http://localhost/api/v1/events
         * Modify public/js/main.js
         * `$.getJSON("http://localhost/api/v1/events", function(data)`
-* OR
-* Run static json server from this repo (testing purposes)
-    * Modify public/js/main.js
-      * `$.getJSON("http://localhost:3004/events", function(data)`
-    * Run`json-server --watch events.json --port 3004`
-    * Navigate to http://localhost:3004/events
 * Run app with `nodemon`
     * Navigate to http://localhost:8000
