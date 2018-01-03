@@ -34,6 +34,7 @@ var m = todayM;
 var y = todayY;
 
 var currDay = today;
+let currCategoryName = "all categories";
 
 function nextDay() {
 	currDay.setDate(currDay.getDate() + 1);
@@ -67,22 +68,9 @@ function updateDate() {
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	// update source
-	filterDayInSidebar(keyUrl);
+	// filterDayInSidebar();
+	filterCategory(currCategoryName);
 	map.getSource('events').setData(keyUrl);
-}
-
-function filterDayInSidebar(){
-    let eventsSource = $("#sidebar-event-template").html();
-    let eventsTemplate = Handlebars.compile(eventsSource);
-    $.getJSON(keyUrl,function(data){
-        $.each(data.features, function(i,item){
-            formatDateItem(item);
-        });
-        $('#events-mount').html(eventsTemplate({
-            events: data.features
-        }));
-		defaultData = data.features;
-    });
 }
 
 //Filters sidebar with either stored default events or filtered events from API
@@ -90,14 +78,17 @@ function filterCategory(categoryName){
 	let eventsSource = $("#sidebar-event-template").html();
 	let eventsTemplate = Handlebars.compile(eventsSource);
 	let dropdownBarText = document.getElementById('categ-dropdown-text');
-	if (categoryName == "all categories"){
-		$('#events-mount').html(eventsTemplate({
-			events: defaultData
-		}));
-		map.getSource('events').setData(keyUrl);
-	}
-	else {
-		$.getJSON(keyUrl,function(data){
+	currCategoryName = categoryName;
+
+	$.getJSON(keyUrl,function(data){
+		if(categoryName == "all categories") {
+			$('#events-mount').html(eventsTemplate({
+				events: data.features
+			}));
+			defaultData = data.features;
+			map.getSource('events').setData(keyUrl);
+		}
+		else {
 			data.features = data.features.filter(function(item){
 				if (item.properties.category == categoryName.toUpperCase()){
 					formatDateItem(item);
@@ -108,8 +99,8 @@ function filterCategory(categoryName){
 				events: data.features
 			}));
 			map.getSource('events').setData(keyUrl);
-		});
-	}
+		}
+	});
 	$(dropdownBarText).html(categoryName+"&nbsp;<span class=caret></span>");
 }
 
