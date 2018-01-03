@@ -6,7 +6,7 @@ body.locked{
 	display: none;
 }
 
-.sign-up-trigger-modal:hover{
+.event-trigger-modal:hover{
 	box-shadow: 0px 1px 4px 0 rgba(34, 36, 38, 0.3);
 	opacity: 0.7;
 }
@@ -28,7 +28,7 @@ body.locked{
 
 }
 
-.sign-up-modal {
+.event-modal {
 /*	width: 65%;
 	height: 80%;*/
 	width: 55%;
@@ -134,10 +134,6 @@ body.locked{
 	margin: 0px 0px 10px 0px;
 }
 
-@media (max-width: 768px) {
-
-}
-
 @media (max-width: 992px) {
 	.event-title{
 		font-size: 18px;
@@ -153,6 +149,28 @@ body.locked{
 	}
 	#event-description{
 		font-size: 10px;
+	}
+}
+
+@media (max-width: 767px) {
+	.event-modal {
+		width: 100%;
+		height: 100%;
+		overflow: scroll;
+	}
+	.my-modal{
+		padding: 30px;
+	}
+	.modal-x{
+		height: 12px;
+	}
+	.event-left{
+		width: 100%;
+	}
+	.event-right{
+		width: 100%;
+		/*padding-left: 2px;*/
+		/*padding-top: 10px;*/
 	}
 }
 

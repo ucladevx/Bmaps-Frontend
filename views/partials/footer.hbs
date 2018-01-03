@@ -27,7 +27,7 @@
       <!-- `events` is passed from main.js's API Call -->
       <!-- We iterate through each of these objects and append them using the template -->
       \{{#each events}}
-      <a class="sign-up sign-up-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
+      <a class="event event-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
           <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
           <div class="sidebar-event-details">
               <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
@@ -44,8 +44,8 @@
 
 <footer>
 <footer>
-  <div class="modal-container hide sign-up-modal-container">
-    <div class="my-modal sign-up-modal">
+  <div class="modal-container hide event-modal-container">
+    <div class="my-modal event-modal">
       <!-- <div class="modal-x">&times</div> -->
       <img class="modal-x" src="../img/modal-x.png">
       <img class="event-image" src="" id="modal-image">
@@ -63,7 +63,7 @@
       </div>
 
     </div> <!-- modal sign-up-modal -->
-    <div class="overlay" onClick="hideModal('sign-up')"></div>
+    <div class="overlay" onClick="hideModal('event')"></div>
   </div> <!-- modal-container hide sign-up-modal-container -->
 </footer>
 </footer>
