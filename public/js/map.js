@@ -68,13 +68,11 @@ function updateDate() {
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	// update source
-	// filterDayInSidebar();
-	filterCategory(currCategoryName);
-	map.getSource('events').setData(keyUrl);
+	filterDateByCategory(currCategoryName);
 }
 
 //Filters sidebar with either stored default events or filtered events from API
-function filterCategory(categoryName){
+function filterDateByCategory(categoryName){
 	let eventsSource = $("#sidebar-event-template").html();
 	let eventsTemplate = Handlebars.compile(eventsSource);
 	let dropdownBarText = document.getElementById('categ-dropdown-text');
@@ -86,7 +84,7 @@ function filterCategory(categoryName){
 				events: data.features
 			}));
 			defaultData = data.features;
-			map.getSource('events').setData(keyUrl);
+			map.getSource('events').setData(data);
 		}
 		else {
 			data.features = data.features.filter(function(item){
@@ -98,7 +96,7 @@ function filterCategory(categoryName){
 			$('#events-mount').html(eventsTemplate({
 				events: data.features
 			}));
-			map.getSource('events').setData(keyUrl);
+			map.getSource('events').setData(data);
 		}
 	});
 	$(dropdownBarText).html(categoryName+"&nbsp;<span class=caret></span>");

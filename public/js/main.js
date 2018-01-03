@@ -21,7 +21,7 @@ $(document).ready(function() {
         let categNames = document.getElementsByClassName("categName");
         let dropdownBarText = document.getElementById('categ-dropdown-text');
         $.each(categNames, function(i, item ){
-            item.addEventListener("click",function(){filterCategory(item.innerHTML)});
+            item.addEventListener("click",function(){filterDateByCategory(item.innerHTML)});
         })
     });
 
