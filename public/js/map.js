@@ -48,7 +48,6 @@ let filteredJSON = {
 //Setting up datalist with searchbox
 let inputBox = document.getElementById('search-input');
 let list = document.getElementById('searchList');
-let dataObj = ""
 
 function nextDay() {
 	currDay.setDate(currDay.getDate() + 1);
@@ -101,7 +100,7 @@ function filterDateByCategory(categoryName){
 	if (currCategoryName != categoryName){
 		currCategoryName = categoryName;
 		let dropdownBarText = document.getElementById('categ-dropdown-text');
-		$(dropdownBarText).html(categoryName+"&nbsp;<span class=caret></span>");
+		$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
 	}
 	//Filter and render currDateJSON
 	if(categoryName == "all categories") {
@@ -142,8 +141,14 @@ inputBox.onkeyup = function(e){
 		}
 		else {
 			$('#events-mount').html(eventsTemplate({
-				events: dataObj
+				events: filteredJSON.features
 			}));
+		}
+		//Save input categoryName if different
+		if (currCategoryName != "all categories"){
+			currCategoryName = "all categories";
+			let dropdownBarText = document.getElementById('categ-dropdown-text');
+			$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
 		}
 		return false;
 	}
@@ -157,26 +162,19 @@ inputBox.onkeyup = function(e){
 		//Filter search results before rendering
 		filteredJSON = JSON.parse(JSON.stringify(data));
 		filteredJSON.features = filteredJSON.features.filter(function(item){
-			console.log("currDate: "+currDate);
-			var dateItem = new Date(item.properties.start_time); //your date object
-			dateVal = new Date(dateVal.setHours(0,0,0,0));
-			if (Date.parse(dateVal) == currDate){
-				formatDateItem(item);
-				return true;
-			}
+			//Parse item's start_time to compare to current date
+			return Date.parse(new Date(item.properties.start_time).toDateString()) == currDate;
 		});
-
 		//Iterate through all of the elemnts given by the API search
 		$.each(filteredJSON.features, function(i,item){
-			formatDateItem(item);
 			if (i < 15){
+				formatDateItem(item);
 				//Append those elements onto the datalist for the input box
 				let option = document.createElement('option');
 				option.value = item.properties.event_name;
 				list.appendChild(option);
 			}
 		});
-		dataObj = filteredJSON.features;
 	})
 }
 
