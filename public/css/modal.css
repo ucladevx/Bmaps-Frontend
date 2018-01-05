@@ -33,7 +33,7 @@ body.locked{
 	height: 80%;*/
 	width: 55%;
 	height: 85%;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .my-modal{
@@ -41,7 +41,7 @@ body.locked{
 	position: fixed;
 	background: white;
 	box-shadow: 0px 1px 4px 0 rgba(34, 36, 38, 0.3);
-	padding: 65px;
+	padding: 55px;
 	border-radius: 2px;
 	-webkit-transform: translate(-50%, -50%);
 			transform: translate(-50%, -50%);
@@ -76,8 +76,8 @@ body.locked{
 .event-left {
 	display: inline-block;
 	vertical-align: top;
-	max-width: 325px;
-	width: 35%;
+	max-width: 200px;
+	width: 33%;
 	/*height: 100%;*/
 	/*padding: 20px 0px 0px 0px;*/
 /*	margin-right: 5%;*/
@@ -85,7 +85,7 @@ body.locked{
 
 .event-image {
 	object-fit: cover;
-	height: 220px;
+	height: 240px;
 	width: 100%;
 	/*border: 1px solid grey;*/
 	box-shadow: 0px 1px 4px 0 rgba(34, 36, 38, 0.3);
@@ -102,15 +102,28 @@ body.locked{
 	padding: 3px 0px 0px 0px;
 }
 
+#event-description {
+	font-weight: normal;
+	font-size: 12px;
+	letter-spacing: 1px;
+	color: rgb(83, 83, 83);
+	/*overflow: scroll;*/
+}
+
 .event-right {
 	display: inline-block;
 	/*vertical-align: right;*/
+	/*position: relative;*/
 	max-width: 400px;
 	width: 64%;
-	/*height: 50%;*/
-	max-height: 250px;
+	height: 36%;
+	max-height: 126px;
 	overflow: scroll;
-	/*margin: 20px 0px 0px 0px;*/
+	/*height: 50%;*/
+	/*max-height: 250px;*/
+	/*overflow: scroll;*/
+	margin: 0px 0px 0px 5px;
+	justify-content: end;
 }
 
 .event-date {
@@ -128,10 +141,11 @@ body.locked{
 	margin: 15px 0px 12px 0px;
 }
 
-#event-description {
-	font-weight: normal;
-	font-size: 12px;
-	margin: 0px 0px 10px 0px;
+.more-button {
+	color: rgb(61, 188, 207);
+	position: relative;
+	float: right;
+	/*align-self: right;*/
 }
 
 @media (max-width: 992px) {

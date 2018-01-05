@@ -21,11 +21,8 @@ function formatDate(date) {
     return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
 }
 function formatDateItem(item) {
-    // console.log("entered formatDateItem");
-    // console.log(item)
     var dateOfStart = new Date(item.properties.start_time);
     var dateOfEnd = new Date(item.properties.end_time);
-    //changing value of start_time to proper parsing
     if (item.properties.end_time != "<NONE>"){
         item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours());
     }
@@ -34,31 +31,45 @@ function formatDateItem(item) {
     }
 }
 
-function chunkArray(myArray, chunk_size){
-    var index = 0;
-    var arrayLength = myArray.length;
-    var tempArray = [];
-    console.log(myArray);
+var today = new Date(); //this is being changed somewhere and I can't figure out where
+var todayD = today.getDate();
+var todayM = today.getMonth(); //January is 0!
+var todayY = today.getFullYear();
 
-    for (index = 0; index < arrayLength; index += chunk_size) {
-        myChunk = myArray.slice(index, index+chunk_size);
-        // Do something if you want with the group
-        tempArray.push(myChunk);
-    }
+let todayDate = new Date();
+let milliDay = 86400000;
 
-    return tempArray;
+var d = todayD;
+var m = todayM;
+var y = todayY;
+
+var currDay = today;
+let currCategoryName = "all categories";
+let currDate = "";
+let currDateJSON = {
+	"features": [],
+	"type": "FeatureCollection"
+}
+let filteredJSON = {
+	"features": [],
+	"type": "FeatureCollection"
+}
+let keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+
+//Setting up datalist with searchbox
+let inputBox = document.getElementById('search-input');
+let list = document.getElementById('searchList');
+
+function nextDay() {
+	currDay.setDate(currDay.getDate() + 1);
+	d = currDay.getDate();
+	m = currDay.getMonth();
+	updateDate();
 }
 
-function filterDayInSidebar(){
-    var eventsSource = $("#sidebar-event-template").html();
-    var eventsTemplate = Handlebars.compile(eventsSource);
-    let keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + ' ' + getMonthNameFromMonthNumber(m);
-    $.getJSON(keyUrl,function(data){
-        $.each(data.features, function(i,item){
-            formatDateItem(item);
-        });
-        $('#events-mount').html(eventsTemplate({
-            events: data.features
-        }));
-    })
+function previousDay() {
+	currDay.setDate(currDay.getDate() - 1);
+	d = currDay.getDate();
+	m = currDay.getMonth();
+	updateDate();
 }

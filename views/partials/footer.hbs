@@ -3,10 +3,9 @@
 <script src="../js/handlebars.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<!-- <script src="vendor/jquery/jquery.min.js"></script> -->
-<!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
 <script src="../js/main.js"></script>
 <script src="../js/utils.js"></script>
+<script src="../js/filter.js"></script>
 <!-- CATEGORY NAMES HANDLEBARS SCRIPT-->
 <script id="category-dropdown-template" type="text/x-handlebars-template">
     <div class="dropdown sidebar-header">
@@ -45,21 +44,20 @@
 <footer>
 <footer>
   <div class="modal-container hide event-modal-container">
-    <div class="my-modal event-modal">
+    <div class="my-modal event-modal" id="event-modal">
       <!-- <div class="modal-x">&times</div> -->
       <img class="modal-x" src="../img/modal-x.png">
       <img class="event-image" src="" id="modal-image">
       <div class="event-title" id="event-title"></div>
-      <div class="event-left">
+      <div class="event-left" id="event-left">
         <!-- <div class="event-title" id="event-day"></div> -->
         <div class="event-text" id="event-date"></div>
         <div class="event-text" id="event-time"></div>
         <div class="event-text" id="event-location"></div>
       </div> <!-- event-left -->
-      <div class="event-right">
-        <!-- <div class="event-date" id="event-month"></div>
-        <div class="event-date" id="event-day"></div> -->
-        <div class="event-text" id="event-description">No event description has been written at this time.</div>
+      <div class="event-right" id="event-description">No event description has been written at this time.</div>
+
+        <!-- <div class="event-text" id="event-description">No event description has been written at this time.</div> -->
       </div>
 
     </div> <!-- modal sign-up-modal -->

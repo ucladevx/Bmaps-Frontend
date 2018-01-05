@@ -16,69 +16,12 @@ var map = new mapboxgl.Map({
 	pitch: 60
 });
 
-
-////////////////////////////////////////////////
-//////////////// DATE HANDLING //////////////////
-////////////////////////////////////////////////
-
-var today = new Date(); //this is being changed somewhere and I can't figure out where
-var todayD = today.getDate();
-var todayM = today.getMonth(); //January is 0!
-var todayY = today.getFullYear();
-
-let todayDate = new Date();
-let milliDay = 86400000;
-
-var d = todayD;
-var m = todayM;
-var y = todayY;
-
-var currDay = today;
-
-function nextDay() {
-	currDay.setDate(currDay.getDate() + 1);
-	d = currDay.getDate();
-	m = currDay.getMonth();
-	updateDate();
-}
-
-function previousDay() {
-	currDay.setDate(currDay.getDate() - 1);
-	d = currDay.getDate();
-	m = currDay.getMonth();
-	updateDate();
-}
-
-function updateDate() {
-	filterDayInSidebar();
-	if (todayDate.getTime() == currDay.getTime()) {
-		document.getElementById("leftArrow").style.display = "none";
-		document.getElementById("rightArrow").style.display = "inline";
-		document.getElementById("relativeDay").innerHTML =  "today";
-	}
-	else {
-		if (currDay.getTime() == (todayDate.getTime() + milliDay)) {
-			document.getElementById("relativeDay").innerHTML =  "tomorrow";
-		} else {
-			document.getElementById("relativeDay").innerHTML = ((currDay.getTime()-todayDate.getTime())/milliDay) +" days from today";
-		}
-		document.getElementById("leftArrow").style.display = "inline";
-	}
-
-	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
-	// update source
-	// map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y);
-	map.getSource('events').setData('http://52.53.72.98/api/v1/event-date/29%20Dec%202017');
-}
-
-
 ////////////////////////////////////////////////
 /////////////////// LOAD DATA //////////////////
 ////////////////////////////////////////////////
 
-var events = 'http://52.53.72.98/api/v1/event-date/' + d +' ' + getMonthNameFromMonthNumber(m); // json we are pulling from for event info
 map.on('load', function () {
-	map.addSource('events', { type: 'geojson', data: events });
+	map.addSource('events', { type: 'geojson', data: keyUrl });
 	// Making layers (based on categorization)
 	/*  events.features.forEach(function(feature) {
 	var symbol = features.properties.category; // category name -> icon
@@ -125,6 +68,7 @@ map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map
 		}
 	});
 });
+initModal();
 });
 
 
@@ -294,4 +238,3 @@ map.on('load', function() {
 function zoomToEventLocation(x, y) {
 	map.flyTo({center: [x, y], zoom: 17, speed: .85});
 }
-
