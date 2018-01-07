@@ -11,11 +11,11 @@ body.locked{
 	opacity: 0.7;
 }
 
-.modal-container .overlay{
+.overlay{
 	position: fixed;
 	height: 100%;
 	width: 100%;
-	background: rgba(0,0,0,0.4);
+	background: rgba(0, 0, 0, 0.7);
 }
 
 .modal-container{

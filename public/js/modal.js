@@ -4,6 +4,7 @@ function showModal(modal, features){
 		case 'event':
 		// formatDate(new Date(e.features[0].properties.start_time));
 			$('.event-modal-container').removeClass('hide');
+			$('.event-modal-container').addClass('overlay');
 			document.getElementById("modal-image").src = prop.cover_picture;
 			document.getElementById("event-date").innerHTML = prop.start_time.toString().split(" ")[0] + ' ' + prop.start_time.toString().split(" ")[1];
 			document.getElementById("event-title").innerHTML = prop.event_name;
