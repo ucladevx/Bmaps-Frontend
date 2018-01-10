@@ -31,7 +31,13 @@
           <div class="sidebar-event-details">
               <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
               <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
-              <p class="sidebar-event-location">\{{this.properties.venue.location.street}}</p>
+              <p class="sidebar-event-location">
+                \{{#if this.properties.venue.name}}
+                    \{{this.properties.venue.name}}
+                \{{else}}
+                  \{{this.properties.venue.location.street}}
+                \{{/if}}
+              </p>
               <p class="sidebar-event-category">\{{this.properties.category}}</p>
           </div>
       </a>
