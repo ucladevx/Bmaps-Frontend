@@ -6,6 +6,7 @@
 <script src="../js/main.js"></script>
 <script src="../js/utils.js"></script>
 <script src="../js/filter.js"></script>
+<!-- <script src="../js/jquery.quickfit.js" type="text/javascript" /> -->
 <!-- CATEGORY NAMES HANDLEBARS SCRIPT-->
 <script id="category-dropdown-template" type="text/x-handlebars-template">
     <div class="dropdown sidebar-header">
@@ -49,7 +50,7 @@
 
 <footer>
 <footer>
-  <div class="modal-container hide event-modal-container modal-overlay">
+  <div class="modal-container hide event-modal-container">
     <div class="my-modal event-modal" id="event-modal">
       <!-- <div class="modal-x">&times</div> -->
       <div class="event-header">
@@ -57,21 +58,19 @@
       </div>
       <img class="modal-x" src="../img/modal-x.png">
       <img class="event-image" src="" id="modal-image">
-      <div class="event-title" id="event-title"></div>
-      <div class="event-left" id="event-left">
-        <!-- <div class="event-title" id="event-day"></div> -->
-        <div class="event-text" id="event-date"></div>
-        <div class="event-text" id="event-time"></div>
-        <div class="event-text" id="event-location"></div>
-      </div> <!-- event-left -->
-      <div class="event-line"><hr style="height:1px;border:none;color:rgb(126, 126, 126);background-color:rgb(126, 126, 126);margin-top:10px;margin-bottom:10px;"/></div>
-      <div class="event-right" id="event-description">No event description has been written at this time.</div>
-
-        <!-- <div class="event-text" id="event-description">No event description has been written at this time.</div> -->
-      </div>
-
+      <!-- <div class="event-info"> -->
+        <div class="event-title" id="event-title"></div>
+        <div class="event-left" id="event-left">
+          <!-- <div class="event-title" id="event-day"></div> -->
+          <div class="event-text" id="event-date"></div>
+          <div class="event-text" id="event-time"></div>
+          <div class="event-text" id="event-location"></div>
+        </div> <!-- event-left -->
+        <div class="event-line"><hr style="height:1px;border:none;color:rgb(126, 126, 126);background-color:rgb(126, 126, 126);margin-top:10px;margin-bottom:10px;"/></div>
+        <div class="event-right" id="event-description">No event description has been written at this time.</div>
+      <!-- </div> -->
     </div> <!-- modal sign-up-modal -->
-    <div class="modal-overlay" onClick="hideModal('event')" style="display:none"></div>
+    <div class="modal-overlay" onClick="hideModal('event')"></div>
   </div> <!-- modal-container hide sign-up-modal-container -->
 </footer>
 </footer>

@@ -31,8 +31,9 @@ body.locked{
 .event-modal {
 /*	width: 65%;
 	height: 80%;*/
-	width: 55%;
+	width: 750px;
 	height: 85%;
+	overflow: scroll;
 }
 
 .my-modal{
@@ -106,21 +107,17 @@ body.locked{
 	font-size: 12px;
 	letter-spacing: 1px;
 	color: rgb(83, 83, 83);
+	text-overflow: ellipsis;
 	/*overflow: scroll;*/
 }
 
 .event-right {
 	display: inline-block;
-	/*vertical-align: right;*/
-	/*position: relative;*/
 	max-width: 400px;
 	width: 64%;
-	height: 36%;
-	max-height: 126px;
+	height: 30%;
+	/*max-height: 200px;*/
 	overflow: scroll;
-	/*height: 50%;*/
-	/*max-height: 250px;*/
-	/*overflow: scroll;*/
 	margin: 0px 0px 0px 5px;
 	/*justify-content: end;*/
 }
