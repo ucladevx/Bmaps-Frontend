@@ -19,39 +19,20 @@ var map = new mapboxgl.Map({
 ////////////////////////////////////////////////
 /////////////////// LOAD DATA //////////////////
 ////////////////////////////////////////////////
-
+var currData =
+{ "type": "FeatureCollection",
+				"features": [
+					{"type": "Feature",
+						"geometry": {
+								"type": "Point",
+								"coordinates": [-118.445320, 34.066915]
+						}
+					}
+				]
+};
 map.on('load', function () {
 	map.addSource('events', { type: 'geojson', data: keyUrl });
-	// Making layers (based on categorization)
-	/*  events.features.forEach(function(feature) {
-	var symbol = features.properties.category; // category name -> icon
-	var layerID = 'poi-' + symbol;
-	// Add a layer for this symbol type if it hasn't been added already.
-	if (!map.getLayer(layerID)) {
-	map.addLayer({
-	"id": layerID,
-	"type": "symbol",
-	"source": "events",
-	"layout": {
-	"icon-image": "/icons/" + symbol + ".svg",
-	"icon-allow-overlap": true
-},
-"filter": ["==", "icon", symbol]
-});
-}
-});*/
-/* REVERT TO THIS IF categorization does not work*/
-
-/**** map.addLayer({
-"id": "eventlayer",
-"type": "symbol",
-"source": "events",
-"layout": {
-"icon-image": "triangle-15",
-"icon-size": 2.3,
-"icon-allow-overlap": true
-}
-}); */
+	map.addSource('currloc', { type: 'geojson', data: currData });
 
 map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
 	if (error) throw error;
@@ -64,9 +45,22 @@ map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map
 			"icon-image": "pin",
 			"icon-size":.06,
 			"icon-allow-overlap": true
-
 		}
 	});
+
+	map.addLayer({
+		"id": "currloc",
+		"type": "symbol",
+		"source":"currloc",
+		"layout": {
+			"visibility": "none",
+			"icon-image": "pin",
+			"icon-size":.08,
+			"icon-allow-overlap": true
+		}
+	});
+
+
 });
 initModal();
 });
@@ -136,20 +130,32 @@ function hoverPopup() {
 	map.on('mouseenter', 'eventlayer', function(e) {
 		// Change the cursor style as a UI indicator.
 		map.getCanvas().style.cursor = 'pointer';
+		console.log("" + e.features[0].geometry.coordinates);
+
+		var coords = "" + e.features[0].geometry.coordinates ;
+		var coordsFormatted = coords.split(",");
+
+		console.log(coords);
+		console.log(coordsFormatted);
+
+		map.getSource('currloc').setData({"geometry": {"type": "Point",
+			"coordinates": coordsFormatted}, "type": "Feature", "properties": {}});
+		// change size when hover not right
+		map.setLayoutProperty('currloc','visibility', 'visible');
+
 		// Populate the popup and set its coordinates
 		// based on the feature found.
 		popup.setLngLat(e.features[0].geometry.coordinates)
 		.setHTML('<p id=popupEvent></p> <p id=popupDate></p>')
 		.addTo(map);
 
-		// change size when hover not right
-		map.getSource('events').setData({"layout": {"size":2}});
-
 		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
 		document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
 	});
 	map.on('mouseleave', 'eventlayer', function() {
 		map.getCanvas().style.cursor = '';
+		// change size when hover not right
+		map.setLayoutProperty('currloc','visibility', 'none');
 		popup.remove();
 	});
 	map.on('click', 'eventlayer', function (e) {
