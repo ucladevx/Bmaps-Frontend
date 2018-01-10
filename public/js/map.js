@@ -167,7 +167,7 @@ function hoverPopup() {
 		//   showModal('sign-up', e.properties);
 		formatDateItem(e.features[0]);
 		console.log(e.features[0]);
-		showModal('sign-up', e.features[0]);
+		showModal('event', e.features[0]);
 	});
 }
 
