@@ -208,7 +208,7 @@ body.locked{
 		padding-bottom: 15px;
 		margin-bottom: 25px;
 		width: 100%;
-		/*height: 100%;*/
+		height: 100%;
 		max-width: 100%;
 		max-height: 100%;
 		overflow: scroll;
@@ -230,7 +230,7 @@ body.locked{
 	#event-description{
 		font-size: 14px;
 		color: rgb(121, 121, 121);
-		
+		overflow: scroll;
 	}
 
 }
