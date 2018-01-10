@@ -41,7 +41,7 @@ td a {
 }
 
 .navbar-default{
-    background: rgb(251, 250, 250);
+    background: linear-gradient(#43576B, #8296A1);
     border-color: rgb(191,191,191);
 }
 
@@ -68,7 +68,7 @@ td a {
 }
 
 #navbar-brand{
-    color: rgb(0,193,211);
+    color: white;
     font-weight: 600;
 }
 
@@ -308,6 +308,7 @@ input::-webkit-calendar-picker-indicator {
     width: 120px;
     display: inline-block;
     vertical-align: top;
+    color: #403F3F;
 }
 
 .sidebar-event-details p {
@@ -315,7 +316,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .sidebar-event-name {
-    color: rgb(255,24,59);
+    color: #FF3A3A;
     font-weight: bold;
 }
 

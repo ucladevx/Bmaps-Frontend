@@ -54,7 +54,7 @@ $(document).ready(function() {
         $(navHeader).removeClass("no-display");
         $(navToggle).removeClass("no-display");
         $(leftIcon).addClass("no-display");
-        navbar.style.background = "rgb(251, 250, 250)";
+        navbar.style.background = "linear-gradient(#43576B, #8296A1)";
         inputBox.setAttribute("style", "display: inline-table;");
         $(searchIcon).off("click");
       } else {
@@ -78,7 +78,7 @@ $(document).ready(function() {
             $(navHeader).removeClass("no-display");
             $(navToggle).removeClass("no-display");
             $(leftIcon).addClass("no-display");
-            navbar.style.background = "rgb(251, 250, 250)";
+            navbar.style.background = "linear-gradient(#43576B, #8296A1)";
             inputBox.setAttribute("style", "display: none;");
         });
       }
