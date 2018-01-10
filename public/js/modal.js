@@ -31,7 +31,7 @@ function showModal(modal, features){
 			// 	// Click <a href="http://www.yahoo.com">here</a> to go to yahoo.
 			// }
 			// this is to make sure the cutting of the letters don't have issues
-			if (document.getElementById("event-description").clientHeight % 18 <= 14 && document.getElementById("event-description").clientHeight % 18 >= 3) {
+			if (document.getElementById("event-description").clientHeight % 18 >= 15 && document.getElementById("event-description").clientHeight % 18 <= 3) {
 				document.getElementById("event-description").style.height = document.getElementById("event-description").clientHeight - (document.getElementById("event-description").clientHeight % 18);
 			}
 			

@@ -107,7 +107,7 @@ body.locked{
 	font-size: 12px;
 	letter-spacing: 1px;
 	color: rgb(83, 83, 83);
-	overflow: scroll;
+	/*overflow: scroll;*/
 }
 
 .event-right {
@@ -123,7 +123,7 @@ body.locked{
 	/*max-height: 250px;*/
 	/*overflow: scroll;*/
 	margin: 0px 0px 0px 5px;
-	justify-content: end;
+	/*justify-content: end;*/
 }
 
 .event-date {
@@ -147,7 +147,7 @@ body.locked{
 	float: right;
 	/*align-self: right;*/
 }
-#left-icon{
+#left-chevron{
 	display: none;
 }
 .event-line{
@@ -208,11 +208,14 @@ body.locked{
 		padding-bottom: 15px;
 		margin-bottom: 25px;
 		width: 100%;
+		/*height: 100%;*/
 		max-width: 100%;
 		max-height: 100%;
+		overflow: scroll;
 	}
 	.my-modal{
 		padding: 0px;
+		margin-bottom: 15px;
 	}
 	.modal-x{
 		float: left;
