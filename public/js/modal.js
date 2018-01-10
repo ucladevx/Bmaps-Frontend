@@ -2,7 +2,7 @@ function showModal(modal, features){
 	var prop = features.properties;
 	switch(modal){
 		case 'event':
-			console.log(prop);
+			// console.log(prop);
 		// formatDate(new Date(e.features[0].properties.start_time));
 			$('.event-modal-container').removeClass('hide');
 			$('.event-modal-container').addClass('overlay');
@@ -42,7 +42,6 @@ function showModal(modal, features){
 }
 
 function hideModal(modal){
-	console.log('hidemodal clicked');
 	switch(modal){
 		case 'event':
 			$('.event-modal-container').addClass('hide');
