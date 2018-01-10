@@ -142,6 +142,9 @@ function hoverPopup() {
 		.setHTML('<p id=popupEvent></p> <p id=popupDate></p>')
 		.addTo(map);
 
+		// change size when hover not right
+		map.getSource('events').setData({"layout": {"size":2}});
+
 		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
 		document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
 	});
