@@ -428,7 +428,10 @@ Picking Date
   position: absolute;
   display: inline-block;
   font-size: 15;
+  width: 100%;
   bottom: 45;
+  left: 0;
+  text-align: center;
   font-weight:bolder;
   -webkit-text-stroke: .05px #FCFCFC;
   -webkit-text-fill-color: #000000;
