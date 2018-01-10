@@ -105,6 +105,10 @@ input::-webkit-calendar-picker-indicator {
 	display: none;
 }
 
+#mobileSearchIcon{
+    top: 15px;
+}
+
 /* MEDIA QUERIES FOR RESIZING SEARCH BAR*/
 /* definitely should be doing it dynamically but attempts were unsucessful */
 
@@ -146,9 +150,7 @@ input::-webkit-calendar-picker-indicator {
         border-color: transparent;
     }
     #searchForm{
-        height: 34px;
-        /* background: transparent; */
-        width: 39px;
+        height: 0px;
         border-top: 0px;
         border-bottom: 0px;
         padding: 0px;
