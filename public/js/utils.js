@@ -20,6 +20,7 @@ function formatDate(date) {
     }
     return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
 }
+
 function formatDateItem(item) {
     var dateOfStart = new Date(item.properties.start_time);
     var dateOfEnd = new Date(item.properties.end_time);
@@ -28,6 +29,15 @@ function formatDateItem(item) {
     }
     else {
         item.properties.start_time = formatDate(dateOfStart);
+    }
+}
+
+function formatCategoryItem(item) {
+    if (item.properties.category == "<NONE>"){
+        item.properties.category = "";
+    }
+    else{
+        item.properties.category = item.properties.category.charAt(0).toUpperCase() + item.properties.category.slice(1).toLowerCase();
     }
 }
 

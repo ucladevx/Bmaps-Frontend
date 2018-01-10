@@ -41,6 +41,7 @@ function filterDateByCategory(categoryName){
 		map.getSource('events').setData(currDateFormattedJSON);
 		$.each(currDateFormattedJSON.features, function(i, item ){
 			formatDateItem(item);
+			formatCategoryItem(item);
 		});
 		$('#events-mount').html(eventsTemplate({
 			events: currDateFormattedJSON.features
@@ -58,6 +59,7 @@ function filterDateByCategory(categoryName){
 		map.getSource('events').setData(filteredJSON);
 		$.each(filteredJSON.features, function(i, item ){
 			formatDateItem(item);
+			formatCategoryItem(item);
 		});
 		$('#events-mount').html(eventsTemplate({
 			events: filteredJSON.features
@@ -72,9 +74,11 @@ inputBox.onkeyup = function(e){
 	let list = document.getElementById('searchList');
 	if (e.which == 13){
 		if (inputBox.value == "") {
-			map.getSource('events').setData(currDateFormattedJSON);
+			map.getSource('events').setData(currDateJSON);
+			currDateFormattedJSON = JSON.parse(JSON.stringify(currDateJSON));
 			$.each(currDateFormattedJSON.features, function(i, item ){
 				formatDateItem(item);
+				formatCategoryItem(item);
 			})
 			$('#events-mount').html(eventsTemplate({
 				events: currDateFormattedJSON.features
@@ -84,6 +88,7 @@ inputBox.onkeyup = function(e){
 			map.getSource('events').setData(filteredJSON);
 			$.each(filteredJSON.features, function(i, item ){
 				formatDateItem(item);
+				formatCategoryItem(item);
 			})
 			$('#events-mount').html(eventsTemplate({
 				events: filteredJSON.features
