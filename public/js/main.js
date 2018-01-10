@@ -25,7 +25,9 @@ $(document).ready(function() {
     //Setting up datalist with searchBox
     let inputBox = document.getElementById('search-input');
     let leftIcon = document.getElementById("mobile-left-icon");
-    let searchIcon = document.getElementById('searchForm');
+    let searchForm = document.getElementById('searchForm');
+    let searchIcon = document.getElementById('searchIcon');
+    let mobileSearchIcon = document.getElementById('mobileSearchIcon');
 
     // media query event handler
     if (matchMedia) {
@@ -54,23 +56,29 @@ $(document).ready(function() {
         $(navHeader).removeClass("no-display");
         $(navToggle).removeClass("no-display");
         $(leftIcon).addClass("no-display");
-        navbar.style.background = "rgb(251, 250, 250)";
+        $(mobileSearchIcon).addClass("no-display");
+        navbar.style.background = "linear-gradient(#43576B, #8296A1)";
         inputBox.setAttribute("style", "display: inline-table;");
-        $(searchIcon).off("click");
+        searchIcon.setAttribute("style", "display: block");
+        // $(searchIcon).off("click");
       } else {
         // window width is less than 767px
         $(".sidebar-mount").appendTo("#mobile-mount");
         $("#nav-non-collapse").removeClass("pull-left");
 
         //When inputBox is clicked: will expand all other nav elements will have no display
+        $(mobileSearchIcon).removeClass("no-display");
         inputBox.setAttribute("style", "display: none;");
-        $(searchIcon).click(function() {
+        searchIcon.setAttribute("style", "display: none");
+        $(mobileSearchIcon).click(function() {
             $(midUl).removeClass("pull-right");
             $(navHeader).addClass("no-display");
             $(navToggle).addClass("no-display");
             $(leftIcon).removeClass("no-display");
+            $(mobileSearchIcon).addClass("no-display");
             navbar.style.background = "white";
             inputBox.setAttribute("style", "display: inline-table;");
+            searchIcon.setAttribute("style", "display: block");
         });
         //When leftIcon is clicked: restore mobile navbar display
         $(leftIcon).click(function(){
@@ -78,8 +86,10 @@ $(document).ready(function() {
             $(navHeader).removeClass("no-display");
             $(navToggle).removeClass("no-display");
             $(leftIcon).addClass("no-display");
-            navbar.style.background = "rgb(251, 250, 250)";
+            $(mobileSearchIcon).removeClass("no-display");
+            navbar.style.background = "linear-gradient(#43576B, #8296A1)";
             inputBox.setAttribute("style", "display: none;");
+            searchIcon.setAttribute("style", "display: none;");
         });
       }
     }
