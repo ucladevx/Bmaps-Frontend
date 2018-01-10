@@ -130,7 +130,7 @@ function hoverPopup() {
 	var popup = new mapboxgl.Popup({
 		closeButton: false,
 		closeOnClick: false,
-		offset: {'bottom':[15,0]}
+		offset: {'bottom':[7.5 ,0]}
 	});
 
 	map.on('mouseenter', 'eventlayer', function(e) {
@@ -141,6 +141,9 @@ function hoverPopup() {
 		popup.setLngLat(e.features[0].geometry.coordinates)
 		.setHTML('<p id=popupEvent></p> <p id=popupDate></p>')
 		.addTo(map);
+
+		// change size when hover not right
+		map.getSource('events').setData({"layout": {"size":2}});
 
 		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
 		document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
