@@ -5,7 +5,7 @@ function showModal(modal, features){
 			// console.log(prop);
 		// formatDate(new Date(e.features[0].properties.start_time));
 			$('.event-modal-container').removeClass('hide');
-			$('.event-modal-container').addClass('overlay');
+			// $('.event-modal-container').addClass('modal-overlay');
 			document.getElementById("modal-image").src = prop.cover_picture;
 			document.getElementById("event-date").innerHTML = prop.start_time.toString().split(" ")[0] + ' ' + prop.start_time.toString().split(" ")[1];
 			document.getElementById("event-title").innerHTML = prop.event_name;
@@ -53,7 +53,7 @@ function hideModal(modal){
 }
 
 var initModal = function(){
-	$('#overlay').click(function(){
+	$('.modal-overlay').click(function(){
 		hideModal('all');
 	});
 	$('#left-icon').click(function(){
