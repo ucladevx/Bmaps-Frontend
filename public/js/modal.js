@@ -2,6 +2,7 @@ function showModal(modal, features){
 	var prop = features.properties;
 	switch(modal){
 		case 'event':
+			console.log(prop);
 		// formatDate(new Date(e.features[0].properties.start_time));
 			$('.event-modal-container').removeClass('hide');
 			$('.event-modal-container').addClass('overlay');
@@ -9,7 +10,12 @@ function showModal(modal, features){
 			document.getElementById("event-date").innerHTML = prop.start_time.toString().split(" ")[0] + ' ' + prop.start_time.toString().split(" ")[1];
 			document.getElementById("event-title").innerHTML = prop.event_name;
 			document.getElementById("event-time").innerHTML = prop.start_time.toString().split("|")[1];
-			document.getElementById("event-location").innerHTML = prop.venue.split("location")[1].split("street")[1].split("\"")[2];
+			if (prop.venue.split("name")[1].split("\"")[2]) {
+				document.getElementById("event-location").innerHTML = prop.venue.split("name")[1].split("\"")[2];
+			}
+			else {
+				document.getElementById("event-location").innerHTML = prop.venue.split("location")[1].split("street")[1].split("\"")[2];
+			}
 			document.getElementById("event-description").innerHTML = prop.description;
 			// console.log(document.getElementById("event-description").clientHeight);
 			// console.log(document.getElementById("event-modal").clientHeight);
@@ -17,13 +23,13 @@ function showModal(modal, features){
 			// if (document.getElementById("event-description").clientHeight > document.getElementById("event-left").clientHeight) {
 			// 	document.getElementById("event-description").style.height = document.getElementById("event-modal").clientHeight * 0.36;
 			// }
-			console.log(document.getElementById("event-description").clientHeight);
-			console.log(document.getElementById("event-description").scrollHeight);
-			if (document.getElementById("event-description").clientHeight < document.getElementById("event-description").scrollHeight) {
-				console.log('i think this needs a more....');
-				document.getElementById("event-description").innerHTML += '<a href="" class="more-button">more...</a>'
-				// Click <a href="http://www.yahoo.com">here</a> to go to yahoo.
-			}
+			// console.log(document.getElementById("event-description").clientHeight);
+			// console.log(document.getElementById("event-description").scrollHeight);
+			// if (document.getElementById("event-description").clientHeight < document.getElementById("event-description").scrollHeight) {
+			// 	console.log('i think this needs a more....');
+			// 	document.getElementById("event-description").innerHTML += '<a href="" class="more-button">more...</a>'
+			// 	// Click <a href="http://www.yahoo.com">here</a> to go to yahoo.
+			// }
 			// this is to make sure the cutting of the letters don't have issues
 			if (document.getElementById("event-description").clientHeight % 18 <= 14 && document.getElementById("event-description").clientHeight % 18 >= 3) {
 				document.getElementById("event-description").style.height = document.getElementById("event-description").clientHeight - (document.getElementById("event-description").clientHeight % 18);
@@ -36,6 +42,7 @@ function showModal(modal, features){
 }
 
 function hideModal(modal){
+	console.log('hidemodal clicked');
 	switch(modal){
 		case 'event':
 			$('.event-modal-container').addClass('hide');
@@ -48,6 +55,9 @@ function hideModal(modal){
 
 var initModal = function(){
 	$('#overlay').click(function(){
+		hideModal('all');
+	});
+	$('#left-icon').click(function(){
 		hideModal('all');
 	});
 	$('.modal-x').click(function(){
