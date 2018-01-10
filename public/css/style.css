@@ -417,19 +417,28 @@ Picking Date
 */
 #leftArrow {
   left:0;
+  font-size: 20;
+}
+
+#rightArrow {
+  font-size: 20;
 }
 
 #relativeDay {
   position: absolute;
   display: inline-block;
+  font-size: 15;
+  width: 100%;
   bottom: 45;
+  left: 0;
+  text-align: center;
   font-weight:bolder;
   -webkit-text-stroke: .05px #FCFCFC;
   -webkit-text-fill-color: #000000;
 }
 
 #currDate {
-  font-size: 20;
+  font-size: 25;
   position: relative;
   display: inline-block;
   padding: initial;
@@ -481,12 +490,29 @@ p {
 Formatting popup
 */
 
-#popupDate {
-  color: red;
+#popupEvent {
+  display: inline;
 }
+
+#popupDate {
+  color:  #FF3A3A;
+  font-size: 11;
+}
+
 .mapboxgl-popup {
   font-family: 'Poppins', sans-serif;
-  max-width: 165;
+  max-width: 150;
+  max-height: 30;
+  line-height: 150%;
   text-align: center;
   padding: inherit;
+}
+
+
+.mapboxgl-popup-content {
+    position: relative;
+    background: #fff;
+    border-radius: 5px;
+    padding: 5px 5px 0px;
+    pointer-events: auto;
 }
