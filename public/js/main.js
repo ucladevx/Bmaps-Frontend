@@ -56,6 +56,7 @@ $(document).ready(function() {
         $(leftIcon).addClass("no-display");
         navbar.style.background = "linear-gradient(#43576B, #8296A1)";
         inputBox.setAttribute("style", "display: inline-table;");
+        
         $(searchIcon).off("click");
       } else {
         // window width is less than 767px

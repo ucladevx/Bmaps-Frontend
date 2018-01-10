@@ -147,6 +147,7 @@ input::-webkit-calendar-picker-indicator {
     }
     #searchForm{
         height: 34px;
+        /* background: transparent; */
         width: 39px;
         border-top: 0px;
         border-bottom: 0px;
