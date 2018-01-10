@@ -155,7 +155,7 @@ body.locked{
 }
 
 @media (max-width: 992px) {
-	#left-icon {
+	#left-chevron {
 		display: block;
 		height: 40px;
 		font-size: 25px;
