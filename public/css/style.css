@@ -417,11 +417,17 @@ Picking Date
 */
 #leftArrow {
   left:0;
+  font-size: 20;
+}
+
+#rightArrow {
+  font-size: 20;
 }
 
 #relativeDay {
   position: absolute;
   display: inline-block;
+  font-size: 15;
   bottom: 45;
   font-weight:bolder;
   -webkit-text-stroke: .05px #FCFCFC;
@@ -429,7 +435,7 @@ Picking Date
 }
 
 #currDate {
-  font-size: 20;
+  font-size: 25;
   position: relative;
   display: inline-block;
   padding: initial;
