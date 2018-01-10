@@ -130,7 +130,7 @@ function hoverPopup() {
 	var popup = new mapboxgl.Popup({
 		closeButton: false,
 		closeOnClick: false,
-		offset: {'bottom':[15,0]}
+		offset: {'bottom':[7.5 ,0]}
 	});
 
 	map.on('mouseenter', 'eventlayer', function(e) {
