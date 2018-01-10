@@ -17,8 +17,8 @@ function updateDate() {
 	//Update keyURL to current date and send to filtering function
 	keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
 	$.getJSON(keyUrl, function(data){
-		//Update currDateJSON since date changed
-		currDateJSON = data;
+		//Update currDateFormattedJSON since date changed
+		currDateJSON = data; //make sure to never touch
 		currDate = Date.parse(getMonthNameFromMonthNumber(m)+ " "+ d + ", " + y);
 		filterDateByCategory(currCategoryName);
 	});
@@ -35,18 +35,19 @@ function filterDateByCategory(categoryName){
 		let dropdownBarText = document.getElementById('categ-dropdown-text');
 		$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
 	}
-	//Filter and render currDateJSON
+	//Filter and render currDateFormattedJSON
 	if(categoryName == "all categories") {
-		map.getSource('events').setData(currDateJSON);
-		$.each(currDateJSON.features, function(i, item ){
+		currDateFormattedJSON = JSON.parse(JSON.stringify(currDateJSON));
+		map.getSource('events').setData(currDateFormattedJSON);
+		$.each(currDateFormattedJSON.features, function(i, item ){
 			formatDateItem(item);
-		})
+		});
 		$('#events-mount').html(eventsTemplate({
-			events: currDateJSON.features
+			events: currDateFormattedJSON.features
 		}));
 	}
 	else {
-		//Clone currDateJSON to filteredJSON and filter for category
+		//Clone currDateFormattedJSON to filteredJSON and filter for category
 		filteredJSON = JSON.parse(JSON.stringify(currDateJSON));
 		filteredJSON.features = filteredJSON.features.filter(function(item){
 			if (item.properties.category == categoryName.toUpperCase()){
@@ -57,7 +58,7 @@ function filterDateByCategory(categoryName){
 		map.getSource('events').setData(filteredJSON);
 		$.each(filteredJSON.features, function(i, item ){
 			formatDateItem(item);
-		})
+		});
 		$('#events-mount').html(eventsTemplate({
 			events: filteredJSON.features
 		}));
@@ -71,12 +72,12 @@ inputBox.onkeyup = function(e){
 	let list = document.getElementById('searchList');
 	if (e.which == 13){
 		if (inputBox.value == "") {
-			map.getSource('events').setData(currDateJSON);
-			$.each(currDateJSON.features, function(i, item ){
+			map.getSource('events').setData(currDateFormattedJSON);
+			$.each(currDateFormattedJSON.features, function(i, item ){
 				formatDateItem(item);
 			})
 			$('#events-mount').html(eventsTemplate({
-				events: currDateJSON.features
+				events: currDateFormattedJSON.features
 			}));
 		}
 		else {
