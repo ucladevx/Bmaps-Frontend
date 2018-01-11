@@ -45,6 +45,14 @@ td a {
     border-color: rgb(191,191,191);
 }
 
+.navbar-default .navbar-toggle{
+    border-color: transparent;
+}
+
+.navbar-default .navbar-toggle .icon-bar{
+    background-color: white;
+}
+
 .navbar-default .navbar-nav > .active{
   background: rgb(216,216,216);
 }
@@ -107,6 +115,7 @@ input::-webkit-calendar-picker-indicator {
 
 #mobileSearchIcon{
     top: 15px;
+    color: white;
 }
 
 /* MEDIA QUERIES FOR RESIZING SEARCH BAR*/
