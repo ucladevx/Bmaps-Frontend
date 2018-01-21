@@ -21,6 +21,7 @@ function updateDate() {
 		currDateJSON = data; //make sure to never touch
 		currDate = Date.parse(getMonthNameFromMonthNumber(m)+ " "+ d + ", " + y);
 
+		// Update categories
 		$.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
 				// Create object to count events under each category
 				var categCount = {};
@@ -57,6 +58,7 @@ function updateDate() {
 				//Capture all elements of CategoryName and add onclick to update sidebar
 				let categLinks = document.getElementsByClassName("categLink");
 				let dropdownBarText = document.getElementById('categ-dropdown-text');
+				$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
 				$.each(categLinks, function(i, item){
 					let categName = item.getElementsByClassName("categName")[0].innerText;
 					item.addEventListener("click",function(){filterDateByCategory(categName)});

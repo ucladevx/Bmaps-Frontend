@@ -31,24 +31,28 @@
   <div class="sidebar">
       <!-- `events` is passed from main.js's API Call -->
       <!-- We iterate through each of these objects and append them using the template -->
-      \{{#each events}}
-      <a class="event event-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
-          <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
-          <div class="sidebar-event-details">
-              <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
-              <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
-              <p class="sidebar-event-location">
-                \{{#if this.properties.venue.name}}
-                    \{{this.properties.venue.name}}
-                \{{else}}
-                  \{{this.properties.venue.location.street}}
-                \{{/if}}
-              </p>
-              <p class="sidebar-event-category">\{{this.properties.category}}</p>
-          </div>
-      </a>
-      <div class="seperator"></div>
-      \{{/each}}
+      \{{#if events}}
+        \{{#each events}}
+        <a class="event event-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
+            <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
+            <div class="sidebar-event-details">
+                <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
+                <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
+                <p class="sidebar-event-location">
+                  \{{#if this.properties.venue.name}}
+                      \{{this.properties.venue.name}}
+                  \{{else}}
+                    \{{this.properties.venue.location.street}}
+                  \{{/if}}
+                </p>
+                <p class="sidebar-event-category">\{{this.properties.category}}</p>
+            </div>
+        </a>
+        <div class="seperator"></div>
+        \{{/each}}
+      \{{else}}
+        <h3 class="no-events-text">No Events</h3>
+      \{{/if}}
   </div>
 </script>
 <script src="../js/modal.js"></script>

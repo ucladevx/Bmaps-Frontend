@@ -336,6 +336,13 @@ input::-webkit-calendar-picker-indicator {
     width: 100%;
 }
 
+.no-events-text {
+  width: 100%;
+  text-align: center;
+  top: 20px;
+  color: #a9a9a9;
+}
+
 /* Using only background gradients */
 
 .seperator
