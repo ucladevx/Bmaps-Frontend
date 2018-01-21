@@ -529,3 +529,9 @@ Formatting popup
     padding: 5px 5px 0px;
     pointer-events: auto;
 }
+
+/*-------------------------------------- BADGES --------------------------------------*/
+
+.badge {
+  float: right;
+}

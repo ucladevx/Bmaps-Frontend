@@ -16,7 +16,11 @@
         <span class="caret"></span></p>
         <ul class="dropdown-menu">
         \{{#each categDrop}}
-            <li><a class="categName">\{{this.category}}</a></li>
+          \{{#if this.numEvents}}
+            <li><a class="categLink"><span class="categName">\{{this.category}}</span><span class="badge">\{{this.numEvents}}</span></a></li>
+          \{{else}}
+            <li><a class="categLink" style="color:#bebebe;"><span class="categName">\{{this.category}}</span></a></li>
+          \{{/if}}
         \{{/each}}
         </ul>
     </div>
