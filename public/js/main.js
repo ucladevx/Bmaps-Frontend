@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    console.log('MAIN');
     //After website is loaded, use handlebars to parse the html in the sidebar template in the index.html
     $('#searchForm').attr('action', 'javascript:void(0);');
 

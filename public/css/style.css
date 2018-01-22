@@ -357,6 +357,10 @@ input::-webkit-calendar-picker-indicator {
     padding-right: 25%;
 }
 
+.badge {
+  float: right;
+}
+
 /*--------------------------------------MAP--------------------------------------*/
 #map {
     top:0;
@@ -535,10 +539,4 @@ Formatting popup
     border-radius: 5px;
     padding: 5px 5px 0px;
     pointer-events: auto;
-}
-
-/*-------------------------------------- BADGES --------------------------------------*/
-
-.badge {
-  float: right;
 }
