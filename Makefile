@@ -2,7 +2,7 @@ build:
 	docker build -t mappening/frontend .
 
 dev:
-	sudo docker run --rm --name frontend-dev -v $(shell pwd)/static:/tmp/static -p "80:80" -it mappening/frontend
+	docker run --rm --name frontend-dev -v $(shell pwd)/static:/tmp/static -p "80:80" -it mappening/frontend
 
 ash:
 	docker exec -it frontend-dev /bin/ash
