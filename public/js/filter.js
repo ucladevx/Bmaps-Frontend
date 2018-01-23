@@ -20,6 +20,51 @@ function updateDate() {
 		//Update currDateFormattedJSON since date changed
 		currDateJSON = data; //make sure to never touch
 		currDate = Date.parse(getMonthNameFromMonthNumber(m)+ " "+ d + ", " + y);
+
+		// Update categories
+		$.getJSON("http://52.53.72.98/api/v1/event-categories", function(data){
+				// Create object to count events under each category
+				var categCount = {};
+
+				let categDropSource = $("#category-dropdown-template").html();
+				let categDropTemplate = Handlebars.compile(categDropSource);
+				//Add default option to categories object
+				data.categories.unshift({"category":"all categories"});
+
+				$.each(data.categories, function(i,item){
+					item.category = item.category.toLowerCase();
+					categCount[item.category] = 0;
+				});
+				categCount['<none>'] = 0;
+
+				// Populate category count object
+				let totalNumEvents = 0;
+				$.each(currDateJSON.features, function(i,event) {
+					let categName = event.properties.category.toLowerCase();
+					categCount[categName]++;
+					totalNumEvents++;
+				});
+				categCount['all categories'] = totalNumEvents;
+
+				// Attach category count info to each category
+				$.each(data.categories, function(i,item){
+					item.numEvents = categCount[item.category];
+				});
+
+				//Mount categories object into dropdown using handlebars
+				$('#categ-dropdown-mount').html(categDropTemplate({
+						categDrop: data.categories
+				}));
+				//Capture all elements of CategoryName and add onclick to update sidebar
+				let categLinks = document.getElementsByClassName("categLink");
+				let dropdownBarText = document.getElementById('categ-dropdown-text');
+				$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
+				$.each(categLinks, function(i, item){
+					let categName = item.getElementsByClassName("categName")[0].innerText;
+					item.addEventListener("click",function(){filterDateByCategory(categName)});
+				})
+		})
+
 		filterDateByCategory(currCategoryName);
 	});
 }
