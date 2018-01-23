@@ -11,16 +11,24 @@ Have nodemon installed with `npm install -g nodemon`
 * Mapbox: Open source mapping platform for custom designed maps
 * Node.js: Javascript runtime built on Chrome
 * Handlebars.js: Templating language that separates view and code
+* nginx (Port 80): Server for static files, forwards requests to backend and serves results
+
+## Setting Up the Environment
+* Download [Docker](https://www.docker.com) and [Docker-Compose](https://github.com/docker/compose/releases) release 1.16.1.  
+
 
 ## How To Run
 * `cd` to the repository.
-* `npm install` to install packages.
 
 * Check if backend is already deployed in AWS
     * Navigate to http://52.53.72.98/api/v1/events
     * If not running, run [Mappening-Backend](https://github.com/ucladevx/Mappening-Backend) locally according to the instructions in the README
-        * Navigate to http://localhost/api/v1/events
-        * Modify public/js/main.js
-        * `$.getJSON("http://localhost/api/v1/events", function(data)`
-* Run app with `nodemon`
-    * Navigate to http://localhost:8000
+
+* Run app
+    * In one terminal window:
+        * For production: `make build`
+        * Navigate to  `localhost`
+        * Create container: `make dev`
+    * Open a second terminal window:
+        * Enter container: `make ash`
+        * Every time you make a change: `make files`
