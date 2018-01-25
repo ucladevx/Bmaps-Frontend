@@ -28,6 +28,13 @@ A single platform for events across campus. Mappening helps raise awareness of e
     - `make ash`
   - Update changes to static files
     - `make files`
+- Navigate to `localhost` which defaults to port 80
+  - Can access api server through nginx 
+    - `localhost/api/v1/<insert_api_route_here>`
+    - e.g. `localhost/api/v1/events`
+  - Cannot access api server directly through port 5000
+- Stop running container with `CTRL+C`
+- Exit frontend container with `exit`
 
 ## More Info
 - Checkout the [backend](https://github.com/ucladevx/Mappening-Backend) repository

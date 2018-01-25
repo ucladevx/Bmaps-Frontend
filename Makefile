@@ -20,7 +20,7 @@ push: ecr-login build
 
 # Build and run frontend image
 dev: build
-	docker run --rm --name frontend-dev -v $(shell pwd)/static:/tmp/static -p "80:80" -it mappening/frontend
+	docker run --rm --name frontend-dev -v $(shell pwd)/static:/tmp/static -p "80:80" -it mappening/$(APP_NAME)
 
 # Enter frontend container
 ash:
