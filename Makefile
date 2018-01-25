@@ -1,5 +1,5 @@
 ECR_REPO=698514710897.dkr.ecr.us-west-1.amazonaws.com
-APP_NAME=frontend
+APP_NAME=mappening/frontend
 
 ##########################      AWS / PRODUCTION      ##########################
 
@@ -9,7 +9,7 @@ ecr-login:
 
 # Build frontend image
 build:
-	docker build . -t mappening/$(APP_NAME)
+	docker build . -t $(APP_NAME)
 
 # Login, build, and push latest image to AWS
 push: ecr-login build
@@ -20,7 +20,7 @@ push: ecr-login build
 
 # Build and run frontend image
 dev: build
-	docker run --rm --name frontend-dev -v $(shell pwd)/static:/tmp/static -p "80:80" -it mappening/$(APP_NAME)
+	docker run --rm --name frontend-dev -v $(shell pwd)/static:/tmp/static -p "80:80" -it $(APP_NAME)
 
 # Enter frontend container
 ash:
