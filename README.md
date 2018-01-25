@@ -26,8 +26,8 @@ A single platform for events across campus. Mappening helps raise awareness of e
 - Open a second terminal window:
   - Enter frontend container
     - `make ash`
-  - Update changes to static files
-    - `make files`
+    - Use Makefile within frontend container to update changes to static files
+      - `make files`
 - Navigate to `localhost` which defaults to port 80
   - Can access api server through nginx 
     - `localhost/api/v1/<insert_api_route_here>`
