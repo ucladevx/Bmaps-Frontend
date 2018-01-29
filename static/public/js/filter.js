@@ -5,10 +5,14 @@ function updateDate() {
 		document.getElementById("relativeDay").innerHTML =  "today";
 	}
 	else {
+		var daysFrom = Number(((currDay.getTime()-todayDate.getTime())/milliDay).toFixed(0));
+		if (daysFrom >= 60) {
+			document.getElementById("rightArrow").style.display = "none";
+		}
 		if (currDay.getTime() == (todayDate.getTime() + milliDay)) {
 			document.getElementById("relativeDay").innerHTML =  "tomorrow";
 		} else {
-			document.getElementById("relativeDay").innerHTML = ((currDay.getTime()-todayDate.getTime())/milliDay) +" days from today";
+			document.getElementById("relativeDay").innerHTML = daysFrom + " days from today";
 		}
 		document.getElementById("leftArrow").style.display = "inline";
 	}
