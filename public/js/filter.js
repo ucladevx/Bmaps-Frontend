@@ -89,13 +89,18 @@ inputBox.onkeyup = function(e){
 			}));
 		}
 		else {
+
 			map.getSource('events').setData(filteredJSON);
 			$.each(filteredJSON.features, function(i, item ){
 				formatDateItem(item);
 				formatCategoryItem(item);
 			})
+
+
+
 			$('#events-mount').html(eventsTemplate({
 				events: filteredJSON.features
+				//events: currDateFormattedJSON.features
 			}));
 		}
 		//Save input categoryName if different
@@ -108,7 +113,7 @@ inputBox.onkeyup = function(e){
 	}
 	//Pass the current input into search API to create datalist
 	let keyUrl = 'http://52.53.72.98/api/v1/search/' + inputBox.value + '/' + currDateURL;
-	//let keyUrl = "http://52.53.72.98/api/v1/search/" + inputBox.value + "/" + "Jan 22 2018";
+
 	$.getJSON(keyUrl, function(data){
 
 		//Clear the list and restart everytime we get a new input

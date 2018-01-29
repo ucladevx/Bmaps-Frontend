@@ -21,15 +21,20 @@ function formatDate(date) {
     return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
 }
 
+
 function formatDateItem(item) {
-    var dateOfStart = new Date(item.properties.start_time);
-    var dateOfEnd = new Date(item.properties.end_time);
-    if (item.properties.end_time != "<NONE>"){
-        item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours());
-    }
-    else {
-        item.properties.start_time = formatDate(dateOfStart);
-    }
+    if (item.properties.start_time.toString().includes("|").toString() == "false") {
+      var dateOfStart = new Date(item.properties.start_time);
+      var dateOfEnd = new Date(item.properties.end_time);
+      if (item.properties.end_time != "<NONE>"){
+          item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours());
+      }
+      else {
+          item.properties.start_time = formatDate(dateOfStart);
+      }
+  } else {
+    return;
+  }
 }
 
 function formatCategoryItem(item) {

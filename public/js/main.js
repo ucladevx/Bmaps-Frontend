@@ -46,8 +46,7 @@ $(document).ready(function() {
 
       if (mq.matches) {
         // window width is at least 767px
-        //var map = new L.mapbox.map('map', 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3').setView([-118.445320, 34.066915], 3); //set map zoom level for desktop size
-        initialZoom = 15;
+
         //Remount map+sidebar horizontally
         $(".sidebar-mount").appendTo("#regular-mount");
         $("#map").appendTo("#regular-mount");
@@ -65,10 +64,6 @@ $(document).ready(function() {
         // $(searchIcon).off("click");
       } else {
         // window width is less than 767px
-
-        //var map = new L.mapbox.map('map', 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3').setView([-118.445320, 34.066915], 20); //set map zoom level for mobile size
-        initialZoom = 10;
-
 
         $(".sidebar-mount").appendTo("#mobile-mount");
         $("#nav-non-collapse").removeClass("pull-left");
