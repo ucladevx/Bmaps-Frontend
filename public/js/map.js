@@ -3,6 +3,17 @@
 ////////////////////////////////////////////////
 // Buildings Tileset: trinakat.cjasdkzxp4sg333mhtqv9vugy-7iaym
 
+var screenSize = window.matchMedia("(min-width: 767px)");
+
+if (screenSize.matches){ // desktop view
+	initialZoom = 15;
+	endZoom = 15.8;
+} else { // mobile view
+	initialZoom = 14;
+	endZoom = 15;
+};
+
+
 mapboxgl.accessToken = 'pk.eyJ1IjoidHJpbmFrYXQiLCJhIjoiY2phczZjMDRoNG9lMTMxbnEzMnAyemtqMyJ9.9BNijLx_oyyU2LmboUczTw'; // 'pk.eyJ1IjoiaGVsYXJhYmF3eSIsImEiOiJjajUxN3k2d3MwMGg4MnFxZHhjcjYxN2U4In0.0OSl71QURA_P9d32r982Zw';
 
 var map = new mapboxgl.Map({
@@ -12,7 +23,7 @@ var map = new mapboxgl.Map({
 	// 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
 	center: [-118.445320, 34.066915],
 	maxBounds: [[-118.46, 34.056],[-118.428, 34.079]],
-	zoom: 15,
+	zoom: initialZoom,
 	pitch: 60
 });
 
@@ -159,7 +170,7 @@ function hoverPopup() {
 		popup.remove();
 	});
 	map.on('click', 'eventlayer', function (e) {
-		map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+		map.flyTo({center: e.lngLat, zoom: 17, speed: .35});
 		// console.log(e);
 		// console.log(e.features);
 		// console.log(e.features[0]);
@@ -177,7 +188,7 @@ function hoverPopup() {
 
 function startMap() {
 	threeDDisplay();
-	map.flyTo({center: [-118.445320, 34.066915], zoom: 15.8, speed: .15});
+	map.flyTo({center: [-118.445320, 34.066915], zoom: endZoom, speed: .15});
 	setTimeout(function() {map.setPaintProperty('ucla-buildings', 'fill-extrusion-opacity', .6);}, 2100);
 
 	document.getElementById("leftArrow").innerHTML = "&#9664;";

@@ -1,3 +1,5 @@
+currDateURL = d + " " + getMonthNameFromMonthNumber(m)+ " " + y;
+
 function updateDate() {
 	if (todayDate.getTime() == currDay.getTime()) {
 		document.getElementById("leftArrow").style.display = "none";
@@ -15,7 +17,9 @@ function updateDate() {
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	//Update keyURL to current date and send to filtering function
-	keyUrl = 'http://52.53.72.98/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
+
+	currDateURL = d + " " + getMonthNameFromMonthNumber(m)+ " " + y;
+	keyUrl = 'http://52.53.72.98/api/v1/event-date/' + currDateURL;
 	$.getJSON(keyUrl, function(data){
 		//Update currDateFormattedJSON since date changed
 		currDateJSON = data; //make sure to never touch
@@ -103,19 +107,18 @@ inputBox.onkeyup = function(e){
 		return false;
 	}
 	//Pass the current input into search API to create datalist
-	let keyUrl = "http://52.53.72.98/api/v1/search/"+inputBox.value;
+	let keyUrl = 'http://52.53.72.98/api/v1/search/' + inputBox.value + '/' + currDateURL;
+	//let keyUrl = "http://52.53.72.98/api/v1/search/" + inputBox.value + "/" + "Jan 22 2018";
 	$.getJSON(keyUrl, function(data){
+
 		//Clear the list and restart everytime we get a new input
 		while (list.firstChild) {
 			list.removeChild(list.firstChild);
 		}
 		//Filter search results before rendering
 		filteredJSON = JSON.parse(JSON.stringify(data));
-		filteredJSON.features = filteredJSON.features.filter(function(item){
-			//Parse item's start_time to compare to current date
-			return Date.parse(new Date(item.properties.start_time).toDateString()) == currDate;
-		});
-		//Iterate through all of the elemnts given by the API search
+
+		//Iterate through all of the elements given by the API search
 		$.each(filteredJSON.features, function(i,item){
 			if (i < 15){
 				//Append those elements onto the datalist for the input box
