@@ -8,9 +8,11 @@ var screenSize = window.matchMedia("(min-width: 767px)");
 if (screenSize.matches){ // desktop view
 	initialZoom = 15;
 	endZoom = 15.8;
+	mapPitch = 60;
 } else { // mobile view
-	initialZoom = 14;
-	endZoom = 15;
+	initialZoom = 13.5;
+	endZoom = 14.2;
+	mapPitch = 50;
 };
 
 
@@ -24,7 +26,7 @@ var map = new mapboxgl.Map({
 	center: [-118.445320, 34.066915],
 	maxBounds: [[-118.46, 34.056],[-118.428, 34.079]],
 	zoom: initialZoom,
-	pitch: 60
+	pitch: mapPitch
 });
 
 ////////////////////////////////////////////////
