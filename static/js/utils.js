@@ -69,7 +69,7 @@ let filteredJSON = {
 	"type": "FeatureCollection"
 }
 
-let keyUrl = 'http://whatsmappening.io:5000/api/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+let keyUrl = 'https://dora.whatsmappening.io/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
 
 //Setting up datalist with searchbox
 let inputBox = document.getElementById('search-input');
