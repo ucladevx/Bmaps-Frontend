@@ -34,8 +34,10 @@
       \{{#if events}}
         \{{#each events}}
         <a class="event event-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
-            <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
-            <div class="sidebar-event-details">
+            <div class="sidebar-event-img-container col-sm-7 col-md-7 col-lg-7">
+                <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
+            </div>
+            <div class="sidebar-event-details col-sm-4 col-md-4 col-lg-4">
                 <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
                 <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
                 <p class="sidebar-event-location">
