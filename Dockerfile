@@ -17,9 +17,10 @@ COPY gulpfile.js /tmp
 COPY Makefile /tmp
 RUN mkdir /app && make files
 
+# Copy the configuration file
 RUN mkdir -p /run/nginx
 COPY nginx/conf/nginx.conf /etc/nginx
-COPY static/public /app
+COPY static/ /app
 
 # open a port and start the server
 CMD ["nginx", "-g", "daemon off;"]
