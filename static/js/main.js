@@ -3,11 +3,11 @@ $(document).ready(function() {
     $('#searchForm').attr('action', 'javascript:void(0);');
 
     //Setting up datalist with searchBox
-    let inputBox = document.getElementById('search-input');
-    let leftIcon = document.getElementById("mobile-left-icon");
-    let searchForm = document.getElementById('searchForm');
-    let searchIcon = document.getElementById('searchIcon');
-    let mobileSearchIcon = document.getElementById('mobileSearchIcon');
+    var inputBox = document.getElementById('search-input');
+    var leftIcon = document.getElementById("mobile-left-icon");
+    var searchForm = document.getElementById('searchForm');
+    var searchIcon = document.getElementById('searchIcon');
+    var mobileSearchIcon = document.getElementById('mobileSearchIcon');
 
     // media query event handler
     if (matchMedia) {
@@ -18,10 +18,10 @@ $(document).ready(function() {
 
     // media query change
     function WidthChange(mq) {
-        let navHeader = document.getElementById("navbar-brand-div")
-        let midUl = document.getElementById("non-collapse-ul");
-        let navToggle = document.getElementById("collapsed-menu");
-        let navbar = document.getElementById("navbar");
+        var navHeader = document.getElementById("navbar-brand-div")
+        var midUl = document.getElementById("non-collapse-ul");
+        var navToggle = document.getElementById("collapsed-menu");
+        var navbar = document.getElementById("navbar");
 
       if (mq.matches) {
         // window width is at least 767px
