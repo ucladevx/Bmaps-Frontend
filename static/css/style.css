@@ -320,13 +320,12 @@ input::-webkit-calendar-picker-indicator {
     object-fit: cover;
     width: 100%;
     height: 20%;
-    margin-right: 5%;
     vertical-align: top;
 }
 
 .sidebar-event-img-container{
     display: inline-block;
-    width: 66%;
+    width: 60%;
 }
 
 .sidebar-event-details {
@@ -335,7 +334,7 @@ input::-webkit-calendar-picker-indicator {
     display: inline-block;
     vertical-align: top;
     color: rgb(116,116,116);
-    width: 33.33333333%;
+    width: 40%;
 }
 
 .sidebar-event-details p {
