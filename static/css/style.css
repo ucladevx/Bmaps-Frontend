@@ -326,7 +326,7 @@ input::-webkit-calendar-picker-indicator {
 
 .sidebar-event-img-container{
     display: inline-block;
-    width: 66.66666667%;
+    width: 66%;
 }
 
 .sidebar-event-details {
@@ -400,16 +400,20 @@ input::-webkit-calendar-picker-indicator {
     }
     .home-row{
         height: auto;
+        /* height: 50%; */
         display: block;
     }
     .sidebar-mount{
         margin-right: 0%;
     }
     .sidebar{
-        height: 42%;
+        height: 47%;
     }
     #events-mount{
         height: auto;
+    }
+    .sidebar-event-img{
+        height: 35%;
     }
 }
 
