@@ -7,10 +7,14 @@ function updateDate() {
 		document.getElementById("relativeDay").innerHTML =  "today";
 	}
 	else {
+		var daysFrom = Number(((currDay.getTime()-todayDate.getTime())/milliDay).toFixed(0));
+		if (daysFrom >= 60) {
+			document.getElementById("rightArrow").style.display = "none";
+		}
 		if (currDay.getTime() == (todayDate.getTime() + milliDay)) {
 			document.getElementById("relativeDay").innerHTML =  "tomorrow";
 		} else {
-			document.getElementById("relativeDay").innerHTML = ((currDay.getTime()-todayDate.getTime())/milliDay) +" days from today";
+			document.getElementById("relativeDay").innerHTML = daysFrom + " days from today";
 		}
 		document.getElementById("leftArrow").style.display = "inline";
 	}
@@ -19,11 +23,56 @@ function updateDate() {
 	//Update keyURL to current date and send to filtering function
 
 	currDateURL = d + " " + getMonthNameFromMonthNumber(m)+ " " + y;
-	keyUrl = 'http://52.53.72.98/api/v1/event-date/' + currDateURL;
+	keyUrl = 'http://whatsmappening.io:5000/api/event-date/' + currDateURL;
 	$.getJSON(keyUrl, function(data){
 		//Update currDateFormattedJSON since date changed
 		currDateJSON = data; //make sure to never touch
 		currDate = Date.parse(getMonthNameFromMonthNumber(m)+ " "+ d + ", " + y);
+
+		// Update categories
+		$.getJSON("http://whatsmappening.io:5000/api/event-categories", function(data){
+				// Create object to count events under each category
+				var categCount = {};
+
+				let categDropSource = $("#category-dropdown-template").html();
+				let categDropTemplate = Handlebars.compile(categDropSource);
+				//Add default option to categories object
+				data.categories.unshift({"category":"all categories"});
+
+				$.each(data.categories, function(i,item){
+					item.category = item.category.toLowerCase();
+					categCount[item.category] = 0;
+				});
+				categCount['<none>'] = 0;
+
+				// Populate category count object
+				let totalNumEvents = 0;
+				$.each(currDateJSON.features, function(i,event) {
+					let categName = event.properties.category.toLowerCase();
+					categCount[categName]++;
+					totalNumEvents++;
+				});
+				categCount['all categories'] = totalNumEvents;
+
+				// Attach category count info to each category
+				$.each(data.categories, function(i,item){
+					item.numEvents = categCount[item.category];
+				});
+
+				//Mount categories object into dropdown using handlebars
+				$('#categ-dropdown-mount').html(categDropTemplate({
+						categDrop: data.categories
+				}));
+				//Capture all elements of CategoryName and add onclick to update sidebar
+				let categLinks = document.getElementsByClassName("categLink");
+				let dropdownBarText = document.getElementById('categ-dropdown-text');
+				$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
+				$.each(categLinks, function(i, item){
+					let categName = item.getElementsByClassName("categName")[0].innerText;
+					item.addEventListener("click",function(){filterDateByCategory(categName)});
+				})
+		})
+
 		filterDateByCategory(currCategoryName);
 	});
 }
@@ -112,7 +161,7 @@ inputBox.onkeyup = function(e){
 		return false;
 	}
 	//Pass the current input into search API to create datalist
-	let keyUrl = 'http://52.53.72.98/api/v1/search/' + inputBox.value + '/' + currDateURL;
+	let keyUrl = 'http://whatsmappening.io:5000/api/search/' + inputBox.value + '/' + currDateURL;
 
 	$.getJSON(keyUrl, function(data){
 

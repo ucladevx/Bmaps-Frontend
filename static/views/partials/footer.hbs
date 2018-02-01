@@ -1,13 +1,13 @@
 <!-- SCRIPTS -->
 <script src='https://api.mapbox.com/mapbox-gl-js/v0.40.0/mapbox-gl.js'></script>
-<script src="../js/handlebars.js"></script>
+<script src="../../js/handlebars.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script src="../js/main.js"></script>
-<script src="../js/utils.js"></script>
-<script src="../js/filter.js"></script>
+<script src="../../js/main.js"></script>
+<script src="../../js/utils.js"></script>
+<script src="../../js/filter.js"></script>
 
-<!-- <script src="../js/jquery.quickfit.js" type="text/javascript" /> -->
+<!-- <script src="../../js/jquery.quickfit.js" type="text/javascript" /> -->
 <!-- CATEGORY NAMES HANDLEBARS SCRIPT-->
 <script id="category-dropdown-template" type="text/x-handlebars-template">
     <div class="dropdown sidebar-header">
@@ -16,38 +16,46 @@
         <span class="caret"></span></p>
         <ul class="dropdown-menu">
         \{{#each categDrop}}
-            <li><a class="categName">\{{this.category}}</a></li>
+          \{{#if this.numEvents}}
+            <li><a class="categLink"><span class="categName">\{{this.category}}</span><span class="badge">\{{this.numEvents}}</span></a></li>
+          \{{else}}
+            <li><a class="categLink" style="color:#bebebe;"><span class="categName">\{{this.category}}</span></a></li>
+          \{{/if}}
         \{{/each}}
         </ul>
     </div>
 </script>
-<script src="../js/map.js"></script>
+<script src="../../js/map.js"></script>
 <!--  SIDEBAR EVENTS HANDLEBARS SCRIPT-->
 <script id="sidebar-event-template" type="text/x-handlebars-template">
   <div class="sidebar">
       <!-- `events` is passed from main.js's API Call -->
       <!-- We iterate through each of these objects and append them using the template -->
-      \{{#each events}}
-      <a class="event event-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
-          <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
-          <div class="sidebar-event-details">
-              <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
-              <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
-              <p class="sidebar-event-location">
-                \{{#if this.properties.venue.name}}
-                    \{{this.properties.venue.name}}
-                \{{else}}
-                  \{{this.properties.venue.location.street}}
-                \{{/if}}
-              </p>
-              <p class="sidebar-event-category">\{{this.properties.category}}</p>
-          </div>
-      </a>
-      <div class="seperator"></div>
-      \{{/each}}
+      \{{#if events}}
+        \{{#each events}}
+        <a class="event event-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
+            <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
+            <div class="sidebar-event-details">
+                <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
+                <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
+                <p class="sidebar-event-location">
+                  \{{#if this.properties.venue.name}}
+                      \{{this.properties.venue.name}}
+                  \{{else}}
+                    \{{this.properties.venue.location.street}}
+                  \{{/if}}
+                </p>
+                <p class="sidebar-event-category">\{{this.properties.category}}</p>
+            </div>
+        </a>
+        <div class="seperator"></div>
+        \{{/each}}
+      \{{else}}
+        <h3 class="no-events-text">No Events</h3>
+      \{{/if}}
   </div>
 </script>
-<script src="../js/modal.js"></script>
+<script src="../../js/modal.js"></script>
 
 <footer>
 <footer>
@@ -57,7 +65,7 @@
       <div class="event-header">
         <i class="glyphicon glyphicon-chevron-left" id="left-chevron"></i>
       </div>
-      <img class="modal-x" src="../img/modal-x.png">
+      <img class="modal-x" src="../../img/modal-x.png">
       <img class="event-image" src="" id="modal-image">
       <!-- <div class="event-info"> -->
         <div class="event-title" id="event-title"></div>
