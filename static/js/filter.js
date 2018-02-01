@@ -19,14 +19,14 @@ function updateDate() {
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	//Update keyURL to current date and send to filtering function
-	keyUrl = 'https://dora.whatsmappening.io/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
+	keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
 	$.getJSON(keyUrl, function(data){
 		//Update currDateFormattedJSON since date changed
 		currDateJSON = data; //make sure to never touch
 		currDate = Date.parse(getMonthNameFromMonthNumber(m)+ " "+ d + ", " + y);
 
 		// Update categories
-		$.getJSON("https://dora.whatsmappening.io/api/v1/event-categories", function(data){
+		$.getJSON(apiURL + "event-categories", function(data){
 				// Create object to count events under each category
 				var categCount = {};
 
@@ -152,7 +152,7 @@ inputBox.onkeyup = function(e){
 		return false;
 	}
 	//Pass the current input into search API to create datalist
-	let keyUrl = "https://dora.whatsmappening.io/api/v1/search/"+inputBox.value;
+	let keyUrl = apiURL + "search/"+inputBox.value;
 	$.getJSON(keyUrl, function(data){
 		//Clear the list and restart everytime we get a new input
 		while (list.firstChild) {

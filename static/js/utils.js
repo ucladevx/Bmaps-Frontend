@@ -41,6 +41,8 @@ function formatCategoryItem(item) {
     }
 }
 
+var apiURL = "https://dora.whatsmappening.io/api/v1/";
+
 var today = new Date(); //this is being changed somewhere and I can't figure out where
 var todayD = today.getDate();
 var todayM = today.getMonth(); //January is 0!
@@ -69,7 +71,7 @@ let filteredJSON = {
 	"type": "FeatureCollection"
 }
 
-let keyUrl = 'https://dora.whatsmappening.io/api/v1/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+let keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
 
 //Setting up datalist with searchbox
 let inputBox = document.getElementById('search-input');
