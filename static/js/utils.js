@@ -18,7 +18,7 @@ function formatDate(date) {
     if (day < 10){
         day = "0" + day;
     }
-    return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
+    return getMonthNameFromMonthNumber(month) + " " + day + " &middot; " + formatHour(hour);
 }
 
 function formatDateItem(item) {
