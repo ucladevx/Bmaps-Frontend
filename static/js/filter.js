@@ -30,8 +30,8 @@ function updateDate() {
 				// Create object to count events under each category
 				var categCount = {};
 
-				let categDropSource = $("#category-dropdown-template").html();
-				let categDropTemplate = Handlebars.compile(categDropSource);
+				var categDropSource = $("#category-dropdown-template").html();
+				var categDropTemplate = Handlebars.compile(categDropSource);
 				//Add default option to categories object
 				data.categories.unshift({"category":"all categories"});
 
@@ -42,9 +42,9 @@ function updateDate() {
 				categCount['<none>'] = 0;
 
 				// Populate category count object
-				let totalNumEvents = 0;
+				var totalNumEvents = 0;
 				$.each(currDateJSON.features, function(i,event) {
-					let categName = event.properties.category.toLowerCase();
+					var categName = event.properties.category.toLowerCase();
 					categCount[categName]++;
 					totalNumEvents++;
 				});
@@ -60,11 +60,11 @@ function updateDate() {
 						categDrop: data.categories
 				}));
 				//Capture all elements of CategoryName and add onclick to update sidebar
-				let categLinks = document.getElementsByClassName("categLink");
-				let dropdownBarText = document.getElementById('categ-dropdown-text');
+				var categLinks = document.getElementsByClassName("categLink");
+				var dropdownBarText = document.getElementById('categ-dropdown-text');
 				$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
 				$.each(categLinks, function(i, item){
-					let categName = item.getElementsByClassName("categName")[0].innerText;
+					var categName = item.getElementsByClassName("categName")[0].innerText;
 					item.addEventListener("click",function(){filterDateByCategory(categName)});
 				})
 		})
@@ -76,12 +76,12 @@ function updateDate() {
 //Filters sidebar with either stored default events or filtered events from API
 function filterDateByCategory(categoryName){
 	//Compile event object
-	let eventsSource = $("#sidebar-event-template").html();
-	let eventsTemplate = Handlebars.compile(eventsSource);
+	var eventsSource = $("#sidebar-event-template").html();
+	var eventsTemplate = Handlebars.compile(eventsSource);
 	//Save input categoryName if different
 	if (currCategoryName != categoryName){
 		currCategoryName = categoryName;
-		let dropdownBarText = document.getElementById('categ-dropdown-text');
+		var dropdownBarText = document.getElementById('categ-dropdown-text');
 		$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
 	}
 	//Filter and render currDateFormattedJSON
@@ -118,9 +118,9 @@ function filterDateByCategory(categoryName){
 
 //Detecting a key change in search and capturing it as "e"
 inputBox.onkeyup = function(e){
-	let eventsSource = $("#sidebar-event-template").html();
-	let eventsTemplate = Handlebars.compile(eventsSource);
-	let list = document.getElementById('searchList');
+	var eventsSource = $("#sidebar-event-template").html();
+	var eventsTemplate = Handlebars.compile(eventsSource);
+	var list = document.getElementById('searchList');
 	if (e.which == 13){
 		if (inputBox.value == "") {
 			map.getSource('events').setData(currDateJSON);
@@ -146,13 +146,13 @@ inputBox.onkeyup = function(e){
 		//Save input categoryName if different
 		if (currCategoryName != "all categories"){
 			currCategoryName = "all categories";
-			let dropdownBarText = document.getElementById('categ-dropdown-text');
+			var dropdownBarText = document.getElementById('categ-dropdown-text');
 			$(dropdownBarText).html(currCategoryName+"&nbsp;<span class=caret></span>");
 		}
 		return false;
 	}
 	//Pass the current input into search API to create datalist
-	let keyUrl = apiURL + "search/"+inputBox.value;
+	var keyUrl = apiURL + "search/"+inputBox.value;
 	$.getJSON(keyUrl, function(data){
 		//Clear the list and restart everytime we get a new input
 		while (list.firstChild) {
@@ -168,7 +168,7 @@ inputBox.onkeyup = function(e){
 		$.each(filteredJSON.features, function(i,item){
 			if (i < 15){
 				//Append those elements onto the datalist for the input box
-				let option = document.createElement('option');
+				var option = document.createElement('option');
 				option.value = item.properties.event_name;
 				list.appendChild(option);
 			}

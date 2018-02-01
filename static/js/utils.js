@@ -48,34 +48,34 @@ var todayD = today.getDate();
 var todayM = today.getMonth(); //January is 0!
 var todayY = today.getFullYear();
 
-let todayDate = new Date();
-let milliDay = 86400000;
+var todayDate = new Date();
+var milliDay = 86400000;
 
 var d = todayD;
 var m = todayM;
 var y = todayY;
 
 var currDay = today;
-let currCategoryName = "all categories";
-let currDate = "";
-let currDateJSON = {
+var currCategoryName = "all categories";
+var currDate = "";
+var currDateJSON = {
 	"features": [],
 	"type": "FeatureCollection"
 }
-let currDateFormattedJSON = {
+var currDateFormattedJSON = {
 	"features": [],
 	"type": "FeatureCollection"
 }
-let filteredJSON = {
+var filteredJSON = {
 	"features": [],
 	"type": "FeatureCollection"
 }
 
-let keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+var keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
 
 //Setting up datalist with searchbox
-let inputBox = document.getElementById('search-input');
-let list = document.getElementById('searchList');
+var inputBox = document.getElementById('search-input');
+var list = document.getElementById('searchList');
 
 function nextDay() {
 	currDay.setDate(currDay.getDate() + 1);
