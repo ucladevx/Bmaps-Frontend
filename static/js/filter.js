@@ -18,10 +18,8 @@ function updateDate() {
 	}
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
-
 	//Update keyURL to current date and send to filtering function
 	keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
-
 	$.getJSON(keyUrl, function(data){
 		//Update currDateFormattedJSON since date changed
 		currDateJSON = data; //make sure to never touch
@@ -155,7 +153,6 @@ inputBox.onkeyup = function(e){
 	}
 	//Pass the current input into search API to create datalist
 	var keyUrl = apiURL + "search/"+inputBox.value;
-
 	$.getJSON(keyUrl, function(data){
 		//Clear the list and restart everytime we get a new input
 		while (list.firstChild) {
