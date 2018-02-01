@@ -16,7 +16,7 @@ push: ecr-login build
 	docker tag $(APP_NAME):latest $(ECR_REPO)/$(APP_NAME):latest
 	docker push $(ECR_REPO)/$(APP_NAME):latest
 
-##################      LOCAL DEVELOPMENT (Frontend Only)     ################## 
+##################      LOCAL DEVELOPMENT (Frontend Only)     ##################
 
 # Build and run frontend image
 dev: build
@@ -28,4 +28,4 @@ ash:
 
 # Update changes made to static files
 files:
-	./node_modules/gulp/bin/gulp.js && cp -r dist/* /app/
+	./node_modules/gulp/bin/gulp.js && cp -r dist/* /app/ && cp -r static/* /app/
