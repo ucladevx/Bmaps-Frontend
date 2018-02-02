@@ -127,7 +127,7 @@ input::-webkit-calendar-picker-indicator {
 
 /* MEDIA QUERIES FOR RESIZING SEARCH BAR*/
 /* definitely should be doing it dynamically but attempts were unsucessful */
-
+/*
 #navBarSearchForm input{
     width:1000px !important;
 }
@@ -154,6 +154,10 @@ input::-webkit-calendar-picker-indicator {
     #navBarSearchForm input{
         width:200px !important;
     }
+} */
+
+#searchForm, .right-inner-addon {
+    width: 100%;
 }
 
 @media (max-width: 767px){
@@ -162,7 +166,7 @@ input::-webkit-calendar-picker-indicator {
     }
     #navBarSearchForm input{
         outline: none;
-        width: 600px !important;
+        /* width: 600px !important; */
         border-color: transparent;
     }
     #searchForm{
@@ -177,7 +181,7 @@ input::-webkit-calendar-picker-indicator {
         box-shadow: none;
     }
 }
-@media (max-width: 700px){
+/* @media (max-width: 700px){
     #navBarSearchForm input{
         width: 525px !important;
     }
@@ -207,7 +211,7 @@ input::-webkit-calendar-picker-indicator {
     #navBarSearchForm input{
         width: 0px !important;
     }
-}
+} */
 
 /* SEARCH ICON*/
 
@@ -300,7 +304,7 @@ input::-webkit-calendar-picker-indicator {
 
 .sidebar-header{
     background-color: white;
-    padding-top: 4%;
+    padding-top: 1%;
     padding-bottom: 1%;
     box-shadow: -1px 1px 1px rgb(207,207,207);
     text-align: center;
