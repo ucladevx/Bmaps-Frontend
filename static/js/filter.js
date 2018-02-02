@@ -1,20 +1,27 @@
 function updateDate() {
+	var $leftArrow = document.getElementById("leftArrow");
+	var $rightArrow = document.getElementById("rightArrow");
+	var $relativeDay = document.getElementById("relativeDay");
 	if (todayDate.getTime() == currDay.getTime()) {
-		document.getElementById("leftArrow").style.display = "none";
-		document.getElementById("rightArrow").style.display = "inline";
-		document.getElementById("relativeDay").innerHTML =  "today";
+		$leftArrow.style.visibility = "hidden";
+		$rightArrow.style.display = "inline";
+		$relativeDay.innerHTML =  "today, ";
 	}
 	else {
 		var daysFrom = Number(((currDay.getTime()-todayDate.getTime())/milliDay).toFixed(0));
 		if (daysFrom >= 60) {
-			document.getElementById("rightArrow").style.display = "none";
+			$rightArrow.style.visibility = "hidden";
+		}
+		else {
+			$rightArrow.style.visibility = ""
 		}
 		if (currDay.getTime() == (todayDate.getTime() + milliDay)) {
-			document.getElementById("relativeDay").innerHTML =  "tomorrow";
-		} else {
-			document.getElementById("relativeDay").innerHTML = daysFrom + " days from today";
+			$relativeDay.innerHTML =  "tomorrow, ";
 		}
-		document.getElementById("leftArrow").style.display = "inline";
+		else {
+			$relativeDay.innerHTML = "";
+		}
+		$leftArrow.style.visibility = "";
 	}
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
