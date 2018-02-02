@@ -76,6 +76,9 @@ td a {
 
 .navbar-form{
     display: inline-block;
+
+
+    margin: 0px;
 }
 
 .no-display{
@@ -125,44 +128,22 @@ input::-webkit-calendar-picker-indicator {
     color: white;
 }
 
-/* MEDIA QUERIES FOR RESIZING SEARCH BAR*/
-/* definitely should be doing it dynamically but attempts were unsucessful */
 
-#navBarSearchForm input{
-    width:1000px !important;
-}
-
-@media (max-width: 1400px){
-    #navBarSearchForm input{
-        width:800px !important;
-    }
-}
-
-@media (max-width: 1200px){
-    #navBarSearchForm input{
-        width:600px !important;
-    }
-}
-
-@media (max-width: 1000px){
-    #navBarSearchForm input{
-        width:400px !important;
-    }
-}
-
-@media (max-width: 800px){
-    #navBarSearchForm input{
-        width:200px !important;
-    }
+#searchForm, .right-inner-addon {
+    width: 100%;
 }
 
 @media (max-width: 767px){
     .navbar-collapse .navbar-nav{
         float: none !important;
     }
-    #navBarSearchForm input{
+
+    .sidebar-header{
+        padding-top: 1%;
+        padding-bottom: 0%;
+    }
+    /* #navBarSearchForm input{
         outline: none;
-        width: 600px !important;
         border-color: transparent;
     }
     #searchForm{
@@ -175,38 +156,7 @@ input::-webkit-calendar-picker-indicator {
     }
     .form-control{
         box-shadow: none;
-    }
-}
-@media (max-width: 700px){
-    #navBarSearchForm input{
-        width: 525px !important;
-    }
-}
-@media (max-width: 600px){
-    #navBarSearchForm input{
-        width: 425px !important;
-    }
-}
-@media (max-width: 500px){
-    #navBarSearchForm input{
-        width: 325px !important;
-    }
-}
-@media (max-width: 400px){
-    #navBarSearchForm input{
-        width: 225px !important;
-    }
-}
-@media (max-width: 300px){
-    #navBarSearchForm input{
-        width: 125px !important;
-    }
-}
-
-@media (max-width: 200px){
-    #navBarSearchForm input{
-        width: 0px !important;
-    }
+    } */
 }
 
 /* SEARCH ICON*/
@@ -298,15 +248,19 @@ input::-webkit-calendar-picker-indicator {
     overflow: scroll;
 }
 
+.search-header{
+    border-bottom: 1px solid rgb(167,167,167);
+}
+
 .sidebar-header{
     background-color: white;
-    padding-top: 4%;
-    padding-bottom: 1%;
     box-shadow: -1px 1px 1px rgb(207,207,207);
     text-align: center;
     color: rgb(116,116,116);
     font-weight: 500;
     font-size: 18px;
+    padding-top: 1%;
+    padding-bottom: 1%;
 }
 
 .sidebar-event {
