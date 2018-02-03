@@ -2,24 +2,31 @@ function updateDate() {
 	var $leftArrow = document.getElementById("leftArrow");
 	var $rightArrow = document.getElementById("rightArrow");
 	var $relativeDay = document.getElementById("relativeDay");
+	var $todayBtn = document.getElementById("map-today-section");
 	if (todayDate.getTime() == currDay.getTime()) {
+		// TODAY, DATE MIN
 		$leftArrow.style.visibility = "hidden";
 		$rightArrow.style.display = "inline";
 		$relativeDay.innerHTML =  "today, ";
+		$todayBtn.style.display = "none";
 	}
 	else {
 		var daysFrom = Number(((currDay.getTime()-todayDate.getTime())/milliDay).toFixed(0));
 		if (daysFrom >= 60) {
+			// DATE MAX
 			$rightArrow.style.visibility = "hidden";
 		}
 		else {
 			$rightArrow.style.visibility = ""
 		}
 		if (currDay.getTime() == (todayDate.getTime() + milliDay)) {
+			// TOMORROW
 			$relativeDay.innerHTML =  "tomorrow, ";
+			$todayBtn.style.display = "none";
 		}
 		else {
 			$relativeDay.innerHTML = "";
+			$todayBtn.style.display = "block";
 		}
 		$leftArrow.style.visibility = "";
 	}

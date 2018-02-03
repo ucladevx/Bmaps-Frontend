@@ -90,3 +90,10 @@ function previousDay() {
 	m = currDay.getMonth();
 	updateDate();
 }
+
+function goToday() {
+  currDay.setDate(todayD);
+  d = currDay.getDate();
+  m = currDay.getMonth();
+  updateDate();
+}

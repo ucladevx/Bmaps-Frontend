@@ -11,11 +11,14 @@
             <div class="map-display col-sm-7 col-md-7" id="map">
               <div class='map-overlay top'>
                   <div class='map-overlay-inner'>
-                    <p id="leftArrow" display="-webkit-inline-box" onclick="previousDay()"></p>
+                    <button id="leftArrow" class="custom-btn date-btn" display="-webkit-inline-box" onclick="previousDay()"></button>
                     <span id="relativeDay"></span>
                     <span id="currDate"></span>
-                    <p id="rightArrow"style="display:inline" onclick="nextDay()"></p>
+                    <button id="rightArrow" class="custom-btn date-btn" style="display:inline" onclick="nextDay()"></button>
                       <!--input id='slider' type='range' min='0' max='48' step='1' value='24' list='tickmarks'/-->
+                  </div>
+                  <div id="map-today-section">
+                    <button class="custom-btn today-btn" onclick="goToday()">today</button>
                   </div>
               </div>
             </div>
