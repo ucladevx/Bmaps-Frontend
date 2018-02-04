@@ -8,6 +8,8 @@ function updateDate() {
 		var daysFrom = Number(((currDay.getTime()-todayDate.getTime())/milliDay).toFixed(0));
 		if (daysFrom >= 60) {
 			document.getElementById("rightArrow").style.display = "none";
+		} else if (daysFrom == 59) {
+			document.getElementById("rightArrow").style.display = "inline";
 		}
 		if (currDay.getTime() == (todayDate.getTime() + milliDay)) {
 			document.getElementById("relativeDay").innerHTML =  "tomorrow";
