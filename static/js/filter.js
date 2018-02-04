@@ -1,20 +1,34 @@
 function updateDate() {
+	var $leftArrow = document.getElementById("leftArrow");
+	var $rightArrow = document.getElementById("rightArrow");
+	var $relativeDay = document.getElementById("relativeDay");
+	var $todayBtn = document.getElementById("map-today-section");
 	if (todayDate.getTime() == currDay.getTime()) {
-		document.getElementById("leftArrow").style.display = "none";
-		document.getElementById("rightArrow").style.display = "inline";
-		document.getElementById("relativeDay").innerHTML =  "today";
+		// TODAY, DATE MIN
+		$leftArrow.style.visibility = "hidden";
+		$rightArrow.style.display = "inline";
+		$relativeDay.innerHTML =  "today, ";
+		$todayBtn.style.display = "none";
 	}
 	else {
 		var daysFrom = Number(((currDay.getTime()-todayDate.getTime())/milliDay).toFixed(0));
 		if (daysFrom >= 60) {
-			document.getElementById("rightArrow").style.display = "none";
+			// DATE MAX
+			$rightArrow.style.visibility = "hidden";
+		}
+		else {
+			$rightArrow.style.visibility = ""
 		}
 		if (currDay.getTime() == (todayDate.getTime() + milliDay)) {
-			document.getElementById("relativeDay").innerHTML =  "tomorrow";
-		} else {
-			document.getElementById("relativeDay").innerHTML = daysFrom + " days from today";
+			// TOMORROW
+			$relativeDay.innerHTML =  "tomorrow, ";
+			$todayBtn.style.display = "none";
 		}
-		document.getElementById("leftArrow").style.display = "inline";
+		else {
+			$relativeDay.innerHTML = "";
+			$todayBtn.style.display = "block";
+		}
+		$leftArrow.style.visibility = "";
 	}
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();

@@ -390,7 +390,7 @@ a.mapboxgl-ctrl-logo {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     position: absolute;
     width: 98%;
-    bottom: 0;
+    top: 12px;
     padding-left: 2%;
     padding-right: 2%;
     z-index: 1;
@@ -413,35 +413,80 @@ datalist{
 Picking Date
 */
 #leftArrow {
-  left:0;
+  transition: color 0.2s ease;
+  position: relative;
+  float:left;
   font-size: 20;
+  color: #656565;
+}
+
+#leftArrow:hover {
+  color: #5dbacd;
+}
+
+#rightArrow:hover {
+  color: #5dbacd;
 }
 
 #rightArrow {
+  transition: color 0.2s ease;
+  position: relative;
   font-size: 20;
+  float:right;
+  color: #656565;
 }
 
 #relativeDay {
-  position: absolute;
-  display: inline-block;
-  font-size: 15;
+  display: inline;
+  font-size: 16;
   width: 100%;
   bottom: 45;
   left: 0;
   text-align: center;
-  font-weight:bolder;
-  -webkit-text-stroke: .05px #FCFCFC;
-  -webkit-text-fill-color: #000000;
+  font-weight:500;
+  /* -webkit-text-stroke: .05px #FCFCFC; */
+  -webkit-text-fill-color: #656565;
 }
 
 #currDate {
-  font-size: 25;
+  font-size: 16;
   position: relative;
   display: inline-block;
   padding: initial;
-  font-weight:bolder;
-  -webkit-text-stroke: .05px #FCFCFC;
-  -webkit-text-fill-color: #000000;
+  font-weight:500;
+  /* -webkit-text-stroke: .05px #FCFCFC; */
+  -webkit-text-fill-color: #656565;
+  letter-spacing: 1px;
+}
+
+.custom-btn {
+  background: none;
+  /* color: inherit; */
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+#map-today-section {
+  margin: 0 auto;
+  width: 80px;
+  margin-top: 5px;
+  display: none;
+}
+
+.today-btn {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 1px 5px #ababab;
+}
+
+.today-btn:hover {
+  background-color: #F5F5F5;
 }
 
 p {
@@ -451,13 +496,16 @@ p {
     font-family: 'Poppins', sans-serif;
     text-align: center;
     font-size: 13;
-    letter-spacing: 2px;
     font-weight: bold;
     vertical-align: middle;
-    line-height: 10px;
+    height: 40px;
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 15px;
+    border-radius: 50px;
+    background-color: white;
+    margin: 0 auto;
+    width: 260px;
+    box-shadow: 0px 2px 5px #ababab;
 }
 
 
