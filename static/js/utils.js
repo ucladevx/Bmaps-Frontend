@@ -2,30 +2,46 @@ function getMonthNameFromMonthNumber(monthNumber){
     var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     return monthNames[monthNumber];
 }
-function formatHour(hour){
+function formatHour(hour, minutes){
+    var minuteString = ""
+    if (minutes != 0){
+        minuteString = ":" + minutes;
+    }
     if (hour > 12){
         hour -= 12;
-        return hour + " PM";
+        return hour + minuteString + " PM";
+    }
+    else if (hour == 12){
+        return hour + minuteString + " PM";
+    }
+    else if (hour == 24) {
+        hour -= 12;
+        return hour + minuteString + " AM";
     }
     else{
-        return hour + " AM";
+        return hour +  minuteString + " AM";
     }
+
+
 }
 function formatDate(date) {
     var month = date.getMonth();
     var day = date.getDate();
     var hour = date.getHours();
+    var minutes = date.getMinutes();
+    console.log(minutes);
+
     if (day < 10){
         day = "0" + day;
     }
-    return getMonthNameFromMonthNumber(month) + " " + day + " &middot; " + formatHour(hour);
+    return getMonthNameFromMonthNumber(month) + " " + day + " &middot; " + formatHour(hour, minutes);
 }
 
 function formatDateItem(item) {
     var dateOfStart = new Date(item.properties.start_time);
     var dateOfEnd = new Date(item.properties.end_time);
     if (item.properties.end_time != "<NONE>"){
-        item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours());
+        item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
     }
     else {
         item.properties.start_time = formatDate(dateOfStart);
