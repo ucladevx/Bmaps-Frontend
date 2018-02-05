@@ -244,7 +244,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .sidebar{
-    height: 92%;
+    height: 87%;
     overflow: scroll;
 }
 
@@ -360,7 +360,7 @@ input::-webkit-calendar-picker-indicator {
         margin-right: 0%;
     }
     .sidebar{
-        height: 47%;
+        height: 39%;
     }
     #events-mount{
         height: auto;
