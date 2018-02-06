@@ -34,7 +34,7 @@ function updateDate() {
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	//Update keyURL to current date and send to filtering function
 	keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
-	console.log(keyUrl)
+	//console.log(keyUrl)
 	$.getJSON(keyUrl, function(data){
 		//Update currDateFormattedJSON since date changed
 		currDateJSON = data; //make sure to never touch
@@ -44,25 +44,25 @@ function updateDate() {
 				return res;
 			}
 			else {
-				console.log(a.properties.event_name);
-				console.log(b.properties.event_name);
+				//console.log(a.properties.event_name);
+				//console.log(b.properties.event_name);
 				if (a.properties.end_time != "<NONE>" && b.properties.end_time != "<NONE>"){
 					//both exist
 					res = a.properties.end_time.localeCompare(b.properties.end_time);
-					console.log(res);
+					//console.log(res);
 					return res;
 				}
 				else if (a.properties.end_time != "<NONE>" && b.properties.end_time == "<NONE>"){
-					console.log(-1);
+					//console.log(-1);
 					return -1;
 				}
 				else if (a.properties.end_time == "<NONE>" && b.properties.end_time != "<NONE>"){
-					console.log(1);
+					//console.log(1);
 					return 1;
 				}
 				else{
 					//no end times
-					console.log(res);
+					//console.log(res);
 					return res;
 				}
 			}
