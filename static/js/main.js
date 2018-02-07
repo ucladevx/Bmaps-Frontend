@@ -15,6 +15,14 @@ if (matchMedia) {
     WidthChange(mq);
 }
 
+// var initEvents = function(){
+//     $('#left-chevron').click(function(){
+//         console.log("CLICKED!!!!!!!!!!!!!!!!");
+//         hideEvent();
+//     });
+// };
+// initEvents();
+
 // media query change
 function WidthChange(mq) {
     var navHeader = document.getElementById("navbar-brand-div")
@@ -34,4 +42,7 @@ function WidthChange(mq) {
         $(".sidebar-mount").appendTo("#mobile-mount");
         $("#nav-non-collapse").removeClass("pull-left");
     }
-}
+    Handlebars.registerHelper('json', function(context) {
+        return JSON.stringify(context).replace(/"/g, '&quot;');
+    });
+}; // close document ready function

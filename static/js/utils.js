@@ -29,7 +29,7 @@ function formatDate(date) {
     var day = date.getDate();
     var hour = date.getHours();
     var minutes = date.getMinutes();
-    console.log(minutes);
+    //console.log(minutes);
 
     if (day < 10){
         day = "0" + day;
