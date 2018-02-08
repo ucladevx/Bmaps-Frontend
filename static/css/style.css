@@ -38,6 +38,16 @@ td a {
     cursor: pointer;
 }
 
+input[type="text"] {
+    border: none;
+    background: white;
+}
+
+.form-control{
+    box-shadow: none;
+}
+
+
 /*---------------------------------------NAVBAR---------------------------------------*/
 .navbar {
     z-index: 100;
@@ -76,9 +86,9 @@ td a {
 
 .navbar-form{
     display: inline-block;
-
-
     margin: 0px;
+    margin-bottom: 1%;
+    margin-top: 1%;
 }
 
 .no-display{
@@ -250,6 +260,7 @@ input::-webkit-calendar-picker-indicator {
 
 .search-header{
     border-bottom: 1px solid rgb(167,167,167);
+
 }
 
 .sidebar-header{
@@ -279,7 +290,7 @@ input::-webkit-calendar-picker-indicator {
 
 .sidebar-event-img-container{
     display: inline-block;
-    width: 60%;
+    width: 58%;
 }
 
 .sidebar-event-details {
@@ -324,6 +335,8 @@ input::-webkit-calendar-picker-indicator {
 #categ-dropdown-text{
     padding-left: 25%;
     padding-right: 25%;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .badge {
@@ -348,8 +361,20 @@ input::-webkit-calendar-picker-indicator {
 
 @media (max-width: 767px){
     #map{
-        height: 45%;
+        height: 64%;
         padding-left: 0%;
+    }
+
+    .map-overlay-inner-searchbox{
+        display: block !important;
+    }
+
+    .form-control-feedback {
+        line-height: 23px !important;
+    }
+
+    .search-header{
+        display: none;
     }
     .home-row{
         height: auto;
@@ -492,6 +517,11 @@ Picking Date
 p {
   display: inline-block;
 }
+
+.map-overlay-inner-searchbox {
+    display:none;
+}
+
 .map-overlay .map-overlay-inner {
     font-family: 'Poppins', sans-serif;
     text-align: center;
@@ -503,11 +533,10 @@ p {
     margin-bottom: 10px;
     border-radius: 50px;
     background-color: white;
-    margin: 0 auto;
+    margin: 1% auto;
     width: 260px;
     box-shadow: 0px 2px 5px #ababab;
 }
-
 
 .map-overlay h2 {
     line-height: 24px;
@@ -522,7 +551,7 @@ p {
 }
 
 .map-overlay input {
-    background-color: transparent;
+    /* background-color: transparent; */
     display: inline-block;
     width: 100%;
     position: relative;
