@@ -108,7 +108,7 @@ function previousDay() {
 }
 
 function goToday() {
-  currDay.setDate(todayD);
+  currDay.setFullYear(todayY, todayM, todayD);
   d = currDay.getDate();
   m = currDay.getMonth();
   updateDate();
