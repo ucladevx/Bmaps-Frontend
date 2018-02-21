@@ -5,10 +5,12 @@ import { FormsModule } from '@angular/forms';
 
 import { MapService } from './map.service';
 import { AppComponent } from './app.component';
+import { MapBoxComponent } from './map-box/map-box.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MapBoxComponent
   ],
   imports: [
     BrowserModule,

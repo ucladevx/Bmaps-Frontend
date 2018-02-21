@@ -3,7 +3,7 @@ import { environment } from '../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Observable} from 'rxjs/Rx';
 
-import { GeoJson } from './map';
+import { GeoJson, FeatureCollection } from './map';
 import * as mapboxgl from 'mapbox-gl';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class MapService {
     mapboxgl.accessToken = environment.mapbox.accessToken
   }
 
-  getEvents(): Observable<any> {
-    return this.http.get(`${this.baseEventsUrl}/events`);
+  getEvents(): Observable<FeatureCollection> {
+    return this.http.get<FeatureCollection>(`${this.baseEventsUrl}/events`);
   }
 }

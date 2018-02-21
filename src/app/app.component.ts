@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {Observable} from 'rxjs/Rx';
 import { MapService } from './map.service';
-import { GeoJson } from './map';
+import { GeoJson, FeatureCollection } from './map';
 
 @Component({
   selector: 'app-root',
@@ -11,22 +11,7 @@ import { GeoJson } from './map';
 export class AppComponent {
   title = 'app';
 
-  public events;
+  public mapEvents: FeatureCollection;
 
-  constructor(private _mapService: MapService){}
-
-  ngOnInit() {
-    this.getEvents();
-  }
-
-  getEvents() {
-    this._mapService.getEvents().subscribe(
-      (data) => {
-        this.events = data.features;
-        console.log(data.features);
-       },
-      err => console.error(err),
-      () => console.log('done loading events')
-    );
-  }
+  constructor(){}
 }
