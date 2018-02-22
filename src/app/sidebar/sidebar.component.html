@@ -1,0 +1,20 @@
+<h2>Events</h2>
+<ul class="events">
+  <li *ngFor="let event of events"
+    [class.selected]="event === selectedEvent"
+    (click)="onSelect(event)">
+    <span class="badge">{{event.id}}</span> {{event.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedEvent">
+
+  <h2>{{ selectedEvent.name | uppercase }} Details</h2>
+  <div><span>id: </span>{{selectedEvent.id}}</div>
+  <div>
+    <label>name:
+      <input [(ngModel)]="selectedEvent.name" placeholder="name">
+    </label>
+  </div>
+
+</div>
