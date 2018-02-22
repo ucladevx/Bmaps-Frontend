@@ -10,14 +10,14 @@ const httpOptions = {
 
 @Injectable()
 export class CategoryService {
-  private apiUrl = "http://www.whatsmappening.io/api/v1";
+  private apiUrl = "http://www.whatsmappening.io/api/v1/event-categories";
 
   constructor(
     private http: HttpClient
   ) { }
 
   /** GET categories from the server */
-  getCategories(): Observable {
+  getCategories(): Observable<any> {
     return this.http.get(this.apiUrl);
   }
 }
