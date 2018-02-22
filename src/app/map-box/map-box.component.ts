@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { MapService } from '../map.service';
 import { GeoJson, FeatureCollection } from '../map';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-map-box',
@@ -9,22 +10,36 @@ import { GeoJson, FeatureCollection } from '../map';
   styleUrls: ['./map-box.component.css']
 })
 export class MapBoxComponent implements OnInit {
-  /// default settings
+    // default settings
     map: mapboxgl.Map;
-    style = 'mapbox://styles/mapbox/outdoors-v9';
-    lat = 37.75;
-    lng = -122.41;
     message = 'Hello World!';
+    lat = 34.066915;
+    lng = -118.445320
 
     // data
     source: any;
     mapEvents: FeatureCollection;
 
-    constructor(private _mapService: MapService) { }
+    constructor(private _mapService: MapService) {
+      mapboxgl.accessToken = environment.mapbox.accessToken;
+    }
 
     ngOnInit() {
       this.getEvents();
       this.initializeMap()
+    }
+
+    buildMap() {
+      this.map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3', // UCLA Campus Buildings (restricted by the border)
+        // 'mapbox://styles/trinakat/cjashcgwq7rfo2srstatrxhyi', // UCLA Buildings
+        // 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
+        center: [this.lng, this.lat],
+        maxBounds: [[-118.46, 34.056],[-118.428, 34.079]],
+        zoom: 15,
+        pitch: 60
+      });
     }
 
     getEvents() {
@@ -51,16 +66,13 @@ export class MapBoxComponent implements OnInit {
       }
 
       this.buildMap()
+    }
+
+    addControls(): void {
 
     }
 
-    buildMap() {
-      this.map = new mapboxgl.Map({
-        container: 'map',
-        style: this.style,
-        zoom: 13,
-        center: [this.lng, this.lat]
-      });
+
 
 
     //   /// Add map controls
