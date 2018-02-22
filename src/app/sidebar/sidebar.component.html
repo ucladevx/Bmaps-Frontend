@@ -7,14 +7,4 @@
   </li>
 </ul>
 
-<div *ngIf="selectedEvent">
-
-  <h2>{{ selectedEvent.name | uppercase }} Details</h2>
-  <div><span>id: </span>{{selectedEvent.id}}</div>
-  <div>
-    <label>name:
-      <input [(ngModel)]="selectedEvent.name" placeholder="name">
-    </label>
-  </div>
-
-</div>
+<app-event-detail [event]="selectedEvent"></app-event-detail>
