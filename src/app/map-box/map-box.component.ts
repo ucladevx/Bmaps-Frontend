@@ -19,7 +19,8 @@ export class MapBoxComponent implements OnInit {
     // data
     source: any;
     mapEvents: FeatureCollection;
-
+    keyUrl: string;
+    
     constructor(private _mapService: MapService) {
       mapboxgl.accessToken = environment.mapbox.accessToken;
     }
@@ -43,7 +44,7 @@ export class MapBoxComponent implements OnInit {
     }
 
     getEvents() {
-      this._mapService.getEvents().subscribe(
+      this._mapService.getAllEvents().subscribe(
         (data) => {
           this.mapEvents = data;
           console.log(data);
@@ -65,14 +66,47 @@ export class MapBoxComponent implements OnInit {
         });
       }
 
-      this.buildMap()
+      this.buildMap();
+      let today = new Date();
+      this.addData(today.getDate(), today.getMonth(), today.getFullYear());
     }
 
-    addControls(): void {
+    addData(d: number, m: number, y: number): void {
+      this.keyUrl = this._mapService.getEventsOnDateURL(d, m, y);
+      const myS = "hi";
+      this.map.on('load', () => {
+        console.log(myS);
+        this.map.addSource('events', { type: 'geojson', data: this.keyUrl });
+        // map.addSource('currloc', { type: 'geojson', data: currData });
 
+        this.map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
+          if (error) throw error;
+          this.map.addImage('pin', image);
+          this.map.addLayer({
+            "id": "eventlayer",
+            "type": "symbol",
+            "source":"events",
+            "layout": {
+              "icon-image": "pin",
+              "icon-size":.06,
+              "icon-allow-overlap": true
+            }
+          });
+
+          // map.addLayer({
+          //   "id": "currloc",
+          //   "type": "symbol",
+          //   "source":"currloc",
+          //   "layout": {
+          //     "visibility": "none",
+          //     "icon-image": "pin",
+          //     "icon-size":.08,
+          //     "icon-allow-overlap": true
+          //   }
+          // });
+        });
+      });
     }
-
-
 
 
     //   /// Add map controls
