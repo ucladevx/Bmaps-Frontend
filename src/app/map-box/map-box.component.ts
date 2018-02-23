@@ -18,7 +18,7 @@ export class MapBoxComponent implements OnInit {
 
     // data
     source: any;
-    mapEvents: FeatureCollection;
+    // mapEvents: FeatureCollection;
     keyUrl: string;
 
     constructor(private _mapService: MapService) {
@@ -26,7 +26,7 @@ export class MapBoxComponent implements OnInit {
     }
 
     ngOnInit() {
-      this.getEvents();
+      // this.getEvents();
       this.initializeMap()
     }
 
@@ -43,16 +43,16 @@ export class MapBoxComponent implements OnInit {
       });
     }
 
-    getEvents() {
-      this._mapService.getAllEvents().subscribe(
-        (data) => {
-          this.mapEvents = data;
-          console.log(data);
-         },
-        err => console.error(err),
-        () => console.log('done loading events')
-      );
-    }
+    // getEvents() {
+    //   this._mapService.getAllEvents().subscribe(
+    //     (data) => {
+    //       this.mapEvents = data;
+    //       console.log(data);
+    //      },
+    //     err => console.error(err),
+    //     () => console.log('done loading events')
+    //   );
+    // }
 
     private initializeMap() {
       /// locate the user
@@ -70,6 +70,12 @@ export class MapBoxComponent implements OnInit {
       let today = new Date();
       this.addData(today.getDate(), today.getMonth(), today.getFullYear());
       this.addControls();
+      //this.threeDDisplay();
+      this.map.on('load', this.threeDDisplay);
+    }
+
+    startMap(): void {
+      this.threeDDisplay();
     }
 
     addData(d: number, m: number, y: number): void {
@@ -119,16 +125,46 @@ export class MapBoxComponent implements OnInit {
       });
     }
 
-    //TODO: this doesn't seem to be working
     addControls(): void {
-      // this.map.addControl(new mapboxgl.GeolocateControl({
-      // 	positionOptions: {
-      //   		enableHighAccuracy: true
-      //   	},
-      //   	fitBoundsOptions: {maxZoom: 17.7, speed: .3},
-      //   	trackUserLocation: true
-      // }));
-      // this.map.addControl(new mapboxgl.NavigationControl());
-      // this.map.addControl(new mapboxgl.FullscreenControl());
+      this.map.addControl(new mapboxgl.GeolocateControl({
+      	positionOptions: {
+        		enableHighAccuracy: true
+        	},
+        	fitBoundsOptions: {maxZoom: 17.7, speed: .3},
+        	trackUserLocation: true
+      }));
+      this.map.addControl(new mapboxgl.NavigationControl());
+    }
+
+    private threeDDisplay(): void {
+    	// Insert the layer beneath any symbol layer.
+    	// let layers = this.map.getStyle().layers.reverse();
+    	// let labelLayerIdx = layers.findIndex((layer) => {
+    	// 	return layer.type !== 'symbol';
+    	// });
+      console.log(this.lat);
+    	// this.map.addLayer({
+    	// 	'id': 'ucla-buildings',
+    	// 	'source': 'composite',
+    	// 	'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
+    	// 	// 'source-layer': 'UCLA_Buildings', // UCLA Buildings
+    	// 	'filter': ['==', 'extrude', 'true'],
+    	// 	'type': 'fill-extrusion',
+    	// 	'minzoom': 15,
+    	// 	'paint': {
+    	// 		'fill-extrusion-color': '#aaa',
+    	// 		'fill-extrusion-height': {
+    	// 			'property': 'height',
+    	// 			'type': 'identity'
+    	// 		},
+    	// 		'fill-extrusion-base': {
+    	// 			'property': 'min_height',
+    	// 			'type': 'identity',
+    	// 		},
+    			// 'fill-extrusion-height': 20,
+    			// 'fill-extrusion-base': 0,
+    			'fill-extrusion-opacity': 0.5
+    		}
+    	}, "eventstest");
     }
 }
