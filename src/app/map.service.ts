@@ -5,14 +5,25 @@ import { Observable } from 'rxjs/Rx';
 import { GeoJson, FeatureCollection } from './map';
 import * as mapboxgl from 'mapbox-gl';
 
+private class SelectedDate {
+    day: number;
+    month: number;
+    year: number;
+}
+
 @Injectable()
 export class MapService {
   private baseEventsUrl = "http://www.whatsmappening.io/api/v1";
-
-  constructor(private http: HttpClient) { }
+  private date: SelectedDate;
+  
+  constructor(private http: HttpClient) {
+      let today = new Date();
+      this.date = { day: today.getDate(), month: today.getMonth(), year: today.getFullYear()}; 
+      this.getAllEvents();
+  }
 
   getAllEvents(): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${this.baseEventsUrl}/events`);
+    return this.http.get<FeatureCollection>(this.getEventsOnDateURL(this.date.day, this.date.month, this.date.year));
   }
 
   //could just define an enum here

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../event';
 import { EVENTS } from '../mock-events';
+import { MapService } from '../map.service'
 
 @Component({
   selector: 'app-sidebar',
@@ -9,14 +10,20 @@ import { EVENTS } from '../mock-events';
 })
 export class SidebarComponent implements OnInit {
 
-  events = EVENTS;
+  private events;
 
   selectedEvent: Event;
 
 
-  constructor() { }
+  constructor(private mapService: MapService) { }
 
   ngOnInit() {
+      this.getEvents();
+  }
+  
+  getEvents(): void {
+      //console.log(this.mapService.getAllEvents().features);
+      this.mapService.getAllEvents().subscribe(events => this.events = events.features)
   }
 
   onSelect(event: Event): void {
