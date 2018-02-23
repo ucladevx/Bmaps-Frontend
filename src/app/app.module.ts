@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { MapBoxComponent } from './map-box/map-box.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
+import { CategoryBarComponent } from './category-bar/category-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapBoxComponent,
     SidebarComponent,
-    EventDetailComponent
+    EventDetailComponent,
+    CategoryBarComponent
   ],
   imports: [
     BrowserModule,
