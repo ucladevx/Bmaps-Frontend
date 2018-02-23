@@ -20,7 +20,7 @@ export class MapBoxComponent implements OnInit {
     source: any;
     mapEvents: FeatureCollection;
     keyUrl: string;
-    
+
     constructor(private _mapService: MapService) {
       mapboxgl.accessToken = environment.mapbox.accessToken;
     }
@@ -69,112 +69,66 @@ export class MapBoxComponent implements OnInit {
       this.buildMap();
       let today = new Date();
       this.addData(today.getDate(), today.getMonth(), today.getFullYear());
+      this.addControls();
     }
 
     addData(d: number, m: number, y: number): void {
       this.keyUrl = this._mapService.getEventsOnDateURL(d, m, y);
-      const myS = "hi";
+      let currLocation: FeatureCollection =
+      { "type": "FeatureCollection",
+  				"features": [
+  					{"type": "Feature",
+  						"geometry": {
+  								"type": "Point",
+  								"coordinates": [this.lng, this.lat]
+  						}
+  					}
+  				]
+      };
       this.map.on('load', () => {
-        console.log(myS);
         this.map.addSource('events', { type: 'geojson', data: this.keyUrl });
-        // map.addSource('currloc', { type: 'geojson', data: currData });
+        this.map.addSource('currloc', { type: 'geojson', data: currLocation });
 
-        this.map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
-          if (error) throw error;
-          this.map.addImage('pin', image);
+        this.map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png',
+          (error, image) => {
+            if (error) throw error;
+            this.map.addImage('pin', image);
+            this.map.addLayer({
+              "id": "eventlayer",
+              "type": "symbol",
+              "source":"events",
+              "layout": {
+                "icon-image": "pin",
+                "icon-size":.06,
+                "icon-allow-overlap": true
+              }
+            });
+
           this.map.addLayer({
-            "id": "eventlayer",
+            "id": "currloc",
             "type": "symbol",
-            "source":"events",
+            "source":"currloc",
             "layout": {
+              // "visibility": "none",
               "icon-image": "pin",
-              "icon-size":.06,
+              "icon-size":.08,
               "icon-allow-overlap": true
             }
           });
-
-          // map.addLayer({
-          //   "id": "currloc",
-          //   "type": "symbol",
-          //   "source":"currloc",
-          //   "layout": {
-          //     "visibility": "none",
-          //     "icon-image": "pin",
-          //     "icon-size":.08,
-          //     "icon-allow-overlap": true
-          //   }
-          // });
         });
       });
     }
 
-
-    //   /// Add map controls
-    //   this.map.addControl(new mapboxgl.NavigationControl());
-    //
-    //
-    //   //// Add Marker on Click
-    //   this.map.on('click', (event) => {
-    //     const coordinates = [event.lngLat.lng, event.lngLat.lat]
-    //     const newMarker   = new GeoJson(coordinates, { message: this.message })
-    //     this.mapService.createMarker(newMarker)
-    //   })
-    //
-    //
-    //   /// Add realtime firebase data on map load
-    //   this.map.on('load', (event) => {
-    //
-    //     /// register source
-    //     this.map.addSource('firebase', {
-    //        type: 'geojson',
-    //        data: {
-    //          type: 'FeatureCollection',
-    //          features: []
-    //        }
-    //     });
-    //
-    //     /// get source
-    //     this.source = this.map.getSource('firebase')
-    //
-    //     /// subscribe to realtime database and set data source
-    //     this.markers.subscribe(markers => {
-    //         let data = new FeatureCollection(markers)
-    //         this.source.setData(data)
-    //     })
-    //
-    //     /// create map layers with realtime data
-    //     this.map.addLayer({
-    //       id: 'firebase',
-    //       source: 'firebase',
-    //       type: 'symbol',
-    //       layout: {
-    //         'text-field': '{message}',
-    //         'text-size': 24,
-    //         'text-transform': 'uppercase',
-    //         'icon-image': 'rocket-15',
-    //         'text-offset': [0, 1.5]
-    //       },
-    //       paint: {
-    //         'text-color': '#f16624',
-    //         'text-halo-color': '#fff',
-    //         'text-halo-width': 2
-    //       }
-    //     })
-    //
-    //   })
-    //
-    // }
-    //
-    //
-    // /// Helpers
-    //
-    // removeMarker(marker) {
-    //   this.mapService.removeMarker(marker.$key)
-    // }
-    //
-    // flyTo(data: GeoJson) {
-    //   this.map.flyTo({
-    //     center: data.geometry.coordinates
-    //   })
-    // }
+    //TODO: this doesn't seem to be working
+    addControls(): void {
+      // this.map.addControl(new mapboxgl.GeolocateControl({
+      // 	positionOptions: {
+      //   		enableHighAccuracy: true
+      //   	},
+      //   	fitBoundsOptions: {maxZoom: 17.7, speed: .3},
+      //   	trackUserLocation: true
+      // }));
+      // this.map.addControl(new mapboxgl.NavigationControl());
+      // this.map.addControl(new mapboxgl.FullscreenControl());
+    }
 }
