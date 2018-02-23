@@ -7,12 +7,14 @@ import { MapService } from './map.service';
 import { AppComponent } from './app.component';
 import { MapBoxComponent } from './map-box/map-box.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { EventDetailComponent } from './event-detail/event-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapBoxComponent,
-    SidebarComponent
+    SidebarComponent,
+    EventDetailComponent
   ],
   imports: [
     BrowserModule,
