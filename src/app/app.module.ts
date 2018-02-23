@@ -9,6 +9,7 @@ import { MapBoxComponent } from './map-box/map-box.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 import { CategoryBarComponent } from './category-bar/category-bar.component';
+import { CategoryService } from './category.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { CategoryBarComponent } from './category-bar/category-bar.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [MapService],
+  providers: [MapService, CategoryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
