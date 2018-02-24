@@ -13,7 +13,7 @@ export class MapBoxComponent implements OnInit {
     // default settings
     map: mapboxgl.Map;
     message = 'Hello World!';
-    lat = 34.066915;
+    lat = 34.066915; //default center of map, used for user location
     lng = -118.445320
 
     // data
@@ -26,8 +26,14 @@ export class MapBoxComponent implements OnInit {
     }
 
     ngOnInit() {
-      // this.getEvents();
-      this.initializeMap()
+      this.buildMap();
+      this.addUserLocation();
+
+      let today = new Date();
+      this.addData(today.getDate(), today.getMonth(), today.getFullYear());
+      this.addControls();
+      //this.threeDDisplay();
+      this.map.on('load', this.threeDDisplay);
     }
 
     buildMap() {
@@ -54,9 +60,10 @@ export class MapBoxComponent implements OnInit {
     //   );
     // }
 
-    private initializeMap() {
-      /// locate the user
+    addUserLocation() {
+      //if location activated
       if (navigator.geolocation) {
+        //locate user and fly map
          navigator.geolocation.getCurrentPosition(position => {
           this.lat = position.coords.latitude;
           this.lng = position.coords.longitude;
@@ -64,14 +71,37 @@ export class MapBoxComponent implements OnInit {
             center: [this.lng, this.lat]
           })
         });
-      }
 
-      this.buildMap();
-      let today = new Date();
-      this.addData(today.getDate(), today.getMonth(), today.getFullYear());
-      this.addControls();
-      //this.threeDDisplay();
-      this.map.on('load', this.threeDDisplay);
+        let currLocation: FeatureCollection =
+        { "type": "FeatureCollection",
+    				"features": [
+    					{"type": "Feature",
+    						"geometry": {
+    								"type": "Point",
+    								"coordinates": [this.lng, this.lat]
+    						}
+    					}
+    				]
+        };
+
+        this.map.on('load', () => {
+          this.map.addSource('currloc', { type: 'geojson', data: currLocation });
+
+          this.map.addLayer({
+            "id": "currloc",
+            "type": "symbol",
+            "source":"currloc",
+            "layout": {
+              // "visibility": "none",
+              "icon-image": "pin",
+              "icon-size":.08,
+              "icon-allow-overlap": true
+            }
+          });
+
+        });
+
+      }
     }
 
     startMap(): void {
@@ -80,20 +110,8 @@ export class MapBoxComponent implements OnInit {
 
     addData(d: number, m: number, y: number): void {
       this.keyUrl = this._mapService.getEventsOnDateURL(d, m, y);
-      let currLocation: FeatureCollection =
-      { "type": "FeatureCollection",
-  				"features": [
-  					{"type": "Feature",
-  						"geometry": {
-  								"type": "Point",
-  								"coordinates": [this.lng, this.lat]
-  						}
-  					}
-  				]
-      };
       this.map.on('load', () => {
         this.map.addSource('events', { type: 'geojson', data: this.keyUrl });
-        this.map.addSource('currloc', { type: 'geojson', data: currLocation });
 
         this.map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png',
           (error, image) => {
@@ -109,18 +127,6 @@ export class MapBoxComponent implements OnInit {
                 "icon-allow-overlap": true
               }
             });
-
-          this.map.addLayer({
-            "id": "currloc",
-            "type": "symbol",
-            "source":"currloc",
-            "layout": {
-              // "visibility": "none",
-              "icon-image": "pin",
-              "icon-size":.08,
-              "icon-allow-overlap": true
-            }
-          });
         });
       });
     }
@@ -163,8 +169,8 @@ export class MapBoxComponent implements OnInit {
     	// 		},
     			// 'fill-extrusion-height': 20,
     			// 'fill-extrusion-base': 0,
-    			'fill-extrusion-opacity': 0.5
-    		}
-    	}, "eventstest");
+    	// 		'fill-extrusion-opacity': 0.5
+    	// 	}
+    	// }, "eventstest");
     }
 }
