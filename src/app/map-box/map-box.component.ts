@@ -33,7 +33,9 @@ export class MapBoxComponent implements OnInit {
       this.addData(today.getDate(), today.getMonth(), today.getFullYear());
       this.addControls();
       //this.threeDDisplay();
-      this.map.on('load', this.threeDDisplay);
+      this.map.on('load', () => {
+        this.threeDDisplay();
+      });
     }
 
     buildMap() {
@@ -104,10 +106,6 @@ export class MapBoxComponent implements OnInit {
       }
     }
 
-    startMap(): void {
-      this.threeDDisplay();
-    }
-
     addData(d: number, m: number, y: number): void {
       this.keyUrl = this._mapService.getEventsOnDateURL(d, m, y);
       this.map.on('load', () => {
@@ -142,35 +140,35 @@ export class MapBoxComponent implements OnInit {
       this.map.addControl(new mapboxgl.NavigationControl());
     }
 
-    private threeDDisplay(): void {
+    threeDDisplay(): void {
     	// Insert the layer beneath any symbol layer.
-    	// let layers = this.map.getStyle().layers.reverse();
-    	// let labelLayerIdx = layers.findIndex((layer) => {
-    	// 	return layer.type !== 'symbol';
-    	// });
-      console.log(this.lat);
-    	// this.map.addLayer({
-    	// 	'id': 'ucla-buildings',
-    	// 	'source': 'composite',
-    	// 	'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
-    	// 	// 'source-layer': 'UCLA_Buildings', // UCLA Buildings
-    	// 	'filter': ['==', 'extrude', 'true'],
-    	// 	'type': 'fill-extrusion',
-    	// 	'minzoom': 15,
-    	// 	'paint': {
-    	// 		'fill-extrusion-color': '#aaa',
-    	// 		'fill-extrusion-height': {
-    	// 			'property': 'height',
-    	// 			'type': 'identity'
-    	// 		},
-    	// 		'fill-extrusion-base': {
-    	// 			'property': 'min_height',
-    	// 			'type': 'identity',
-    	// 		},
+      let layers = this.map.getStyle().layers.reverse();
+    	let labelLayerIdx = layers.findIndex(function (layer) {
+    		return layer.type !== 'symbol';
+    	});
+
+    	this.map.addLayer({
+    		'id': 'ucla-buildings',
+    		'source': 'composite',
+    		'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
+    		// 'source-layer': 'UCLA_Buildings', // UCLA Buildings
+    		'filter': ['==', 'extrude', 'true'],
+    		'type': 'fill-extrusion',
+    		'minzoom': 15,
+    		'paint': {
+    			'fill-extrusion-color': '#aaa',
+    			'fill-extrusion-height': {
+    				'property': 'height',
+    				'type': 'identity'
+    			},
+    			'fill-extrusion-base': {
+    				'property': 'min_height',
+    				'type': 'identity',
+    			},
     			// 'fill-extrusion-height': 20,
     			// 'fill-extrusion-base': 0,
-    	// 		'fill-extrusion-opacity': 0.5
-    	// 	}
-    	// }, "eventstest");
+    			'fill-extrusion-opacity': 0.5
+    		}
+    	}, "eventstest");
     }
 }
