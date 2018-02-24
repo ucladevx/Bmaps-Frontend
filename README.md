@@ -5,7 +5,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Using Bootstrap with Angular
 
 This project uses [ngx-bootstrap](https://valor-software.com/ngx-bootstrap/#/getting-started).
-Refer to it's documentation.
+Refer to it's documentation for how to include Bootstrap modules.
+Refer to [Bootstrap v4.0](https://getbootstrap.com/docs/4.0/getting-started/introduction/)'s documentation for any styling.
 
 ## Development server
 
