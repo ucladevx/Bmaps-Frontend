@@ -32,7 +32,6 @@ export class MapBoxComponent implements OnInit {
       let today = new Date();
       this.addData(today.getDate(), today.getMonth(), today.getFullYear());
       this.addControls();
-      //this.threeDDisplay();
       this.map.on('load', () => {
         this.threeDDisplay();
       });
@@ -51,58 +50,56 @@ export class MapBoxComponent implements OnInit {
       });
     }
 
-    // getEvents() {
-    //   this._mapService.getAllEvents().subscribe(
-    //     (data) => {
-    //       this.mapEvents = data;
-    //       console.log(data);
-    //      },
-    //     err => console.error(err),
-    //     () => console.log('done loading events')
-    //   );
-    // }
+    //assumes pin image and map already loaded
+    addPinToLocation(id: string, latitude: number, longitude: number, icon: string) {
+      let currLocation: FeatureCollection =
+      { "type": "FeatureCollection",
+          "features": [
+            {"type": "Feature",
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [longitude, latitude]
+              }
+            }
+          ]
+      };
+
+      this.map.addSource(id, { type: 'geojson', data: currLocation });
+
+      this.map.addLayer({
+        "id": id,
+        "type": "symbol",
+        "source":"currloc",
+        "layout": {
+          // "visibility": "none",
+          "icon-image": icon,
+          "icon-size":.08,
+          "icon-allow-overlap": true
+        }
+      }
+    }
 
     addUserLocation() {
       //if location activated
       if (navigator.geolocation) {
-        //locate user and fly map
-         navigator.geolocation.getCurrentPosition(position => {
+        //locate user
+        navigator.geolocation.getCurrentPosition(position => {
           this.lat = position.coords.latitude;
           this.lng = position.coords.longitude;
-          this.map.flyTo({
-            center: [this.lng, this.lat]
-          })
+          // this.map.flyTo({
+          //   center: [this.lng, this.lat]
+          // })
+
+          //if map loaded add immediately, else wait until loaded
+          if(this.map.loaded()) {
+            this.addPinToLocation("currloc", this.lat, this.lng, "pin");
+          }
+          else {
+            this.map.on('load', () => {
+              this.addPinToLocation("currloc", this.lat, this.lng, "pin");
+            });
+          }
         });
-
-        let currLocation: FeatureCollection =
-        { "type": "FeatureCollection",
-    				"features": [
-    					{"type": "Feature",
-    						"geometry": {
-    								"type": "Point",
-    								"coordinates": [this.lng, this.lat]
-    						}
-    					}
-    				]
-        };
-
-        this.map.on('load', () => {
-          this.map.addSource('currloc', { type: 'geojson', data: currLocation });
-
-          this.map.addLayer({
-            "id": "currloc",
-            "type": "symbol",
-            "source":"currloc",
-            "layout": {
-              // "visibility": "none",
-              "icon-image": "pin",
-              "icon-size":.08,
-              "icon-allow-overlap": true
-            }
-          });
-
-        });
-
       }
     }
 
