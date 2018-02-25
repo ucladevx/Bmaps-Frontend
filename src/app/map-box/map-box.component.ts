@@ -13,13 +13,15 @@ export class MapBoxComponent implements OnInit {
     // default settings
     map: mapboxgl.Map;
     message = 'Hello World!';
-    lat = 34.066915; //default center of map, used for user location
+    lat = 34.066915; //default center of map, variables used for user location/naviagation center
     lng = -118.445320
 
     // data
     source: any;
-    // mapEvents: FeatureCollection;
     keyUrl: string;
+
+    // style
+    pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
 
     constructor(private _mapService: MapService) {
       mapboxgl.accessToken = environment.mapbox.accessToken;
@@ -27,14 +29,43 @@ export class MapBoxComponent implements OnInit {
 
     ngOnInit() {
       this.buildMap();
-      this.addUserLocation();
+      //I think you should use something like this to create all the promises once instead of calling promiseMapLoad() several times
+      let _promiseMapLoad = this.promiseMapLoad()
+      let _promiseGetUserLocation = this.promiseGetUserLocation()
+      let _promisePinLoad = this.promiseImageLoad(this.pinUrl)
 
-      let today = new Date();
-      this.addData(today.getDate(), today.getMonth(), today.getFullYear());
-      this.addControls();
-      this.map.on('load', () => {
+      _promiseMapLoad.then(() => {
         this.threeDDisplay();
       });
+
+      let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
+      promise_map_pin.then((promiseReturns) => {
+        let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+        let today = new Date();
+        this.keyUrl = this._mapService.getEventsOnDateURL(today.getDate(), today.getMonth(), today.getFullYear());
+
+        //can change the url to a static geojson object from the service
+        this.map.addSource('events', { type: 'geojson', data: this.keyUrl });
+
+        this.map.addImage('pin', image);
+        this.map.addLayer({
+          "id": "eventlayer",
+          "type": "symbol",
+          "source":"events",
+          "layout": {
+            "icon-image": "pin",
+            "icon-size":.06,
+            "icon-allow-overlap": true
+          }
+        });
+      });
+
+      let promise_map_userloc_pin = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad]);
+      promise_map_userloc_pin.then( () => {
+        this.addPinToLocation("currloc", this.lat, this.lng, "pin");
+      });
+
+      this.addControls();
     }
 
     buildMap() {
@@ -50,7 +81,6 @@ export class MapBoxComponent implements OnInit {
       });
     }
 
-    //assumes pin image and map already loaded
     addPinToLocation(id: string, latitude: number, longitude: number, icon: string) {
       let currLocation: FeatureCollection =
       { "type": "FeatureCollection",
@@ -69,7 +99,7 @@ export class MapBoxComponent implements OnInit {
       this.map.addLayer({
         "id": id,
         "type": "symbol",
-        "source":"currloc",
+        "source":id,
         "layout": {
           // "visibility": "none",
           "icon-image": icon,
@@ -77,53 +107,6 @@ export class MapBoxComponent implements OnInit {
           "icon-allow-overlap": true
         }
       }
-    }
-
-    addUserLocation() {
-      //if location activated
-      if (navigator.geolocation) {
-        //locate user
-        navigator.geolocation.getCurrentPosition(position => {
-          this.lat = position.coords.latitude;
-          this.lng = position.coords.longitude;
-          // this.map.flyTo({
-          //   center: [this.lng, this.lat]
-          // })
-
-          //if map loaded add immediately, else wait until loaded
-          if(this.map.loaded()) {
-            this.addPinToLocation("currloc", this.lat, this.lng, "pin");
-          }
-          else {
-            this.map.on('load', () => {
-              this.addPinToLocation("currloc", this.lat, this.lng, "pin");
-            });
-          }
-        });
-      }
-    }
-
-    addData(d: number, m: number, y: number): void {
-      this.keyUrl = this._mapService.getEventsOnDateURL(d, m, y);
-      this.map.on('load', () => {
-        this.map.addSource('events', { type: 'geojson', data: this.keyUrl });
-
-        this.map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png',
-          (error, image) => {
-            if (error) throw error;
-            this.map.addImage('pin', image);
-            this.map.addLayer({
-              "id": "eventlayer",
-              "type": "symbol",
-              "source":"events",
-              "layout": {
-                "icon-image": "pin",
-                "icon-size":.06,
-                "icon-allow-overlap": true
-              }
-            });
-        });
-      });
     }
 
     addControls(): void {
@@ -167,5 +150,46 @@ export class MapBoxComponent implements OnInit {
     			'fill-extrusion-opacity': 0.5
     		}
     	}, "eventstest");
+    }
+
+    ///////////////////////////////////////
+    // MAP CALLBACKS AS PROMISES
+    //////////////////////////////////////
+    promiseMapLoad() {
+      return new Promise((resolve, reject) => {
+        this.map.on('load', () => {
+          resolve();
+        })
+      });
+    }
+
+    promiseImageLoad(url) {
+      return new Promise((resolve, reject) => {
+        this.map.loadImage(url, (error, image) => {
+          if(error) {
+            reject(error);
+          } else {
+            resolve(image);
+          }
+        });
+      });
+    }
+
+    //puts User location in this.lat and this.lng
+    promiseGetUserLocation() {
+      return new Promise((resolve, reject) => {
+        //if location activated
+        if (navigator.geolocation) {
+          //locate user
+          navigator.geolocation.getCurrentPosition(position => {
+            this.lat = position.coords.latitude;
+            this.lng = position.coords.longitude;
+            resolve();
+          }
+        }
+        else {
+          reject();
+        }
+      }
     }
 }
