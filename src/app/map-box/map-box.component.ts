@@ -29,7 +29,7 @@ export class MapBoxComponent implements OnInit {
 
     ngOnInit() {
       this.buildMap();
-      //I think you should use something like this to create all the promises once instead of calling promiseMapLoad() several times
+      //I think you should use something like this to create all the promises once instead of calling function creating promise several times
       let _promiseMapLoad = this.promiseMapLoad()
       let _promiseGetUserLocation = this.promiseGetUserLocation()
       let _promisePinLoad = this.promiseImageLoad(this.pinUrl)
@@ -41,23 +41,11 @@ export class MapBoxComponent implements OnInit {
       let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
       promise_map_pin.then((promiseReturns) => {
         let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+        this.map.addImage('pin', image);
+
         let today = new Date();
         this.keyUrl = this._mapService.getEventsOnDateURL(today.getDate(), today.getMonth(), today.getFullYear());
-
-        //can change the url to a static geojson object from the service
-        this.map.addSource('events', { type: 'geojson', data: this.keyUrl });
-
-        this.map.addImage('pin', image);
-        this.map.addLayer({
-          "id": "eventlayer",
-          "type": "symbol",
-          "source":"events",
-          "layout": {
-            "icon-image": "pin",
-            "icon-size":.06,
-            "icon-allow-overlap": true
-          }
-        });
+        this.addEventLayer(this.keyUrl)
       });
 
       let promise_map_userloc_pin = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad]);
@@ -66,6 +54,23 @@ export class MapBoxComponent implements OnInit {
       });
 
       this.addControls();
+    }
+
+    addEventLayer(data): void {
+      //TODO: Add Removal of previous event layer
+      //can change the url to a static geojson object from the service
+      this.map.addSource('events', { type: 'geojson', data: data });
+
+      this.map.addLayer({
+        "id": "eventlayer",
+        "type": "symbol",
+        "source":"events",
+        "layout": {
+          "icon-image": "pin",
+          "icon-size":.06,
+          "icon-allow-overlap": true
+        }
+      });
     }
 
     buildMap() {
