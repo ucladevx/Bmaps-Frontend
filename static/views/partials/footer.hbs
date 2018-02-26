@@ -10,35 +10,50 @@
 <!-- <script src="../../js/jquery.quickfit.js" type="text/javascript" /> -->
 <!-- CATEGORY NAMES HANDLEBARS SCRIPT-->
 <script id="category-dropdown-template" type="text/x-handlebars-template">
-    <div class="dropdown sidebar-header">
-        <p data-toggle="dropdown" id="categ-dropdown-text">
-            all categories &nbsp;
-        <span class="caret"></span></p>
-        <ul class="dropdown-menu">
-        \{{#each categDrop}}
-          \{{#if this.numEvents}}
-            <li><a class="categLink"><span class="categName">\{{this.category}}</span><span class="badge">\{{this.numEvents}}</span></a></li>
-          \{{else}}
-            <li><a class="categLink" style="color:#bebebe;"><span class="categName">\{{this.category}}</span></a></li>
-          \{{/if}}
-        \{{/each}}
-        </ul>
-    </div>
+		<div class="dropdown sidebar-header">
+			<p data-toggle="dropdown" id="categ-dropdown-text">
+					all categories &nbsp;
+			<span class="caret"></span></p>
+			<ul class="dropdown-menu">
+			\{{#each categDrop}}
+				\{{#if this.numEvents}}
+					<li><a class="categLink"><span class="categName">\{{this.category}}</span><span class="badge">\{{this.numEvents}}</span></a></li>
+				\{{else}}
+					<li><a class="categLink" style="color:#bebebe;"><span class="categName">\{{this.category}}</span></a></li>
+				\{{/if}}
+			\{{/each}}
+			</ul>
+		</div>
 </script>
 <script src="../../js/map.js"></script>
+<script src="../../js/event.js"></script>
 <!--  SIDEBAR EVENTS HANDLEBARS SCRIPT-->
 <script id="sidebar-event-template" type="text/x-handlebars-template">
   <div class="sidebar">
+  	<div class="hide event-container" id="one-event">
+  		<div class="event-header">
+			<i class="glyphicon glyphicon-chevron-left" id="left-chevron" onclick="hideEvent();"></i>
+		</div>
+  		<div class="event-body">
+			<img class="event-image" src="" id="modal-image">
+			<div class="event-title" id="event-title"></div>
+			<div class="event-info" id="event-info"></div>
+			<div class="event-description" id="event-description"></div>
+		</div>
+	</div>
       <!-- `events` is passed from main.js's API Call -->
       <!-- We iterate through each of these objects and append them using the template -->
+      <div class="event-list">
       \{{#if events}}
         \{{#each events}}
-        <a class="event event-trigger-modal sidebar-event" onclick="zoomToEventLocation(\{{{this.geometry.coordinates}}},{{{this.geometry.coordinates}}})">
-            <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
-            <div class="sidebar-event-details">
+        <a class="event event-trigger-modal sidebar-event" onclick="showEvent(\{{{json this}}});">
+            <div class="sidebar-event-img-container col-sm-7 col-md-7 col-lg-7">
+                <img src="\{{this.properties.cover_picture}}" class="sidebar-event-img"></img>
+            </div>
+            <div class="sidebar-event-details col-sm-5 col-md-5 col-lg-5">
                 <p class="sidebar-event-name">\{{this.properties.event_name}}</p>
-                <p class="sidebar-event-date">\{{this.properties.start_time}}</p>
-                <p class="sidebar-event-location">
+                <p class="sidebar-event-date">\{{{this.properties.start_time}}}
+                &middot;
                   \{{#if this.properties.venue.name}}
                       \{{this.properties.venue.name}}
                   \{{else}}
@@ -53,35 +68,11 @@
       \{{else}}
         <h3 class="no-events-text">No Events</h3>
       \{{/if}}
+      </div>
   </div>
 </script>
-<script src="../../js/modal.js"></script>
 
 <footer>
-<footer>
-  <div class="modal-container hide event-modal-container">
-    <div class="my-modal event-modal" id="event-modal">
-      <!-- <div class="modal-x">&times</div> -->
-      <div class="event-header">
-        <i class="glyphicon glyphicon-chevron-left" id="left-chevron"></i>
-      </div>
-      <img class="modal-x" src="../../img/modal-x.png">
-      <img class="event-image" src="" id="modal-image">
-      <!-- <div class="event-info"> -->
-        <div class="event-title" id="event-title"></div>
-        <div class="event-left" id="event-left">
-          <!-- <div class="event-title" id="event-day"></div> -->
-          <div class="event-text" id="event-date"></div>
-          <div class="event-text" id="event-time"></div>
-          <div class="event-text" id="event-location"></div>
-        </div> <!-- event-left -->
-        <div class="event-line"><hr style="height:1px;border:none;color:rgb(126, 126, 126);background-color:rgb(126, 126, 126);margin-top:10px;margin-bottom:10px;"/></div>
-        <div class="event-right" id="event-description">No event description has been written at this time.</div>
-      <!-- </div> -->
-    </div> <!-- modal sign-up-modal -->
-    <div class="modal-overlay" onClick="hideModal('event')"></div>
-  </div> <!-- modal-container hide sign-up-modal-container -->
-</footer>
 </footer>
 
 </body>

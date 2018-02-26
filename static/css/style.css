@@ -1,9 +1,12 @@
 /*--------------------------------------- EVERYTHING ---------------------------------------*/
+html{
+    overflow: hidden;
+}
 
 body {
     font:15px arial,sans-serif;
-    background: rgb(251, 250, 250);
-    margin-top: 70px;
+    background: rgb(237, 237, 237);
+    margin-top: 51px;
     font-family: 'Poppins', sans-serif;
 }
 h1 {
@@ -30,6 +33,20 @@ td a {
     color: #000;
     text-decoration: underline;
 }
+
+*:hover, a:hover{
+    cursor: pointer;
+}
+
+input[type="text"] {
+    border: none;
+    background: white;
+}
+
+.form-control{
+    box-shadow: none;
+}
+
 
 /*---------------------------------------NAVBAR---------------------------------------*/
 .navbar {
@@ -69,6 +86,9 @@ td a {
 
 .navbar-form{
     display: inline-block;
+    margin: 0px;
+    margin-bottom: 1%;
+    margin-top: 1%;
 }
 
 .no-display{
@@ -118,44 +138,22 @@ input::-webkit-calendar-picker-indicator {
     color: white;
 }
 
-/* MEDIA QUERIES FOR RESIZING SEARCH BAR*/
-/* definitely should be doing it dynamically but attempts were unsucessful */
 
-#navBarSearchForm input{
-    width:1000px !important;
-}
-
-@media (max-width: 1400px){
-    #navBarSearchForm input{
-        width:800px !important;
-    }
-}
-
-@media (max-width: 1200px){
-    #navBarSearchForm input{
-        width:600px !important;
-    }
-}
-
-@media (max-width: 1000px){
-    #navBarSearchForm input{
-        width:400px !important;
-    }
-}
-
-@media (max-width: 800px){
-    #navBarSearchForm input{
-        width:200px !important;
-    }
+#searchForm, .right-inner-addon {
+    width: 100%;
 }
 
 @media (max-width: 767px){
     .navbar-collapse .navbar-nav{
         float: none !important;
     }
-    #navBarSearchForm input{
+
+    .sidebar-header{
+        padding-top: 1%;
+        padding-bottom: 0%;
+    }
+    /* #navBarSearchForm input{
         outline: none;
-        width: 600px !important;
         border-color: transparent;
     }
     #searchForm{
@@ -168,38 +166,7 @@ input::-webkit-calendar-picker-indicator {
     }
     .form-control{
         box-shadow: none;
-    }
-}
-@media (max-width: 700px){
-    #navBarSearchForm input{
-        width: 525px !important;
-    }
-}
-@media (max-width: 600px){
-    #navBarSearchForm input{
-        width: 425px !important;
-    }
-}
-@media (max-width: 500px){
-    #navBarSearchForm input{
-        width: 325px !important;
-    }
-}
-@media (max-width: 400px){
-    #navBarSearchForm input{
-        width: 225px !important;
-    }
-}
-@media (max-width: 300px){
-    #navBarSearchForm input{
-        width: 125px !important;
-    }
-}
-
-@media (max-width: 200px){
-    #navBarSearchForm input{
-        width: 0px !important;
-    }
+    } */
 }
 
 /* SEARCH ICON*/
@@ -265,12 +232,12 @@ input::-webkit-calendar-picker-indicator {
 /*-------------------------------------SIDEBAR-------------------------------------*/
 
 .home-container{
-    width: 90%;
+    width: 100%;
 }
 
 .home-row{
     display: flex;
-    height: 97%;
+    height: 100%;
 }
 
 #events-mount{
@@ -287,40 +254,52 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .sidebar{
-    height: 90%;
+    height: 87%;
     overflow: scroll;
 }
 
+.search-header{
+    border-bottom: 1px solid rgb(167,167,167);
+
+}
+
 .sidebar-header{
-    background-color: rgb(223,222,221);
-    padding-top: 4%;
-    padding-bottom: 1%;
+    background-color: white;
     box-shadow: -1px 1px 1px rgb(207,207,207);
     text-align: center;
-    color: rgb(70,70,70);
+    color: rgb(116,116,116);
+    font-weight: 500;
+    font-size: 18px;
+    padding-top: 1%;
+    padding-bottom: 1%;
 }
 
 .sidebar-event {
     width: 100%;
-    padding: 5%;
+    padding: 3%;
     box-sizing: border-box;
     display: inline-block;
 }
 
 .sidebar-event-img{
     object-fit: cover;
-    width: 90px;
-    height: 90px;
-    margin-right: 5%;
+    width: 100%;
+    height: 20%;
     vertical-align: top;
 }
 
+.sidebar-event-img-container{
+    display: inline-block;
+    width: 58%;
+}
+
 .sidebar-event-details {
+    display: inline-block;
     font-size: 11px;
-    width: 120px;
     display: inline-block;
     vertical-align: top;
-    color: #403F3F;
+    color: rgb(116,116,116);
+    width: 40%;
 }
 
 .sidebar-event-details p {
@@ -328,8 +307,9 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .sidebar-event-name {
-    color: #FF3A3A;
-    font-weight: bold;
+    color: rgb(116,116,116);
+    font-size: 19px;
+    font-weight: 500;
 }
 
 .dropdown-menu {
@@ -355,6 +335,8 @@ input::-webkit-calendar-picker-indicator {
 #categ-dropdown-text{
     padding-left: 25%;
     padding-right: 25%;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .badge {
@@ -365,7 +347,7 @@ input::-webkit-calendar-picker-indicator {
 #map {
     top:0;
     bottom:0;
-    width: 100%;
+    /* width: 100%; */
     height: 100%;
     box-shadow: -1px 1px 1px #888888;
     padding-left: 0;
@@ -379,21 +361,37 @@ input::-webkit-calendar-picker-indicator {
 
 @media (max-width: 767px){
     #map{
-        height: 45%;
+        height: 64%;
         padding-left: 0%;
+    }
+
+    .map-overlay-inner-searchbox{
+        display: block !important;
+    }
+
+    .form-control-feedback {
+        line-height: 23px !important;
+    }
+
+    .search-header{
+        display: none;
     }
     .home-row{
         height: auto;
+        /* height: 50%; */
         display: block;
     }
     .sidebar-mount{
         margin-right: 0%;
     }
     .sidebar{
-        height: 42%;
+        height: 39%;
     }
     #events-mount{
         height: auto;
+    }
+    .sidebar-event-img{
+        height: 35%;
     }
 }
 
@@ -417,7 +415,7 @@ a.mapboxgl-ctrl-logo {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     position: absolute;
     width: 98%;
-    bottom: 0;
+    top: 12px;
     padding-left: 2%;
     padding-right: 2%;
     z-index: 1;
@@ -440,53 +438,105 @@ datalist{
 Picking Date
 */
 #leftArrow {
-  left:0;
+  transition: color 0.2s ease;
+  position: relative;
+  float:left;
   font-size: 20;
+  color: #656565;
+}
+
+#leftArrow:hover {
+  color: #5dbacd;
+}
+
+#rightArrow:hover {
+  color: #5dbacd;
 }
 
 #rightArrow {
+  transition: color 0.2s ease;
+  position: relative;
   font-size: 20;
+  float:right;
+  color: #656565;
 }
 
 #relativeDay {
-  position: absolute;
-  display: inline-block;
-  font-size: 15;
+  display: inline;
+  font-size: 16;
   width: 100%;
   bottom: 45;
   left: 0;
   text-align: center;
-  font-weight:bolder;
-  -webkit-text-stroke: .05px #FCFCFC;
-  -webkit-text-fill-color: #000000;
+  font-weight:500;
+  /* -webkit-text-stroke: .05px #FCFCFC; */
+  -webkit-text-fill-color: #656565;
 }
 
 #currDate {
-  font-size: 25;
+  font-size: 16;
   position: relative;
   display: inline-block;
   padding: initial;
-  font-weight:bolder;
-  -webkit-text-stroke: .05px #FCFCFC;
-  -webkit-text-fill-color: #000000;
+  font-weight:500;
+  /* -webkit-text-stroke: .05px #FCFCFC; */
+  -webkit-text-fill-color: #656565;
+  letter-spacing: 1px;
+}
+
+.custom-btn {
+  background: none;
+  /* color: inherit; */
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+#map-today-section {
+  margin: 0 auto;
+  width: 80px;
+  margin-top: 5px;
+  display: none;
+}
+
+.today-btn {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 1px 5px #ababab;
+}
+
+.today-btn:hover {
+  background-color: #F5F5F5;
 }
 
 p {
   display: inline-block;
 }
+
+.map-overlay-inner-searchbox {
+    display:none;
+}
+
 .map-overlay .map-overlay-inner {
     font-family: 'Poppins', sans-serif;
     text-align: center;
     font-size: 13;
-    letter-spacing: 2px;
     font-weight: bold;
     vertical-align: middle;
-    line-height: 10px;
+    height: 40px;
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 15px;
+    border-radius: 50px;
+    background-color: white;
+    margin: 1% auto;
+    width: 260px;
+    box-shadow: 0px 2px 5px #ababab;
 }
-
 
 .map-overlay h2 {
     line-height: 24px;
@@ -501,7 +551,7 @@ p {
 }
 
 .map-overlay input {
-    background-color: transparent;
+    /* background-color: transparent; */
     display: inline-block;
     width: 100%;
     position: relative;

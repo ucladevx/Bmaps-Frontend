@@ -75,7 +75,6 @@ map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map
 
 
 });
-initModal();
 });
 
 
@@ -179,8 +178,6 @@ function hoverPopup() {
 		// console.log(e.features[0].properties)
 		//   showModal('sign-up', e.properties);
 		formatDateItem(e.features[0]);
-		console.log(e.features[0]);
-		showModal('event', e.features[0]);
 	});
 }
 

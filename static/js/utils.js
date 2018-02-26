@@ -2,27 +2,44 @@ function getMonthNameFromMonthNumber(monthNumber){
     var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     return monthNames[monthNumber];
 }
-function formatHour(hour){
+function formatHour(hour, minutes){
+    var minuteString = ""
+    if (minutes != 0){
+        minuteString = ":" + minutes;
+    }
     if (hour > 12){
         hour -= 12;
-        return hour + " PM";
+        return hour + minuteString + " PM";
+    }
+    else if (hour == 12){
+        return hour + minuteString + " PM";
+    }
+    else if (hour == 24) {
+        hour -= 12;
+        return hour + minuteString + " AM";
     }
     else{
-        return hour + " AM";
+        return hour +  minuteString + " AM";
     }
+
+
 }
 function formatDate(date) {
     var month = date.getMonth();
     var day = date.getDate();
     var hour = date.getHours();
+    var minutes = date.getMinutes();
+    //console.log(minutes);
+
     if (day < 10){
         day = "0" + day;
     }
-    return getMonthNameFromMonthNumber(month) + " " + day + " | " + formatHour(hour);
+    return getMonthNameFromMonthNumber(month) + " " + day + " &middot; " + formatHour(hour, minutes);
 }
 
 
 function formatDateItem(item) {
+<<<<<<< HEAD
     if (item.properties.start_time.toString().includes("|").toString() == "false") {
       var dateOfStart = new Date(item.properties.start_time);
       var dateOfEnd = new Date(item.properties.end_time);
@@ -35,6 +52,16 @@ function formatDateItem(item) {
   } else {
     return;
   }
+=======
+    var dateOfStart = new Date(item.properties.start_time);
+    var dateOfEnd = new Date(item.properties.end_time);
+    if (item.properties.end_time != "<NONE>"){
+        item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
+    }
+    else {
+        item.properties.start_time = formatDate(dateOfStart);
+    }
+>>>>>>> ca92765acccffb2dbda6717617032eee58abbdad
 }
 
 function formatCategoryItem(item) {
@@ -46,39 +73,41 @@ function formatCategoryItem(item) {
     }
 }
 
+var apiURL = "http://52.53.72.98/api/v1/";
+
 var today = new Date(); //this is being changed somewhere and I can't figure out where
 var todayD = today.getDate();
 var todayM = today.getMonth(); //January is 0!
 var todayY = today.getFullYear();
 
-let todayDate = new Date();
-let milliDay = 86400000;
+var todayDate = new Date();
+var milliDay = 86400000;
 
 var d = todayD;
 var m = todayM;
 var y = todayY;
 
 var currDay = today;
-let currCategoryName = "all categories";
-let currDate = "";
-let currDateJSON = {
+var currCategoryName = "all categories";
+var currDate = "";
+var currDateJSON = {
 	"features": [],
 	"type": "FeatureCollection"
 }
-let currDateFormattedJSON = {
+var currDateFormattedJSON = {
 	"features": [],
 	"type": "FeatureCollection"
 }
-let filteredJSON = {
+var filteredJSON = {
 	"features": [],
 	"type": "FeatureCollection"
 }
 
-let keyUrl = 'http://whatsmappening.io:5000/api/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+var keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
 
 //Setting up datalist with searchbox
-let inputBox = document.getElementById('search-input');
-let list = document.getElementById('searchList');
+var inputBox = document.getElementById('search-input');
+var list = document.getElementById('searchList');
 
 function nextDay() {
 	currDay.setDate(currDay.getDate() + 1);
@@ -92,4 +121,11 @@ function previousDay() {
 	d = currDay.getDate();
 	m = currDay.getMonth();
 	updateDate();
+}
+
+function goToday() {
+  currDay.setFullYear(todayY, todayM, todayD);
+  d = currDay.getDate();
+  m = currDay.getMonth();
+  updateDate();
 }
