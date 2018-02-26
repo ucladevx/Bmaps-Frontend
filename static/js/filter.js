@@ -23,7 +23,7 @@ function updateDate() {
 	//Update keyURL to current date and send to filtering function
 
 	currDateURL = d + " " + getMonthNameFromMonthNumber(m)+ " " + y;
-	keyUrl = 'http://whatsmappening.io:5000/api/event-date/' + currDateURL;
+	keyUrl = 'http://whatsmappening.io:5000/api/event-date/'+ currDateURL;
 	$.getJSON(keyUrl, function(data){
 		//Update currDateFormattedJSON since date changed
 		currDateJSON = data; //make sure to never touch
