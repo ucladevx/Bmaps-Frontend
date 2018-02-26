@@ -37,10 +37,11 @@ export class MapBoxComponent implements OnInit {
       let _promiseGetUserLocation = this.promiseGetUserLocation()
       let _promisePinLoad = this.promiseImageLoad(this.pinUrl)
 
-      //Add 3D buildings and on-hover popup
+      //Add 3D buildings, on-hover popup, and arrowcontrols
       _promiseMapLoad.then(() => {
         this.threeDDisplay();
         this.hoverPopup();
+        this.addArrowControls();
       });
 
       //Add all Events pins
@@ -197,15 +198,15 @@ export class MapBoxComponent implements OnInit {
 
     		// Populate the popup and set its coordinates
     		// based on the feature found.
-    		popup.setLngLat(coords)
-    		.setHTML('<p id=popupEvent></p> <p id=popupDate></p>')
+    		popup.setLngLat([coords[0]-.00015, coords[1]])
+    		.setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>')
     		.addTo(this.map);
 
     		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
-    		document.getElementById('popupDate').innerHTML = _dateService.formatDate(new Date(e.features[0].properties.start_time));
+    		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(e.features[0].properties.start_time));
     	});
 
-    	this.map.on('mouseleave', 'eventlayer', function() {
+    	this.map.on('mouseleave', 'eventlayer', () => {
     		this.map.getCanvas().style.cursor = '';
     		// change size when hover not right
     		this.map.setLayoutProperty('hoveredPin','visibility', 'none');
@@ -216,8 +217,54 @@ export class MapBoxComponent implements OnInit {
     		this.map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
     		// console.log(e);
     		//   showModal('sign-up', e.properties);
-    		formatDateItem(e.features[0]);
+    		// formatDateItem(e.features[0]);
     	});
+    }
+
+    addArrowControls(): void {
+      // pixels the map pans when the up or down arrow is clicked
+      const deltaDistance = 60;
+      // degrees the map rotates when the left or right arrow is clicked
+      const deltaDegrees = 25;
+      const deltaZoom = .5;
+
+      function easing(t) {
+        return t * (2 - t);
+      }
+
+      this.map.getCanvas().focus();
+    	this.map.getCanvas().addEventListener('keydown', (e) => {
+    		e.preventDefault();
+    		if (e.which === 38) { // up
+    			this.map.panBy([0, -deltaDistance], {
+    				easing: easing
+    			});
+    		} else if (e.which === 40) { // down
+    			this.map.panBy([0, deltaDistance], {
+    				easing: easing
+    			});
+    		} else if (e.which === 37) { // left
+    			this.map.easeTo({
+    				bearing: this.map.getBearing() - deltaDegrees,
+    				easing: easing
+    			});
+    		} else if (e.which === 39) { // right
+    			this.map.easeTo({
+    				bearing: this.map.getBearing() + deltaDegrees,
+    				easing: easing
+    			});
+    		} else if (e.which === 32) { // zoom in (space)
+    			this.map.easeTo({
+    				zoom: this.map.getZoom() + deltaZoom,
+    				easing: easing
+    			});
+    		} else if (e.which === 8) { // zoom out (backspace)
+    			this.map.easeTo({
+    				zoom: this.map.getZoom() - deltaZoom,
+    				easing: easing
+    			});
+    		}
+    	}, true);
     }
 
     ///////////////////////////////////////
