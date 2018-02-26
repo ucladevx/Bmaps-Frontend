@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
+
 import { MapService } from '../map.service';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
+import { DateService } from '../shared/date.service';
 
 @Component({
   selector: 'app-map-box',
   templateUrl: './map-box.component.html',
-  styleUrls: ['./map-box.component.css']
+  styleUrls: ['./map-box.component.css'],
+  providers: [ DateService ]
 })
 export class MapBoxComponent implements OnInit {
     // default settings
@@ -23,7 +26,7 @@ export class MapBoxComponent implements OnInit {
     // style
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
 
-    constructor(private _mapService: MapService) {
+    constructor(private _mapService: MapService, private _dateService: DateService) {
       mapboxgl.accessToken = environment.mapbox.accessToken;
     }
 
@@ -164,6 +167,7 @@ export class MapBoxComponent implements OnInit {
     	}, "eventstest");
     }
 
+    //Not done through promises becauses no callbacks need to build off this anyway
     hoverPopup(): void {
     	// Create a popup, but don't add it to the map yet.
     	let popup = new mapboxgl.Popup({
@@ -198,7 +202,7 @@ export class MapBoxComponent implements OnInit {
     		.addTo(this.map);
 
     		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
-    		document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
+    		document.getElementById('popupDate').innerHTML = _dateService.formatDate(new Date(e.features[0].properties.start_time));
     	});
 
     	this.map.on('mouseleave', 'eventlayer', function() {
@@ -211,9 +215,6 @@ export class MapBoxComponent implements OnInit {
     	this.map.on('click', 'eventlayer', (e) => {
     		this.map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
     		// console.log(e);
-    		// console.log(e.features);
-    		// console.log(e.features[0]);
-    		// console.log(e.features[0].properties)
     		//   showModal('sign-up', e.properties);
     		formatDateItem(e.features[0]);
     	});
