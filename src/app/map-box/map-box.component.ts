@@ -34,10 +34,13 @@ export class MapBoxComponent implements OnInit {
       let _promiseGetUserLocation = this.promiseGetUserLocation()
       let _promisePinLoad = this.promiseImageLoad(this.pinUrl)
 
+      //Add 3D buildings and on-hover popup
       _promiseMapLoad.then(() => {
         this.threeDDisplay();
+        this.hoverPopup();
       });
 
+      //Add all Events pins
       let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
       promise_map_pin.then((promiseReturns) => {
         let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
@@ -48,9 +51,10 @@ export class MapBoxComponent implements OnInit {
         this.addEventLayer(this.keyUrl)
       });
 
+      //Add user location pin
       let promise_map_userloc_pin = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad]);
       promise_map_userloc_pin.then( () => {
-        this.addPinToLocation("currloc", this.lat, this.lng, "pin");
+        this.addPinToLocation("currloc", this.lat, this.lng, "pin", .08);
       });
 
       this.addControls();
@@ -71,6 +75,9 @@ export class MapBoxComponent implements OnInit {
           "icon-allow-overlap": true
         }
       });
+
+      //Add a larger pin to later use for on hover
+      this.addPinToLocation('hoveredPin', this.lat, this.lng, "pin", .08, false);
     }
 
     buildMap() {
@@ -86,8 +93,8 @@ export class MapBoxComponent implements OnInit {
       });
     }
 
-    addPinToLocation(id: string, latitude: number, longitude: number, icon: string) {
-      let currLocation: FeatureCollection =
+    addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
+      let point: FeatureCollection =
       { "type": "FeatureCollection",
           "features": [
             {"type": "Feature",
@@ -99,16 +106,16 @@ export class MapBoxComponent implements OnInit {
           ]
       };
 
-      this.map.addSource(id, { type: 'geojson', data: currLocation });
+      this.map.addSource(id, { type: 'geojson', data: point });
 
       this.map.addLayer({
         "id": id,
         "type": "symbol",
         "source":id,
         "layout": {
-          // "visibility": "none",
+          "visibility": (visible ? "visible" : "none"),
           "icon-image": icon,
-          "icon-size":.08,
+          "icon-size": size,
           "icon-allow-overlap": true
         }
       }
@@ -155,6 +162,61 @@ export class MapBoxComponent implements OnInit {
     			'fill-extrusion-opacity': 0.5
     		}
     	}, "eventstest");
+    }
+
+    hoverPopup(): void {
+    	// Create a popup, but don't add it to the map yet.
+    	let popup = new mapboxgl.Popup({
+    		closeButton: false,
+    		closeOnClick: false,
+    		offset: {'bottom':[7.5 ,0]}
+    	});
+
+    	this.map.on('mouseenter', 'eventlayer', (e) => {
+    		// Change the cursor style as a UI indicator.
+    		this.map.getCanvas().style.cursor = 'pointer';
+
+        //slice returns a copy of the array rather than the actual array
+        let coords = e.features[0].geometry.coordinates.slice()
+
+    		console.log(coords);
+
+    		this.map.getSource('hoveredPin').setData({
+          "geometry": {
+              "type": "Point",
+        			"coordinates": coords
+            },
+          "type": "Feature"
+        });
+    		// change size when hover not right
+    		this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
+
+    		// Populate the popup and set its coordinates
+    		// based on the feature found.
+    		popup.setLngLat(coords)
+    		.setHTML('<p id=popupEvent></p> <p id=popupDate></p>')
+    		.addTo(this.map);
+
+    		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
+    		document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
+    	});
+
+    	this.map.on('mouseleave', 'eventlayer', function() {
+    		this.map.getCanvas().style.cursor = '';
+    		// change size when hover not right
+    		this.map.setLayoutProperty('hoveredPin','visibility', 'none');
+    		popup.remove();
+    	});
+
+    	this.map.on('click', 'eventlayer', (e) => {
+    		this.map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+    		// console.log(e);
+    		// console.log(e.features);
+    		// console.log(e.features[0]);
+    		// console.log(e.features[0].properties)
+    		//   showModal('sign-up', e.properties);
+    		formatDateItem(e.features[0]);
+    	});
     }
 
     ///////////////////////////////////////
