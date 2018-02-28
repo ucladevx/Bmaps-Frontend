@@ -3,11 +3,15 @@
   background-color: #CFD8DC !important;
   color: white;
 }
+
+.sidebar-outer {
+    width: 20%;
+}
 .events {
   margin: 0 0 2em 0;
   list-style-type: none;
   padding: 0;
-  width: 15em;
+  /* width: 15em; */
 }
 .events li {
   cursor: pointer;
