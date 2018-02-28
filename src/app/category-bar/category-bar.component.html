@@ -1,3 +1,12 @@
-<p>
-  category-bar works!
-</p>
+<div class="btn-group" dropdown>
+  <button dropdownToggle type="button" class="btn btn-light dropdown-toggle">
+    Button dropdown <span class="caret"></span>
+  </button>
+  <ul *dropdownMenu class="dropdown-menu" role="menu">
+    <li *ngFor="let category of categories">
+      <p>
+        {{category}}
+      </p>
+    </li>
+  </ul>
+</div>
