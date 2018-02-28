@@ -15,10 +15,10 @@ private class SelectedDate {
 export class MapService {
   private baseEventsUrl = "http://www.whatsmappening.io/api/v1";
   private date: SelectedDate;
-  
+
   constructor(private http: HttpClient) {
       let today = new Date();
-      this.date = { day: today.getDate(), month: today.getMonth(), year: today.getFullYear()}; 
+      this.date = { day: today.getDate(), month: today.getMonth(), year: today.getFullYear()};
       this.getAllEvents();
   }
 
