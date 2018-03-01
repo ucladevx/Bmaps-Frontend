@@ -7,11 +7,15 @@ import { Event } from '../event';
   styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-  @Input() event: Event;
+	@Input() event: Event;
 
-  constructor() { }
+	constructor() {
 
-  ngOnInit() {
-  }
+	}
+
+	ngOnInit() {
+	}
+
+	
 
 }

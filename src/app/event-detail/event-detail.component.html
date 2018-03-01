@@ -1,11 +1,23 @@
 <div *ngIf="event">
-
-  <h2>{{ event.name | uppercase }} Details</h2>
-  <div><span>id: </span>{{event.id}}</div>
-  <div>
-    <label>name:
-      <input [(ngModel)]="event.name" placeholder="name"/>
-    </label>
-  </div>
-
+	<div class="event-header">
+		<i id="left-chevron">X</i>
+	</div>
+	<div class="event-body">
+		<img class="event-image" src="{{event.properties.cover_picture}}">
+		<div class="event-title" id="event-title">{{ event.properties.event_name}}</div>
+		<div class="event-info" id="event-info">{{event.properties.start_time}}</div>
+		<div class="event-description" id="event-description">{{event.properties.description}}</div>
+	</div>
 </div>
+
+<!-- <div class="hide event-container" id="one-event">
+  		<div class="event-header">
+			<i class="glyphicon glyphicon-chevron-left" id="left-chevron" onclick="hideEvent();"></i>
+		</div>
+  		<div class="event-body">
+			<img class="event-image" src="" id="modal-image">
+			<div class="event-title" id="event-title"></div>
+			<div class="event-info" id="event-info"></div>
+			<div class="event-description" id="event-description"></div>
+		</div>
+	</div> -->
