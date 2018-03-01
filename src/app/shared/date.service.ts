@@ -6,7 +6,7 @@ export class DateService {
 
   today = new Date();
   todayD = this.today.getDate();
-  todayM = this.today.getMonth(); 
+  todayM = this.today.getMonth();
   todayY = this.today.getFullYear();
 
   todayDate = new Date();
@@ -82,10 +82,10 @@ export class DateService {
       let dateOfStart = new Date(item.properties.start_time);
       let dateOfEnd = new Date(item.properties.end_time);
       if (item.properties.end_time != "<NONE>"){
-          item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
+          item.properties.start_time = this.formatDate(dateOfStart) + " - " + this.formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
       }
       else {
-          item.properties.start_time = formatDate(dateOfStart);
+          item.properties.start_time = this.formatDate(dateOfStart);
       }
   }
 
