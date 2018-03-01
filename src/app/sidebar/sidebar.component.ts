@@ -22,6 +22,9 @@ export class SidebarComponent implements OnInit {
 
     }
 
+    toHTML(input) : any {
+        return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
+    }
 
     getMonthNameFromMonthNumber(monthNumber){
         var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -58,7 +61,7 @@ export class SidebarComponent implements OnInit {
         if (day < 10){
             day = "0" + day;
         }
-        return this.getMonthNameFromMonthNumber(month) + " " + day + " &middot; " + this.formatHour(hour, minutes);
+        return this.getMonthNameFromMonthNumber(month) + " " + day + " " + this.formatHour(hour, minutes);
     }
 
     formatDateItem(item) {

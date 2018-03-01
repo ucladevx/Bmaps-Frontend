@@ -22,6 +22,10 @@
     border-color: rgb(207,207,207);
 }
 
+.event-list{
+    height: 51em;
+}
+
 .sidebar{
     height: 87%;
     overflow: scroll;
@@ -45,7 +49,7 @@
 
 .sidebar-event {
     width: 100%;
-    padding: 3%;
+    padding: 1%;
     box-sizing: border-box;
     display: inline-block;
 }
@@ -53,13 +57,15 @@
 .sidebar-event-img{
     object-fit: cover;
     width: 100%;
-    height: 20%;
+    height: 13em;
     vertical-align: top;
 }
 
 .sidebar-event-img-container{
     display: inline-block;
     width: 58%;
+    padding-right: 1%;
+    padding-left: 1%;
 }
 
 .sidebar-event-details {
@@ -99,6 +105,7 @@
     height: 2px;
     background-image: radial-gradient(#CCC, #FFF), radial-gradient(#CCC, #FFF);
     background-position: 0, 100%, 0, 100%;
+    margin: 3px;
 }
 
 #categ-dropdown-text{
