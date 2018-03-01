@@ -150,6 +150,9 @@ function hoverPopup() {
 
 		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
 		document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
+
+		// fade other events in the sidebar
+		//document.get
 	});
 	map.on('mouseleave', 'eventlayer', function() {
 		map.getCanvas().style.cursor = '';

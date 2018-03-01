@@ -298,7 +298,7 @@ input::-webkit-calendar-picker-indicator {
     font-size: 11px;
     display: inline-block;
     vertical-align: top;
-    color: rgb(116,116,116);
+    color: rgb(116, 116, 116);
     width: 40%;
 }
 
@@ -307,13 +307,14 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .sidebar-event-name {
-    color: rgb(116,116,116);
+    color: rgba(116, 116, 116);
+
     font-size: 19px;
     font-weight: 500;
 }
 
-.dropdown-menu {
-    width: 100%;
+.sidebar-event-details:hover {
+  color: rgba(116,116,116,.5);
 }
 
 .no-events-text {
