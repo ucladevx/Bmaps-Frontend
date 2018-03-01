@@ -26,7 +26,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    SharedModule
+    SharedModule,
     BsDropdownModule.forRoot()
   ],
   providers: [MapService, CategoryService],
