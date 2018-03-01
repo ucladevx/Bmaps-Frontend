@@ -1,0 +1,12 @@
+<div class="sidebar-outer container">
+<h2>Sidebar</h2>
+<app-category-bar></app-category-bar>
+<ul class="events">
+  <li *ngFor="let event of events"
+    [class.selected]="event === selectedEvent"
+    (click)="onSelect(event)">
+    <span class="badge">{{event.properties.event_name}}</span> {{event.name}}
+  </li>
+</ul>
+<app-event-detail [event]="selectedEvent"></app-event-detail>
+</div>
