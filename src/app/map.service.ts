@@ -26,7 +26,7 @@ export class MapService {
     return this.http.get<FeatureCollection>(this.getEventsOnDateURL(this.date.day, this.date.month, this.date.year));
   }
 
-  //could just define an enum here
+  //TODO: could just define an enum here
   getMonthNameFromMonthNumber(monthNumber: number): string {
     var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     return monthNames[monthNumber];
@@ -35,7 +35,6 @@ export class MapService {
   getEventsOnDateURL(d: number, m: number, y: number): string {
     const monthName = this.getMonthNameFromMonthNumber(m);
     let dateURL = `${this.baseEventsUrl}/event-date/${d}%20${monthName}%20${y}`;
-    console.log("THE URL IS " + dateURL);
     return dateURL; // json we are pulling from for event info
   }
 }

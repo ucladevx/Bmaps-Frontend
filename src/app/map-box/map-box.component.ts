@@ -1,33 +1,87 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
+
 import { MapService } from '../map.service';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
+import { DateService } from '../shared/date.service';
 
 @Component({
   selector: 'app-map-box',
   templateUrl: './map-box.component.html',
-  styleUrls: ['./map-box.component.css']
+  styleUrls: ['./map-box.component.css'],
+  providers: [ DateService ]
 })
 export class MapBoxComponent implements OnInit {
     // default settings
     map: mapboxgl.Map;
     message = 'Hello World!';
-    lat = 34.066915;
+    lat = 34.066915; //default center of map, variables used for user location/naviagation center
     lng = -118.445320
 
     // data
     source: any;
-    mapEvents: FeatureCollection;
     keyUrl: string;
-    
-    constructor(private _mapService: MapService) {
+
+    // style
+    pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
+
+    constructor(private _mapService: MapService, private _dateService: DateService) {
       mapboxgl.accessToken = environment.mapbox.accessToken;
     }
 
     ngOnInit() {
-      this.getEvents();
-      this.initializeMap()
+      this.buildMap();
+      //I think you should use something like this to create all the promises once instead of calling function creating promise several times
+      let _promiseMapLoad = this.promiseMapLoad()
+      let _promiseGetUserLocation = this.promiseGetUserLocation()
+      let _promisePinLoad = this.promiseImageLoad(this.pinUrl)
+
+      //Add 3D buildings, on-hover popup, and arrowcontrols
+      _promiseMapLoad.then(() => {
+        this.threeDDisplay();
+        this.hoverPopup();
+        this.addArrowControls();
+      });
+
+      //Add all Events pins
+      let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
+      promise_map_pin.then((promiseReturns) => {
+        let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+        this.map.addImage('pin', image);
+
+        let today = new Date();
+        this.keyUrl = this._mapService.getEventsOnDateURL(today.getDate(), today.getMonth(), today.getFullYear());
+        this.addEventLayer(this.keyUrl)
+      });
+
+      //Add user location pin
+      let promise_map_userloc_pin = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad]);
+      promise_map_userloc_pin.then( () => {
+        this.addPinToLocation("currloc", this.lat, this.lng, "pin", .08);
+      });
+
+      this.addControls();
+    }
+
+    addEventLayer(data): void {
+      //TODO: Add Removal of previous event layer
+      //can change the url to a static geojson object from the service
+      this.map.addSource('events', { type: 'geojson', data: data });
+
+      this.map.addLayer({
+        "id": "eventlayer",
+        "type": "symbol",
+        "source":"events",
+        "layout": {
+          "icon-image": "pin",
+          "icon-size":.06,
+          "icon-allow-overlap": true
+        }
+      });
+
+      //Add a larger pin to later use for on hover
+      this.addPinToLocation('hoveredPin', this.lat, this.lng, "pin", .08, false);
     }
 
     buildMap() {
@@ -43,138 +97,214 @@ export class MapBoxComponent implements OnInit {
       });
     }
 
-    getEvents() {
-      this._mapService.getAllEvents().subscribe(
-        (data) => {
-          this.mapEvents = data;
-          console.log(data);
-         },
-        err => console.error(err),
-        () => console.log('done loading events')
-      );
+    addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
+      let point: FeatureCollection =
+      { "type": "FeatureCollection",
+          "features": [
+            {"type": "Feature",
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [longitude, latitude]
+              }
+            }
+          ]
+      };
+
+      this.map.addSource(id, { type: 'geojson', data: point });
+
+      this.map.addLayer({
+        "id": id,
+        "type": "symbol",
+        "source":id,
+        "layout": {
+          "visibility": (visible ? "visible" : "none"),
+          "icon-image": icon,
+          "icon-size": size,
+          "icon-allow-overlap": true
+        }
+      }
     }
 
-    private initializeMap() {
-      /// locate the user
-      if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition(position => {
-          this.lat = position.coords.latitude;
-          this.lng = position.coords.longitude;
-          this.map.flyTo({
-            center: [this.lng, this.lat]
-          })
+    addControls(): void {
+      this.map.addControl(new mapboxgl.GeolocateControl({
+      	positionOptions: {
+        		enableHighAccuracy: true
+        	},
+        	fitBoundsOptions: {maxZoom: 17.7, speed: .3},
+        	trackUserLocation: true
+      }));
+      this.map.addControl(new mapboxgl.NavigationControl());
+    }
+
+    threeDDisplay(): void {
+    	// Insert the layer beneath any symbol layer.
+      let layers = this.map.getStyle().layers.reverse();
+    	let labelLayerIdx = layers.findIndex(function (layer) {
+    		return layer.type !== 'symbol';
+    	});
+
+    	this.map.addLayer({
+    		'id': 'ucla-buildings',
+    		'source': 'composite',
+    		'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
+    		// 'source-layer': 'UCLA_Buildings', // UCLA Buildings
+    		'filter': ['==', 'extrude', 'true'],
+    		'type': 'fill-extrusion',
+    		'minzoom': 15,
+    		'paint': {
+    			'fill-extrusion-color': '#aaa',
+    			'fill-extrusion-height': {
+    				'property': 'height',
+    				'type': 'identity'
+    			},
+    			'fill-extrusion-base': {
+    				'property': 'min_height',
+    				'type': 'identity',
+    			},
+    			// 'fill-extrusion-height': 20,
+    			// 'fill-extrusion-base': 0,
+    			'fill-extrusion-opacity': 0.5
+    		}
+    	}, "eventstest");
+    }
+
+    //Not done through promises becauses no callbacks need to build off this anyway
+    hoverPopup(): void {
+    	// Create a popup, but don't add it to the map yet.
+    	let popup = new mapboxgl.Popup({
+    		closeButton: false,
+    		closeOnClick: false,
+    		offset: {'bottom':[7.5 ,0]}
+    	});
+
+    	this.map.on('mouseenter', 'eventlayer', (e) => {
+    		// Change the cursor style as a UI indicator.
+    		this.map.getCanvas().style.cursor = 'pointer';
+
+        //slice returns a copy of the array rather than the actual array
+        let coords = e.features[0].geometry.coordinates.slice()
+
+    		console.log(coords);
+
+    		this.map.getSource('hoveredPin').setData({
+          "geometry": {
+              "type": "Point",
+        			"coordinates": coords
+            },
+          "type": "Feature"
         });
+    		// change size when hover not right
+    		this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
+
+    		// Populate the popup and set its coordinates
+    		// based on the feature found.
+    		popup.setLngLat([coords[0]-.00015, coords[1]])
+    		.setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>')
+    		.addTo(this.map);
+
+    		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
+    		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(e.features[0].properties.start_time));
+    	});
+
+    	this.map.on('mouseleave', 'eventlayer', () => {
+    		this.map.getCanvas().style.cursor = '';
+    		// change size when hover not right
+    		this.map.setLayoutProperty('hoveredPin','visibility', 'none');
+    		popup.remove();
+    	});
+
+    	this.map.on('click', 'eventlayer', (e) => {
+    		this.map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+    		// console.log(e);
+    		//   showModal('sign-up', e.properties);
+    		// formatDateItem(e.features[0]);
+    	});
+    }
+
+    addArrowControls(): void {
+      // pixels the map pans when the up or down arrow is clicked
+      const deltaDistance = 60;
+      // degrees the map rotates when the left or right arrow is clicked
+      const deltaDegrees = 25;
+      const deltaZoom = .5;
+
+      function easing(t) {
+        return t * (2 - t);
       }
 
-      this.buildMap();
-      let today = new Date();
-      this.addData(today.getDate(), today.getMonth(), today.getFullYear());
+      this.map.getCanvas().focus();
+    	this.map.getCanvas().addEventListener('keydown', (e) => {
+    		e.preventDefault();
+    		if (e.which === 38) { // up
+    			this.map.panBy([0, -deltaDistance], {
+    				easing: easing
+    			});
+    		} else if (e.which === 40) { // down
+    			this.map.panBy([0, deltaDistance], {
+    				easing: easing
+    			});
+    		} else if (e.which === 37) { // left
+    			this.map.easeTo({
+    				bearing: this.map.getBearing() - deltaDegrees,
+    				easing: easing
+    			});
+    		} else if (e.which === 39) { // right
+    			this.map.easeTo({
+    				bearing: this.map.getBearing() + deltaDegrees,
+    				easing: easing
+    			});
+    		} else if (e.which === 32) { // zoom in (space)
+    			this.map.easeTo({
+    				zoom: this.map.getZoom() + deltaZoom,
+    				easing: easing
+    			});
+    		} else if (e.which === 8) { // zoom out (backspace)
+    			this.map.easeTo({
+    				zoom: this.map.getZoom() - deltaZoom,
+    				easing: easing
+    			});
+    		}
+    	}, true);
     }
 
-    addData(d: number, m: number, y: number): void {
-      this.keyUrl = this._mapService.getEventsOnDateURL(d, m, y);
-      const myS = "hi";
-      this.map.on('load', () => {
-        console.log(myS);
-        this.map.addSource('events', { type: 'geojson', data: this.keyUrl });
-        // map.addSource('currloc', { type: 'geojson', data: currData });
+    ///////////////////////////////////////
+    // MAP CALLBACKS AS PROMISES
+    //////////////////////////////////////
+    promiseMapLoad() {
+      return new Promise((resolve, reject) => {
+        this.map.on('load', () => {
+          resolve();
+        })
+      });
+    }
 
-        this.map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
-          if (error) throw error;
-          this.map.addImage('pin', image);
-          this.map.addLayer({
-            "id": "eventlayer",
-            "type": "symbol",
-            "source":"events",
-            "layout": {
-              "icon-image": "pin",
-              "icon-size":.06,
-              "icon-allow-overlap": true
-            }
-          });
-
-          // map.addLayer({
-          //   "id": "currloc",
-          //   "type": "symbol",
-          //   "source":"currloc",
-          //   "layout": {
-          //     "visibility": "none",
-          //     "icon-image": "pin",
-          //     "icon-size":.08,
-          //     "icon-allow-overlap": true
-          //   }
-          // });
+    promiseImageLoad(url) {
+      return new Promise((resolve, reject) => {
+        this.map.loadImage(url, (error, image) => {
+          if(error) {
+            reject(error);
+          } else {
+            resolve(image);
+          }
         });
       });
     }
 
-
-    //   /// Add map controls
-    //   this.map.addControl(new mapboxgl.NavigationControl());
-    //
-    //
-    //   //// Add Marker on Click
-    //   this.map.on('click', (event) => {
-    //     const coordinates = [event.lngLat.lng, event.lngLat.lat]
-    //     const newMarker   = new GeoJson(coordinates, { message: this.message })
-    //     this.mapService.createMarker(newMarker)
-    //   })
-    //
-    //
-    //   /// Add realtime firebase data on map load
-    //   this.map.on('load', (event) => {
-    //
-    //     /// register source
-    //     this.map.addSource('firebase', {
-    //        type: 'geojson',
-    //        data: {
-    //          type: 'FeatureCollection',
-    //          features: []
-    //        }
-    //     });
-    //
-    //     /// get source
-    //     this.source = this.map.getSource('firebase')
-    //
-    //     /// subscribe to realtime database and set data source
-    //     this.markers.subscribe(markers => {
-    //         let data = new FeatureCollection(markers)
-    //         this.source.setData(data)
-    //     })
-    //
-    //     /// create map layers with realtime data
-    //     this.map.addLayer({
-    //       id: 'firebase',
-    //       source: 'firebase',
-    //       type: 'symbol',
-    //       layout: {
-    //         'text-field': '{message}',
-    //         'text-size': 24,
-    //         'text-transform': 'uppercase',
-    //         'icon-image': 'rocket-15',
-    //         'text-offset': [0, 1.5]
-    //       },
-    //       paint: {
-    //         'text-color': '#f16624',
-    //         'text-halo-color': '#fff',
-    //         'text-halo-width': 2
-    //       }
-    //     })
-    //
-    //   })
-    //
-    // }
-    //
-    //
-    // /// Helpers
-    //
-    // removeMarker(marker) {
-    //   this.mapService.removeMarker(marker.$key)
-    // }
-    //
-    // flyTo(data: GeoJson) {
-    //   this.map.flyTo({
-    //     center: data.geometry.coordinates
-    //   })
-    // }
+    //puts User location in this.lat and this.lng
+    promiseGetUserLocation() {
+      return new Promise((resolve, reject) => {
+        //if location activated
+        if (navigator.geolocation) {
+          //locate user
+          navigator.geolocation.getCurrentPosition(position => {
+            this.lat = position.coords.latitude;
+            this.lng = position.coords.longitude;
+            resolve();
+          }
+        }
+        else {
+          reject();
+        }
+      }
+    }
 }

@@ -1,0 +1,11 @@
+ @import "https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css";
+
+ #popupEvent {
+   display: inline;
+ }
+
+/* It wont apply the CSS properly to a text injected through innerHTML, so https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling */
+ :host ::ng-deep #popupDate {
+   color:  #FF3A3A;
+   font-size: 11;
+ }

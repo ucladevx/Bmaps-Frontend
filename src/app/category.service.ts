@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { CategoryList } from './category';
+
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -17,7 +19,7 @@ export class CategoryService {
   ) { }
 
   /** GET categories from the server */
-  getCategories(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  getCategories(): Observable<CategoryList> {
+    return this.http.get<CategoryList>(this.apiUrl);
   }
 }

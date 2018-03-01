@@ -17,7 +17,7 @@ export class AppComponent {
   constructor(private categService: CategoryService){}
 
   ngOnInit(): void {
-    this.categService.getCategories()
-      .subscribe(categs => console.log(categs));
+    // this.categService.getCategories()
+    //   .subscribe(categs => console.log(categs));
   }
 }
