@@ -1,0 +1,592 @@
+/*--------------------------------------- EVERYTHING ---------------------------------------*/
+html{
+    overflow: hidden;
+}
+
+body {
+    font:15px arial,sans-serif;
+    background: rgb(237, 237, 237);
+    margin-top: 51px;
+    font-family: 'Poppins', sans-serif;
+}
+h1 {
+    margin: 0 0 10px 0;
+    padding: 5px;
+    font-size: 24px;
+    background-color: #999;
+    color: #fff;
+}
+table {
+    margin: 10px;
+}
+th, td {
+    padding: 5px;
+    border: 1px solid #999;
+}
+th {
+    background: #ccc;
+}
+tr:nth-child(odd) {
+    background: #eee;
+}
+td a {
+    color: #000;
+    text-decoration: underline;
+}
+
+*:hover, a:hover{
+    cursor: pointer;
+}
+
+input[type="text"] {
+    border: none;
+    background: white;
+}
+
+.form-control{
+    box-shadow: none;
+}
+
+
+/*---------------------------------------NAVBAR---------------------------------------*/
+.navbar {
+    z-index: 100;
+}
+
+.nav-container {
+    margin-left: 14px;
+}
+
+.navbar-default{
+    background: linear-gradient(#43576B, #8296A1);
+    border-color: rgb(191,191,191);
+}
+
+.navbar-default .navbar-toggle{
+    border-color: transparent;
+}
+
+.navbar-default .navbar-toggle .icon-bar{
+    background-color: white;
+}
+
+.navbar-default .navbar-nav > .active{
+  background: rgb(216,216,216);
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+     background: rgb(216,216,216);
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: rgb(128,128,128);
+    font-weight: 600;
+}
+
+.navbar-form{
+    display: inline-block;
+    margin: 0px;
+    margin-bottom: 1%;
+    margin-top: 1%;
+}
+
+.no-display{
+    display: none !important;
+}
+
+#navbar-brand{
+    color: white;
+    font-weight: 600;
+}
+
+#nav-logo{
+    display: inline-block;
+}
+
+ul li {
+    border-radius: 100px;
+}
+
+li a {
+    border-radius: 100px;
+}
+
+/*------------------------------------SEARCH BAR------------------------------------- */
+
+#mobile-left-icon button{
+    border-color: transparent;
+    margin-top: 6px;
+    padding: 10px;
+}
+
+#navBarSearchForm div input[type=text] {
+    margin: 0px;
+}
+
+.input-group-addon{
+    background: white;
+}
+
+/* specifically hide the arrow on focus */
+input::-webkit-calendar-picker-indicator {
+	display: none;
+}
+
+#mobileSearchIcon{
+    top: 15px;
+    color: white;
+}
+
+
+#searchForm, .right-inner-addon {
+    width: 100%;
+}
+
+@media (max-width: 767px){
+    .navbar-collapse .navbar-nav{
+        float: none !important;
+    }
+
+    .sidebar-header{
+        padding-top: 1%;
+        padding-bottom: 0%;
+    }
+    /* #navBarSearchForm input{
+        outline: none;
+        border-color: transparent;
+    }
+    #searchForm{
+        height: 0px;
+        border-top: 0px;
+        border-bottom: 0px;
+        padding: 0px;
+        margin-left: 0px;
+        margin-right: 20px;
+    }
+    .form-control{
+        box-shadow: none;
+    } */
+}
+
+/* SEARCH ICON*/
+
+.has-feedback .form-control {
+  padding-right: 34px;
+}
+.has-feedback .form-control.input-sm,
+.has-feedback.form-group-sm .form-control {
+  padding-right: 30px;
+}
+.has-feedback .form-control.input-lg,
+.has-feedback.form-group-lg .form-control {
+  padding-right: 46px;
+}
+.has-feedback-left .form-control {
+  padding-right: 12px;
+  padding-left: 34px;
+}
+.has-feedback-left .form-control.input-sm,
+.has-feedback-left.form-group-sm .form-control {
+  padding-left: 30px;
+}
+.has-feedback-left .form-control.input-lg,
+.has-feedback-left.form-group-lg .form-control {
+  padding-left: 46px;
+}
+.has-feedback-left .form-control-feedback {
+  left: 0;
+}
+.form-control-feedback {
+  line-height: 34px !important;
+}
+.input-sm + .form-control-feedback,
+.form-horizontal .form-group-sm .form-control-feedback {
+  width: 30px;
+  height: 30px;
+  line-height: 30px !important;
+}
+.input-lg + .form-control-feedback,
+.form-horizontal .form-group-lg .form-control-feedback {
+  width: 46px;
+  height: 46px;
+  line-height: 46px !important;
+}
+.has-feedback label.sr-only ~ .form-control-feedback,
+.has-feedback label.sr-only ~ div .form-control-feedback {
+  top: 0;
+}
+@media (min-width: 768px) {
+  .form-inline .inline-feedback {
+    position: relative;
+    display: inline-block;
+  }
+  .form-inline .has-feedback .form-control-feedback {
+    top: 0;
+  }
+}
+.form-horizontal .has-feedback-left .form-control-feedback {
+  left: 15px;
+}
+
+/*-------------------------------------SIDEBAR-------------------------------------*/
+
+.home-container{
+    width: 100%;
+}
+
+.home-row{
+    display: flex;
+    height: 100%;
+}
+
+#events-mount{
+    height: 100%;
+}
+.sidebar-mount{
+    min-width: 270px;
+    padding-left: 0px;
+    padding-right: 0px;
+    box-shadow: -1px 1px 1px #888888;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(207,207,207);
+}
+
+.sidebar{
+    height: 87%;
+    overflow: scroll;
+}
+
+.search-header{
+    border-bottom: 1px solid rgb(167,167,167);
+
+}
+
+.sidebar-header{
+    background-color: white;
+    box-shadow: -1px 1px 1px rgb(207,207,207);
+    text-align: center;
+    color: rgb(116,116,116);
+    font-weight: 500;
+    font-size: 18px;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.sidebar-event {
+    width: 100%;
+    padding: 3%;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.sidebar-event-img{
+    object-fit: cover;
+    width: 100%;
+    height: 20%;
+    vertical-align: top;
+}
+
+.sidebar-event-img-container{
+    display: inline-block;
+    width: 58%;
+}
+
+.sidebar-event-details {
+    display: inline-block;
+    font-size: 11px;
+    display: inline-block;
+    vertical-align: top;
+    color: rgb(116,116,116);
+    width: 40%;
+}
+
+.sidebar-event-details p {
+    margin-bottom: 0px;
+}
+
+.sidebar-event-name {
+    color: rgb(116,116,116);
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.dropdown-menu {
+    width: 100%;
+}
+
+.no-events-text {
+  width: 100%;
+  text-align: center;
+  top: 20px;
+  color: #a9a9a9;
+}
+
+/* Using only background gradients */
+
+.seperator
+{
+    height: 2px;
+    background-image: radial-gradient(#CCC, #FFF), radial-gradient(#CCC, #FFF);
+    background-position: 0, 100%, 0, 100%;
+}
+
+#categ-dropdown-text{
+    padding-left: 25%;
+    padding-right: 25%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.badge {
+  float: right;
+}
+
+/*--------------------------------------MAP--------------------------------------*/
+#map {
+    top:0;
+    bottom:0;
+    /* width: 100%; */
+    height: 100%;
+    box-shadow: -1px 1px 1px #888888;
+    padding-left: 0;
+}
+
+@media(min-width: 767px){
+    #mobile-mount{
+        height: 0;
+    }
+}
+
+@media (max-width: 767px){
+    #map{
+        height: 64%;
+        padding-left: 0%;
+    }
+
+    .map-overlay-inner-searchbox{
+        display: block !important;
+    }
+
+    .form-control-feedback {
+        line-height: 23px !important;
+    }
+
+    .search-header{
+        display: none;
+    }
+    .home-row{
+        height: auto;
+        /* height: 50%; */
+        display: block;
+    }
+    .sidebar-mount{
+        margin-right: 0%;
+    }
+    .sidebar{
+        height: 39%;
+    }
+    #events-mount{
+        height: auto;
+    }
+    .sidebar-event-img{
+        height: 35%;
+    }
+}
+
+/* getting rid of mapbox logos */
+a.mapboxgl-ctrl-logo {
+  height: 0;
+}
+
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+  height: 0;
+}
+
+/*-------------------------------------- SLIDER --------------------------------------*/
+/* #slider{
+  padding-right: 0%;
+  background: -webkit-repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+  background: -moz-repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+  background: repeating-linear-gradient(90deg, #777, #777 2px, transparent 2px, transparent 40px) no-repeat 50% 50%;
+} */
+.map-overlay {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    position: absolute;
+    width: 98%;
+    top: 12px;
+    padding-left: 2%;
+    padding-right: 2%;
+    z-index: 1;
+    opacity: 1;
+}
+
+option{
+  min-height:10px;
+  white-space: normal;
+  padding: 1.24%;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+datalist{
+  display: flex;
+}
+
+/*
+Picking Date
+*/
+#leftArrow {
+  transition: color 0.2s ease;
+  position: relative;
+  float:left;
+  font-size: 20;
+  color: #656565;
+}
+
+#leftArrow:hover {
+  color: #5dbacd;
+}
+
+#rightArrow:hover {
+  color: #5dbacd;
+}
+
+#rightArrow {
+  transition: color 0.2s ease;
+  position: relative;
+  font-size: 20;
+  float:right;
+  color: #656565;
+}
+
+#relativeDay {
+  display: inline;
+  font-size: 16;
+  width: 100%;
+  bottom: 45;
+  left: 0;
+  text-align: center;
+  font-weight:500;
+  /* -webkit-text-stroke: .05px #FCFCFC; */
+  -webkit-text-fill-color: #656565;
+}
+
+#currDate {
+  font-size: 16;
+  position: relative;
+  display: inline-block;
+  padding: initial;
+  font-weight:500;
+  /* -webkit-text-stroke: .05px #FCFCFC; */
+  -webkit-text-fill-color: #656565;
+  letter-spacing: 1px;
+}
+
+.custom-btn {
+  background: none;
+  /* color: inherit; */
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+#map-today-section {
+  margin: 0 auto;
+  width: 80px;
+  margin-top: 5px;
+  display: none;
+}
+
+.today-btn {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 1px 5px #ababab;
+}
+
+.today-btn:hover {
+  background-color: #F5F5F5;
+}
+
+p {
+  display: inline-block;
+}
+
+.map-overlay-inner-searchbox {
+    display:none;
+}
+
+.map-overlay .map-overlay-inner {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    font-size: 13;
+    font-weight: bold;
+    vertical-align: middle;
+    height: 40px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 50px;
+    background-color: white;
+    margin: 1% auto;
+    width: 260px;
+    box-shadow: 0px 2px 5px #ababab;
+}
+
+.map-overlay h2 {
+    line-height: 24px;
+    display: block;
+    margin: 0 0 10px;
+}
+
+.map-overlay .legend .bar {
+    height: 10px;
+    width: 100%;
+    background: linear-gradient(to right, #FCA107, #7F3121);
+}
+
+.map-overlay input {
+    /* background-color: transparent; */
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    bottom: 6.5px;
+}
+
+/*
+Formatting popup
+*/
+
+#popupEvent {
+  display: inline;
+}
+
+#popupDate {
+  color:  #FF3A3A;
+  font-size: 11;
+}
+
+.mapboxgl-popup {
+  font-family: 'Poppins', sans-serif;
+  max-width: 150;
+  max-height: 30;
+  line-height: 150%;
+  text-align: center;
+  padding: inherit;
+}
+
+
+.mapboxgl-popup-content {
+    position: relative;
+    background: #fff;
+    border-radius: 5px;
+    padding: 5px 5px 0px;
+    pointer-events: auto;
+}
