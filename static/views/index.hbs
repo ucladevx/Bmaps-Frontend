@@ -6,13 +6,22 @@
             <div class="sidebar-mount col-sm-5 col-md-5">
                 <div class="search-header">
                     <div class="sidebar-header">
+                      <div class='map-overlay-inner'>
+                        <button id="leftArrow" class="custom-btn date-btn" display="-webkit-inline-box" onclick="previousDay()"></button>
+                        <span id="relativeDay"></span>
+                        <span id="currDate"></span>
+                        <button id="rightArrow" class="custom-btn date-btn" style="display:inline" onclick="nextDay()"></button>
+                        <div id="map-today-section">
+                          <button class="custom-btn today-btn" onclick="goToday()">today</button>
+                        </div>
+                      </div>
                         <!-- Search Box -->
                         <!-- <i class="glyphicon glyphicon-search" id="mobileSearchIcon"></i> -->
                         <form class="navbar-form has-feedback has-feedback-left" id="searchForm">
                             <div class="form-group" style="display:inline;" id="navBarSearchForm">
                                 <div class="input-group right-inner-addon">
-                                    <input id="search-input" type="text" list="searchList" class="form-control" autocomplete="off" placeholder="search for an event...">
-                                    <i class="glyphicon glyphicon-search form-control-feedback" id="searchIcon"></i>
+                                    <!--input id="search-input" type="text" list="searchList" class="form-control" autocomplete="off" placeholder="search for an event..."-->
+                                    <!--i class="glyphicon glyphicon-search form-control-feedback" id="searchIcon"></i-->
                                     <datalist id="searchList"></datalist>
                                 </div>
                             </div>
@@ -26,6 +35,7 @@
               <div class='map-overlay top'>
                   <div class='map-overlay-inner-searchbox'>
                       <!-- Search Box -->
+
                       <!-- <i class="glyphicon glyphicon-search" id="mobileSearchIcon"></i> -->
                       <form class="navbar-form has-feedback has-feedback-left" id="searchForm">
                           <div class="form-group" style="display:inline;" id="navBarSearchForm">
@@ -37,16 +47,9 @@
                           </div>
                       </form>
                   </div>
-                  <div class='map-overlay-inner'>
-                    <button id="leftArrow" class="custom-btn date-btn" display="-webkit-inline-box" onclick="previousDay()"></button>
-                    <span id="relativeDay"></span>
-                    <span id="currDate"></span>
-                    <button id="rightArrow" class="custom-btn date-btn" style="display:inline" onclick="nextDay()"></button>
-                      <!--input id='slider' type='range' min='0' max='48' step='1' value='24' list='tickmarks'/-->
-                  </div>
-                  <div id="map-today-section">
+                  <!--div id="map-today-section">
                     <button class="custom-btn today-btn" onclick="goToday()">today</button>
-                  </div>
+                  </div-->
               </div>
             </div>
     </div>
