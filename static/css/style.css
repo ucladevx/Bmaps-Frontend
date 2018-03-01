@@ -323,6 +323,10 @@ input::-webkit-calendar-picker-indicator {
   color: #a9a9a9;
 }
 
+.dropdown.sidebar-header:hover {
+  background: #52d8d9de;
+}
+
 /* Using only background gradients */
 
 .seperator
