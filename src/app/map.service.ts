@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { GeoJson, FeatureCollection } from './map';
 import * as mapboxgl from 'mapbox-gl';
 
-private class SelectedDate {
+public class SelectedDate {
     day: number;
     month: number;
     year: number;

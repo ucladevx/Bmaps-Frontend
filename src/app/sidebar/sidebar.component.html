@@ -6,21 +6,18 @@
     [class.selected]="event === selectedEvent"
     (click)="onSelect(event)">
     <!-- <span class="badge">{{event.properties.event_name}}</span> {{event.name}} -->
-
+    <div class="sidebar-event-img-container col-sm-7 col-md-7 col-lg-7">
+        <img src="{{event.properties.cover_picture}}" class="sidebar-event-img">
+    </div>
     <div class="sidebar-event-details col-sm-5 col-md-5 col-lg-5">
         <p class="sidebar-event-name">{{event.properties.event_name}}</p>
-         <p class="sidebar-event-date">{{event.properties.start_time}}
+         <p class="sidebar-event-date">{{event.properties.start_time}}</p>
         &middot;
-          <!-- \{{#if this.properties.venue.name}}
-              \{{this.properties.venue.name}}
-          \{{else}}
-            \{{this.properties.venue.location.street}}
-          \{{/if}} -->
-        </p>
+        <p *ngIf="isValid;then venue_street else venue_name"></p>
+        <ng-template #venue_street>{{event.properties.venue.location.street}}</ng-template>
+        <ng-template #venue_name>{{event.properties.venue.name}}</ng-template>
         <p class="sidebar-event-category">{{event.properties.category}}</p>
     </div>
-
-
 
   </li>
 </ul>
