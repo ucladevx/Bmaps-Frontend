@@ -24,9 +24,7 @@ export class CategoryBarComponent implements OnInit {
           this.categories.push(categ.category);
         }
       });
-    // Add bubble numbers using events
-    console.log("in here");
-    console.log(events);
+    // Add bubble numbers using events object
   }
 
   filter(category: string): void {
