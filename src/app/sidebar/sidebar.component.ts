@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Event } from '../event';
 import { EVENTS } from '../mock-events';
 import { MapService } from '../map.service'
+import { AfterViewInit, ViewChild } from '@angular/core';
+import { CategoryBarComponent } from '../category-bar/category-bar.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,6 +14,8 @@ export class SidebarComponent implements OnInit {
 
   private events;
   private filteredEvents;
+  @ViewChild(CategoryBarComponent)
+  private categoryBar: CategoryBarComponent;
 
   selectedEvent: Event;
 
@@ -27,6 +31,7 @@ export class SidebarComponent implements OnInit {
     this.mapService.getAllEvents().subscribe(events => {
       this.events = events.features;
       this.filteredEvents = events.features;
+      this.initCategoryBar();
     })
   }
 
@@ -42,4 +47,6 @@ export class SidebarComponent implements OnInit {
       }
     }
   }
+
+  initCategoryBar(): void { this.categoryBar.getCategories(this.events) }
 }

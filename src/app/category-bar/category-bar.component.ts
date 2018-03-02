@@ -15,16 +15,18 @@ export class CategoryBarComponent implements OnInit {
 
   ngOnInit() {
     this.categories = [];
-    this.getCategories();
   }
 
-  getCategories(): void {
+  getCategories(events): void {
     this.categService.getCategories()
       .subscribe(categs => {
         for (let categ of categs.categories) {
           this.categories.push(categ.category);
         }
       });
+    // Add bubble numbers using events
+    console.log("in here");
+    console.log(events);
   }
 
   filter(category: string): void {
