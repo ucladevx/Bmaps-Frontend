@@ -40,12 +40,17 @@ export class SidebarComponent implements OnInit {
   }
 
   filterByCategory(category: string): void {
-    this.filteredEvents = [];
+    if (category === "all") {
+      this.filteredEvents = this.events;
+      return;
+    }
+    var tempEvents = [];
     for (let e of this.events) {
-      if (category.toLowerCase() == e.properties.category.toLowerCase()) {
-        this.filteredEvents.push(e);
+      if (category.toLowerCase() === e.properties.category.toLowerCase()) {
+        tempEvents.push(e);
       }
     }
+    this.filteredEvents = tempEvents;
   }
 
   initCategoryBar(): void { this.categoryBar.getCategories(this.events) }

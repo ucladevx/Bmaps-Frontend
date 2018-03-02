@@ -14,14 +14,14 @@ export class CategoryBarComponent implements OnInit {
   constructor(private categService: CategoryService) { }
 
   ngOnInit() {
-    this.categories = [];
+    this.categories = ["all"];
   }
 
   getCategories(events): void {
     this.categService.getCategories()
       .subscribe(categs => {
         for (let categ of categs.categories) {
-          this.categories.push(categ.category);
+          this.categories.push(categ.category.toLowerCase());
         }
       });
     // Add bubble numbers using events object
