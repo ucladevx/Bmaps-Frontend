@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Event } from '../event';
 
 @Component({
@@ -8,6 +8,7 @@ import { Event } from '../event';
 })
 export class EventDetailComponent implements OnInit {
 	@Input() event: Event;
+	@Output() showSideBar = new EventEmitter<boolean>();
 
 	constructor() {
 
@@ -15,7 +16,9 @@ export class EventDetailComponent implements OnInit {
 
 	ngOnInit() {
 	}
-
 	
-
+	hideEvent(event) {
+		this.showSideBar.emit(true);
+		// this.event = null;
+	}
 }

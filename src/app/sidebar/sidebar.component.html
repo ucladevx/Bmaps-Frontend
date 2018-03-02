@@ -1,3 +1,33 @@
+<div class="sidebar-outer">
+    <app-category-bar></app-category-bar>
+    <div class="sidebar">
+        <div *ngIf="show" class="event-list">
+        <!-- <div class="event-list"> -->
+            <div *ngFor="let event of events"
+            [class.selected]="event === selectedEvent"
+            (click)="onSelect(event)">
+            <a  class="sidebar-event">
+                <div class="sidebar-event-img-container col-sm-7 col-md-7 col-lg-7">
+                    <img src="{{event.properties.cover_picture}}" class="sidebar-event-img">
+                </div>
+                <div class="sidebar-event-details col-sm-5 col-md-5 col-lg-5">
+                    <p class="sidebar-event-name">{{event.properties.event_name}}</p>
+                    <p class="sidebar-event-date"[innerHTML]="toHTML(event.properties.start_time)"></p>
+                    <ng-template #venue_street>{{event.properties.venue.location.street}}</ng-template>
+                    <ng-template #venue_name>{{event.properties.venue.name}}</ng-template>
+                    <p class="sidebar-event-category">{{event.properties.category}}</p>
+                </div>
+            </a>
+            <div class="seperator"></div>
+            </div>
+        </div>
+    </div>
+    <app-event-detail [event]="selectedEvent"  (showSideBar)="showSidebar($event)"></app-event-detail>
+</div>
+<!-- <app-sidebar #selectedEvent>
+</app-sidebar>
+<app-event-detail [event]="selectedEvent"></app-event-detail> -->
+<!-- 
 <div class="sidebar-outer container">
 <h2>Sidebar</h2>
 <app-category-bar></app-category-bar>
@@ -8,5 +38,6 @@
     <span class="badge">{{event.properties.event_name}}</span> {{event.name}}
   </li>
 </ul>
-<app-event-detail [event]="selectedEvent"></app-event-detail>
+<app-event-detail [event]="selectedEvent">HELLOOOOO</app-event-detail>
 </div>
+ -->

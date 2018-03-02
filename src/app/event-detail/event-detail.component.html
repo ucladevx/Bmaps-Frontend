@@ -1,6 +1,6 @@
 <div *ngIf="event">
-	<div class="event-header">
-		<i id="left-chevron">X</i>
+	<div class="event-header col-sm-7 col-md-7 col-lg-7">
+		<i id="left-chevron" (click)="hideEvent($event)">X</i>
 	</div>
 	<div class="event-body">
 		<img class="event-image" src="{{event.properties.cover_picture}}">
@@ -9,15 +9,3 @@
 		<div class="event-description" id="event-description">{{event.properties.description}}</div>
 	</div>
 </div>
-
-<!-- <div class="hide event-container" id="one-event">
-  		<div class="event-header">
-			<i class="glyphicon glyphicon-chevron-left" id="left-chevron" onclick="hideEvent();"></i>
-		</div>
-  		<div class="event-body">
-			<img class="event-image" src="" id="modal-image">
-			<div class="event-title" id="event-title"></div>
-			<div class="event-info" id="event-info"></div>
-			<div class="event-description" id="event-description"></div>
-		</div>
-	</div> -->
