@@ -34,34 +34,40 @@ map.on('load', function () {
 	map.addSource('events', { type: 'geojson', data: keyUrl });
 	map.addSource('currloc', { type: 'geojson', data: currData });
 
-map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
-	if (error) throw error;
-	map.addImage('pin', image);
-	map.addLayer({
-		"id": "eventlayer",
-		"type": "symbol",
-		"source":"events",
-		"layout": {
-			"icon-image": "pin",
-			"icon-size":.06,
-			"icon-allow-overlap": true
-		}
+	map.loadImage('../img/red-mappointer.png', function(error, image) {
+		if (error) throw error;
+		map.addImage('pin', image);
+
+		map.loadImage('../img/blue-mappointer.png', function(error, img) {
+			if (error) throw error;
+			map.addImage('m_pin', img);
+
+			// Mappening pin for hover (same size so it covers the og)
+			map.addLayer({
+				"id": "currloc",
+				"type": "symbol",
+				"source":"currloc",
+				"layout": {
+					"visibility": "none",
+					"icon-image": "m_pin",
+					"icon-size": 0.06,
+					"icon-allow-overlap": true
+				}
+			});
+		});
+
+		// The default sized pin
+		map.addLayer({
+			"id": "eventlayer",
+			"type": "symbol",
+			"source":"events",
+			"layout": {
+				"icon-image": "pin",
+				"icon-size": 0.06,
+				"icon-allow-overlap": true
+			}
+		});
 	});
-
-	map.addLayer({
-		"id": "currloc",
-		"type": "symbol",
-		"source":"currloc",
-		"layout": {
-			"visibility": "none",
-			"icon-image": "pin",
-			"icon-size":.08,
-			"icon-allow-overlap": true
-		}
-	});
-
-
-});
 });
 
 
