@@ -174,6 +174,7 @@ function hoverPopup() {
 		map.getCanvas().style.cursor = '';
 
 		// Remove popup and pin goes back to default
+		// TODO: only remove blue pin if the event was not clicked on?
 		map.setLayoutProperty('currloc','visibility', 'none');
 		popup.remove();
 	});
@@ -189,14 +190,32 @@ function hoverPopup() {
 		//   showModal('sign-up', e.properties);
 		formatDateItem(e.features[0]);
 		
-		// TODO on click
-		// Event pin remains Mappening blue
-		// map.setLayoutProperty('currloc','visibility', 'visible');
 		// Sidebar opens corresponding event
-		// TODO on back arrow click or click on another event
-		// Event pin goes back to default
-		// map.setLayoutProperty('currloc','visibility', 'none');
+		showEvent(e.features[0]);
+
+		// Event pin remains Mappening blue
+		map.setLayoutProperty('currloc','visibility', 'visible');
+		
 	});
+}
+
+// Helper function to show current pin for sidebar interactions
+function showPin(coordsFormatted) {
+	// Hide the past event that was clicked on
+	hidePin();
+
+	map.getSource('currloc').setData({"geometry": {"type": "Point",
+			"coordinates": coordsFormatted}, "type": "Feature", "properties": {}});
+
+	map.setLayoutProperty('currloc','visibility', 'visible');
+}
+
+// Helper function to hide current pin for sidebar interactions
+// Event pin goes back to default
+// Occurs on back arrow click on sidebar or when a different event is clicked on
+// Also when the user hovers over other events
+function hidePin() {
+	map.setLayoutProperty('currloc','visibility', 'none');
 }
 
 ////////////////////////////////////////////////
