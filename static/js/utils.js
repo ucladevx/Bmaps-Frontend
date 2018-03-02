@@ -57,7 +57,7 @@ function formatCategoryItem(item) {
     }
 }
 
-var apiURL = "http://52.53.72.98/api/v1/";
+var apiURL = "https://whatsmappening.io/api/v1/";
 
 var today = new Date(); //this is being changed somewhere and I can't figure out where
 var todayD = today.getDate();
