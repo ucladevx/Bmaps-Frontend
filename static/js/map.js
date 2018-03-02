@@ -19,42 +19,30 @@ var map = new mapboxgl.Map({
 ////////////////////////////////////////////////
 /////////////////// LOAD DATA //////////////////
 ////////////////////////////////////////////////
+// Initialize currentData to UCLA
 var currData =
-{ "type": "FeatureCollection",
-				"features": [
-					{"type": "Feature",
-						"geometry": {
-								"type": "Point",
-								"coordinates": [-118.445320, 34.066915]
-						}
-					}
-				]
+{ 
+	"type": "FeatureCollection",
+		"features": [
+			{
+				"type": "Feature",
+				"geometry": {
+					"type": "Point",
+					"coordinates": [-118.445320, 34.066915]
+				}
+			}
+		]
 };
+
 map.on('load', function () {
+	// Add data sources for event data and current location
 	map.addSource('events', { type: 'geojson', data: keyUrl });
 	map.addSource('currloc', { type: 'geojson', data: currData });
 
+	// Load red pin image for event pins
 	map.loadImage('../img/red-mappointer.png', function(error, image) {
 		if (error) throw error;
 		map.addImage('pin', image);
-
-		map.loadImage('../img/blue-mappointer.png', function(error, img) {
-			if (error) throw error;
-			map.addImage('m_pin', img);
-
-			// Mappening pin for hover (same size so it covers the og)
-			map.addLayer({
-				"id": "currloc",
-				"type": "symbol",
-				"source":"currloc",
-				"layout": {
-					"visibility": "none",
-					"icon-image": "m_pin",
-					"icon-size": 0.06,
-					"icon-allow-overlap": true
-				}
-			});
-		});
 
 		// The default sized pin
 		map.addLayer({
@@ -63,6 +51,26 @@ map.on('load', function () {
 			"source":"events",
 			"layout": {
 				"icon-image": "pin",
+				"icon-size": 0.06,
+				"icon-allow-overlap": true
+			}
+		});
+	});
+
+	// Load Mappening blue pin image for current pin
+	// Used on hover or for clicked events
+	map.loadImage('../img/blue-mappointer.png', function(error, image) {
+		if (error) throw error;
+		map.addImage('m_pin', image);
+
+		// Mappening pin for hover (same size so it covers the og)
+		map.addLayer({
+			"id": "currloc",
+			"type": "symbol",
+			"source":"currloc",
+			"layout": {
+				"visibility": "none",
+				"icon-image": "m_pin",
 				"icon-size": 0.06,
 				"icon-allow-overlap": true
 			}
@@ -132,8 +140,10 @@ function hoverPopup() {
 		offset: {'bottom':[7.5 ,0]}
 	});
 
+	// Mouse enters event region, hover behavior handled
 	map.on('mouseenter', 'eventlayer', function(e) {
 		// Change the cursor style as a UI indicator.
+		// Mouse becomes the click hand
 		map.getCanvas().style.cursor = 'pointer';
 		console.log("" + e.features[0].geometry.coordinates);
 
@@ -145,11 +155,12 @@ function hoverPopup() {
 
 		map.getSource('currloc').setData({"geometry": {"type": "Point",
 			"coordinates": coordsFormatted}, "type": "Feature", "properties": {}});
-		// change size when hover not right
+
+		// On hover over an event pin, pin turns Mappening blue
 		map.setLayoutProperty('currloc','visibility', 'visible');
 
-		// Populate the popup and set its coordinates
-		// based on the feature found.
+		// On hover popup with event info shows up
+		// Populate the popup and set its coordinates based on the feature found
 		popup.setLngLat(e.features[0].geometry.coordinates)
 		.setHTML('<p id=popupEvent></p> <p id=popupDate></p>')
 		.addTo(map);
@@ -157,13 +168,19 @@ function hoverPopup() {
 		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
 		document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
 	});
+
+	// Mouse leaves an event region
 	map.on('mouseleave', 'eventlayer', function() {
 		map.getCanvas().style.cursor = '';
-		// change size when hover not right
+
+		// Remove popup and pin goes back to default
 		map.setLayoutProperty('currloc','visibility', 'none');
 		popup.remove();
 	});
+
+	// Click action on event
 	map.on('click', 'eventlayer', function (e) {
+		// Move map view to event
 		map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
 		// console.log(e);
 		// console.log(e.features);
@@ -171,6 +188,14 @@ function hoverPopup() {
 		// console.log(e.features[0].properties)
 		//   showModal('sign-up', e.properties);
 		formatDateItem(e.features[0]);
+		
+		// TODO on click
+		// Event pin remains Mappening blue
+		// map.setLayoutProperty('currloc','visibility', 'visible');
+		// Sidebar opens corresponding event
+		// TODO on back arrow click or click on another event
+		// Event pin goes back to default
+		// map.setLayoutProperty('currloc','visibility', 'none');
 	});
 }
 
