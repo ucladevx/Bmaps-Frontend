@@ -10,7 +10,7 @@ import { GeoJson, FeatureCollection } from './map';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  title = 'mappening';
 
   public mapEvents: FeatureCollection;
 
