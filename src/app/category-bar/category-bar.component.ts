@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output} from '@angular/core';
 
 import { CategoryService } from '../category.service';
 
@@ -9,6 +9,7 @@ import { CategoryService } from '../category.service';
 })
 export class CategoryBarComponent implements OnInit {
   categories: string[];
+  @Output() onCategorySelect = new EventEmitter<string>();
 
   constructor(private categService: CategoryService) { }
 
@@ -24,5 +25,9 @@ export class CategoryBarComponent implements OnInit {
           this.categories.push(categ.category);
         }
       });
+  }
+
+  filter(category: string): void {
+    this.onCategorySelect.emit(category);
   }
 }
