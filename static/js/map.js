@@ -34,7 +34,8 @@ map.on('load', function () {
 	map.addSource('events', { type: 'geojson', data: keyUrl });
 	map.addSource('currloc', { type: 'geojson', data: currData });
 
-map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
+//map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
+map.loadImage('https://drive.google.com/file/d/1mpkhR__APHS6hIgS2qsn8SQU7mZfkC-M/view', function(error, image) {
 	if (error) throw error;
 	map.addImage('pin', image);
 	map.addLayer({

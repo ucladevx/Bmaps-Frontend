@@ -325,7 +325,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .dropdown.sidebar-header:hover {
-  background: #52d8d9de;
+  color: #52d8d9de;
 }
 
 /* Using only background gradients */
@@ -448,6 +448,7 @@ Picking Date
   float:left;
   font-size: 20;
   color: #656565;
+  padding: 10px;
 }
 
 #leftArrow:hover {
@@ -464,6 +465,7 @@ Picking Date
   font-size: 20;
   float:right;
   color: #656565;
+  padding: 10px;
 }
 
 #relativeDay {
@@ -482,7 +484,7 @@ Picking Date
   font-size: 16;
   position: relative;
   display: inline-block;
-  padding: initial;
+  padding-top:10px;
   font-weight:500;
   /* -webkit-text-stroke: .05px #FCFCFC; */
   -webkit-text-fill-color: #656565;
@@ -509,6 +511,7 @@ Picking Date
 .today-btn {
   font-family: 'Poppins', sans-serif;
   width: 100%;
+  font-size: 13px;
   text-align: center;
   background-color: #ffffff;
   border-radius: 10px;
