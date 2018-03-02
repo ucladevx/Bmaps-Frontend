@@ -131,6 +131,8 @@ function threeDDisplay() {
 ////////////////////////////////////////////////
 ///////////// HOVER POPUP WHEN HOVER ///////////
 ////////////////////////////////////////////////
+// Keep track of which event is clicked on
+var clickedEvent = "none";
 
 function hoverPopup() {
 	// Create a popup, but don't add it to the map yet.
@@ -153,11 +155,14 @@ function hoverPopup() {
 		console.log(coords);
 		console.log(coordsFormatted);
 
-		map.getSource('currloc').setData({"geometry": {"type": "Point",
+		// Only change blue pin if an event is not already selected
+		// On hover over an event pin, pin turns Mappening blue
+		if (clickedEvent == "none") {
+			map.getSource('currloc').setData({"geometry": {"type": "Point",
 			"coordinates": coordsFormatted}, "type": "Feature", "properties": {}});
 
-		// On hover over an event pin, pin turns Mappening blue
-		map.setLayoutProperty('currloc','visibility', 'visible');
+			map.setLayoutProperty('currloc','visibility', 'visible');
+		}
 
 		// On hover popup with event info shows up
 		// Populate the popup and set its coordinates based on the feature found
@@ -173,10 +178,13 @@ function hoverPopup() {
 	map.on('mouseleave', 'eventlayer', function() {
 		map.getCanvas().style.cursor = '';
 
-		// Remove popup and pin goes back to default
-		// TODO: only remove blue pin if the event was not clicked on?
-		map.setLayoutProperty('currloc','visibility', 'none');
+		// Remove popup
 		popup.remove();
+
+		// Only remove blue pin if an event is not currently clicked on/selected
+		if (clickedEvent == "none") {
+			map.setLayoutProperty('currloc','visibility', 'none');
+		}
 	});
 
 	// Click action on event
@@ -195,7 +203,8 @@ function hoverPopup() {
 
 		// Event pin remains Mappening blue
 		map.setLayoutProperty('currloc','visibility', 'visible');
-		
+
+		clickedEvent = e.features[0].properties.event_name;
 	});
 }
 
@@ -216,6 +225,16 @@ function showPin(coordsFormatted) {
 // Also when the user hovers over other events
 function hidePin() {
 	map.setLayoutProperty('currloc','visibility', 'none');
+}
+
+// Helper function to keep track of which event is clicked on
+function clickEvent(event) {
+	clickedEvent = event;
+}
+
+// Helper function to keep track of which event is clicked on
+function unclickEvent() {
+	clickedEvent = "none";
 }
 
 ////////////////////////////////////////////////

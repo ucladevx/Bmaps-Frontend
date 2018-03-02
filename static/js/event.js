@@ -19,6 +19,7 @@ function showEvent(event) {
 	var coords = "" + geo.coordinates ;
 	var coordsFormatted = coords.split(",");
 	showPin(coordsFormatted);
+	clickEvent(prop.event_name);
 }
 
 function hideEvent(){
@@ -28,4 +29,5 @@ function hideEvent(){
 	$('.sidebar-header').removeClass('hide');
 
 	hidePin();
+	unclickEvent();
 }
