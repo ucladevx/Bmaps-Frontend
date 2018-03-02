@@ -3,16 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 import { GeoJson, FeatureCollection } from './map';
+import { SelectedDate } from './selectedDate'
 import * as mapboxgl from 'mapbox-gl';
-
-public class SelectedDate {
-    day: number;
-    month: number;
-    year: number;
-}
 
 @Injectable()
 export class MapService {
+
   private baseEventsUrl = "http://www.whatsmappening.io/api/v1";
   private date: SelectedDate;
 

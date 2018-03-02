@@ -72,10 +72,11 @@ export class DateService {
       let minutes = date.getMinutes();
       //console.log(minutes);
 
-      if (day < 10){
-          day = "0" + day;
+      let dayString;
+      if (day < 10) {
+          dayString = "0" + day;
       }
-      return this.getMonthNameFromMonthNumber(month) + " " + day + " &middot; " + this.formatHour(hour, minutes);
+      return this.getMonthNameFromMonthNumber(month) + " " + dayString + " &middot; " + this.formatHour(hour, minutes);
   }
 
   formatDateItem(item): void {
@@ -118,6 +119,6 @@ export class DateService {
   //   d = currDay.getDate();
   //   m = currDay.getMonth();
   //   updateDate();
-  }
+  // }
 
 }
