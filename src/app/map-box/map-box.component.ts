@@ -122,7 +122,7 @@ export class MapBoxComponent implements OnInit {
           "icon-size": size,
           "icon-allow-overlap": true
         }
-      }
+      });
     }
 
     addControls(): void {
@@ -300,11 +300,12 @@ export class MapBoxComponent implements OnInit {
             this.lat = position.coords.latitude;
             this.lng = position.coords.longitude;
             resolve();
-          }
+          });
         }
         else {
           reject();
         }
-      }
+      });
+
     }
 }

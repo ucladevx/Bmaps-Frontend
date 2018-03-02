@@ -3,22 +3,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 import { GeoJson, FeatureCollection } from './map';
+import { SelectedDate } from './selectedDate'
 import * as mapboxgl from 'mapbox-gl';
-
-private class SelectedDate {
-    day: number;
-    month: number;
-    year: number;
-}
 
 @Injectable()
 export class MapService {
+
   private baseEventsUrl = "http://www.whatsmappening.io/api/v1";
   private date: SelectedDate;
-  
+
   constructor(private http: HttpClient) {
       let today = new Date();
-      this.date = { day: today.getDate(), month: today.getMonth(), year: today.getFullYear()}; 
+      this.date = { day: today.getDate(), month: today.getMonth(), year: today.getFullYear()};
       this.getAllEvents();
   }
 

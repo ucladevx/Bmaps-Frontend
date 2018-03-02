@@ -6,7 +6,7 @@ export class DateService {
 
   today = new Date();
   todayD = this.today.getDate();
-  todayM = this.today.getMonth(); 
+  todayM = this.today.getMonth();
   todayY = this.today.getFullYear();
 
   todayDate = new Date();
@@ -72,20 +72,21 @@ export class DateService {
       let minutes = date.getMinutes();
       //console.log(minutes);
 
-      if (day < 10){
-          day = "0" + day;
+      let dayString;
+      if (day < 10) {
+          dayString = "0" + day;
       }
-      return this.getMonthNameFromMonthNumber(month) + " " + day + " &middot; " + this.formatHour(hour, minutes);
+      return this.getMonthNameFromMonthNumber(month) + " " + dayString + " &middot; " + this.formatHour(hour, minutes);
   }
 
   formatDateItem(item): void {
       let dateOfStart = new Date(item.properties.start_time);
       let dateOfEnd = new Date(item.properties.end_time);
       if (item.properties.end_time != "<NONE>"){
-          item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
+          item.properties.start_time = this.formatDate(dateOfStart) + " - " + this.formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
       }
       else {
-          item.properties.start_time = formatDate(dateOfStart);
+          item.properties.start_time = this.formatDate(dateOfStart);
       }
   }
 
@@ -118,6 +119,6 @@ export class DateService {
   //   d = currDay.getDate();
   //   m = currDay.getMonth();
   //   updateDate();
-  }
+  // }
 
 }
