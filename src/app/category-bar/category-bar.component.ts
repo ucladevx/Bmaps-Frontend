@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter, Output} from '@angular/core';
 
 import { CategoryService } from '../category.service';
+import { EventService } from '../event.service';
+import { FeatureCollection, GeoJson } from '../map';
 
 @Component({
   selector: 'app-category-bar',
@@ -8,16 +10,21 @@ import { CategoryService } from '../category.service';
   styleUrls: ['./category-bar.component.css']
 })
 export class CategoryBarComponent implements OnInit {
-  categories: string[];
-  @Output() onCategorySelect = new EventEmitter<string>();
+  private categories: string[];
+  private events: GeoJson[];
 
-  constructor(private categService: CategoryService) { }
+  constructor(private categService: CategoryService, private eventService: EventService) { }
 
   ngOnInit() {
     this.categories = ["all"];
+    this.eventService.currEvents$.subscribe(eventCollection => {
+      this.events = eventCollection.features;
+      this.getCategories();
+    });
   }
 
-  getCategories(events): void {
+  getCategories(): void {
+    console.log("UPDATING CATEGORIES");
     this.categService.getCategories()
       .subscribe(categs => {
         for (let categ of categs.categories) {
@@ -28,6 +35,6 @@ export class CategoryBarComponent implements OnInit {
   }
 
   filter(category: string): void {
-    this.onCategorySelect.emit(category);
+    this.eventService.filterEvents(category);
   }
 }

@@ -13,6 +13,7 @@ import { CategoryBarComponent } from './category-bar/category-bar.component';
 import { CategoryService } from './category.service';
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { EventService } from './event.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     SharedModule,
     BsDropdownModule.forRoot()
   ],
-  providers: [MapService, CategoryService],
+  providers: [MapService, CategoryService, EventService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

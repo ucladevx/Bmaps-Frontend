@@ -1,7 +1,5 @@
 <div class="sidebar-outer">
-    <app-category-bar
-      (onCategorySelect)="filterByCategory($event)">
-    </app-category-bar>
+    <app-category-bar></app-category-bar>
         <div class="event-list">
             <div *ngFor="let event of filteredEvents"
             [class.selected]="event === selectedEvent"

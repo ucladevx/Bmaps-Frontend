@@ -3,8 +3,9 @@ import { Event } from '../event';
 import { EVENTS } from '../mock-events';
 import { MapService } from '../map.service';
 import { DateService } from '../shared/date.service';
+import { EventService } from '../event.service';
 import { AfterViewInit, ViewChild } from '@angular/core';
-import { CategoryBarComponent } from '../category-bar/category-bar.component';
+import { FeatureCollection, GeoJson } from '../map';
 
 @Component({
     selector: 'app-sidebar',
@@ -13,54 +14,22 @@ import { CategoryBarComponent } from '../category-bar/category-bar.component';
     providers: [ DateService ]
 })
 export class SidebarComponent implements OnInit {
+    private filteredEvents: GeoJson[];
+    private selectedEvent: Event;
 
-    private events;
-    private filteredEvents;
-    @ViewChild(CategoryBarComponent)
-    private categoryBar: CategoryBarComponent;
-
-    selectedEvent: Event;
-
-
-    constructor(private mapService: MapService, private _dateService: DateService) { }
+    constructor(private eventService: EventService) { }
 
     ngOnInit() {
-        this.getEvents();
+      this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+        this.filteredEvents = eventCollection.features;
+      });
     }
 
     toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
 
-    getEvents(): void {
-      // console.log(this.mapService.getAllEvents().features);
-      this.mapService.getAllEvents().subscribe(events => {
-        this.events = events.features;
-        this.filteredEvents = events.features;
-        this.initCategoryBar();
-        for (var event of this.events) {
-            this._dateService.formatDateItem(event);
-        }
-      })
-    }
-
     onSelect(event: Event): void {
       this.selectedEvent = event;
     }
-
-    filterByCategory(category: string): void {
-      if (category === "all") {
-        this.filteredEvents = this.events;
-        return;
-      }
-      var tempEvents = [];
-      for (let e of this.events) {
-        if (category.toLowerCase() === e.properties.category.toLowerCase()) {
-          tempEvents.push(e);
-        }
-      }
-      this.filteredEvents = tempEvents;
-    }
-
-    initCategoryBar(): void { this.categoryBar.getCategories(this.events) }
 }
