@@ -208,31 +208,35 @@ function hoverPopup() {
 	});
 }
 
-// Helper function to show current pin for sidebar interactions
+/* Helper functions called in event.js */
+
+// Passed in coordinates of selected event in sidebar
+// Updated currloc data and displays blue pin for corresponding event
 function showPin(coordsFormatted) {
-	// Hide the past event that was clicked on
+	// Hide the past event that was clicked on 
+	// currloc data has not been updated since last click
 	hidePin();
 
+	// Set the currloc to selected event coordinates
 	map.getSource('currloc').setData({"geometry": {"type": "Point",
 			"coordinates": coordsFormatted}, "type": "Feature", "properties": {}});
 
+	// Display blue pin
 	map.setLayoutProperty('currloc','visibility', 'visible');
 }
 
-// Helper function to hide current pin for sidebar interactions
 // Event pin goes back to default
 // Occurs on back arrow click on sidebar or when a different event is clicked on
-// Also when the user hovers over other events
 function hidePin() {
 	map.setLayoutProperty('currloc','visibility', 'none');
 }
 
-// Helper function to keep track of which event is clicked on
-function clickEvent(event) {
-	clickedEvent = event;
+// Set clickedEvent to the name of the event that was clicked on
+function clickEvent(event_name) {
+	clickedEvent = event_name;
 }
 
-// Helper function to keep track of which event is clicked on
+// Set clickedEvent to none, no event is currently selected
 function unclickEvent() {
 	clickedEvent = "none";
 }
