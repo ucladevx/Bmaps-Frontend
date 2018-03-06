@@ -1,7 +1,7 @@
 <div class="sidebar-outer">
     <app-category-bar></app-category-bar>
     <div class="sidebar">
-        <div *ngIf="show" class="event-list">
+        <div class="event-list">
         <!-- <div class="event-list"> -->
             <div *ngFor="let event of events"
             [class.selected]="event === selectedEvent"

@@ -8,13 +8,13 @@ import { DateService } from '../shared/date.service';
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.css'],
-    providers: [ DateService ]
+    providers: [ DateService ],
 })
 export class SidebarComponent implements OnInit {
     private events;
 
     selectedEvent: Event;
-    show = true;
+    show: boolean = true;
 
 
     constructor(private mapService: MapService, private _dateService: DateService) { }
@@ -39,12 +39,13 @@ export class SidebarComponent implements OnInit {
 
     showSidebar(result: boolean) {
         this.show = true;
+        this.selectedEvent = null;
     }  
 
 
     onSelect(event: Event): void {
         this.selectedEvent = event;
-        console.log("selectedEvent");
+        console.log("selectedEvent: " + this.selectedEvent.id);
         this.show = false;
     }
 }

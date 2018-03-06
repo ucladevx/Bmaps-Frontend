@@ -15,6 +15,7 @@ export class EventDetailComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		console.log(event);
 	}
 	
 	hideEvent(event) {
