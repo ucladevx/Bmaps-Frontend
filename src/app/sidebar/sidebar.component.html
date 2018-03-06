@@ -1,8 +1,8 @@
 <div class="sidebar-outer">
-    <app-category-bar></app-category-bar>
     <div class="sidebar">
         <div class="event-list">
             <div *ngIf="show"><!-- -->
+            <app-category-bar></app-category-bar>
                 <div *ngFor="let event of events"
                 [class.selected]="event === selectedEvent"
                 (click)="onSelect(event)">
