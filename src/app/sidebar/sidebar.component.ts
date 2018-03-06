@@ -13,7 +13,7 @@ import { DateService } from '../shared/date.service';
 export class SidebarComponent implements OnInit {
     private events;
 
-    selectedEvent: Event;
+    selectedEvent: Event = null;
     show: boolean = true;
 
 
