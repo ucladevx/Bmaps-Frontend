@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { Event } from '../event';
 import { EVENTS } from '../mock-events';
 import { MapService } from '../map.service';
@@ -8,13 +8,13 @@ import { DateService } from '../shared/date.service';
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.css'],
-    providers: [ DateService ]
+    providers: [ DateService ],
 })
 export class SidebarComponent implements OnInit {
-
     private events;
 
-    selectedEvent: Event;
+    selectedEvent: Event = null;
+    show: boolean = true;
 
 
     constructor(private mapService: MapService, private _dateService: DateService) { }
@@ -37,8 +37,14 @@ export class SidebarComponent implements OnInit {
     })
     }
 
+    showSidebar(result: boolean) {
+        this.show = true;
+        this.selectedEvent = null;
+    }  
+
 
     onSelect(event: Event): void {
         this.selectedEvent = event;
+        this.show = false;
     }
 }
