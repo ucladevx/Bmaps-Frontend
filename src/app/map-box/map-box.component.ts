@@ -22,6 +22,7 @@ export class MapBoxComponent implements OnInit {
     // data
     source: any;
     keyUrl: string;
+    events: FeatureCollection;
 
     // style
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
@@ -51,8 +52,15 @@ export class MapBoxComponent implements OnInit {
         this.map.addImage('pin', image);
 
         let today = new Date();
-        this.keyUrl = this._mapService.getEventsOnDateURL(today.getDate(), today.getMonth(), today.getFullYear());
-        this.addEventLayer(this.keyUrl)
+
+        this._mapService.getAllEvents()
+                .subscribe(events => {
+                  this.events = events;
+                  console.log(events);
+                  this.addEventLayer(events);
+                });
+        // this.keyUrl = this._mapService.getEventsOnDateURL(today.getDate(), today.getMonth(), today.getFullYear());
+        // this.addEventLayer(this.keyUrl)
       });
 
       //Add user location pin
@@ -82,6 +90,12 @@ export class MapBoxComponent implements OnInit {
 
       //Add a larger pin to later use for on hover
       this.addPinToLocation('hoveredPin', this.lat, this.lng, "pin", .08, false);
+
+      //TEST FOR GOOD SQUARE size
+      this.addPinToLocation('hp1', this.lat+.0001, this.lng, "pin", .08, true);
+      this.addPinToLocation('hp2', this.lat, this.lng, "pin", .08, true);
+      this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, "pin", .08, true);
+      this.addPinToLocation('hp4', this.lat, this.lng+.0001, "pin", .08, true);
     }
 
     buildMap() {
@@ -198,7 +212,9 @@ export class MapBoxComponent implements OnInit {
 
     		// Populate the popup and set its coordinates
     		// based on the feature found.
-    		popup.setLngLat([coords[0]-.00015, coords[1]])
+    		// popup.setLngLat([coords[0]-.00015, coords[1]])
+        popup.setLngLat([coords[0], coords[1]])
+
     		.setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>')
     		.addTo(this.map);
 
