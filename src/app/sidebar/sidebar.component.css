@@ -22,8 +22,15 @@
     border-color: rgb(207,207,207);
 }
 
+
 .event-list{
-    height: 51em;
+    height: 40em;
+}
+
+@media only screen and (min-width: 576px) {
+    .event-list{
+        height: 54em;
+    }
 }
 
 .sidebar{
