@@ -1,8 +1,8 @@
 <div class="sidebar-outer">
     <div class="sidebar">
+        <app-category-bar></app-category-bar>
         <div class="event-list">
-            <div *ngIf="show"><!-- -->
-            <app-category-bar></app-category-bar>
+            <div *ngIf="show">
                 <div *ngFor="let event of events"
                 [class.selected]="event === selectedEvent"
                 (click)="onSelect(event)">
@@ -19,9 +19,9 @@
                     </div>
                 </a>
                 <div class="seperator"></div>
-                </div>
-                </div>
-            <app-event-detail [event]="selectedEvent"  (showSideBar)="showSidebar($event)"></app-event-detail>
+            </div>
         </div>
+        <app-event-detail [event]="selectedEvent"  (showSideBar)="showSidebar($event)"></app-event-detail>
     </div>
+</div>
 </div>

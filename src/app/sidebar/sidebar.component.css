@@ -13,18 +13,15 @@
 
 
 .event-list{
-    height: 23em;
+    height: 20em;
+    overflow: scroll;
 }
 
 @media only screen and (min-width: 576px) {
     .event-list{
-        height: 54em;
+        height: 51em;
+        overflow: scroll;
     }
-}
-
-.sidebar{
-    height: 87%;
-    overflow: scroll;
 }
 
 .search-header{
