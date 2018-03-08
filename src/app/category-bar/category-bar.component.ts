@@ -12,6 +12,7 @@ import { FeatureCollection, GeoJson } from '../map';
 export class CategoryBarComponent implements OnInit {
   private categories: string[];
   private events: GeoJson[];
+  private selectedCategory = "all categories";
 
   constructor(private categService: CategoryService, private eventService: EventService) { }
 
@@ -28,13 +29,16 @@ export class CategoryBarComponent implements OnInit {
     this.categService.getCategories()
       .subscribe(categs => {
         for (let categ of categs.categories) {
-          this.categories.push(categ.category.toLowerCase());
+          this.categories.push(categ.category.toLowerCase().replace('_', ' '));
         }
       });
     // Add bubble numbers using events object
   }
 
   filter(category: string): void {
+    if (category === "all") this.selectedCategory = "all categories";
+    else this.selectedCategory = category.toLowerCase();
+    category = category.replace(' ', '_');
     this.eventService.filterEvents(category);
   }
 }
