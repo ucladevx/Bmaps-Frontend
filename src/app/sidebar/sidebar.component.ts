@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { Event } from '../event';
 import { EVENTS } from '../mock-events';
-import { MapService } from '../map.service';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
 import { AfterViewInit, ViewChild } from '@angular/core';
@@ -14,7 +13,7 @@ import { FeatureCollection, GeoJson } from '../map';
     providers: [ DateService ],
 })
 export class SidebarComponent implements OnInit {
-    private filteredEvents: GeoJson[]; 
+    private filteredEvents: GeoJson[];
     private selectedEvent: Event = null;
     show: boolean = true;
 
@@ -29,7 +28,7 @@ export class SidebarComponent implements OnInit {
     toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
-  
+
     onSelect(event: Event): void {
         this.selectedEvent = event;
         this.show = false;
@@ -38,5 +37,5 @@ export class SidebarComponent implements OnInit {
     showSidebar(result: boolean) {
         this.show = true;
         this.selectedEvent = null;
-    }  
+    }
 }
