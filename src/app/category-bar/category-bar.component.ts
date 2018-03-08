@@ -12,6 +12,7 @@ import { FeatureCollection, GeoJson } from '../map';
 export class CategoryBarComponent implements OnInit {
   private categories: string[];
   private events: GeoJson[];
+  private selectedCategory = "all categories";
 
   constructor(private categService: CategoryService, private eventService: EventService) { }
 
@@ -35,6 +36,12 @@ export class CategoryBarComponent implements OnInit {
   }
 
   filter(category: string): void {
+    if (category === "all") {
+      this.selectedCategory = "all categories";
+    }
+    else {
+      this.selectedCategory = category.toLowerCase();
+    }
     this.eventService.filterEvents(category);
   }
 }

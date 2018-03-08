@@ -1,6 +1,6 @@
 <div id="categ-div" class="btn-group" dropdown>
   <button id="categ-btn" dropdownToggle type="button" class="btn btn-light dropdown-toggle">
-    all categories<span class="caret"></span>
+    <span id="categ-name">{{selectedCategory}}</span><span class="caret"></span>
   </button>
   <ul id="categ-menu" *dropdownMenu class="dropdown-menu" role="menu">
     <li *ngFor="let category of categories">
