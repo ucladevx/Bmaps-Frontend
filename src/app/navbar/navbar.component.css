@@ -7,8 +7,12 @@
 }
 
 .navbar-default{
-    background: linear-gradient(#43576B, #8296A1);
+    background: rgb(71,71,71);
     border-color: rgb(191,191,191);
+}
+
+.navbar-default .navbar-toggler-icon{
+    background:  url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(120,213,215, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
 .navbar-default .navbar-toggle{
@@ -45,8 +49,18 @@
 }
 
 #navbar-brand{
-    color: white;
+    color: rgb(120,213,215);
     font-weight: 600;
+}
+
+#navbar-brand span {
+    display: none;
+}
+
+@media only screen and (min-width: 576px) {
+    #navbar-brand span{
+        display: inline-block;
+    }
 }
 
 #nav-logo{
@@ -59,4 +73,8 @@ ul li {
 
 li a {
     border-radius: 100px;
+}
+
+a:hover{
+    text-decoration: none;
 }

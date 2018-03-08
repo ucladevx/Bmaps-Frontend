@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { Event } from '../event';
-import { EVENTS } from '../mock-events';
 import { MapService } from '../map.service';
 import { DateService } from '../shared/date.service';
 
@@ -27,7 +26,7 @@ export class SidebarComponent implements OnInit {
     toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
-    
+
     getEvents(): void {
         this.mapService.getAllEvents().subscribe(events => {
         this.events = events.features;
@@ -40,7 +39,7 @@ export class SidebarComponent implements OnInit {
     showSidebar(result: boolean) {
         this.show = true;
         this.selectedEvent = null;
-    }  
+    }
 
 
     onSelect(event: Event): void {

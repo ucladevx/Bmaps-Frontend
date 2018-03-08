@@ -94,8 +94,8 @@
 
 .seperator
 {
-    height: 2px;
-    background-image: radial-gradient(#CCC, #FFF), radial-gradient(#CCC, #FFF);
+    height: 1px;
+    background: rgb(151,151,151);
     background-position: 0, 100%, 0, 100%;
     margin: 3px;
 }

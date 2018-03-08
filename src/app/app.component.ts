@@ -4,9 +4,6 @@ import { MapService } from './map.service';
 import { CategoryService } from './category.service';
 import { GeoJson, FeatureCollection } from './map';
 
-declare var jquery:any;
-declare var $ :any;
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

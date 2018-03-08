@@ -12,6 +12,7 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
 import { CategoryBarComponent } from './category-bar/category-bar.component';
 import { CategoryService } from './category.service';
 
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NavbarComponent } from './navbar/navbar.component';
 
@@ -29,6 +30,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     FormsModule,
     HttpClientModule,
     SharedModule,
+    CollapseModule.forRoot(),
     BsDropdownModule.forRoot()
   ],
   providers: [MapService, CategoryService],
