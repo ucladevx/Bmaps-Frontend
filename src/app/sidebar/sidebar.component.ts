@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { Event } from '../event';
-import { MapService } from '../map.service';
 import { DateService } from '../shared/date.service';
+import { EventService } from '../event.service';
+import { AfterViewInit, ViewChild } from '@angular/core';
+import { FeatureCollection, GeoJson } from '../map';
 
 @Component({
     selector: 'app-sidebar',
@@ -10,40 +12,29 @@ import { DateService } from '../shared/date.service';
     providers: [ DateService ],
 })
 export class SidebarComponent implements OnInit {
-    private events;
-
-    selectedEvent: Event = null;
+    private filteredEvents: GeoJson[];
+    private selectedEvent: Event = null;
     show: boolean = true;
 
-
-    constructor(private mapService: MapService, private _dateService: DateService) { }
+    constructor(private eventService: EventService) { }
 
     ngOnInit() {
-        this.getEvents();
-
+      this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+        this.filteredEvents = eventCollection.features;
+      });
     }
 
     toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
 
-    getEvents(): void {
-        this.mapService.getAllEvents().subscribe(events => {
-        this.events = events.features;
-        for (var event of this.events) {
-            this._dateService.formatDateItem(event);
-        }
-    })
+    onSelect(event: Event): void {
+        this.selectedEvent = event;
+        this.show = false;
     }
 
     showSidebar(result: boolean) {
         this.show = true;
         this.selectedEvent = null;
-    }
-
-
-    onSelect(event: Event): void {
-        this.selectedEvent = event;
-        this.show = false;
     }
 }

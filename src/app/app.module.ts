@@ -4,7 +4,6 @@ import { HttpClientModule } from '@angular/common/http';  // replaces previous H
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from './shared/shared.module';
 
-import { MapService } from './map.service';
 import { AppComponent } from './app.component';
 import { MapBoxComponent } from './map-box/map-box.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -15,6 +14,7 @@ import { CategoryService } from './category.service';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NavbarComponent } from './navbar/navbar.component';
+import { EventService } from './event.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot()
   ],
-  providers: [MapService, CategoryService],
+  providers: [CategoryService, EventService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

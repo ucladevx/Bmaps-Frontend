@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {Observable} from 'rxjs/Rx';
-import { MapService } from './map.service';
 import { CategoryService } from './category.service';
 import { GeoJson, FeatureCollection } from './map';
 

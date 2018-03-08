@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 
-import { MapService } from '../map.service';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../shared/date.service';
+import { EventService } from '../event.service';
 
 @Component({
   selector: 'app-map-box',
@@ -26,11 +26,17 @@ export class MapBoxComponent implements OnInit {
     // style
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
 
-    constructor(private _mapService: MapService, private _dateService: DateService) {
+    private events: FeatureCollection;
+
+    constructor(private _dateService: DateService, private eventService: EventService) {
       mapboxgl.accessToken = environment.mapbox.accessToken;
     }
 
     ngOnInit() {
+      this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+        this.events = eventCollection;
+        this.updateSource();
+      });
       this.buildMap();
       //I think you should use something like this to create all the promises once instead of calling function creating promise several times
       let _promiseMapLoad = this.promiseMapLoad()
@@ -51,8 +57,7 @@ export class MapBoxComponent implements OnInit {
         this.map.addImage('pin', image);
 
         let today = new Date();
-        this.keyUrl = this._mapService.getEventsOnDateURL(today.getDate(), today.getMonth(), today.getFullYear());
-        this.addEventLayer(this.keyUrl)
+        this.addEventLayer(this.events);
       });
 
       //Add user location pin
@@ -82,6 +87,18 @@ export class MapBoxComponent implements OnInit {
 
       //Add a larger pin to later use for on hover
       this.addPinToLocation('hoveredPin', this.lat, this.lng, "pin", .08, false);
+
+      //TEST FOR GOOD SQUARE size
+      // this.addPinToLocation('hp1', this.lat+.0001, this.lng, "pin", .08, true);
+      // this.addPinToLocation('hp2', this.lat, this.lng, "pin", .08, true);
+      // this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, "pin", .08, true);
+      // this.addPinToLocation('hp4', this.lat, this.lng+.0001, "pin", .08, true);
+
+    }
+
+    updateSource(): void {
+      if (this.map == undefined || this.map.getSource('events') == undefined) return;
+      this.map.getSource('events').setData(this.events);
     }
 
     buildMap() {
@@ -198,7 +215,9 @@ export class MapBoxComponent implements OnInit {
 
     		// Populate the popup and set its coordinates
     		// based on the feature found.
-    		popup.setLngLat([coords[0]-.00015, coords[1]])
+    		// popup.setLngLat([coords[0]-.00015, coords[1]])
+        popup.setLngLat([coords[0], coords[1]])
+
     		.setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>')
     		.addTo(this.map);
 
