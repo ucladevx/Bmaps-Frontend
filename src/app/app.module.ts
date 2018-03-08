@@ -13,6 +13,7 @@ import { CategoryService } from './category.service';
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { EventService } from './event.service';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { EventService } from './event.service';
     MapBoxComponent,
     SidebarComponent,
     EventDetailComponent,
-    CategoryBarComponent
+    CategoryBarComponent,
+    DateSelectorComponent
   ],
   imports: [
     BrowserModule,
