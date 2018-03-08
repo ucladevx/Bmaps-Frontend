@@ -13,6 +13,7 @@ import { CategoryBarComponent } from './category-bar/category-bar.component';
 import { CategoryService } from './category.service';
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     MapBoxComponent,
     SidebarComponent,
     EventDetailComponent,
-    CategoryBarComponent
+    CategoryBarComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
