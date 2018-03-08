@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { Event } from '../event';
 import { EVENTS } from '../mock-events';
 import { MapService } from '../map.service';
@@ -11,11 +11,12 @@ import { FeatureCollection, GeoJson } from '../map';
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.css'],
-    providers: [ DateService ]
+    providers: [ DateService ],
 })
 export class SidebarComponent implements OnInit {
-    private filteredEvents: GeoJson[];
-    private selectedEvent: Event;
+    private filteredEvents: GeoJson[]; 
+    private selectedEvent: Event = null;
+    show: boolean = true;
 
     constructor(private eventService: EventService) { }
 
@@ -28,8 +29,14 @@ export class SidebarComponent implements OnInit {
     toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
-
+  
     onSelect(event: Event): void {
-      this.selectedEvent = event;
+        this.selectedEvent = event;
+        this.show = false;
     }
+
+    showSidebar(result: boolean) {
+        this.show = true;
+        this.selectedEvent = null;
+    }  
 }
