@@ -4,7 +4,10 @@
   </button>
   <ul id="categ-menu" *dropdownMenu class="dropdown-menu" role="menu">
     <li *ngFor="let category of categories">
-      <a class="dropdown-item">{{category}}</a>
+      <a class="dropdown-item"
+         (click)="filter(category)">
+        {{category}}
+      </a>
     </li>
   </ul>
 </div>

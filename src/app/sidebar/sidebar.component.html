@@ -3,7 +3,7 @@
         <div class="event-list">
             <div *ngIf="show"><!-- -->
             <app-category-bar></app-category-bar>
-                <div *ngFor="let event of events"
+                <div *ngFor="let event of filteredEvents"
                 [class.selected]="event === selectedEvent"
                 (click)="onSelect(event)">
                 <a  class="sidebar-event">
