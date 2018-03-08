@@ -75,6 +75,8 @@ export class MapBoxComponent implements OnInit {
     addEventLayer(data): void {
       //TODO: Add Removal of previous event layer
       //can change the url to a static geojson object from the service
+
+      //TODO: 
       this.map.addSource('events', { type: 'geojson', data: data });
 
       this.map.addLayer({
