@@ -6,6 +6,7 @@
 		<img class="event-image" src="{{event.properties.cover_picture}}">
 		<div class="event-title" id="event-title">{{ event.properties.event_name}}</div>
 		<div class="event-info" id="event-info" [innerHTML]="toHTML(event.properties.start_time)"></div>
+		<div class="seperator"></div>
 		<div class="event-description" id="event-description">{{event.properties.description}}</div>
 	</div>
 </div>

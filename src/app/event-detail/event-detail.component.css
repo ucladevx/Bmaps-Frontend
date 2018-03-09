@@ -45,7 +45,8 @@
 	font-weight: 900;
 	letter-spacing: 2px;
 	line-height: 50px;
-	margin: 5px 0px 10px 0px;
+	margin: 5px 0px 0px 0px;
+	text-align: center;
 }
 
 .event-info {
@@ -54,7 +55,8 @@
 	font-weight: 900;
 	font-style: oblique;
 	letter-spacing: 2px;
-	margin: 5px 0px 10px 0px;
+	margin: 20px 0px 20px 0px;
+	text-align: center;
 }
 
 .event-description {
@@ -74,6 +76,16 @@
 	line-height: 50px;
 	margin-left: 10px;
 	text-align: left;
+}
+
+.seperator
+{
+    height: 1px;
+    width: 50%;
+    align-self: center;
+    background: #979797;
+    margin: auto;
+    margin-bottom: 20px;
 }
 
 
