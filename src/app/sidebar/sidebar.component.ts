@@ -21,14 +21,7 @@ export class SidebarComponent implements OnInit {
     ngOnInit() {
       this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
         this.filteredEvents = eventCollection.features;
-        for (var event of this.filteredEvents) {
-            this._dateService.formatDateItem(event);
-        }
       });
-    }
-
-    toHTML(input) : any {
-        return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
 
     onSelect(event: Event): void {

@@ -12,7 +12,7 @@
                     </div>
                     <div class="sidebar-event-details col-sm-5 col-md-5 col-lg-5">
                         <p class="sidebar-event-name">{{event.properties.event_name}}</p>
-                        <p class="sidebar-event-date"[innerHTML]="toHTML(event.properties.start_time)"></p>
+                        <p class="sidebar-event-date"[innerHTML]="_dateService.formatDateItem(event)"></p>
                         <ng-template #venue_street>{{event.properties.venue.location.street}}</ng-template>
                         <ng-template #venue_name>{{event.properties.venue.name}}</ng-template>
                         <p class="sidebar-event-category">{{event.properties.category}}</p>
