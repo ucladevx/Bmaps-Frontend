@@ -20,10 +20,9 @@ export class EventDetailComponent implements OnInit {
 	toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
-	
+
 	hideEvent(event) {
 		console.log(this.event);
 		this.showSideBar.emit(true);
-		// this.event = null;
 	}
 }
