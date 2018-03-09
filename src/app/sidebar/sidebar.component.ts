@@ -16,11 +16,14 @@ export class SidebarComponent implements OnInit {
     private selectedEvent: Event = null;
     show: boolean = true;
 
-    constructor(private eventService: EventService) { }
+    constructor(private eventService: EventService, private _dateService: DateService) { }
 
     ngOnInit() {
       this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
         this.filteredEvents = eventCollection.features;
+        for (var event of this.filteredEvents) {
+            this._dateService.formatDateItem(event);
+        }
       });
     }
 
