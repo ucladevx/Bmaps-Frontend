@@ -70,7 +70,6 @@ export class DateService {
       let day = date.getDate();
       let hour = date.getHours();
       let minutes = date.getMinutes();
-      //console.log(minutes);
 
       let dayString;
       if (day < 10) {
@@ -83,10 +82,10 @@ export class DateService {
       let dateOfStart = new Date(item.properties.start_time);
       let dateOfEnd = new Date(item.properties.end_time);
       if (item.properties.end_time != "<NONE>"){
-          item.properties.start_time = this.formatDate(dateOfStart) + " - " + this.formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
+          return this.formatDate(dateOfStart) + " - " + this.formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
       }
       else {
-          item.properties.start_time = this.formatDate(dateOfStart);
+          return this.formatDate(dateOfStart);
       }
   }
 
