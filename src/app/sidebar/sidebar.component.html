@@ -1,8 +1,9 @@
 <div class="sidebar-outer">
     <div class="sidebar">
+        <app-date-selector></app-date-selector>
         <app-category-bar></app-category-bar>
         <div class="event-list">
-            <div [hidden]="!show">
+            <div [hidden]="!show"><!-- -->
                 <div *ngFor="let event of filteredEvents"
                 [class.selected]="event === selectedEvent"
                 (click)="onSelect(event)">

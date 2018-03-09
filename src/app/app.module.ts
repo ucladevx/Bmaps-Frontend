@@ -15,6 +15,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { EventService } from './event.service';
     SidebarComponent,
     EventDetailComponent,
     CategoryBarComponent,
+    DateSelectorComponent,
     NavbarComponent
   ],
   imports: [
