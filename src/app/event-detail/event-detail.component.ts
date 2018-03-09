@@ -1,25 +1,33 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { DateService } from '../shared/date.service';
 import { Event } from '../event';
 
 @Component({
   selector: 'app-event-detail',
   templateUrl: './event-detail.component.html',
-  styleUrls: ['./event-detail.component.css']
+  styleUrls: ['./event-detail.component.css'],
+  providers: [ DateService ],
 })
 export class EventDetailComponent implements OnInit {
 	@Input() event: Event;
 	@Output() showSideBar = new EventEmitter<boolean>();
 
-	constructor() {
+	constructor(private _dateService: DateService) {
 
 	}
 
 	ngOnInit() {
 	}
 
-	toHTML(input) : any {
-        return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
-    }
+	formatInfo() {
+		var date = "";
+		var location = "";
+		if (this.event != undefined)
+			date = this._dateService.formatDateItem(this.event) ;
+		if (this.event['properties']['venue']['name'] != undefined) 
+			location = this.event['properties']['venue']['name']
+		return date + ' &middot; ' + location;
+	}
 
 	hideEvent(event) {
 		console.log(this.event);

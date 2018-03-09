@@ -78,7 +78,7 @@ export class DateService {
       return this.getMonthNameFromMonthNumber(month) + " " + dayString + " &middot; " + this.formatHour(hour, minutes);
   }
 
-  formatDateItem(item): void {
+  formatDateItem(item): string {
       let dateOfStart = new Date(item.properties.start_time);
       let dateOfEnd = new Date(item.properties.end_time);
       if (item.properties.end_time != "<NONE>"){
