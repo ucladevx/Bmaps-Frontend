@@ -24,7 +24,6 @@
 
 .event-body {
 	display: inline-block;
-	position: absolute;
 	z-index: 500;
 	padding: 40px;
 }

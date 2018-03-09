@@ -16,16 +16,12 @@ export class SidebarComponent implements OnInit {
     private selectedEvent: Event = null;
     show: boolean = true;
 
-    constructor(private eventService: EventService) { }
+    constructor(private eventService: EventService, private _dateService: DateService) { }
 
     ngOnInit() {
       this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
         this.filteredEvents = eventCollection.features;
       });
-    }
-
-    toHTML(input) : any {
-        return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
 
     onSelect(event: Event): void {
