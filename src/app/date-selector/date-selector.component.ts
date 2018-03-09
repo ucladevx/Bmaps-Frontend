@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
-import { SelectedDate } from '../selectedDate';
 
 @Component({
   selector: 'app-date-selector',
@@ -20,11 +19,10 @@ export class DateSelectorComponent implements OnInit {
     });
   }
 
-  private dateToString(date: SelectedDate): string {
-    let today = new Date();
-    let day = today.getDate();
-    let month = today.getMonth()+1;
-    let year = today.getFullYear();
+  private dateToString(date: Date): string {
+    let day = date.getDate();
+    let month = date.getMonth()+1;
+    let year = date.getFullYear();
 
     return month.toString() + '/' + day.toString() + '/' + year.toString();
   }
