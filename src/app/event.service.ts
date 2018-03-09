@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { FeatureCollection } from './map';
 import { SelectedDate } from './selectedDate'
 
@@ -10,16 +10,16 @@ import { DateService } from './shared/date.service';
 @Injectable()
 export class EventService {
   // holds all events of the current date that components can see
-  private currEventsSource = new Subject<FeatureCollection>();
+  private currEventsSource: BehaviorSubject<FeatureCollection>;
   // holds filtered events that components can see
-  private filteredCurrEventsSource = new Subject<FeatureCollection>();
+  private filteredCurrEventsSource: BehaviorSubject<FeatureCollection>;
   // holds the current date that components can see
-  private currDateSource = new Subject<SelectedDate>();
+  private currDateSource: BehaviorSubject<SelectedDate>;
 
   // Used by any component for live access to current date and events
-  currEvents$ = this.currEventsSource.asObservable();
-  filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
-  currDate$ = this.currDateSource.asObservable();
+  currEvents$;
+  filteredCurrEvents$;
+  currDate$;
 
   // Used internally to keep an updated FeatureCollection of events
   private _events;
@@ -27,15 +27,26 @@ export class EventService {
   private baseUrl = "http://www.whatsmappening.io/api/v1";
 
   constructor(private http: HttpClient, private dateService: DateService) {
-    this.currEvents$.subscribe(eventCollection => {
-      this._events = eventCollection;
-    });
     let today = new Date();
     let todayDate: SelectedDate = {
       day: today.getDate(),
-      month: today.getMonth(),
+      month: today.getMonth()+1,
       year: today.getFullYear()
     }
+
+    this.currEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
+    this.filteredCurrEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
+    this.currDateSource = new BehaviorSubject<SelectedDate>(todayDate);
+
+    this.currEvents$ = this.currEventsSource.asObservable();
+    this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
+    this.currDate$ = this.currDateSource.asObservable();
+
+
+    this.currEvents$.subscribe(eventCollection => {
+      this._events = eventCollection;
+    });
+
     this.updateEvents(todayDate);
   }
 
