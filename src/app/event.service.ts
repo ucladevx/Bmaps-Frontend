@@ -69,14 +69,6 @@ export class EventService {
     });
   }
 
-  updateNextDate(): void {
-    this.updateDateByDays(1);
-  }
-
-  updatePreviousDate(): void {
-    this.updateDateByDays(-1);
-  }
-
   updateDateByDays(days: number) {
     let newDate = this._date;
     newDate.setDate(newDate.getDate() + days);

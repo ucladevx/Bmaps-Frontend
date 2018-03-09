@@ -12,9 +12,7 @@ export class DateSelectorComponent implements OnInit {
   constructor(private eventService: EventService) { }
 
   ngOnInit() {
-    console.log('inititin');
     this.eventService.currDate$.subscribe(date => {
-      console.log('herefea');
       this.dateString = this.dateToString(date);
     });
   }
@@ -25,5 +23,10 @@ export class DateSelectorComponent implements OnInit {
     let year = date.getFullYear();
 
     return month.toString() + '/' + day.toString() + '/' + year.toString();
+  }
+
+  private updateDate(days: number) {
+    // 1 means advance one day, -1 means go back one day
+    this.eventService.updateDateByDays(days);
   }
 }
