@@ -2,5 +2,29 @@
 
 body {
     background-color: rgb(237, 237, 237);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Avenir Book';
+}
+
+@font-face {
+    font-family: 'Avenir Book';
+    src: url('./assets/font/Avenir-Book.eot');
+    src: url('./assets/font/Avenir-Book.eot?#iefix') format('embedded-opentype'),
+        url('./assets/font/Avenir-Book.woff2') format('woff2'),
+        url('./assets/font/Avenir-Book.woff') format('woff'),
+        url('./assets/font/Avenir-Book.ttf') format('truetype'),
+        url('./assets/font/Avenir-Book.svg#Avenir-Book') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nexa';
+    src: url('./assets/font/NexaBold.eot');
+    src: url('./assets/font/NexaBold.eot?#iefix') format('embedded-opentype'),
+        url('./assets/font/NexaBold.woff2') format('woff2'),
+        url('./assets/font/NexaBold.woff') format('woff'),
+        url('./assets/font/NexaBold.ttf') format('truetype'),
+        url('./assets/font/NexaBold.svg#NexaBold') format('svg');
+    font-weight: bold;
+    font-style: normal;
 }

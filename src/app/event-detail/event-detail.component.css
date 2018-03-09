@@ -9,16 +9,15 @@
 }
 
 .event-header {
-	height: 50px;
+	height: 60px;
 	background-color: #ffffff;
-	border-bottom: 1px solid #afafaf;
+	border-bottom: 1px solid #979797;
 	z-index: 600;
 }
 
 .header-text {
 	color: #3c3c3c;
 	font-size: 22px;
-	font-family: Avenir;
 	font-weight: bolder;
 	letter-spacing: 2px;
 }
@@ -41,33 +40,30 @@
 }
 
 .event-title {
-	color: #3c3c3c;
-	font-size: 32px;
-	font-family: Avenir;
-	font-weight: 600;
+	color: #353535;
+	font-size: 36px;
+	font-weight: 900;
 	letter-spacing: 2px;
+	line-height: 50px;
 	margin: 5px 0px 10px 0px;
 }
 
 .event-info {
 	color: #3c3c3c;
 	font-size: 18px;
-	font-family: Avenir;
-	font-weight: bolder;
-	font-style: italic;
+	font-weight: 900;
+	font-style: oblique;
 	letter-spacing: 2px;
 	margin: 5px 0px 10px 0px;
 }
 
 .event-description {
-	color: #7c7c7c;
+	color: #353535;
 	font-size: 14px;
-	font-family: Avenir;
 	font-weight: 300;
 	letter-spacing: 1px;
 	margin: 5px 0px 5px 0px;
 }
-
 
 #left-chevron {
 	display: block;
