@@ -1,6 +1,8 @@
 #categ-btn {
-  width: 96%;
+  width: 100%;
+  height: 40px;
   margin: 0 auto;
+  border-radius: 0px;
 }
 
 #categ-div {
