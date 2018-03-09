@@ -1,34 +1,13 @@
-/*-------------------------------------SIDEBAR-------------------------------------*/
-
-.home-container{
-    width: 100%;
-}
-
-.home-row{
-    display: flex;
-    height: 100%;
-}
-
-#events-mount{
-    height: 100%;
-}
-.sidebar-mount{
-    min-width: 270px;
-    padding-left: 0px;
-    padding-right: 0px;
-    box-shadow: -1px 1px 1px #888888;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(207,207,207);
-}
-
 .event-list{
-    height: 51em;
+    height: 20em;
+    overflow: scroll;
 }
 
-.sidebar{
-    height: 87%;
-    overflow: scroll;
+@media only screen and (min-width: 576px) {
+    .event-list{
+        height: 51em;
+        overflow: scroll;
+    }
 }
 
 .search-header{
@@ -98,12 +77,11 @@
   color: #a9a9a9;
 }
 
-/* Using only background gradients */
 
 .seperator
 {
-    height: 2px;
-    background-image: radial-gradient(#CCC, #FFF), radial-gradient(#CCC, #FFF);
+    height: 1px;
+    background: rgb(151,151,151);
     background-position: 0, 100%, 0, 100%;
     margin: 3px;
 }
@@ -113,8 +91,4 @@
     padding-right: 25%;
     margin-top: 10px;
     margin-bottom: 10px;
-}
-
-.badge {
-  float: right;
 }

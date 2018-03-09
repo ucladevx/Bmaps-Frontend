@@ -11,7 +11,9 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
 import { CategoryBarComponent } from './category-bar/category-bar.component';
 import { CategoryService } from './category.service';
 
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 
 @NgModule({
@@ -20,13 +22,15 @@ import { EventService } from './event.service';
     MapBoxComponent,
     SidebarComponent,
     EventDetailComponent,
-    CategoryBarComponent
+    CategoryBarComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     SharedModule,
+    CollapseModule.forRoot(),
     BsDropdownModule.forRoot()
   ],
   providers: [CategoryService, EventService],
