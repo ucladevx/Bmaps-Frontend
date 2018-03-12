@@ -65,7 +65,7 @@ export class DateService {
       }
   }
 
-  formatDate(date: Date): number {
+  formatDate(date: Date): any {
       let month = date.getMonth();
       let day = date.getDate();
       let hour = date.getHours();
@@ -73,10 +73,10 @@ export class DateService {
 
       let dayString = "";
       if (day < 10) {
-          dayString = "0" + day;
+          dayString = "0" + day.toString();
       }
       else {
-          dayString = day;
+          dayString = day.toString();
       }
       return this.getMonthNameFromMonthNumber(month) + " " + dayString + " &middot; " + this.formatHour(hour, minutes);
   }

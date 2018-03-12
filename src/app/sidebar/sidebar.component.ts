@@ -4,12 +4,27 @@ import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
 import { AfterViewInit, ViewChild } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.css'],
     providers: [ DateService ],
+    animations: [
+        trigger('myAwesomeAnimation', [
+            state('inactive', style({
+                backgroundColor: '#eee',
+                fontSize: '10px'
+            })),
+            state('active',   style({
+                backgroundColor: '#cfd8dc',
+                fontSize: '30px'
+            })),
+            transition('inactive => active', animate('100ms ease-in')),
+            transition('active => inactive', animate('100ms ease-out'))
+        ])
+    ]
 })
 export class SidebarComponent implements OnInit {
     private filteredEvents: GeoJson[];
@@ -19,9 +34,9 @@ export class SidebarComponent implements OnInit {
     constructor(private eventService: EventService, private _dateService: DateService) { }
 
     ngOnInit() {
-      this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
-        this.filteredEvents = eventCollection.features;
-      });
+        this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+            this.filteredEvents = eventCollection.features;
+        });
     }
 
     onSelect(event: Event): void {
@@ -33,4 +48,11 @@ export class SidebarComponent implements OnInit {
         this.show = true;
         this.selectedEvent = null;
     }
+
+    animateMe() {
+        console.log(this.state);
+      this.state = (this.state === 'inactive' ? 'active' : 'inactive');
+      console.log(this.state);
+    }
+
 }
