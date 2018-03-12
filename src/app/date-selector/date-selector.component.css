@@ -8,3 +8,17 @@
   border-width: 0px 0px 1px 0px;
   text-align: center;
 }
+
+#left-arrow {
+  float: left;
+}
+
+#right-arrow {
+  float: right;
+}
+
+#date-text {
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
