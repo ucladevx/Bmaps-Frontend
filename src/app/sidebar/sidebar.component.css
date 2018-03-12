@@ -5,7 +5,7 @@
 
 @media only screen and (min-width: 576px) {
     .event-list{
-        height: 51em;
+        height: 48em;
         overflow: scroll;
     }
 }
@@ -86,9 +86,13 @@
     margin: 3px;
 }
 
-#categ-dropdown-text{
-    padding-left: 25%;
-    padding-right: 25%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.move-up {
+    display: block;
+    text-align: center;
+}
+
+@media only screen and (min-width: 576px) {
+    .move-up {
+        display: none;
+    }
 }

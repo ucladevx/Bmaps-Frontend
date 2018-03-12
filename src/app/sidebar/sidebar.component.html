@@ -1,6 +1,9 @@
 <div class="sidebar-outer">
   <div class="sidebar">
-    <div [hidden]="!show"><!-- -->
+    <div [hidden]="!show">
+        <div class="move-up">
+            <fa name="chevron-up" size="lg"></fa>
+        </div>
       <app-date-selector></app-date-selector>
       <app-category-bar></app-category-bar>
       <div class="event-list">
@@ -23,7 +26,6 @@
       </div>
     </div>
   </div>
-
     <app-event-detail [event]="selectedEvent"  (showSideBar)="showSidebar($event)"></app-event-detail>
   </div>
 </div>

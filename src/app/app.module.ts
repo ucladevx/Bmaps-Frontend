@@ -11,6 +11,7 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
 import { CategoryBarComponent } from './category-bar/category-bar.component';
 import { CategoryService } from './category.service';
 
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -32,6 +33,7 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     FormsModule,
     HttpClientModule,
     SharedModule,
+    AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot()
   ],
