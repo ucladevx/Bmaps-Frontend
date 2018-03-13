@@ -13,6 +13,7 @@ export class CategoryBarComponent implements OnInit {
   private categories: string[];
   private events: GeoJson[];
   private selectedCategory = "all categories";
+  private categObjects = [];
 
   constructor(private categService: CategoryService, private eventService: EventService) { }
 
@@ -20,19 +21,19 @@ export class CategoryBarComponent implements OnInit {
     this.resetCategories();
     this.eventService.currEvents$.subscribe(eventCollection => {
       this.events = eventCollection.features;
-      this.resetCategories();
-      this.getCategories();
+      this.updateCategories();
     });
   }
 
-  resetCategories(): void {
+  private resetCategories(): void {
     this.categories = ["all"];
   }
 
-  getCategories(): void {
+  private updateCategories(): void {
     console.log("UPDATING CATEGORIES");
     this.categService.getCategories()
       .subscribe(categs => {
+        this.resetCategories();
         for (let categ of categs.categories) {
           this.categories.push(categ.category.toLowerCase().replace('_', ' '));
         }
