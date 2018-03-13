@@ -15,12 +15,12 @@ export class EventService {
   // holds the current date that components can see
   private currDateSource: BehaviorSubject<Date>;
 
-  // Used by any component for live access to current date and events
+  // Observables that components can subscribe to for realtime updates
   currEvents$;
   filteredCurrEvents$;
   currDate$;
 
-  // Used internally to keep an updated FeatureCollection of events
+  // Used internally to keep a realtime, subscribed set of values
   private _events;
   private _date;
   private _category = "all";
@@ -50,6 +50,7 @@ export class EventService {
     return dateURL; // json we are pulling from for event info
   }
 
+  // Updates events for given date while persisting the current category
   updateEvents(date: Date): void {
     console.log("UPDATING EVENTS");
     this.currDateSource.next(date);
@@ -61,12 +62,14 @@ export class EventService {
     });
   }
 
+  // Calls updateEvents for the current date + days
   updateDateByDays(days: number) {
     let newDate = this._date;
     newDate.setDate(newDate.getDate() + days);
     this.updateEvents(newDate);
   }
 
+  // Filters current events given category name
   filterEvents(category: string): void {
     console.log("FILTERING EVENTS");
     this._category = category;
