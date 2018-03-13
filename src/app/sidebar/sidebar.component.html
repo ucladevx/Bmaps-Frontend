@@ -2,15 +2,19 @@
     <div class="sidebar">
         <div [hidden]="!show">
 
-            <div class="move-up" (click)="showFirst=!showFirst">
-                <i *ngIf="showFirst" class="fa fa-chevron-down fa-lg" aria-hidden="true"></i>
-                <i *ngIf="!showFirst" class="fa fa-chevron-up fa-lg" aria-hidden="true"></i>
+            <!-- <div class="move-up">
+                <i class="fa fa-chevron-down fa-lg" aria-hidden="true"></i>
+                <i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i>
+            </div> -->
+
+            <div class="move-up">
+                <i aria-hidden="true" (click)="toggleMobileSidebar()" [ngClass]="status ? 'fa fa-chevron-down fa-lg' : 'fa fa-chevron-up fa-lg'"></i>
             </div>
-            <p [@myAwesomeAnimation]='state' (click)="animateMe()">I will animate</p>
+            <!-- <p [@myAwesomeAnimation]='state' (click)="toggleMobileSidebar()">I will animate</p> -->
 
             <app-date-selector></app-date-selector>
             <app-category-bar></app-category-bar>
-            <div class="event-list">
+            <div id="event-list">
                 <div *ngFor="let event of filteredEvents"
                 [class.selected]="event === selectedEvent"
                 (click)="onSelect(event)">
@@ -25,7 +29,7 @@
                             {{event.properties.venue.name}}
                         </p>
                         <ng-template #venue_street>{{event.properties.venue.location.street}}</ng-template>
-                        <p class="sidebar-event-category">{{event.properties.category}}</p>
+                        <p class="sidebar-event-category" [innerHTML]="formatCategory(event.properties.category)"></p>
                     </div>
                 </a>
                 <div class="seperator"></div>
@@ -33,5 +37,4 @@
         </div>
     </div>
     <app-event-detail [event]="selectedEvent"  (showSideBar)="showSidebar($event)"></app-event-detail>
-</div>
 </div>

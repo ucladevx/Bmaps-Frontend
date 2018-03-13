@@ -49,10 +49,22 @@ export class SidebarComponent implements OnInit {
         this.selectedEvent = null;
     }
 
-    animateMe() {
-        console.log(this.state);
-      this.state = (this.state === 'inactive' ? 'active' : 'inactive');
-      console.log(this.state);
+    status: boolean = false;
+    toggleMobileSidebar() {
+
+        this.status = !this.status;
+        // console.log(this.state);
+        //   this.state = (this.state === 'inactive' ? 'active' : 'inactive');
+        //   console.log(this.state);
+    }
+
+    formatCategory(category: String): string {
+        if (category =="<NONE>"){
+            return "";
+        }
+        else {
+            return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+        }
     }
 
 }
