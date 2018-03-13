@@ -17,11 +17,16 @@ export class CategoryBarComponent implements OnInit {
   constructor(private categService: CategoryService, private eventService: EventService) { }
 
   ngOnInit() {
-    this.categories = ["all"];
+    this.resetCategories();
     this.eventService.currEvents$.subscribe(eventCollection => {
       this.events = eventCollection.features;
+      this.resetCategories();
       this.getCategories();
     });
+  }
+
+  resetCategories(): void {
+    this.categories = ["all"];
   }
 
   getCategories(): void {
