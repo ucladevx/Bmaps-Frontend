@@ -23,6 +23,7 @@ export class EventService {
   // Used internally to keep an updated FeatureCollection of events
   private _events;
   private _date;
+  private _category = "all";
 
   private baseUrl = "http://www.whatsmappening.io/api/v1";
 
@@ -37,13 +38,8 @@ export class EventService {
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
 
-    this.currEvents$.subscribe(eventCollection => {
-      this._events = eventCollection;
-    });
-
-    this.currDate$.subscribe(date => {
-      this._date = date;
-    });
+    this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
+    this.currDate$.subscribe(date => this._date = date);
 
     this.updateEvents(today);
   }
@@ -61,11 +57,7 @@ export class EventService {
       this.getEventsOnDateURL(date.getDate(), date.getMonth(), date.getFullYear())
     ).subscribe(events => {
       this.currEventsSource.next(events);
-      this.filteredCurrEventsSource.next(events);
-      // (below code was in sidebar.component)
-      // for (var event of this.events) {
-      //     this._dateService.formatDateItem(event);
-      // }
+      this.filterEvents(this._category);
     });
   }
 
@@ -77,6 +69,7 @@ export class EventService {
 
   filterEvents(category: string): void {
     console.log("FILTERING EVENTS");
+    this._category = category;
     if (category === "all") {
       this.filteredCurrEventsSource.next(this._events);
       return;
