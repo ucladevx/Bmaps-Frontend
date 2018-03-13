@@ -3,7 +3,7 @@
     overflow: scroll;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 768px) {
     #event-list{
         height: 48em;
         overflow: scroll;
@@ -28,7 +28,7 @@
 
 .sidebar-event {
     width: 100%;
-    padding: 4%;
+    margin: 4%;
     box-sizing: border-box;
     display: inline-block;
 }
@@ -96,7 +96,7 @@
     background-color: white;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 768px) {
     .move-up {
         display: none;
     }

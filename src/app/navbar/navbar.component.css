@@ -57,7 +57,7 @@
     display: none;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 768px) {
     #navbar-brand span{
         display: inline-block;
     }
@@ -65,6 +65,36 @@
 
 #nav-logo{
     display: inline-block;
+}
+
+@media (min-width: 768px){
+    .navbar-toggler {
+        display: none;
+    }
+
+    .navbar-nav {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+    }
+
+    .navbar-collapse {
+        display: flex !important;
+        width: 100%;
+    }
+
+    .navbar-toggleable-md{
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
 }
 
 ul li {
