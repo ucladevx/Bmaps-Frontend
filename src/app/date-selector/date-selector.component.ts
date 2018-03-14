@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
+import { DateService } from '../shared/date.service';
 
 @Component({
   selector: 'app-date-selector',
@@ -9,20 +10,30 @@ import { EventService } from '../event.service';
 export class DateSelectorComponent implements OnInit {
   private dateString: string;
 
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService, private dateService: DateService) { }
 
   ngOnInit() {
     this.eventService.currDate$.subscribe(date => {
-      this.dateString = this.dateToString(date);
+      this.dateString = `Events for ${this.dateToString(date)}`;
     });
   }
 
   private dateToString(date: Date): string {
     let day = date.getDate();
-    let month = date.getMonth()+1;
-    let year = date.getFullYear();
+    let month = this.dateService.getMonthNameFromMonthNumber(date.getMonth());
 
-    return month.toString() + '/' + day.toString() + '/' + year.toString();
+    let description = '';
+    let today = new Date();
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    if (this.dateService.equalDates(date, today)) {
+      description = 'Today, ';
+    }
+    else if (this.dateService.equalDates(date, tomorrow)) {
+      description = 'Tomorrow, ';
+    }
+
+    return `${description} ${month} ${day}`
   }
 
   private updateDate(days: number) {
