@@ -66,7 +66,7 @@ export class CategoryBarComponent implements OnInit {
 
   filter(category: string): void {
     if (category === "all") this.selectedCategory = "all categories";
-    else this.selectedCategory = category.toLowerCase();
+    else this.selectedCategory = category.toLowerCase().replace('_', ' ');
     category = category.replace(' ', '_');
     this.eventService.filterEvents(category);
   }
