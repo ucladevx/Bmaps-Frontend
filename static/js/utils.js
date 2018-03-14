@@ -98,6 +98,11 @@ function nextDay() {
 	d = currDay.getDate();
 	m = currDay.getMonth();
 	updateDate();
+
+    // MAPBOX
+    // Hide blue pin for unselected event and unlock blue hover
+    hidePin();
+    unclickEvent();
 }
 
 function previousDay() {
@@ -105,6 +110,11 @@ function previousDay() {
 	d = currDay.getDate();
 	m = currDay.getMonth();
 	updateDate();
+
+    // MAPBOX
+    // Hide blue pin for unselected event and unlock blue hover
+    hidePin();
+    unclickEvent();
 }
 
 function goToday() {
@@ -112,4 +122,9 @@ function goToday() {
   d = currDay.getDate();
   m = currDay.getMonth();
   updateDate();
+
+  // MAPBOX
+  // Hide blue pin for unselected event and unlock blue hover
+  hidePin();
+  unclickEvent();
 }

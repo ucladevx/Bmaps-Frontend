@@ -19,49 +19,63 @@ var map = new mapboxgl.Map({
 ////////////////////////////////////////////////
 /////////////////// LOAD DATA //////////////////
 ////////////////////////////////////////////////
+// Initialize currentData to UCLA
 var currData =
-{ "type": "FeatureCollection",
-				"features": [
-					{"type": "Feature",
-						"geometry": {
-								"type": "Point",
-								"coordinates": [-118.445320, 34.066915]
-						}
-					}
-				]
+{ 
+	"type": "FeatureCollection",
+		"features": [
+			{
+				"type": "Feature",
+				"geometry": {
+					"type": "Point",
+					"coordinates": [-118.445320, 34.066915]
+				}
+			}
+		]
 };
+
 map.on('load', function () {
+	// Add data sources for event data and current location
 	map.addSource('events', { type: 'geojson', data: keyUrl });
 	map.addSource('currloc', { type: 'geojson', data: currData });
 
-map.loadImage('https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png', function(error, image) {
-	if (error) throw error;
-	map.addImage('pin', image);
-	map.addLayer({
-		"id": "eventlayer",
-		"type": "symbol",
-		"source":"events",
-		"layout": {
-			"icon-image": "pin",
-			"icon-size":.06,
-			"icon-allow-overlap": true
-		}
+	// Load red pin image for event pins
+	map.loadImage('../img/red-mappointer.png', function(error, image) {
+		if (error) throw error;
+		map.addImage('pin', image);
+
+		// The default sized pin
+		map.addLayer({
+			"id": "eventlayer",
+			"type": "symbol",
+			"source":"events",
+			"layout": {
+				"icon-image": "pin",
+				"icon-size": 0.06,
+				"icon-allow-overlap": true
+			}
+		});
 	});
 
-	map.addLayer({
-		"id": "currloc",
-		"type": "symbol",
-		"source":"currloc",
-		"layout": {
-			"visibility": "none",
-			"icon-image": "pin",
-			"icon-size":.08,
-			"icon-allow-overlap": true
-		}
+	// Load Mappening blue pin image for current pin
+	// Used on hover or for clicked events
+	map.loadImage('../img/blue-mappointer.png', function(error, image) {
+		if (error) throw error;
+		map.addImage('m_pin', image);
+
+		// Mappening pin for hover (same size so it covers the og)
+		map.addLayer({
+			"id": "currloc",
+			"type": "symbol",
+			"source":"currloc",
+			"layout": {
+				"visibility": "none",
+				"icon-image": "m_pin",
+				"icon-size": 0.06,
+				"icon-allow-overlap": true
+			}
+		});
 	});
-
-
-});
 });
 
 
@@ -117,6 +131,8 @@ function threeDDisplay() {
 ////////////////////////////////////////////////
 ///////////// HOVER POPUP WHEN HOVER ///////////
 ////////////////////////////////////////////////
+// Keep track of which event is clicked on
+var clickedEvent = "none";
 
 function hoverPopup() {
 	// Create a popup, but don't add it to the map yet.
@@ -126,8 +142,10 @@ function hoverPopup() {
 		offset: {'bottom':[7.5 ,0]}
 	});
 
+	// Mouse enters event region, hover behavior handled
 	map.on('mouseenter', 'eventlayer', function(e) {
 		// Change the cursor style as a UI indicator.
+		// Mouse becomes the click hand
 		map.getCanvas().style.cursor = 'pointer';
 		console.log("" + e.features[0].geometry.coordinates);
 
@@ -137,13 +155,17 @@ function hoverPopup() {
 		console.log(coords);
 		console.log(coordsFormatted);
 
-		map.getSource('currloc').setData({"geometry": {"type": "Point",
+		// Only change blue pin if an event is not already selected
+		// On hover over an event pin, pin turns Mappening blue
+		if (clickedEvent == "none") {
+			map.getSource('currloc').setData({"geometry": {"type": "Point",
 			"coordinates": coordsFormatted}, "type": "Feature", "properties": {}});
-		// change size when hover not right
-		map.setLayoutProperty('currloc','visibility', 'visible');
 
-		// Populate the popup and set its coordinates
-		// based on the feature found.
+			map.setLayoutProperty('currloc','visibility', 'visible');
+		}
+
+		// On hover popup with event info shows up
+		// Populate the popup and set its coordinates based on the feature found
 		popup.setLngLat(e.features[0].geometry.coordinates)
 		.setHTML('<p id=popupEvent></p> <p id=popupDate></p>')
 		.addTo(map);
@@ -151,13 +173,23 @@ function hoverPopup() {
 		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
 		document.getElementById('popupDate').innerHTML = formatDate(new Date(e.features[0].properties.start_time));
 	});
+
+	// Mouse leaves an event region
 	map.on('mouseleave', 'eventlayer', function() {
 		map.getCanvas().style.cursor = '';
-		// change size when hover not right
-		map.setLayoutProperty('currloc','visibility', 'none');
+
+		// Remove popup
 		popup.remove();
+
+		// Only remove blue pin if an event is not currently clicked on/selected
+		if (clickedEvent == "none") {
+			map.setLayoutProperty('currloc','visibility', 'none');
+		}
 	});
+
+	// Click action on event
 	map.on('click', 'eventlayer', function (e) {
+		// Move map view to event
 		map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
 		// console.log(e);
 		// console.log(e.features);
@@ -165,7 +197,48 @@ function hoverPopup() {
 		// console.log(e.features[0].properties)
 		//   showModal('sign-up', e.properties);
 		formatDateItem(e.features[0]);
+		
+		// Sidebar opens corresponding event
+		showEvent(e.features[0]);
+
+		// Event pin remains Mappening blue
+		map.setLayoutProperty('currloc','visibility', 'visible');
+
+		clickedEvent = e.features[0].properties.event_name;
 	});
+}
+
+/* Helper functions called in event.js */
+
+// Passed in coordinates of selected event in sidebar
+// Updated currloc data and displays blue pin for corresponding event
+function showPin(coordsFormatted) {
+	// Hide the past event that was clicked on 
+	// currloc data has not been updated since last click
+	hidePin();
+
+	// Set the currloc to selected event coordinates
+	map.getSource('currloc').setData({"geometry": {"type": "Point",
+			"coordinates": coordsFormatted}, "type": "Feature", "properties": {}});
+
+	// Display blue pin
+	map.setLayoutProperty('currloc','visibility', 'visible');
+}
+
+// Event pin goes back to default
+// Occurs on back arrow click on sidebar or when a different event is clicked on
+function hidePin() {
+	map.setLayoutProperty('currloc','visibility', 'none');
+}
+
+// Set clickedEvent to the name of the event that was clicked on
+function clickEvent(event_name) {
+	clickedEvent = event_name;
+}
+
+// Set clickedEvent to none, no event is currently selected
+function unclickEvent() {
+	clickedEvent = "none";
 }
 
 ////////////////////////////////////////////////
