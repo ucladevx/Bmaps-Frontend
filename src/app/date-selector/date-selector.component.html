@@ -1,3 +1,11 @@
 <div class="selector">
-  today
+  <button id="left-arrow"
+          (click)="updateDate(-1)">
+    <
+  </button>
+  <span id="date-text">{{dateString}}</span>
+  <button id="right-arrow"
+          (click)="updateDate(1)">
+    >
+  </button>
 </div>

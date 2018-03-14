@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 
 import { GeoJson, FeatureCollection } from '../map';
@@ -13,6 +13,7 @@ import { EventService } from '../event.service';
   providers: [ DateService ]
 })
 export class MapBoxComponent implements OnInit {
+    @Input() pressed: boolean;
     // default settings
     map: mapboxgl.Map;
     message = 'Hello World!';

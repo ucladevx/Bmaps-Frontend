@@ -65,15 +65,18 @@ export class DateService {
       }
   }
 
-  formatDate(date: Date): string {
+  formatDate(date: Date): any {
       let month = date.getMonth();
       let day = date.getDate();
       let hour = date.getHours();
       let minutes = date.getMinutes();
 
-      let dayString;
+      let dayString = "";
       if (day < 10) {
-          dayString = "0" + day;
+          dayString = "0" + day.toString();
+      }
+      else {
+          dayString = day.toString();
       }
       return this.getMonthNameFromMonthNumber(month) + " " + dayString + " &middot; " + this.formatHour(hour, minutes);
   }
@@ -81,6 +84,7 @@ export class DateService {
   formatDateItem(item): string {
       let dateOfStart = new Date(item.properties.start_time);
       let dateOfEnd = new Date(item.properties.end_time);
+
       if (item.properties.end_time != "<NONE>"){
           return this.formatDate(dateOfStart) + " - " + this.formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
       }
@@ -89,7 +93,7 @@ export class DateService {
       }
   }
 
-  formatCategoryItem(item) {
+  formatCategoryItem(item): void {
       if (item.properties.category == "<NONE>"){
           item.properties.category = "";
       }

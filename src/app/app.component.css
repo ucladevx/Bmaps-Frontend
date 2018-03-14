@@ -1,12 +1,10 @@
 .sidebar-container{
     padding-right: 0px;
-    /* margin-top: 30em; */
 }
-
 .map-container{
     padding-left: 0px;
 }
-@media (min-width: 576px) {
+@media (min-width: 768px) {
 .sidebar-container{
     margin-top: 0px;
 }

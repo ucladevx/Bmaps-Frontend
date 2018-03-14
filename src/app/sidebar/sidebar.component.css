@@ -1,11 +1,15 @@
-.event-list{
-    height: 20em;
+#event-list{
+    height: 15em;
     overflow: scroll;
 }
 
-@media only screen and (min-width: 576px) {
-    .event-list{
-        height: 51em;
+.event-list-show {
+    height: 47em !important;
+}
+
+@media only screen and (min-width: 768px) {
+    #event-list{
+        height: 48em;
         overflow: scroll;
     }
 }
@@ -28,7 +32,7 @@
 
 .sidebar-event {
     width: 100%;
-    padding: 1%;
+    margin: 4%;
     box-sizing: border-box;
     display: inline-block;
 }
@@ -66,6 +70,10 @@
     font-weight: 500;
 }
 
+.sidebar-event-category{
+    font-style: italic;
+}
+
 .dropdown-menu {
     width: 100%;
 }
@@ -86,9 +94,15 @@
     margin: 3px;
 }
 
-#categ-dropdown-text{
-    padding-left: 25%;
-    padding-right: 25%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.move-up {
+    display: block;
+    text-align: center;
+    background-color: white;
+    color: rgb(216, 216, 216)
+}
+
+@media only screen and (min-width: 768px) {
+    .move-up {
+        display: none;
+    }
 }
