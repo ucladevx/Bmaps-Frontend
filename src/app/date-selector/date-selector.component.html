@@ -1,9 +1,9 @@
 <div class="selector">
-  <button class="custom-btn" id="left-arrow" (click)="updateDate(-1)">
+  <button [style.visibility]="showLeft ? 'visible' : 'hidden'" class="custom-btn" id="left-arrow" (click)="updateDate(-1)">
     <i class="fa fa-caret-left" aria-hidden="true"></i>
   </button>
   <span id="date-text">{{dateString}}</span>
-  <button class="custom-btn" id="right-arrow" (click)="updateDate(1)">
+  <button [style.visibility]="showRight ? 'visible' : 'hidden'" class="custom-btn" id="right-arrow" (click)="updateDate(1)">
     <i class="fa fa-caret-right" aria-hidden="true"></i>
   </button>
 </div>

@@ -9,13 +9,26 @@ import { DateService } from '../shared/date.service';
 })
 export class DateSelectorComponent implements OnInit {
   private dateString: string;
+  private showLeft: boolean;
+  private showRight: boolean;
 
   constructor(private eventService: EventService, private dateService: DateService) { }
 
   ngOnInit() {
     this.eventService.currDate$.subscribe(date => {
       this.dateString = `Events for ${this.dateToString(date)}`;
+      this.showLeft = this.showLeftArrow(date);
+      this.showRight = this.showRightArrow(date);
     });
+  }
+
+  private showLeftArrow(date: Date): boolean {
+    let today = new Date();
+    return !this.dateService.equalDates(date, today);
+  }
+
+  private showRightArrow(date: Date): boolean {
+    return true;
   }
 
   private dateToString(date: Date): string {
