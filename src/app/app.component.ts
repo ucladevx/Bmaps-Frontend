@@ -23,6 +23,6 @@ export class AppComponent {
 
   onPressed(pressed) {
       console.log("hello");
-      this.pressed = pressed;
+      this.pressed = !this.pressed;
   }
 }
