@@ -24,8 +24,13 @@ export class MapBoxComponent implements OnInit {
     source: any;
     keyUrl: string;
 
-    // style
+    // state
+    eventIsSelected: boolean = false;
+    selectedEvent: any = null;
+
+    // Resources
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
+    bluePinPath = "../../assets/blue-mappointer.png"
 
     private events: FeatureCollection;
 
@@ -40,9 +45,10 @@ export class MapBoxComponent implements OnInit {
       });
       this.buildMap();
       //I think you should use something like this to create all the promises once instead of calling function creating promise several times
-      let _promiseMapLoad = this.promiseMapLoad()
-      let _promiseGetUserLocation = this.promiseGetUserLocation()
-      let _promisePinLoad = this.promiseImageLoad(this.pinUrl)
+      let _promiseMapLoad = this.promiseMapLoad();
+      let _promiseGetUserLocation = this.promiseGetUserLocation();
+      let _promisePinLoad = this.promiseImageLoad(this.pinUrl);
+      let _promiseBluePinLoad = this.promiseImageLoad(this.bluePinPath);
 
       //Add 3D buildings, on-hover popup, and arrowcontrols
       _promiseMapLoad.then(() => {
@@ -55,16 +61,21 @@ export class MapBoxComponent implements OnInit {
       let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
       promise_map_pin.then((promiseReturns) => {
         let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
-        this.map.addImage('pin', image);
-
-        let today = new Date();
+        this.map.addImage('redPin', image);
+        //add events with the new pin
         this.addEventLayer(this.events);
       });
 
+      let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
+      promise_map_blue_pin.then((promiseReturns) => {
+        let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+        this.map.addImage('bluePin', image);
+      });
+
       //Add user location pin
-      let promise_map_userloc_pin = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad]);
-      promise_map_userloc_pin.then( () => {
-        this.addPinToLocation("currloc", this.lat, this.lng, "pin", .08);
+      let promise_map_userloc_pins = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad, _promiseBluePinLoad]);
+      promise_map_userloc_pins.then( () => {
+        this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
       });
 
       this.addControls();
@@ -80,20 +91,20 @@ export class MapBoxComponent implements OnInit {
         "type": "symbol",
         "source":"events",
         "layout": {
-          "icon-image": "pin",
-          "icon-size":.06,
+          "icon-image": 'redPin',
+          "icon-size":.07,
           "icon-allow-overlap": true
         }
       });
 
       //Add a larger pin to later use for on hover
-      this.addPinToLocation('hoveredPin', this.lat, this.lng, "pin", .08, false);
-
+      this.addPinToLocation('hoveredPin', this.lat, this.lng, "bluePin", .07, false);
+      this.addPinToLocation('redBackupHoveredPin', this.lat, this.lmg, 'redPin', .09, false);
       //TEST FOR GOOD SQUARE size
-      // this.addPinToLocation('hp1', this.lat+.0001, this.lng, "pin", .08, true);
-      // this.addPinToLocation('hp2', this.lat, this.lng, "pin", .08, true);
-      // this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, "pin", .08, true);
-      // this.addPinToLocation('hp4', this.lat, this.lng+.0001, "pin", .08, true);
+      // this.addPinToLocation('hp1', this.lat+.0001, this.lng, 'redPin', .08, true);
+      // this.addPinToLocation('hp2', this.lat, this.lng, 'redPin', .08, true);
+      // this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, 'redPin', .08, true);
+      // this.addPinToLocation('hp4', this.lat, this.lng+.0001, 'redPin', .08, true);
 
     }
 
@@ -195,45 +206,95 @@ export class MapBoxComponent implements OnInit {
     		offset: {'bottom':[7.5 ,0]}
     	});
 
+      //HOVER
     	this.map.on('mouseenter', 'eventlayer', (e) => {
     		// Change the cursor style as a UI indicator.
     		this.map.getCanvas().style.cursor = 'pointer';
-
+        console.log(e);
         //slice returns a copy of the array rather than the actual array
-        let coords = e.features[0].geometry.coordinates.slice()
+        let coords = e.features[0].geometry.coordinates.slice();
 
-    		console.log(coords);
+        if(this.eventIsSelected) {
+          if(e.features[0].id !== this.selectedEvent) {
+            this.map.getSource('redBackupHoveredPin').setData({
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": coords
+                },
+              "type": "Feature"
+            });
+            // change size when hover not right
+            this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
+          }
+        }
+        else {
+      		this.map.getSource('hoveredPin').setData({
+            "geometry": {
+                "type": "Point",
+          			"coordinates": coords
+              },
+            "type": "Feature"
+          });
+      		// change size when hover not right
+      		this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
+        }
+      });
 
-    		this.map.getSource('hoveredPin').setData({
+      //UNHOVER
+    	this.map.on('mouseleave', 'eventlayer', () => {
+    		this.map.getCanvas().style.cursor = '';
+    		// change size when hover not right
+        if(this.eventIsSelected) {
+    		  this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
+        } else {
+          this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
+        }
+    	});
+
+      //CLICK
+    	this.map.on('click', 'eventlayer', (e) => {
+        // Populate the popup and set its coordinates
+    		// based on the feature found.
+        console.log(e);
+        //Handle if you reclick an event
+        if(this.selectedEvent === e.features[0].id) {
+          this.eventIsSelected = false;
+          this.selectedEvent = null;
+          popup.remove();
+          return;
+        }
+
+        let coords = e.features[0].geometry.coordinates.slice();
+
+        //Switch selected event
+        if(this.eventIsSelected) {
+          this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
+          //Add Popup if click, making it blue if it was redBackupHoveredPin
+        }
+
+        //change some state variables
+        this.eventIsSelected = true;
+        this.selectedEvent = e.features[0].id;
+
+        // change size when hover not right
+        this.map.getSource('hoveredPin').setData({
           "geometry": {
               "type": "Point",
-        			"coordinates": coords
+              "coordinates": coords
             },
           "type": "Feature"
         });
-    		// change size when hover not right
-    		this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
+        this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
 
-    		// Populate the popup and set its coordinates
-    		// based on the feature found.
-    		// popup.setLngLat([coords[0]-.00015, coords[1]])
+        // popup.setLngLat([coords[0]-.00015, coords[1]])
         popup.setLngLat([coords[0], coords[1]])
-
     		.setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>')
     		.addTo(this.map);
 
     		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
+        console.log(e.features[0].properties.start_time);
     		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(e.features[0].properties.start_time));
-    	});
 
-    	this.map.on('mouseleave', 'eventlayer', () => {
-    		this.map.getCanvas().style.cursor = '';
-    		// change size when hover not right
-    		this.map.setLayoutProperty('hoveredPin','visibility', 'none');
-    		popup.remove();
-    	});
-
-    	this.map.on('click', 'eventlayer', (e) => {
     		this.map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
     		// console.log(e);
     		//   showModal('sign-up', e.properties);
