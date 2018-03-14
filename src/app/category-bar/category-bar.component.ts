@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../category.service';
 import { EventService } from '../event.service';
 import { FeatureCollection, GeoJson } from '../map';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-category-bar',
@@ -13,7 +14,6 @@ export class CategoryBarComponent implements OnInit {
   private categories;
   private events: GeoJson[];
   private selectedCategory = "all categories";
-  private categObjects = [];
 
   constructor(private categService: CategoryService, private eventService: EventService) { }
 
@@ -45,7 +45,6 @@ export class CategoryBarComponent implements OnInit {
           this.categories.push(categObject);
         }
       });
-    // Add bubble numbers using events object
   }
 
   private getEventMap() {
