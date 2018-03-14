@@ -23,8 +23,9 @@ export class MapBoxComponent implements OnInit {
     source: any;
     keyUrl: string;
 
-    // style
+    // Resources
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
+    bluePinPath = "../../assets/blue-mappointer.png"
 
     private events: FeatureCollection;
 
@@ -39,9 +40,10 @@ export class MapBoxComponent implements OnInit {
       });
       this.buildMap();
       //I think you should use something like this to create all the promises once instead of calling function creating promise several times
-      let _promiseMapLoad = this.promiseMapLoad()
-      let _promiseGetUserLocation = this.promiseGetUserLocation()
-      let _promisePinLoad = this.promiseImageLoad(this.pinUrl)
+      let _promiseMapLoad = this.promiseMapLoad();
+      let _promiseGetUserLocation = this.promiseGetUserLocation();
+      let _promisePinLoad = this.promiseImageLoad(this.pinUrl);
+      let _promiseBluePinLoad = this.promiseImageLoad(this.bluePinPath);
 
       //Add 3D buildings, on-hover popup, and arrowcontrols
       _promiseMapLoad.then(() => {
@@ -54,16 +56,21 @@ export class MapBoxComponent implements OnInit {
       let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
       promise_map_pin.then((promiseReturns) => {
         let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
-        this.map.addImage('pin', image);
-
-        let today = new Date();
+        this.map.addImage('redPin', image);
+        //add events with the new pin
         this.addEventLayer(this.events);
       });
 
+      let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
+      promise_map_blue_pin.then((promiseReturns) => {
+        let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+        this.map.addImage('bluePin', image);
+      });
+
       //Add user location pin
-      let promise_map_userloc_pin = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad]);
-      promise_map_userloc_pin.then( () => {
-        this.addPinToLocation("currloc", this.lat, this.lng, "pin", .08);
+      let promise_map_userloc_pins = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad, _promiseBluePinLoad]);
+      promise_map_userloc_pins.then( () => {
+        this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
       });
 
       this.addControls();
@@ -79,20 +86,20 @@ export class MapBoxComponent implements OnInit {
         "type": "symbol",
         "source":"events",
         "layout": {
-          "icon-image": "pin",
+          "icon-image": 'redPin',
           "icon-size":.06,
           "icon-allow-overlap": true
         }
       });
 
       //Add a larger pin to later use for on hover
-      this.addPinToLocation('hoveredPin', this.lat, this.lng, "pin", .08, false);
+      this.addPinToLocation('hoveredPin', this.lat, this.lng, "bluePin", .08, false);
 
       //TEST FOR GOOD SQUARE size
-      // this.addPinToLocation('hp1', this.lat+.0001, this.lng, "pin", .08, true);
-      // this.addPinToLocation('hp2', this.lat, this.lng, "pin", .08, true);
-      // this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, "pin", .08, true);
-      // this.addPinToLocation('hp4', this.lat, this.lng+.0001, "pin", .08, true);
+      // this.addPinToLocation('hp1', this.lat+.0001, this.lng, 'redPin', .08, true);
+      // this.addPinToLocation('hp2', this.lat, this.lng, 'redPin', .08, true);
+      // this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, 'redPin', .08, true);
+      // this.addPinToLocation('hp4', this.lat, this.lng+.0001, 'redPin', .08, true);
 
     }
 
@@ -197,9 +204,9 @@ export class MapBoxComponent implements OnInit {
     	this.map.on('mouseenter', 'eventlayer', (e) => {
     		// Change the cursor style as a UI indicator.
     		this.map.getCanvas().style.cursor = 'pointer';
-
+        console.log(e);
         //slice returns a copy of the array rather than the actual array
-        let coords = e.features[0].geometry.coordinates.slice()
+        let coords = e.features[0].geometry.coordinates.slice();
 
     		console.log(coords);
 
@@ -217,11 +224,11 @@ export class MapBoxComponent implements OnInit {
     		// based on the feature found.
     		// popup.setLngLat([coords[0]-.00015, coords[1]])
         popup.setLngLat([coords[0], coords[1]])
-
     		.setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>')
     		.addTo(this.map);
 
     		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
+        console.log(e.features[0].properties.start_time);
     		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(e.features[0].properties.start_time));
     	});
 
