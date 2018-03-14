@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';  // replaces previous Http service
 import { FormsModule } from '@angular/forms';
@@ -11,6 +12,7 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
 import { CategoryBarComponent } from './category-bar/category-bar.component';
 import { CategoryService } from './category.service';
 
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -29,9 +31,11 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     SharedModule,
+    AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot()
   ],
