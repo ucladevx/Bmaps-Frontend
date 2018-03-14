@@ -99,7 +99,7 @@ export class MapBoxComponent implements OnInit {
 
       //Add a larger pin to later use for on hover
       this.addPinToLocation('hoveredPin', this.lat, this.lng, "bluePin", .07, false);
-      this.addPinToLocation('redBackupHoveredPin', this.lat, this.lmg, 'redPin', .09, false);
+      this.addPinToLocation('redBackupHoveredPin', this.lat, this.lng, 'redPin', .09, false);
       //TEST FOR GOOD SQUARE size
       // this.addPinToLocation('hp1', this.lat+.0001, this.lng, 'redPin', .08, true);
       // this.addPinToLocation('hp2', this.lat, this.lng, 'redPin', .08, true);
