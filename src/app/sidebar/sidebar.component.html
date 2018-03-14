@@ -1,17 +1,9 @@
 <div class="sidebar-outer">
     <div class="sidebar">
+        <div class="move-up">
+            <i aria-hidden="true" (click)="toggleMobileSidebar()" [ngClass]="mobileSidebarStatus ? 'fa fa-chevron-down fa-lg' : 'fa fa-chevron-up fa-lg sidebar-up'"></i>
+        </div>
         <div [hidden]="!show">
-
-            <!-- <div class="move-up">
-                <i class="fa fa-chevron-down fa-lg" aria-hidden="true"></i>
-                <i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i>
-            </div> -->
-
-            <div class="move-up">
-                <i aria-hidden="true" (click)="toggleMobileSidebar()" [ngClass]="mobileSidebarStatus ? 'fa fa-chevron-down fa-lg' : 'fa fa-chevron-up fa-lg sidebar-up'"></i>
-            </div>
-            <!-- <p [@myAwesomeAnimation]='state' (click)="toggleMobileSidebar()">I will animate</p> -->
-
             <app-date-selector></app-date-selector>
             <app-category-bar></app-category-bar>
             <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">

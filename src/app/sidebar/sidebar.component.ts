@@ -52,14 +52,8 @@ export class SidebarComponent implements OnInit {
 
     mobileSidebarStatus: boolean = false;
     toggleMobileSidebar() {
-
-
         this.mobileSidebarStatus = !this.mobileSidebarStatus;
         this.pressed.emit(true);
-        console.log("hello from toggleMobile");
-        // console.log(this.state);
-        //   this.state = (this.state === 'inactive' ? 'active' : 'inactive');
-        //   console.log(this.state);
     }
 
     formatCategory(category: String): string {

@@ -1,5 +1,5 @@
 #event-list{
-    height: 20em;
+    height: 15em;
     overflow: scroll;
 }
 
@@ -98,6 +98,7 @@
     display: block;
     text-align: center;
     background-color: white;
+    color: rgb(216, 216, 216)
 }
 
 @media only screen and (min-width: 768px) {
