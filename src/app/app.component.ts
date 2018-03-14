@@ -19,4 +19,10 @@ export class AppComponent {
     // this.categService.getCategories()
     //   .subscribe(categs => console.log(categs));
   }
+  pressed = false;
+
+  onPressed = (pressed) => {
+      console.log("hello");
+      this.pressed = pressed;
+  }
 }

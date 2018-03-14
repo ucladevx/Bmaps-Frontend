@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { Event } from '../event';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
@@ -30,6 +30,7 @@ export class SidebarComponent implements OnInit {
     private filteredEvents: GeoJson[];
     private selectedEvent: Event = null;
     show: boolean = true;
+    @Output() pressed: EventEmitter<boolean> = new EventEmitter();
 
     constructor(private eventService: EventService, private _dateService: DateService) { }
 
@@ -52,7 +53,10 @@ export class SidebarComponent implements OnInit {
     status: boolean = false;
     toggleMobileSidebar() {
 
+
         this.status = !this.status;
+        this.pressed.emit(true);
+        console.log("hello from toggleMobile");
         // console.log(this.state);
         //   this.state = (this.state === 'inactive' ? 'active' : 'inactive');
         //   console.log(this.state);
