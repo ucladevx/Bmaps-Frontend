@@ -21,7 +21,7 @@ export class AppComponent {
   }
   pressed = false;
 
-  onPressed = (pressed) => {
+  onPressed(pressed) {
       console.log("hello");
       this.pressed = pressed;
   }
