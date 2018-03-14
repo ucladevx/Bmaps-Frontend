@@ -15,14 +15,15 @@ export class EventService {
   // holds the current date that components can see
   private currDateSource: BehaviorSubject<Date>;
 
-  // Used by any component for live access to current date and events
+  // Observables that components can subscribe to for realtime updates
   currEvents$;
   filteredCurrEvents$;
   currDate$;
 
-  // Used internally to keep an updated FeatureCollection of events
+  // Used internally to keep a realtime, subscribed set of values
   private _events;
   private _date;
+  private _category = "all";
 
   private baseUrl = "http://www.whatsmappening.io/api/v1";
 
@@ -37,13 +38,8 @@ export class EventService {
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
 
-    this.currEvents$.subscribe(eventCollection => {
-      this._events = eventCollection;
-    });
-
-    this.currDate$.subscribe(date => {
-      this._date = date;
-    });
+    this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
+    this.currDate$.subscribe(date => this._date = date);
 
     this.updateEvents(today);
   }
@@ -54,6 +50,7 @@ export class EventService {
     return dateURL; // json we are pulling from for event info
   }
 
+  // Updates events for given date while persisting the current category
   updateEvents(date: Date): void {
     console.log("UPDATING EVENTS");
     this.currDateSource.next(date);
@@ -61,22 +58,21 @@ export class EventService {
       this.getEventsOnDateURL(date.getDate(), date.getMonth(), date.getFullYear())
     ).subscribe(events => {
       this.currEventsSource.next(events);
-      this.filteredCurrEventsSource.next(events);
-      // (below code was in sidebar.component)
-      // for (var event of this.events) {
-      //     this._dateService.formatDateItem(event);
-      // }
+      this.filterEvents(this._category);
     });
   }
 
+  // Calls updateEvents for the current date + days
   updateDateByDays(days: number) {
     let newDate = this._date;
     newDate.setDate(newDate.getDate() + days);
     this.updateEvents(newDate);
   }
 
+  // Filters current events given category name
   filterEvents(category: string): void {
     console.log("FILTERING EVENTS");
+    this._category = category;
     if (category === "all") {
       this.filteredCurrEventsSource.next(this._events);
       return;
