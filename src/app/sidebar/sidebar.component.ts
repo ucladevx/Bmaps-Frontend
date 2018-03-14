@@ -43,6 +43,10 @@ export class SidebarComponent implements OnInit {
     onSelect(event: Event): void {
         this.selectedEvent = event;
         this.show = false;
+        if (window.innerWidth < 768 && !this.mobileSidebarStatus) {
+            console.log("THIS IS TOGGLING");
+            this.toggleMobileSidebar();
+        }
     }
 
     showSidebar(result: boolean) {
