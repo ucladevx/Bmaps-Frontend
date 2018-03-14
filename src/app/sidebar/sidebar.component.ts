@@ -38,6 +38,9 @@ export class SidebarComponent implements OnInit {
         this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
             this.filteredEvents = eventCollection.features;
         });
+        this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
+            this.selectedEvent = selectedEventInfo.features;
+        });
     }
 
     onSelect(event: GeoJson): void {
