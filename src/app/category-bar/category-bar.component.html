@@ -3,10 +3,11 @@
     {{selectedCategory}}<span class="caret"></span>
   </button>
   <ul id="categ-menu" *dropdownMenu class="dropdown-menu" role="menu">
-    <li *ngFor="let category of categories">
+    <li *ngFor="let categObject of categories">
       <a class="dropdown-item"
-         (click)="filter(category)">
-        {{category}}
+         (click)="filter(categObject.category)">
+        {{categObject.formattedCategory}}
+        <span class="badge badge-secondary categ-bubble">{{categObject.numEvents}}</span>
       </a>
     </li>
   </ul>
