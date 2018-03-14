@@ -1,11 +1,8 @@
 <div *ngIf="event" class="event-details">
 	<div class="event-header">
-		<!-- <svg id="left-chevron" xmlns="../../assets/images/back_arrow.svg"  (click)="hideEvent($event)"></svg> -->
 		<img id="left-chevron" src="../../assets/images/back_arrow.png" height="35px" (click)="hideEvent($event)">
-		
-		<!-- <i id="left-chevron" (click)="hideEvent($event)">X</i> -->
 	</div>
-	<div class="event-body" script="console.log(event.properties);">
+	<div class="event-body">
 		<img class="event-image" src="{{event.properties.cover_picture}}">
 		<div class="event-title" id="event-title">{{ event.properties.event_name}}</div>
 		<div class="event-info" id="event-info" [innerHTML]="formatInfo()"></div>

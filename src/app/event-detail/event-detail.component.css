@@ -87,7 +87,7 @@
 @media (max-width: 992px) {
 	.event-container {
 		background-color: #f2f2f2;
-		display: inline-block;
+		display: block;
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -98,8 +98,15 @@
 		width: 100%;
 		overflow: auto;
 	}
-
-	.event-title {
-		font-size: 22px;
+	.event-image {
+		max-height: 100%;
+		max-width: 100%;
+		object-fit: scale-down;
+		text-align: center;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
 	}
+
+
 }
