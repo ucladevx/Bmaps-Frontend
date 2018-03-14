@@ -3,6 +3,10 @@
     overflow: scroll;
 }
 
+.event-list-show {
+    height: 47em !important;
+}
+
 @media only screen and (min-width: 768px) {
     #event-list{
         height: 48em;

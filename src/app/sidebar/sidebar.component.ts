@@ -50,11 +50,11 @@ export class SidebarComponent implements OnInit {
         this.selectedEvent = null;
     }
 
-    status: boolean = false;
+    mobileSidebarStatus: boolean = false;
     toggleMobileSidebar() {
 
 
-        this.status = !this.status;
+        this.mobileSidebarStatus = !this.mobileSidebarStatus;
         this.pressed.emit(true);
         console.log("hello from toggleMobile");
         // console.log(this.state);
