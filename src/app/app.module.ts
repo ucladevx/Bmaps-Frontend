@@ -13,7 +13,6 @@ import { CategoryService } from './category.service';
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { EventService } from './event.service';
-import { MapPopupComponent } from './map-popup/map-popup.component';
 
 @NgModule({
   declarations: [
@@ -21,8 +20,7 @@ import { MapPopupComponent } from './map-popup/map-popup.component';
     MapBoxComponent,
     SidebarComponent,
     EventDetailComponent,
-    CategoryBarComponent,
-    MapPopupComponent
+    CategoryBarComponent
   ],
   imports: [
     BrowserModule,
