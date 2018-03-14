@@ -85,4 +85,17 @@ export class EventService {
       .filter(e => e.properties.category.toLowerCase() === category.toLowerCase()));
     this.filteredCurrEventsSource.next(tempEvents);
   }
+
+  selectedEvent(id: number): void {
+      console.log("Showing selected event");
+      console.log(id);
+      if (id == 0){
+          this.filteredCurrEventsSource.next(this._events);
+          return;
+      }
+      let tempEvents = new FeatureCollection(this._events.features
+        .filter(e => e.id === id);
+    this.filteredCurrEventsSource.next(tempEvents);
+  }
+
 }

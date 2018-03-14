@@ -43,6 +43,7 @@ export class SidebarComponent implements OnInit {
     onSelect(event: Event): void {
         this.selectedEvent = event;
         this.show = false;
+        this.eventService.selectedEvent(event.id);
     }
 
     showSidebar(result: boolean) {
