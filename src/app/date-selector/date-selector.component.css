@@ -7,18 +7,50 @@
   border-style: solid;
   border-width: 0px 0px 1px 0px;
   text-align: center;
+  display: table;
+}
+
+.custom-btn {
+  background: none;
+  /* color: inherit; */
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 #left-arrow {
+  left: 20px;
+  transition: color 0.2s ease;
+  position: relative;
   float: left;
+  font-size: 32px;
+  color: #656565;
 }
 
 #right-arrow {
   float: right;
+  transition: color 0.2s ease;
+  position: relative;
+  font-size: 32px;
+  float: right;
+  color: #656565;
+  right: 20px;
+}
+
+#left-arrow:hover {
+  color: #5dbacd;
+}
+
+#right-arrow:hover {
+  color: #5dbacd;
 }
 
 #date-text {
-  display: inline-block;
+  display: table-cell;
   margin: 0 auto;
   text-align: center;
+  vertical-align: middle;
+  font-size: 18px;
 }
