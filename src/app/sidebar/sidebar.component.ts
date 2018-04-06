@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
-import { Event } from '../event';
+// import { Event } from '../event';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
 import { AfterViewInit, ViewChild } from '@angular/core';
@@ -40,6 +40,7 @@ export class SidebarComponent implements OnInit {
         });
         this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
             this.selectedEvent = selectedEventInfo.features;
+            console.log(this.selectedEvent);
         });
     }
 

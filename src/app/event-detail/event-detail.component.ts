@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Event } from '../event';
+import { FeatureCollection, GeoJson } from '../map';
 
 @Component({
   selector: 'app-event-detail',
@@ -7,7 +7,7 @@ import { Event } from '../event';
   styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-	@Input() event: Event;
+	@Input() event: GeoJson;
 	@Output() showSideBar = new EventEmitter<boolean>();
 
 	constructor() {
