@@ -102,6 +102,13 @@ export class DateService {
       }
   }
 
+  equalDates(a: Date, b: Date) {
+    let dateEqual = a.getDate() === b.getDate();
+    let monthEqual = a.getMonth() === b.getMonth();
+    let yearEqual = a.getFullYear() === b.getFullYear();
+    return dateEqual && monthEqual && yearEqual;
+  }
+
   //MOVE THIS SOMEWHERE WITHIN THE APP
   // nextDay() {
   // 	currDay.setDate(currDay.getDate() + 1);
