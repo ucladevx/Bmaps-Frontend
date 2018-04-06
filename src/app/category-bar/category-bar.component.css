@@ -39,3 +39,11 @@
   background-color: #c4e6ed;
   color: white;
 }
+
+#categ-btn {
+  z-index: 999;
+}
+
+.dropdown-menu {
+  z-index: 998;
+}
