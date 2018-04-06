@@ -57,7 +57,7 @@ function formatCategoryItem(item) {
     }
 }
 
-var apiURL = "http://52.53.72.98/api/v1/";
+var apiURL = "http://52.53.72.98/api/";
 
 var today = new Date(); //this is being changed somewhere and I can't figure out where
 var todayD = today.getDate();
@@ -87,7 +87,7 @@ var filteredJSON = {
 	"type": "FeatureCollection"
 }
 
-var keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+var keyUrl = apiURL + 'v2/events/search?date=' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
 
 //Setting up datalist with searchbox
 var inputBox = document.getElementById('search-input');

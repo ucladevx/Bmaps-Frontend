@@ -33,7 +33,7 @@ function updateDate() {
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	//Update keyURL to current date and send to filtering function
-	keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
+	keyUrl = apiURL + 'v2/events/search?date=' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
 	//console.log(keyUrl)
 	$.getJSON(keyUrl, function(data){
 		//Update currDateFormattedJSON since date changed
@@ -71,7 +71,7 @@ function updateDate() {
 		currDate = Date.parse(getMonthNameFromMonthNumber(m)+ " "+ d + ", " + y);
 
 		// Update categories
-		$.getJSON(apiURL + "event-categories", function(data){
+		$.getJSON(apiURL + "v2/events/search?category=", function(data){
 				// Create object to count events under each category
 				var categCount = {};
 
@@ -197,7 +197,7 @@ inputBox.onkeyup = function(e){
 		return false;
 	}
 	//Pass the current input into search API to create datalist
-	var keyUrl = apiURL + "search/"+inputBox.value;
+	var keyUrl = apiURL + "v2/events/search?term="+inputBox.value;
 	$.getJSON(keyUrl, function(data){
 		//Clear the list and restart everytime we get a new input
 		while (list.firstChild) {
