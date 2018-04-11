@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FeatureCollection } from './map';
+import { FeatureCollection, GeoJson } from './map';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
@@ -15,7 +15,7 @@ export class EventService {
   // holds the current date that components can see
   private currDateSource: BehaviorSubject<Date>;
   // holds current event
-  private selectedEventSource: BehaviorSubject<FeatureCollection>;
+  private selectedEventSource: BehaviorSubject<GeoJson>;
 
   // Observables that components can subscribe to for realtime updates
   currEvents$;
@@ -38,7 +38,7 @@ export class EventService {
     this.currEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject<Date>(today);
-    this.selectedEventSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection());
+    this.selectedEventSource = new BehaviorSubject<GeoJson>(new GeoJson([]));
 
     //Observable string streams
     this.currEvents$ = this.currEventsSource.asObservable();
@@ -90,4 +90,12 @@ export class EventService {
       .filter(e => e.properties.category.toLowerCase() === category.toLowerCase()));
     this.filteredCurrEventsSource.next(tempEvents);
   }
+
+  // Updates the current event by number
+  updateSelectedEvent(event: GeoJson): void {
+    console.log("UPDATING SELECTED EVENT");
+    this._selectedEvent = event;
+    console.log(this._selectedEvent);
+    this.selectedEventSource.next(this._selectedEvent);
+    }
 }

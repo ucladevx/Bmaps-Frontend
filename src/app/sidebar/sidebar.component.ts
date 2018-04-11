@@ -47,6 +47,7 @@ export class SidebarComponent implements OnInit {
     onSelect(event: GeoJson): void {
         this.selectedEvent = event;
         this.show = false;
+        this.eventService.updateSelectedEvent(event);
     }
 
     showSidebar(result: boolean) {
