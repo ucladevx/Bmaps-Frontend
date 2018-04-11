@@ -39,8 +39,12 @@ export class SidebarComponent implements OnInit {
             this.filteredEvents = eventCollection.features;
         });
         this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
-            this.selectedEvent = selectedEventInfo.features;
+            console.log(selectedEventInfo);
             console.log(this.selectedEvent);
+            // this.selectedEvent = selectedEventInfo;
+            // this.selectedEvent = selectedEventInfo;
+            // this.selectedEvent = selectedEventInfo.features;
+            // console.log(this.selectedEvent);
         });
     }
 

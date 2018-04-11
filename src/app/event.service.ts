@@ -94,7 +94,12 @@ export class EventService {
   // Updates the current event by number
   updateSelectedEvent(event: GeoJson): void {
     console.log("UPDATING SELECTED EVENT");
+    console.log("current event:");
+    console.log(this._selectedEvent);
+    console.log("input event: ");
+    console.log(event);
     this._selectedEvent = event;
+    console.log("output event:");
     console.log(this._selectedEvent);
     this.selectedEventSource.next(this._selectedEvent);
     }
