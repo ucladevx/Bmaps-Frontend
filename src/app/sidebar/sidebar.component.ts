@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
-// import { Event } from '../event';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
 import { AfterViewInit, ViewChild } from '@angular/core';
@@ -41,10 +40,6 @@ export class SidebarComponent implements OnInit {
         this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
             console.log(selectedEventInfo);
             console.log(this.selectedEvent);
-            // this.selectedEvent = selectedEventInfo;
-            // this.selectedEvent = selectedEventInfo;
-            // this.selectedEvent = selectedEventInfo.features;
-            // console.log(this.selectedEvent);
         });
     }
 
@@ -72,6 +67,10 @@ export class SidebarComponent implements OnInit {
         else {
             return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
         }
+    }
+
+    onHoverEvent(event: GeoJson): void{
+
     }
 
 }

@@ -37,7 +37,7 @@
     display: inline-block;
 }
 
-.sidebar-event:hover{
+.sidebar-event:hover, .sidebar-event:active{
     background-color: rgb(219, 219, 219);
 }
 

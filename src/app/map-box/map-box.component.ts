@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../shared/date.service';
@@ -26,7 +25,8 @@ export class MapBoxComponent implements OnInit {
 
     // state
     eventIsSelected: boolean = false;
-    selectedEvent: any = null;
+    selectedEventId: any = null;
+    selectedEvent: GeoJson;
 
     // Resources
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
@@ -42,6 +42,11 @@ export class MapBoxComponent implements OnInit {
       this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
         this.events = eventCollection;
         this.updateSource();
+      });
+
+      this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
+          console.log(selectedEventInfo);
+          // console.log(this.selectedEvent);
       });
       this.buildMap();
       //I think you should use something like this to create all the promises once instead of calling function creating promise several times
@@ -215,7 +220,7 @@ export class MapBoxComponent implements OnInit {
         let coords = e.features[0].geometry.coordinates.slice();
 
         if(this.eventIsSelected) {
-          if(e.features[0].id !== this.selectedEvent) {
+          if(e.features[0].id !== this.selectedEventId) {
             this.map.getSource('redBackupHoveredPin').setData({
               "geometry": {
                   "type": "Point",
@@ -257,9 +262,9 @@ export class MapBoxComponent implements OnInit {
     		// based on the feature found.
         console.log(e);
         //Handle if you reclick an event
-        if(this.selectedEvent === e.features[0].id) {
+        if(this.selectedEventId === e.features[0].id) {
           this.eventIsSelected = false;
-          this.selectedEvent = null;
+          this.selectedEventId = null;
           popup.remove();
           return;
         }
@@ -274,7 +279,11 @@ export class MapBoxComponent implements OnInit {
 
         //change some state variables
         this.eventIsSelected = true;
-        this.selectedEvent = e.features[0].id;
+        this.selectedEventId = e.features[0].id;
+        this.selectedEvent = e;
+        this.eventService.updateSelectedEvent(this.selectedEvent);
+
+        console.log("schanged the state");
 
         // change size when hover not right
         this.map.getSource('hoveredPin').setData({

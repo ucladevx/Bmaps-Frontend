@@ -56,6 +56,7 @@ export class EventService {
   private getEventsOnDateURL(d: number, m: number, y: number): string {
     const monthName = this.dateService.getMonthNameFromMonthNumber(m);
     let dateURL = `${this.baseUrl}/event-date/${d}%20${monthName}%20${y}`;
+    console.log(dateURL);
     return dateURL; // json we are pulling from for event info
   }
 
