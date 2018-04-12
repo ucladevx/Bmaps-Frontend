@@ -7,22 +7,25 @@ import { FeatureCollection, GeoJson } from '../map';
   styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-	@Input() event: GeoJson;
+	@Input() event: any;
 	@Output() showSideBar = new EventEmitter<boolean>();
 
 	constructor() {
-
+        console.log("construct me");
 	}
 
 	ngOnInit() {
+        console.log(this.event);
 	}
 
 	toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
 
-	hideEvent(event) {
-		console.log(this.event);
+	hideEvent($event) {
+        console.log("whtf");
+        console.log($event);
+        console.log(this.event);
 		this.showSideBar.emit(true);
 	}
 }

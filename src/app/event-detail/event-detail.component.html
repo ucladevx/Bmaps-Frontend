@@ -2,7 +2,7 @@
 	<div class="event-header">
 		<i id="left-chevron" (click)="hideEvent($event)">X</i>
 	</div>
-	<div class="event-body" script="console.log(event.properties);">
+	<div class="event-body" script="">
 		<img class="event-image" src="{{event.properties.cover_picture}}">
 		<div class="event-title" id="event-title">{{ event.properties.event_name}}</div>
 		<div class="event-info" id="event-info" [innerHTML]="toHTML(event.properties.start_time)"></div>

@@ -15,7 +15,7 @@ export class EventService {
   // holds the current date that components can see
   private currDateSource: BehaviorSubject<Date>;
   // holds current event
-  private selectedEventSource: BehaviorSubject<GeoJson>;
+  private selectedEventSource: BehaviorSubject<FeatureCollection>;
 
   // Observables that components can subscribe to for realtime updates
   currEvents$;
@@ -38,7 +38,7 @@ export class EventService {
     this.currEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject<Date>(today);
-    this.selectedEventSource = new BehaviorSubject<GeoJson>(new GeoJson([]));
+    this.selectedEventSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
 
     //Observable string streams
     this.currEvents$ = this.currEventsSource.asObservable();
@@ -93,7 +93,7 @@ export class EventService {
   }
 
   // Updates the current event by number
-  updateSelectedEvent(event: GeoJson): void {
+  updateSelectedEvent(event: FeatureCollection[]): void {
     console.log("UPDATING SELECTED EVENT");
     console.log("current event:");
     console.log(this._selectedEvent);

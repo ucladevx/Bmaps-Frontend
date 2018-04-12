@@ -26,7 +26,7 @@ export class MapBoxComponent implements OnInit {
     // state
     eventIsSelected: boolean = false;
     selectedEventId: any = null;
-    selectedEvent: GeoJson;
+    selectedEvent: FeatureCollection[];
 
     // Resources
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
@@ -45,8 +45,12 @@ export class MapBoxComponent implements OnInit {
       });
 
       this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
-          console.log(selectedEventInfo);
+          // console.log(selectedEventInfo);
           // console.log(this.selectedEvent);
+          this.selectedEvent = selectedEventInfo;
+          this.selectedEventId = selectedEventInfo.id;
+          console.log("map sub");
+          //need to call zoom function for map
       });
       this.buildMap();
       //I think you should use something like this to create all the promises once instead of calling function creating promise several times
@@ -260,7 +264,7 @@ export class MapBoxComponent implements OnInit {
     	this.map.on('click', 'eventlayer', (e) => {
         // Populate the popup and set its coordinates
     		// based on the feature found.
-        console.log(e);
+        // console.log(e);
         //Handle if you reclick an event
         if(this.selectedEventId === e.features[0].id) {
           this.eventIsSelected = false;
@@ -280,7 +284,8 @@ export class MapBoxComponent implements OnInit {
         //change some state variables
         this.eventIsSelected = true;
         this.selectedEventId = e.features[0].id;
-        this.selectedEvent = e;
+        console.log(e.features[0]);
+        this.selectedEvent = e.features[0];
         this.eventService.updateSelectedEvent(this.selectedEvent);
 
         console.log("schanged the state");
