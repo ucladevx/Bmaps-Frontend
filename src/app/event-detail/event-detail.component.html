@@ -1,6 +1,8 @@
 <div *ngIf="event" class="event-details">
 	<div class="event-header">
-		<i id="left-chevron" (click)="hideEvent($event)">X</i>
+		<button id="left-arrow" class="custom-btn">
+			<i class="fa fa-chevron-left" aria-hidden="true" (click)="hideEvent($event)"></i>
+		</button>
 	</div>
 	<div class="event-body" script="console.log(event.properties);">
 		<img class="event-image" src="{{event.properties.cover_picture}}">
