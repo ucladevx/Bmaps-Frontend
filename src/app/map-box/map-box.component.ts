@@ -27,6 +27,8 @@ export class MapBoxComponent implements OnInit {
     eventIsSelected: boolean = false;
     selectedEventId: any = null;
     selectedEvent: FeatureCollection[];
+    currLng: any;
+    currLat: any;
 
     // Resources
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
@@ -50,6 +52,31 @@ export class MapBoxComponent implements OnInit {
           this.selectedEvent = selectedEventInfo;
           this.selectedEventId = selectedEventInfo.id;
           console.log("map sub");
+          console.log(this.selectedEvent);
+          if (this.selectedEvent.geometry)
+          {
+
+              // This flies to not using the mapbox event which it should do instead
+              // Good luck Jorge /////
+
+              this.currLng = this.selectedEvent.geometry.coordinates[0];
+              this.currLat = this.selectedEvent.geometry.coordinates[1];
+              this.map.flyTo({center: {lng: this.currLng, lat: this.currLat}, zoom: 17, speed: .3 })
+              // Create a popup, but don't add it to the map yet.
+              // let popup = new mapboxgl.Popup({
+              //     closeButton: false,
+              //     closeOnClick: false,
+              //     offset: {'bottom':[7.5 ,0]}
+              // });
+              // popup.setLngLat([this.currLng, this.currLat])
+              //   .setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>')
+              //   .addTo(this.map);
+
+
+            //// Up to here
+          }
+          // console.log (this.selectedEvent.geometry.coordinates[0], this.selectedEvent.geometry.coordinates[0]);
+           // this.map.flyTo({center: {this.selectedEvent.geometry.coordinates[0], this.selectedEvent.geometry.coordinates[0]}, zoom: 17, speed: .3});
           //need to call zoom function for map
       });
       this.buildMap();
@@ -308,6 +335,8 @@ export class MapBoxComponent implements OnInit {
     		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
         console.log(e.features[0].properties.start_time);
     		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(e.features[0].properties.start_time));
+            console.log("before ling lat");
+            console.log(e);
 
     		this.map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
     		// console.log(e);
