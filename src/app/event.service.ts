@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FeatureCollection } from './map';
+import { FeatureCollection, GeoJson } from './map';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
@@ -14,15 +14,19 @@ export class EventService {
   private filteredCurrEventsSource: BehaviorSubject<FeatureCollection>;
   // holds the current date that components can see
   private currDateSource: BehaviorSubject<Date>;
+  // holds current event
+  private selectedEventSource: BehaviorSubject<FeatureCollection>;
 
   // Observables that components can subscribe to for realtime updates
   currEvents$;
   filteredCurrEvents$;
   currDate$;
+  selectedEvent$;
 
   // Used internally to keep a realtime, subscribed set of values
   private _events;
   private _date;
+  private _selectedEvent;
   private _category = "all";
 
   private baseUrl = "http://www.whatsmappening.io/api/v1";
@@ -30,16 +34,21 @@ export class EventService {
   constructor(private http: HttpClient, private dateService: DateService) {
     let today = new Date();
 
+    // Observable string sources
     this.currEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject<Date>(today);
+    this.selectedEventSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
 
+    //Observable string streams
     this.currEvents$ = this.currEventsSource.asObservable();
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
+    this.selectedEvent$ = this.selectedEventSource.asObservable();
 
     this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
     this.currDate$.subscribe(date => this._date = date);
+    this.selectedEvent$.subscribe(selectedEventInfo => this._selectedEvent = selectedEventInfo);
 
     this.updateEvents(today);
   }
@@ -47,6 +56,7 @@ export class EventService {
   private getEventsOnDateURL(d: number, m: number, y: number): string {
     const monthName = this.dateService.getMonthNameFromMonthNumber(m);
     let dateURL = `${this.baseUrl}/event-date/${d}%20${monthName}%20${y}`;
+    console.log(dateURL);
     return dateURL; // json we are pulling from for event info
   }
 
@@ -81,4 +91,17 @@ export class EventService {
       .filter(e => e.properties.category.toLowerCase() === category.toLowerCase()));
     this.filteredCurrEventsSource.next(tempEvents);
   }
+
+  // Updates the current event by number
+  updateSelectedEvent(event: FeatureCollection[]): void {
+    console.log("UPDATING SELECTED EVENT");
+    console.log("current event:");
+    console.log(this._selectedEvent);
+    console.log("input event: ");
+    console.log(event);
+    this._selectedEvent = event;
+    console.log("output event:");
+    console.log(this._selectedEvent);
+    this.selectedEventSource.next(this._selectedEvent);
+    }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Event } from '../event';
+import { FeatureCollection, GeoJson } from '../map';
 
 @Component({
   selector: 'app-event-detail',
@@ -7,22 +7,25 @@ import { Event } from '../event';
   styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-	@Input() event: Event;
+	@Input() event: any;
 	@Output() showSideBar = new EventEmitter<boolean>();
 
 	constructor() {
-
+        console.log("construct me");
 	}
 
 	ngOnInit() {
+        console.log(this.event);
 	}
 
 	toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }
 
-	hideEvent(event) {
-		console.log(this.event);
+	hideEvent($event) {
+        console.log("whtf");
+        console.log($event);
+        console.log(this.event);
 		this.showSideBar.emit(true);
 	}
 }

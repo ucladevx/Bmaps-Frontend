@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
-import { Event } from '../event';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
 import { AfterViewInit, ViewChild } from '@angular/core';
@@ -28,7 +27,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 })
 export class SidebarComponent implements OnInit {
     private filteredEvents: GeoJson[];
-    private selectedEvent: Event = null;
+    private selectedEvent: any;
     show: boolean = true;
     @Output() pressed: EventEmitter<boolean> = new EventEmitter();
 
@@ -38,11 +37,19 @@ export class SidebarComponent implements OnInit {
         this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
             this.filteredEvents = eventCollection.features;
         });
+        this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
+            console.log(selectedEventInfo);
+            console.log(this.selectedEvent);
+            console.log (selectedEventInfo == this.selectedEvent);
+            this.selectedEvent = selectedEventInfo;
+            // this.selectedEvent = selectedEventInfo;
+        });
     }
 
-    onSelect(event: Event): void {
+    onSelect(event: FeatureCollection[]): void {
         this.selectedEvent = event;
         this.show = false;
+        this.eventService.updateSelectedEvent(event);
     }
 
     showSidebar(result: boolean) {
@@ -63,6 +70,10 @@ export class SidebarComponent implements OnInit {
         else {
             return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
         }
+    }
+
+    onHoverEvent(event: FeatureCollection[]): void{
+
     }
 
 }
