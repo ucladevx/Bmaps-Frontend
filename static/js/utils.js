@@ -49,7 +49,7 @@ function formatDateItem(item) {
 }
 
 function formatCategoryItem(item) {
-    if (item.properties.category == "<NONE>"){
+    if (item.properties.category == "<NONE>" || item.properties.category == null){
         item.properties.category = "";
     }
     else{
@@ -57,7 +57,7 @@ function formatCategoryItem(item) {
     }
 }
 
-var apiURL = "http://52.53.72.98/api/v1/";
+var apiURL = "https://whatsmappening.io/api/";
 
 var today = new Date(); //this is being changed somewhere and I can't figure out where
 var todayD = today.getDate();
@@ -87,7 +87,10 @@ var filteredJSON = {
 	"type": "FeatureCollection"
 }
 
-var keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+// TODO: Move to new api
+// var keyUrl = apiURL + 'v2/events/search?date=' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+var keyUrl = apiURL + 'v1/events/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+
 
 //Setting up datalist with searchbox
 var inputBox = document.getElementById('search-input');

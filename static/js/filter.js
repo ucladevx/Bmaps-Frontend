@@ -33,7 +33,10 @@ function updateDate() {
 
 	document.getElementById("currDate").innerHTML =  (getMonthNameFromMonthNumber(m) + " " + d).toLowerCase();
 	//Update keyURL to current date and send to filtering function
-	keyUrl = apiURL + 'event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
+	// TODO: Move to new api
+	// keyUrl = apiURL + 'v2/events/search?date=' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y;
+	var keyUrl = apiURL + 'v1/events/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+
 	//console.log(keyUrl)
 	$.getJSON(keyUrl, function(data){
 		//Update currDateFormattedJSON since date changed
@@ -71,7 +74,9 @@ function updateDate() {
 		currDate = Date.parse(getMonthNameFromMonthNumber(m)+ " "+ d + ", " + y);
 
 		// Update categories
-		$.getJSON(apiURL + "event-categories", function(data){
+		// TODO: Move to new api
+		// $.getJSON(apiURL + "v2/events/categories", function(data){
+		$.getJSON(apiURL + "v1/events/event-categories", function(data){
 				// Create object to count events under each category
 				var categCount = {};
 
@@ -89,8 +94,10 @@ function updateDate() {
 				// Populate category count object
 				var totalNumEvents = 0;
 				$.each(currDateJSON.features, function(i,event) {
-					var categName = event.properties.category.toLowerCase();
-					categCount[categName]++;
+					if (event.properties.category != null) {
+						var categName = event.properties.category.toLowerCase();
+						categCount[categName]++;
+					}
 					totalNumEvents++;
 				});
 				categCount['all categories'] = totalNumEvents;
@@ -197,7 +204,9 @@ inputBox.onkeyup = function(e){
 		return false;
 	}
 	//Pass the current input into search API to create datalist
-	var keyUrl = apiURL + "search/"+inputBox.value;
+	// TODO: Move to new api
+	// var keyUrl = apiURL + "v2/events/search?term="+inputBox.value;
+	var keyUrl = apiURL + "v1/events/search/"+inputBox.value;
 	$.getJSON(keyUrl, function(data){
 		//Clear the list and restart everytime we get a new input
 		while (list.firstChild) {
