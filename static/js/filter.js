@@ -49,17 +49,17 @@ function updateDate() {
 			else {
 				//console.log(a.properties.event_name);
 				//console.log(b.properties.event_name);
-				if (a.properties.end_time != null && b.properties.end_time != null){
+				if (a.properties.end_time != "<NONE>" && b.properties.end_time != "<NONE>"){
 					//both exist
 					res = a.properties.end_time.localeCompare(b.properties.end_time);
 					//console.log(res);
 					return res;
 				}
-				else if (a.properties.end_time != null && b.properties.end_time == null){
+				else if (a.properties.end_time != "<NONE>" && b.properties.end_time == "<NONE>"){
 					//console.log(-1);
 					return -1;
 				}
-				else if (a.properties.end_time == null && b.properties.end_time != null){
+				else if (a.properties.end_time == "<NONE>" && b.properties.end_time != "<NONE>"){
 					//console.log(1);
 					return 1;
 				}
