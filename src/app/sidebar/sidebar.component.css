@@ -35,6 +35,7 @@
     margin: 4%;
     box-sizing: border-box;
     display: inline-block;
+    cursor: pointer;
 }
 
 .sidebar-event-img{

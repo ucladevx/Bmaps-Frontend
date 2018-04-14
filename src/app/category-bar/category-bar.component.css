@@ -21,3 +21,7 @@
 .zero-events {
   color: #C0C0C0 !important;
 }
+
+.dropdown-item {
+  cursor: pointer;
+}
