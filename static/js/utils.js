@@ -49,7 +49,7 @@ function formatDateItem(item) {
 }
 
 function formatCategoryItem(item) {
-    if (item.properties.category == "<NONE>"){
+    if (item.properties.category == "<NONE>" || item.properties.category == null){
         item.properties.category = "";
     }
     else{
@@ -57,7 +57,7 @@ function formatCategoryItem(item) {
     }
 }
 
-var apiURL = "http://whatsmappening.io/api/";
+var apiURL = "https://dora.whatsmappening.io/api/";
 
 var today = new Date(); //this is being changed somewhere and I can't figure out where
 var todayD = today.getDate();
