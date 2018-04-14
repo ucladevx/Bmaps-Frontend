@@ -1,11 +1,11 @@
-<!--The content below is only a placeholder and can be replaced.-->
-
 <app-navbar></app-navbar>
 <div class="row">
     <div class="col-sm-12 col-md-7 map-container column-3-4">
         <app-map-box [pressed]="pressed"></app-map-box>
+        <!-- Link app's pressed variable to map-box's pressed variable-->
     </div>
     <div class="col-sm-12 col-md-5 sidebar-container column-1-4">
         <app-sidebar (pressed)=onPressed($event)></app-sidebar>
+        <!-- On the click event, executes app.ts's onPressed -->
     </div>
 </div>
