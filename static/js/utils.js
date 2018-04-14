@@ -87,7 +87,9 @@ var filteredJSON = {
 	"type": "FeatureCollection"
 }
 
-var keyUrl = apiURL + 'v2/events/search?date=' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+// var keyUrl = apiURL + 'v2/events/search?date=' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+var keyUrl = apiURL + 'v1/events/event-date/' + d + '%20' + getMonthNameFromMonthNumber(m)+ '%20' + y; // json we are pulling from for event info
+
 
 //Setting up datalist with searchbox
 var inputBox = document.getElementById('search-input');
