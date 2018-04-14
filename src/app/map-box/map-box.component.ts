@@ -119,14 +119,14 @@ export class MapBoxComponent implements OnInit {
       this.map.getSource('events').setData(this.events);
     }
 
-    updateSourceWithoutEvent(eventIdToRemove: number): void {
-      if (this.map == undefined || this.map.getSource('events') == undefined) return;
-      let subsetOfEvents: FeatureCollection = {
-        type: 'FeatureCollection',
-        features: this.events.features.filter(curGeoJson => curGeoJson.id != eventIdToRemove)
-      };
-      this.map.getSource('events').setData(subsetOfEvents);
-    }
+    // updateSourceWithoutEvent(eventIdToRemove: number): void {
+    //   if (this.map == undefined || this.map.getSource('events') == undefined) return;
+    //   let subsetOfEvents: FeatureCollection = {
+    //     type: 'FeatureCollection',
+    //     features: this.events.features.filter(curGeoJson => curGeoJson.id != eventIdToRemove)
+    //   };
+    //   this.map.getSource('events').setData(subsetOfEvents);
+    // }
 
     buildMap() {
       this.map = new mapboxgl.Map({
