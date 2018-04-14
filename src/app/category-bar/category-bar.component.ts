@@ -7,8 +7,7 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-category-bar',
-  templateUrl: './category-bar.component.html',
-  styleUrls: ['./category-bar.component.css']
+  templateUrl: './category-bar.component.html'
 })
 export class CategoryBarComponent implements OnInit {
   private categories;

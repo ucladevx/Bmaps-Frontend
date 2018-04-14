@@ -9,7 +9,6 @@ import { EventService } from '../event.service';
 @Component({
   selector: 'app-map-box',
   templateUrl: './map-box.component.html',
-  styleUrls: ['./map-box.component.css'],
   providers: [ DateService ]
 })
 export class MapBoxComponent implements OnInit {

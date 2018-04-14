@@ -9,7 +9,6 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.css'],
     providers: [ DateService ],
     animations: [
         trigger('myAwesomeAnimation', [

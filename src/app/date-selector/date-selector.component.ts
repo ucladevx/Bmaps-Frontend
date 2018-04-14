@@ -4,8 +4,7 @@ import { DateService } from '../shared/date.service';
 
 @Component({
   selector: 'app-date-selector',
-  templateUrl: './date-selector.component.html',
-  styleUrls: ['./date-selector.component.css']
+  templateUrl: './date-selector.component.html'
 })
 export class DateSelectorComponent implements OnInit {
   private dateString: string;

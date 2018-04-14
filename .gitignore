@@ -17,6 +17,7 @@
 *.launch
 .settings/
 *.sublime-workspace
+*.swp
 
 # IDE - VSCode
 .vscode/*
@@ -41,3 +42,15 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Ionic
+.idea/
+.sourcemaps/
+.sass-cache/
+.versions/
+coverage/
+platforms/
+plugins/
+plugins/android.json
+plugins/ios.json
+www/
