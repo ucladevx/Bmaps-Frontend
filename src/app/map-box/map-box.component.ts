@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../shared/date.service';
@@ -48,6 +47,14 @@ export class MapBoxComponent implements OnInit {
       this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
         this.events = eventCollection;
         this.updateSource();
+      });
+
+      this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
+          // console.log(selectedEventInfo);
+          // console.log(this.selectedEvent);
+          this.selectedEvent = selectedEventInfo;
+          console.log("map sub");
+          //need to call zoom function for map
       });
       this.buildMap();
       //I think you should use something like this to create all the promises once instead of calling function creating promise several times
@@ -286,6 +293,8 @@ export class MapBoxComponent implements OnInit {
 
         //change some state variables
         this.selectedEvent = e.features[0].id;
+        this.eventService.updateSelectedEvent(this.selectedEvent);
+        console.log("schanged the state");
 
         // add blue hovered Pin
         this.map.getSource('hoveredPin').setData({

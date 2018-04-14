@@ -32,9 +32,13 @@
 
 .sidebar-event {
     width: 100%;
-    margin: 4%;
+    padding: 4%;
     box-sizing: border-box;
     display: inline-block;
+}
+
+.sidebar-event:hover, .sidebar-event:active{
+    background-color: rgb(219, 219, 219);
 }
 
 .sidebar-event-img{

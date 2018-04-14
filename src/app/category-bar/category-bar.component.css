@@ -21,3 +21,29 @@
 .zero-events {
   color: #C0C0C0 !important;
 }
+
+.btn:hover {
+  color: #5dbacd;
+}
+
+.btn-light:hover {
+  color: #5dbacd;
+}
+
+.dropdown-item:active {
+  background-color: #c4e6ed;
+  color: white;
+}
+
+.dropdown-item:focus {
+  background-color: #c4e6ed;
+  color: white;
+}
+
+#categ-btn {
+  z-index: 999;
+}
+
+.dropdown-menu {
+  z-index: 998;
+}
