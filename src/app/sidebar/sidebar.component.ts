@@ -38,15 +38,14 @@ export class SidebarComponent implements OnInit {
             this.filteredEvents = eventCollection.features;
         });
         this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
-            console.log(selectedEventInfo);
-            console.log(this.selectedEvent);
-            console.log (selectedEventInfo == this.selectedEvent);
+            console.log("Sidebar update", selectedEventInfo);
             this.selectedEvent = selectedEventInfo;
             // this.selectedEvent = selectedEventInfo;
         });
     }
 
-    onSelect(event: FeatureCollection[]): void {
+    onSelect(event: GeoJson): void {
+        console.log("On Select", event);
         this.selectedEvent = event;
         this.show = false;
         this.eventService.updateSelectedEvent(event);
@@ -54,7 +53,7 @@ export class SidebarComponent implements OnInit {
 
     showSidebar(result: boolean) {
         this.show = true;
-        this.selectedEvent = null;
+        this.eventService.updateSelectedEvent(null);
     }
 
     mobileSidebarStatus: boolean = false;

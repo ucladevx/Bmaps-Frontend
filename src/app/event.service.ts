@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import {Subject} from 'rxjs/Subject';
 import { FeatureCollection, GeoJson } from './map';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -34,11 +35,11 @@ export class EventService {
   constructor(private http: HttpClient, private dateService: DateService) {
     let today = new Date();
 
-    // Observable string sources
+    // Observable string sources, BehaviorSubjects have an intial state
     this.currEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject<Date>(today);
-    this.selectedEventSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
+    this.selectedEventSource = new Subject<GeoJson>();
 
     //Observable string streams
     this.currEvents$ = this.currEventsSource.asObservable();
@@ -93,15 +94,8 @@ export class EventService {
   }
 
   // Updates the current event by number
-  updateSelectedEvent(event: FeatureCollection[]): void {
-    console.log("UPDATING SELECTED EVENT");
-    console.log("current event:");
-    console.log(this._selectedEvent);
-    console.log("input event: ");
-    console.log(event);
+  updateSelectedEvent(event: GeoJson): void {
     this._selectedEvent = event;
-    console.log("output event:");
-    console.log(this._selectedEvent);
     this.selectedEventSource.next(this._selectedEvent);
     }
 }

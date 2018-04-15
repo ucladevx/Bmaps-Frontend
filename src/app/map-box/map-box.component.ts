@@ -52,8 +52,9 @@ export class MapBoxComponent implements OnInit {
       this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
           // console.log(selectedEventInfo);
           // console.log(this.selectedEvent);
-          this.selectedEvent = selectedEventInfo;
-          console.log("map sub");
+          //TODO: Just put this.selectEvent here
+          console.log("map sub", selectedEventInfo);
+          this.selectEvent(selectedEventInfo);
           //need to call zoom function for map
       });
       this.buildMap();
@@ -286,29 +287,38 @@ export class MapBoxComponent implements OnInit {
         //Remove bigRed if it was visible
         this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
 
-        //change some state variables
-        this.selectedEvent = e.features[0];
-        this.eventService.updateSelectedEvent(this.selectedEvent);
-
-        // add blue hovered Pin
-        let coords = e.features[0].geometry.coordinates.slice();
-        this.map.getSource('hoveredPin').setData({
-          "geometry": {
-              "type": "Point",
-              "coordinates": coords
-            },
-          "type": "Feature"
-        });
-        this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
-
-        //add popup
-        this.popup.setLngLat(coords)
-    		          .addTo(this.map);
-    		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
-    		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(e.features[0].properties.start_time));
-
-    		this.map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
+        //the service then calls selectEvent
+        this.eventService.updateSelectedEvent(e.features[0]);
     	});
+    }
+
+    //if event exists put popup and blue pin, else remove popup and blue pin
+    selectEvent(event: GeoJson): void {
+      this.selectedEvent = event;
+      if (event === null) {
+        this.popup.remove();
+        this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
+        return;
+      }
+
+      // add blue hovered Pin
+      let coords = event.geometry.coordinates.slice();
+      this.map.getSource('hoveredPin').setData({
+        "geometry": {
+            "type": "Point",
+            "coordinates": coords
+          },
+        "type": "Feature"
+      });
+      this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
+
+      //add popup
+      this.popup.setLngLat(coords)
+  		          .addTo(this.map);
+  		document.getElementById('popupEvent').innerHTML =  event.properties.event_name ;
+  		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(event.properties.start_time));
+
+  		this.map.flyTo({center: coords, zoom: 17, speed: .3});
     }
 
     addArrowControls(): void {
