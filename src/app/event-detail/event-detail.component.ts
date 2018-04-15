@@ -18,6 +18,7 @@ export class EventDetailComponent implements OnInit {
         console.log(this.event);
 	}
 
+  //used for date parsing
 	toHTML(input) : any {
         return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
     }

@@ -27,7 +27,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 })
 export class SidebarComponent implements OnInit {
     private filteredEvents: GeoJson[];
-    private selectedEvent: any;
+    private selectedEvent: GeoJson;
     show: boolean = true;
     @Output() pressed: EventEmitter<boolean> = new EventEmitter();
 
@@ -35,18 +35,18 @@ export class SidebarComponent implements OnInit {
 
     ngOnInit() {
         this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+            // console.log("Filtered Events update", eventCollection.features);
             this.filteredEvents = eventCollection.features;
         });
         this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
-            console.log(selectedEventInfo);
-            console.log(this.selectedEvent);
-            console.log (selectedEventInfo == this.selectedEvent);
+            // console.log("Sidebar update", selectedEventInfo);
             this.selectedEvent = selectedEventInfo;
             // this.selectedEvent = selectedEventInfo;
         });
     }
 
-    onSelect(event: FeatureCollection[]): void {
+    onSelect(event: GeoJson): void {
+        // console.log("On Select", event);
         this.selectedEvent = event;
         this.show = false;
         this.eventService.updateSelectedEvent(event);
@@ -54,7 +54,7 @@ export class SidebarComponent implements OnInit {
 
     showSidebar(result: boolean) {
         this.show = true;
-        this.selectedEvent = null;
+        this.eventService.updateSelectedEvent(null);
     }
 
     mobileSidebarStatus: boolean = false;
@@ -71,9 +71,4 @@ export class SidebarComponent implements OnInit {
             return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
         }
     }
-
-    onHoverEvent(event: FeatureCollection[]): void{
-
-    }
-
 }

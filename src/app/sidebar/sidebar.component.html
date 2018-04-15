@@ -8,8 +8,8 @@
             <app-category-bar></app-category-bar>
             <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">
                 <div *ngFor="let event of filteredEvents"
-                [class.selected]="event === selectedEvent"
-                (click)="onSelect(event)" (mouseover)="onHoverEvent(event)">
+                [class.selected]="selectedEvent && event.id == selectedEvent.id"
+                (click)="onSelect(event)">
                 <a  class="sidebar-event">
                     <div class="sidebar-event-img-container col-sm-7 col-md-7 col-lg-7">
                         <img src="{{event.properties.cover_picture}}" class="sidebar-event-img">
