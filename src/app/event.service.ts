@@ -16,7 +16,7 @@ export class EventService {
   // holds the current date that components can see
   private currDateSource: BehaviorSubject<Date>;
   // holds current event
-  private selectedEventSource: BehaviorSubject<FeatureCollection>;
+  private selectedEventSource: Subject<GeoJson>;
 
   // Observables that components can subscribe to for realtime updates
   currEvents$;

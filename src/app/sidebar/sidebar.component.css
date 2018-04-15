@@ -41,6 +41,10 @@
     background-color: rgb(219, 219, 219);
 }
 
+.selected {
+    background-color: rgb(219, 219, 219);
+}
+
 .sidebar-event-img{
     object-fit: cover;
     width: 100%;

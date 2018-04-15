@@ -89,7 +89,7 @@ export class MapBoxComponent implements OnInit {
       //Add user location pin
       let promise_map_userloc_pins = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad, _promiseBluePinLoad]);
       promise_map_userloc_pins.then( () => {
-        this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
+        // this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
       });
 
       this.addControls();
@@ -124,7 +124,9 @@ export class MapBoxComponent implements OnInit {
 
     updateSource(): void {
       if (this.map == undefined || this.map.getSource('events') == undefined) return;
+
       this.map.getSource('events').setData(this.events);
+      this.unSelectEvent();
     }
 
     // updateSourceWithoutEvent(eventIdToRemove: number): void {
@@ -274,13 +276,11 @@ export class MapBoxComponent implements OnInit {
     	this.map.on('click', 'eventlayer', (e) => {
         // Populate the popup and set its coordinates
     		// based on the feature found.
-        console.log("Click", e.features[0]);
-        console.log("Map selected Event", this.selectedEvent);
+        // console.log("Click", e.features[0]);
 
         //Handle if you reclick an event
         if(this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
-          this.selectedEvent = null;
-          this.popup.remove();
+          this.eventService.updateSelectedEvent(null);
           return;
         }
 
@@ -292,12 +292,16 @@ export class MapBoxComponent implements OnInit {
     	});
     }
 
-    //if event exists put popup and blue pin, else remove popup and blue pin
+    unSelectEvent(): void {
+      this.popup.remove();
+      this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
+    }
+
+    //if event exists put popup and blue pin, else unselect
     selectEvent(event: GeoJson): void {
       this.selectedEvent = event;
       if (event === null) {
-        this.popup.remove();
-        this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
+        this.unSelectEvent();
         return;
       }
 
