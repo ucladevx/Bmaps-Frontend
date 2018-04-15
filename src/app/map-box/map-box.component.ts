@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
+import { Geolocation } from '@ionic-native/geolocation';
+import { Platform } from 'ionic-angular';
 
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
@@ -33,7 +35,7 @@ export class MapBoxComponent implements OnInit {
 
     private events: FeatureCollection;
 
-    constructor(private _dateService: DateService, private eventService: EventService) {
+    constructor(private platform: Platform, private geolocation: Geolocation, private _dateService: DateService, private eventService: EventService) {
       mapboxgl.accessToken = environment.mapbox.accessToken;
     }
 
@@ -373,17 +375,30 @@ export class MapBoxComponent implements OnInit {
     //puts User location in this.lat and this.lng
     promiseGetUserLocation() {
       return new Promise((resolve, reject) => {
-        //if location activated
-        if (navigator.geolocation) {
-          //locate user
-          navigator.geolocation.getCurrentPosition(position => {
+        // if native mobile app
+        if (this.platform.is('cordova')) {
+          let options = {
+            timeout: 10000
+          };
+          this.geolocation.getCurrentPosition(options).then(position => {
             this.lat = position.coords.latitude;
             this.lng = position.coords.longitude;
             resolve();
-          });
+          }).catch(reject);
         }
         else {
-          reject();
+          //if location activated
+          if (navigator.geolocation) {
+            //locate user
+            navigator.geolocation.getCurrentPosition(position => {
+              this.lat = position.coords.latitude;
+              this.lng = position.coords.longitude;
+              resolve();
+            });
+          }
+          else {
+            reject();
+          }
         }
       });
 

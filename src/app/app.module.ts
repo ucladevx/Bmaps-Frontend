@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { AppComponent } from './app.component';
 import { MapBoxComponent } from './map-box/map-box.component';
@@ -53,6 +54,7 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     EventService,
     StatusBar,
     SplashScreen,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
