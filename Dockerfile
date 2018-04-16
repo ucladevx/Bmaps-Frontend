@@ -1,5 +1,5 @@
 # start with a lightweight linux image
-FROM alpine:3.6
+FROM alpine:3.6 as builder
 
 # add necessary packages
 RUN apk update && \
