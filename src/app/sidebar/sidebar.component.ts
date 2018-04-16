@@ -26,8 +26,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     ]
 })
 export class SidebarComponent implements OnInit {
-    private filteredEvents: GeoJson[];
-    private selectedEvent: GeoJson;
+    public filteredEvents: GeoJson[];
+    public selectedEvent: GeoJson;
     show: boolean = true;
     @Output() pressed: EventEmitter<boolean> = new EventEmitter();
 
