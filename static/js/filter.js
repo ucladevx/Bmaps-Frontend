@@ -26,7 +26,7 @@ function updateDate() {
 		}
 		else {
 			$relativeDay.innerHTML = "";
-			$todayBtn.style.display = "block";
+			$todayBtn.style.display = "none"; // "block";
 		}
 		$leftArrow.style.visibility = "";
 	}
