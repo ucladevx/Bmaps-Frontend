@@ -8,9 +8,9 @@ import { DateService } from '../shared/date.service';
   styleUrls: ['./date-selector.component.css']
 })
 export class DateSelectorComponent implements OnInit {
-  private dateString: string;
-  private showLeft: boolean;
-  private showRight: boolean;
+  public dateString: string;
+  public showLeft: boolean;
+  public showRight: boolean;
 
   constructor(private eventService: EventService, private dateService: DateService) { }
 
@@ -49,7 +49,7 @@ export class DateSelectorComponent implements OnInit {
     return `${description} ${month} ${day}`
   }
 
-  private updateDate(days: number) {
+  public updateDate(days: number) {
     // 1 means advance one day, -1 means go back one day
     this.eventService.updateDateByDays(days);
   }
