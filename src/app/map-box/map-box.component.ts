@@ -26,12 +26,18 @@ export class MapBoxComponent implements OnInit {
     keyUrl: string;
 
     // state
-    eventIsSelected: boolean = false;
     selectedEvent: any = null;
 
     // Resources
     pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
     bluePinPath = "../../assets/blue-mappointer.png"
+
+    // Reusable Blocks
+    popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 20 // offset upward from pin
+    }).setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>');
 
     private events: FeatureCollection;
 
@@ -43,6 +49,15 @@ export class MapBoxComponent implements OnInit {
       this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
         this.events = eventCollection;
         this.updateSource();
+      });
+
+      this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
+          // console.log(selectedEventInfo);
+          // console.log(this.selectedEvent);
+          //TODO: Just put this.selectEvent here
+          console.log("map sub", selectedEventInfo);
+          this.selectEvent(selectedEventInfo);
+          //need to call zoom function for map
       });
       this.buildMap();
       //I think you should use something like this to create all the promises once instead of calling function creating promise several times
@@ -76,7 +91,7 @@ export class MapBoxComponent implements OnInit {
       //Add user location pin
       let promise_map_userloc_pins = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad, _promiseBluePinLoad]);
       promise_map_userloc_pins.then( () => {
-        this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
+        // this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
       });
 
       this.addControls();
@@ -111,8 +126,19 @@ export class MapBoxComponent implements OnInit {
 
     updateSource(): void {
       if (this.map == undefined || this.map.getSource('events') == undefined) return;
+
       this.map.getSource('events').setData(this.events);
+      this.unSelectEvent();
     }
+
+    // updateSourceWithoutEvent(eventIdToRemove: number): void {
+    //   if (this.map == undefined || this.map.getSource('events') == undefined) return;
+    //   let subsetOfEvents: FeatureCollection = {
+    //     type: 'FeatureCollection',
+    //     features: this.events.features.filter(curGeoJson => curGeoJson.id != eventIdToRemove)
+    //   };
+    //   this.map.getSource('events').setData(subsetOfEvents);
+    // }
 
     buildMap() {
       this.map = new mapboxgl.Map({
@@ -200,23 +226,18 @@ export class MapBoxComponent implements OnInit {
 
     //Not done through promises becauses no callbacks need to build off this anyway
     hoverPopup(): void {
-    	// Create a popup, but don't add it to the map yet.
-    	let popup = new mapboxgl.Popup({
-    		closeButton: false,
-    		closeOnClick: false,
-    		offset: {'bottom':[7.5 ,0]}
-    	});
-
       //HOVER
     	this.map.on('mouseenter', 'eventlayer', (e) => {
     		// Change the cursor style as a UI indicator.
     		this.map.getCanvas().style.cursor = 'pointer';
-        console.log(e);
+        console.log("mouseenter");
+
         //slice returns a copy of the array rather than the actual array
         let coords = e.features[0].geometry.coordinates.slice();
 
-        if(this.eventIsSelected) {
-          if(e.features[0].id !== this.selectedEvent) {
+        if(this.selectedEvent !== null) {
+          if(e.features[0].id !== this.selectedEvent.id) {
+            //add bigger red pin
             this.map.getSource('redBackupHoveredPin').setData({
               "geometry": {
                   "type": "Point",
@@ -224,9 +245,9 @@ export class MapBoxComponent implements OnInit {
                 },
               "type": "Feature"
             });
-            // change size when hover not right
             this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
           }
+          //do nothing if hover already clicked event
         }
         else {
       		this.map.getSource('hoveredPin').setData({
@@ -244,8 +265,9 @@ export class MapBoxComponent implements OnInit {
       //UNHOVER
     	this.map.on('mouseleave', 'eventlayer', () => {
     		this.map.getCanvas().style.cursor = '';
-    		// change size when hover not right
-        if(this.eventIsSelected) {
+        console.log("mouseleave");
+
+        if(this.selectedEvent !== null) {
     		  this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
         } else {
           this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
@@ -256,51 +278,53 @@ export class MapBoxComponent implements OnInit {
     	this.map.on('click', 'eventlayer', (e) => {
         // Populate the popup and set its coordinates
     		// based on the feature found.
-        console.log(e);
+        // console.log("Click", e.features[0]);
+
         //Handle if you reclick an event
-        if(this.selectedEvent === e.features[0].id) {
-          this.eventIsSelected = false;
-          this.selectedEvent = null;
-          popup.remove();
+        if(this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
+          this.eventService.updateSelectedEvent(null);
           return;
         }
 
-        let coords = e.features[0].geometry.coordinates.slice();
+        //Remove bigRed if it was visible
+        this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
 
-        //Switch selected event
-        if(this.eventIsSelected) {
-          this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
-          //Add Popup if click, making it blue if it was redBackupHoveredPin
-        }
-
-        //change some state variables
-        this.eventIsSelected = true;
-        this.selectedEvent = e.features[0].id;
-
-        // change size when hover not right
-        this.map.getSource('hoveredPin').setData({
-          "geometry": {
-              "type": "Point",
-              "coordinates": coords
-            },
-          "type": "Feature"
-        });
-        this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
-
-        // popup.setLngLat([coords[0]-.00015, coords[1]])
-        popup.setLngLat([coords[0], coords[1]])
-    		.setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>')
-    		.addTo(this.map);
-
-    		document.getElementById('popupEvent').innerHTML =  e.features[0].properties.event_name ;
-        console.log(e.features[0].properties.start_time);
-    		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(e.features[0].properties.start_time));
-
-    		this.map.flyTo({center: e.lngLat, zoom: 17, speed: .3});
-    		// console.log(e);
-    		//   showModal('sign-up', e.properties);
-    		// formatDateItem(e.features[0]);
+        //the service then calls selectEvent
+        this.eventService.updateSelectedEvent(e.features[0]);
     	});
+    }
+
+    unSelectEvent(): void {
+      this.popup.remove();
+      this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
+    }
+
+    //if event exists put popup and blue pin, else unselect
+    selectEvent(event: GeoJson): void {
+      this.selectedEvent = event;
+      if (event === null) {
+        this.unSelectEvent();
+        return;
+      }
+
+      // add blue hovered Pin
+      let coords = event.geometry.coordinates.slice();
+      this.map.getSource('hoveredPin').setData({
+        "geometry": {
+            "type": "Point",
+            "coordinates": coords
+          },
+        "type": "Feature"
+      });
+      this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
+
+      //add popup
+      this.popup.setLngLat(coords)
+  		          .addTo(this.map);
+  		document.getElementById('popupEvent').innerHTML =  event.properties.event_name ;
+  		document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(event.properties.start_time));
+
+  		this.map.flyTo({center: coords, zoom: 17, speed: .3});
     }
 
     addArrowControls(): void {

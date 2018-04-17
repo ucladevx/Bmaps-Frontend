@@ -12,7 +12,7 @@ import { NgClass } from '@angular/common';
 export class CategoryBarComponent implements OnInit {
   private categories;
   private events: GeoJson[];
-  private selectedCategory = "all categories";
+  public selectedCategory = "all categories";
 
   constructor(private categService: CategoryService, private eventService: EventService) { }
 

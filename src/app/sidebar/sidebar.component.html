@@ -8,7 +8,7 @@
             <app-category-bar></app-category-bar>
             <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">
                 <div *ngFor="let event of filteredEvents"
-                [class.selected]="event === selectedEvent"
+                [class.selected]="selectedEvent && event.id == selectedEvent.id"
                 (click)="onSelect(event)">
                 <a  class="sidebar-event">
                     <div class="sidebar-event-img-container col-sm-7 col-md-7 col-lg-7">
@@ -28,5 +28,5 @@
             </div>
         </div>
     </div>
-    <app-event-detail [event]="selectedEvent"  (showSideBar)="showSidebar($event)"></app-event-detail>
+    <app-event-detail [event]="selectedEvent" (showSideBar)="showSidebar($event)"></app-event-detail>
 </div>
