@@ -37,7 +37,22 @@ function formatDate(date) {
     return getMonthNameFromMonthNumber(month) + " " + day + " &middot; " + formatHour(hour, minutes);
 }
 
+
 function formatDateItem(item) {
+<<<<<<< HEAD
+    if (item.properties.start_time.toString().includes("|").toString() == "false") {
+      var dateOfStart = new Date(item.properties.start_time);
+      var dateOfEnd = new Date(item.properties.end_time);
+      if (item.properties.end_time != "<NONE>"){
+          item.properties.start_time = formatDate(dateOfStart) + " - " + formatHour(dateOfEnd.getHours());
+      }
+      else {
+          item.properties.start_time = formatDate(dateOfStart);
+      }
+  } else {
+    return;
+  }
+=======
     var dateOfStart = new Date(item.properties.start_time);
     var dateOfEnd = new Date(item.properties.end_time);
     if (item.properties.end_time != "<NONE>"){
@@ -46,6 +61,7 @@ function formatDateItem(item) {
     else {
         item.properties.start_time = formatDate(dateOfStart);
     }
+>>>>>>> ca92765acccffb2dbda6717617032eee58abbdad
 }
 
 function formatCategoryItem(item) {

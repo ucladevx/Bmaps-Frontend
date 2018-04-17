@@ -38,7 +38,7 @@ function showModal(modal, features){
 			// if (document.getElementById("event-description").clientHeight % 18 <= 15 && document.getElementById("event-description").clientHeight % 18 >= 3) {
 			// 	document.getElementById("event-description").style.height = document.getElementById("event-description").clientHeight + (document.getElementById("event-description").clientHeight % 18);
 			// }
-			
+
 			// break;
 	}
 
