@@ -1,15 +1,15 @@
 #event-list{
-    height: 15em;
+    height: 28vh;
     overflow: scroll;
 }
 
 .event-list-show {
-    height: 47em !important;
+    height: 81vh !important;
 }
 
 @media only screen and (min-width: 768px) {
     #event-list{
-        height: 48em;
+        height: 85vh;
         overflow: scroll;
     }
 }
@@ -48,7 +48,7 @@
 .sidebar-event-img{
     object-fit: cover;
     width: 100%;
-    height: 13em;
+    height: 16vh;
     vertical-align: top;
 }
 
