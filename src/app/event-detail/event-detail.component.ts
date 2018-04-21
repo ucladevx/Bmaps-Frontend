@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
+import { EventService } from '../event.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -10,7 +11,7 @@ export class EventDetailComponent implements OnInit {
 	@Input() event: any;
 	@Output() showSideBar = new EventEmitter<boolean>();
 
-	constructor() {
+	constructor(private eventService: EventService) {
         console.log("construct me");
 	}
 
@@ -24,7 +25,7 @@ export class EventDetailComponent implements OnInit {
     }
 
 	hideEvent($event) {
-        console.log("whtf");
+        console.log("clicked hideEvent from eventDetail");
         console.log($event);
         console.log(this.event);
 		this.showSideBar.emit(true);

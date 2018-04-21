@@ -100,9 +100,16 @@ export class EventService {
     this.filteredCurrEventsSource.next(tempEvents);
   }
 
-  // Updates the current event by number
+  // Updates the current clicked event by number
   updateClickedEvent(event: GeoJson): void {
     this._clickedEvent = event;
     this.clickedEventSource.next(this._clickedEvent);
+    }
+
+    // Updates the current hovered event by number
+    updateHoveredEvent(event: GeoJson): void {
+    this._hoveredEvent = event;
+    this.hoveredEventSource.next(this._hoveredEvent);
+    console.log(this._hoveredEvent);
     }
 }

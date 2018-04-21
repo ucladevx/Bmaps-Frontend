@@ -231,6 +231,7 @@ export class MapBoxComponent implements OnInit {
     		// Change the cursor style as a UI indicator.
     		this.map.getCanvas().style.cursor = 'pointer';
         console.log("mouseenter");
+        console.log(e);
 
         //slice returns a copy of the array rather than the actual array
         let coords = e.features[0].geometry.coordinates.slice();
@@ -260,6 +261,7 @@ export class MapBoxComponent implements OnInit {
       		// change size when hover not right
       		this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
         }
+        this.eventService.updateHoveredEvent(e.features[0]);
       });
 
       //UNHOVER
@@ -267,11 +269,13 @@ export class MapBoxComponent implements OnInit {
     		this.map.getCanvas().style.cursor = '';
         console.log("mouseleave");
 
+
         if(this.selectedEvent !== null) {
     		  this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
         } else {
           this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
         }
+        this.eventService.updateHoveredEvent(null);
     	});
 
       //CLICK

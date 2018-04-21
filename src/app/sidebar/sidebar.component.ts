@@ -43,7 +43,7 @@ export class SidebarComponent implements OnInit {
         });
         this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
             this.hoveredEvent = hoveredEventInfo;
-        })
+        });
     }
 
     onSelect(event: GeoJson): void {
@@ -51,6 +51,13 @@ export class SidebarComponent implements OnInit {
         this.clickedEvent = event;
         this.show = false;
         this.eventService.updateClickedEvent(event);
+    }
+
+    onHover(event: GeoJson): void {
+        console.log('before hovering');
+        console.log(this.hoveredEvent);
+        this.hoveredEvent = event;
+        this.eventService.updateHoveredEvent(event);
     }
 
     showSidebar(result: boolean) {
