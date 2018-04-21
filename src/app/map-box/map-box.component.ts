@@ -49,14 +49,16 @@ export class MapBoxComponent implements OnInit {
         this.updateSource();
       });
 
-      this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
-          // console.log(selectedEventInfo);
-          // console.log(this.selectedEvent);
+      this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
           //TODO: Just put this.selectEvent here
-          console.log("map sub", selectedEventInfo);
-          this.selectEvent(selectedEventInfo);
+          console.log("map sub", clickedEventInfo);
+          this.selectEvent(clickedEventInfo);
           //need to call zoom function for map
       });
+      console.log("before");
+      this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+          console.log("hovering from map");
+      })
       this.buildMap();
       //I think you should use something like this to create all the promises once instead of calling function creating promise several times
       let _promiseMapLoad = this.promiseMapLoad();
@@ -280,7 +282,7 @@ export class MapBoxComponent implements OnInit {
 
         //Handle if you reclick an event
         if(this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
-          this.eventService.updateSelectedEvent(null);
+          this.eventService.updateClickedEvent(null);
           return;
         }
 
@@ -288,7 +290,7 @@ export class MapBoxComponent implements OnInit {
         this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
 
         //the service then calls selectEvent
-        this.eventService.updateSelectedEvent(e.features[0]);
+        this.eventService.updateClickedEvent(e.features[0]);
     	});
     }
 

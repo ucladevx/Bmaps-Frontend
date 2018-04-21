@@ -15,19 +15,23 @@ export class EventService {
   private filteredCurrEventsSource: BehaviorSubject<FeatureCollection>;
   // holds the current date that components can see
   private currDateSource: BehaviorSubject<Date>;
-  // holds current event
-  private selectedEventSource: Subject<GeoJson>;
+  // holds clicked event
+  private clickedEventSource: Subject<GeoJson>;
+  // holds hoveredd event
+  private hoveredEventSource: Subject<GeoJson>;
 
   // Observables that components can subscribe to for realtime updates
   currEvents$;
   filteredCurrEvents$;
   currDate$;
-  selectedEvent$;
+  clickedEvent$;
+  hoveredEvent$;
 
   // Used internally to keep a realtime, subscribed set of values
   private _events;
   private _date;
-  private _selectedEvent;
+  private _clickedEvent;
+  private _hoveredEvent;
   private _category = "all";
 
   private baseUrl = "http://www.whatsmappening.io/api/v1/events";
@@ -39,17 +43,20 @@ export class EventService {
     this.currEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject<Date>(today);
-    this.selectedEventSource = new Subject<GeoJson>();
+    this.clickedEventSource = new Subject<GeoJson>();
+    this.hoveredEventSource = new Subject<GeoJson>();
 
     //Observable string streams
     this.currEvents$ = this.currEventsSource.asObservable();
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
-    this.selectedEvent$ = this.selectedEventSource.asObservable();
+    this.clickedEvent$ = this.clickedEventSource.asObservable();
+    this.hoveredEvent$ = this.hoveredEventSource.asObservable();
 
     this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
     this.currDate$.subscribe(date => this._date = date);
-    this.selectedEvent$.subscribe(selectedEventInfo => this._selectedEvent = selectedEventInfo);
+    this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
+    this.hoveredEvent$.subscribe(hoveredEventInfo => this._hoveredEvent = hoveredEventInfo);
 
     this.updateEvents(today);
   }
@@ -94,8 +101,8 @@ export class EventService {
   }
 
   // Updates the current event by number
-  updateSelectedEvent(event: GeoJson): void {
-    this._selectedEvent = event;
-    this.selectedEventSource.next(this._selectedEvent);
+  updateClickedEvent(event: GeoJson): void {
+    this._clickedEvent = event;
+    this.clickedEventSource.next(this._clickedEvent);
     }
 }
