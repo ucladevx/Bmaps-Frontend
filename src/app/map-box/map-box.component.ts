@@ -155,12 +155,7 @@ export class MapBoxComponent implements OnInit {
       let point: FeatureCollection =
       { "type": "FeatureCollection",
           "features": [
-            {"type": "Feature",
-              "geometry": {
-                  "type": "Point",
-                  "coordinates": [longitude, latitude]
-              }
-            }
+            new GeoJson(id, {latitude, longitude})
           ]
       };
 
@@ -225,7 +220,7 @@ export class MapBoxComponent implements OnInit {
     //Not done through promises becauses no callbacks need to build off this anyway
     hoverPopup(): void {
       //HOVER
-    	this.map.on('mouseenter', 'eventlayer', (e) => {
+      this.map.on('mouseenter', 'eventlayer', (e: FeatureCollection) => {
     		// Change the cursor style as a UI indicator.
     		this.map.getCanvas().style.cursor = 'pointer';
         console.log("mouseenter");
