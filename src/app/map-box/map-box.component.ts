@@ -253,6 +253,9 @@ export class MapBoxComponent implements OnInit {
       		// change size when hover not right
       		this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
         }
+
+        // scroll to hovered event in sidebar
+        this.eventService.updateHoveredEvent(e.features[0]);
       });
 
       //UNHOVER

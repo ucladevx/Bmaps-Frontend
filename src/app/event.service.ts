@@ -17,17 +17,21 @@ export class EventService {
   private currDateSource: BehaviorSubject<Date>;
   // holds current event
   private selectedEventSource: Subject<GeoJson>;
+  // holds hovered event
+  private hoveredEventSource: Subject<GeoJson>;
 
   // Observables that components can subscribe to for realtime updates
   currEvents$;
   filteredCurrEvents$;
   currDate$;
   selectedEvent$;
+  hoveredEvent$;
 
   // Used internally to keep a realtime, subscribed set of values
   private _events;
   private _date;
   private _selectedEvent;
+  private _hoveredEvent;
   private _category = "all";
 
   private baseUrl = "http://www.whatsmappening.io/api/v1/events";
@@ -40,16 +44,19 @@ export class EventService {
     this.filteredCurrEventsSource = new BehaviorSubject<FeatureCollection>(new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject<Date>(today);
     this.selectedEventSource = new Subject<GeoJson>();
+    this.hoveredEventSource = new Subject<GeoJson>();
 
     //Observable string streams
     this.currEvents$ = this.currEventsSource.asObservable();
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
     this.selectedEvent$ = this.selectedEventSource.asObservable();
+    this.hoveredEvent$ = this.hoveredEventSource.asObservable();
 
     this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
     this.currDate$.subscribe(date => this._date = date);
     this.selectedEvent$.subscribe(selectedEventInfo => this._selectedEvent = selectedEventInfo);
+    this.hoveredEvent$.subscribe(hoveredEventInfo => this._hoveredEvent = hoveredEventInfo);
 
     this.updateEvents(today);
   }
@@ -97,5 +104,11 @@ export class EventService {
   updateSelectedEvent(event: GeoJson): void {
     this._selectedEvent = event;
     this.selectedEventSource.next(this._selectedEvent);
-    }
+  }
+
+  // Updates the hovered event
+  updateHoveredEvent(event: GeoJson): void {
+    this._hoveredEvent = event;
+    this.hoveredEventSource.next(this._hoveredEvent);
+  }
 }
