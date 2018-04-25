@@ -17,7 +17,7 @@ export class MapBoxComponent implements OnInit {
     map: mapboxgl.Map;
     message = 'Hello World!';
     lat = 34.066915; //default center of map, variables used for user location/naviagation center
-    lng = -118.445320
+    lng = -118.445320;
 
     // data
     source: any;
@@ -37,7 +37,13 @@ export class MapBoxComponent implements OnInit {
     offset: 20 // offset upward from pin
 }).setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>');
 
-private events: FeatureCollection;
+    backupPopup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 20 // offset upward from pin
+    }).setHTML('<div id="backupPopupEvent"></div> <div id="backupPopupDate"></div>');
+
+    private events: FeatureCollection;
 
 constructor(private _dateService: DateService, private eventService: EventService) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
@@ -127,9 +133,10 @@ addEventLayer(data): void {
 updateSource(): void {
     if (this.map == undefined || this.map.getSource('events') == undefined) return;
 
-    this.map.getSource('events').setData(this.events);
-    this.unSelectEvent();
-}
+      this.map.getSource('events').setData(this.events);
+      this.removePinsAndPopups();
+      this.selectedEvent = null;
+    }
 
 // updateSourceWithoutEvent(eventIdToRemove: number): void {
 //   if (this.map == undefined || this.map.getSource('events') == undefined) return;
@@ -192,144 +199,152 @@ addControls(): void {
     this.map.addControl(new mapboxgl.NavigationControl());
 }
 
-threeDDisplay(): void {
-    // Insert the layer beneath any symbol layer.
-    let layers = this.map.getStyle().layers.reverse();
-    let labelLayerIdx = layers.findIndex(function (layer) {
-        return layer.type !== 'symbol';
-    });
+    addPopup(popup, coords, eventName:string, eventTime: string): void {
+      if(popup == this.popup){
+        popup.setLngLat(coords)
+              .addTo(this.map);
+        document.getElementById('popupEvent').innerHTML =  eventName;
+        document.getElementById('popupDate').innerHTML = eventTime;
+      } else {
+        popup.setLngLat(coords)
+              .addTo(this.map);
+        document.getElementById('backupPopupEvent').innerHTML = eventName;
+        document.getElementById('backupPopupDate').innerHTML = eventTime;
+      }
+    }
 
-    this.map.addLayer({
-        'id': 'ucla-buildings',
-        'source': 'composite',
-        'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
-        // 'source-layer': 'UCLA_Buildings', // UCLA Buildings
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': {
-                'property': 'height',
-                'type': 'identity'
-            },
-            'fill-extrusion-base': {
-                'property': 'min_height',
-                'type': 'identity',
-            },
-            // 'fill-extrusion-height': 20,
-            // 'fill-extrusion-base': 0,
-            'fill-extrusion-opacity': 0.5
+    //Not done through promises becauses no callbacks need to build off this anyway
+    hoverPopup(): void {
+      //HOVER
+    	this.map.on('mouseenter', 'eventlayer', (e) => {
+    		// Change the cursor style as a UI indicator.
+    		this.map.getCanvas().style.cursor = 'pointer';
+        console.log("mouseenter");
+
+        //slice returns a copy of the array rather than the actual array
+        let coords = e.features[0].geometry.coordinates.slice();
+
+        if(this.selectedEvent !== null) {
+          if(e.features[0].id !== this.selectedEvent.id) {
+            //add bigger red pin
+            this.map.getSource('redBackupHoveredPin').setData({
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": coords
+                },
+              "type": "Feature"
+            });
+            this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
+          }
+
+          this.addPopup(this.backupPopup, coords, e.features[0].properties.event_name,
+            this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
         }
-    }, "eventstest");
-}
+        else {
+      		this.map.getSource('hoveredPin').setData({
+            "geometry": {
+                "type": "Point",
+          			"coordinates": coords
+              },
+            "type": "Feature"
+          });
+      		this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
 
-//Not done through promises becauses no callbacks need to build off this anyway
-hoverPopup(): void {
-//HOVER
-this.map.on('mouseenter', 'eventlayer', (e) => {
-// Change the cursor style as a UI indicator.
-this.map.getCanvas().style.cursor = 'pointer';
-console.log("mouseenter");
-console.log(e);
+          //add primary popups
+          this.addPopup(this.popup, coords, e.features[0].properties.event_name,
+            this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
+        }
+      });
 
-//slice returns a copy of the array rather than the actual array
-let coords = e.features[0].geometry.coordinates.slice();
+      this.map.on('mouseleave', 'eventlayer', () => {
+        if(this.selectedEvent !== null) {
+          this.backupPopup.remove();
+    		  this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
+        } else {
+          this.popup.remove();
+          this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
+        }
+    	});
 
-if(this.selectedEvent !== null) {
-    if(e.features[0].id !== this.selectedEvent.id) {
-        //add bigger red pin
-        this.map.getSource('redBackupHoveredPin').setData({
+      //CLICK
+    	this.map.on('click', 'eventlayer', (e) => {
+        // Populate the popup and set its coordinates
+    		// based on the feature found.
+        // console.log("Click", e.features[0]);
+
+        //Handle if you reclick an event
+        if(this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
+          this.eventService.updateClickedEvent(null);
+          return;
+        }
+
+        //the service then calls selectEvent
+        this.eventService.updateClickedEvent(e.features[0]);
+    	});
+    }
+
+    removePinsAndPopups(): void {
+      this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
+      this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
+      this.backupPopup.remove();
+      this.popup.remove();
+    }
+
+    //if event exists put popup and blue pin, else unselect
+    selectEvent(event: GeoJson): void {
+      this.selectedEvent = event;
+      this.removePinsAndPopups();
+
+      if (event === null) {
+        return;
+      }
+
+      // add blue hovered Pin
+      let coords = event.geometry.coordinates.slice();
+      this.map.getSource('hoveredPin').setData({
         "geometry": {
             "type": "Point",
             "coordinates": coords
-        },
+          },
         "type": "Feature"
-    });
-    this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
-}
-//do nothing if hover already clicked event
-}
-else {
-    this.map.getSource('hoveredPin').setData({
-        "geometry": {
-            "type": "Point",
-            "coordinates": coords
-        },
-        "type": "Feature"
-    });
-    // change size when hover not right
-    this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
-}
-this.eventService.updateHoveredEvent(e.features[0]);
-});
+      });
+      this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
 
-//UNHOVER
-this.map.on('mouseleave', 'eventlayer', () => {
-this.map.getCanvas().style.cursor = '';
-console.log("mouseleave");
+      this.addPopup(this.popup, coords, event.properties.event_name,
+                  this._dateService.formatDate(new Date(event.properties.start_time)));
+    }
 
+    threeDDisplay(): void {
+        	// Insert the layer beneath any symbol layer.
+          let layers = this.map.getStyle().layers.reverse();
+        	let labelLayerIdx = layers.findIndex(function (layer) {
+        		return layer.type !== 'symbol';
+        	});
 
-if(this.selectedEvent !== null) {
-    this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
-} else {
-    this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
-}
-this.eventService.updateHoveredEvent(null);
-});
-
-//CLICK
-this.map.on('click', 'eventlayer', (e) => {
-// Populate the popup and set its coordinates
-// based on the feature found.
-// console.log("Click", e.features[0]);
-
-//Handle if you reclick an event
-if(this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
-this.eventService.updateClickedEvent(null);
-return;
-}
-
-//Remove bigRed if it was visible
-this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
-
-//the service then calls selectEvent
-this.eventService.updateClickedEvent(e.features[0]);
-});
-}
-
-unSelectEvent(): void {
-    this.popup.remove();
-    this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
-}
-
-//if event exists put popup and blue pin, else unselect
-selectEvent(event: GeoJson): void {
-this.selectedEvent = event;
-if (event === null) {
-    this.unSelectEvent();
-    return;
-}
-
-// add blue hovered Pin
-let coords = event.geometry.coordinates.slice();
-this.map.getSource('hoveredPin').setData({
-    "geometry": {
-        "type": "Point",
-        "coordinates": coords
-    },
-    "type": "Feature"
-});
-this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
-
-//add popup
-this.popup.setLngLat(coords)
-.addTo(this.map);
-document.getElementById('popupEvent').innerHTML =  event.properties.event_name ;
-document.getElementById('popupDate').innerHTML = this._dateService.formatDate(new Date(event.properties.start_time));
-
-this.map.flyTo({center: coords, zoom: 17, speed: .3});
-}
+        	this.map.addLayer({
+        		'id': 'ucla-buildings',
+        		'source': 'composite',
+        		'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
+        		// 'source-layer': 'UCLA_Buildings', // UCLA Buildings
+        		'filter': ['==', 'extrude', 'true'],
+        		'type': 'fill-extrusion',
+        		'minzoom': 15,
+        		'paint': {
+        			'fill-extrusion-color': '#aaa',
+        			'fill-extrusion-height': {
+        				'property': 'height',
+        				'type': 'identity'
+        			},
+        			'fill-extrusion-base': {
+        				'property': 'min_height',
+        				'type': 'identity',
+        			},
+        			// 'fill-extrusion-height': 20,
+        			// 'fill-extrusion-base': 0,
+        			'fill-extrusion-opacity': 0.5
+        		}
+        	}, "eventstest");
+        }
 
 addArrowControls(): void {
     // pixels the map pans when the up or down arrow is clicked
