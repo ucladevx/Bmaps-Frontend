@@ -345,7 +345,7 @@ export class MapBoxComponent implements OnInit {
       this.map.setLayoutProperty('hoveredPin','visibility', 'visible');
 
       this.addPopup(this.popup, coords, event.properties.event_name,
-                  this._dateService.formatDate(new Date(event.properties.start_time)));)
+                  this._dateService.formatDate(new Date(event.properties.start_time)));
 
   		this.map.flyTo({center: coords, zoom: 17, speed: .3});
     }
