@@ -27,24 +27,24 @@ export class CategoryBarComponent implements OnInit {
   updateCategories(): void {
     console.log("UPDATING CATEGORIES");
     this.categService.getCategories()
-      .subscribe(categs => {
-        let eventMap = this.getEventMap();
-        this.categories = [{
-          category: "all",
-          formattedCategory: "all",
-          numEvents: eventMap["all"]
-        }];
-        for (let categ of categs.categories) {
-          let categName = categ.category.toLowerCase();
-          let formattedCategName = categName.replace('_', ' ');
-          let categObject = {
-            category: categName,
-            formattedCategory: formattedCategName,
-            numEvents: eventMap[categName]
-          };
-          this.categories.push(categObject);
-        }
-      });
+    .subscribe(categs => {
+      let eventMap = this.getEventMap();
+      this.categories = [{
+        category: "all",
+        formattedCategory: "all",
+        numEvents: eventMap["all"]
+      }];
+      for (let categ of categs.categories) {
+        let categName = categ.category.toLowerCase();
+        let formattedCategName = categName.replace('_', ' ');
+        let categObject = {
+          category: categName,
+          formattedCategory: formattedCategName,
+          numEvents: eventMap[categName]
+        };
+        this.categories.push(categObject);
+      }
+    });
   }
 
   private getEventMap() {

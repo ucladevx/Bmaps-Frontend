@@ -24,12 +24,12 @@
 }
 
 .navbar-default .navbar-nav > .active{
-  background: rgb(216,216,216);
+    background: rgb(216,216,216);
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-     background: rgb(216,216,216);
+    background: rgb(216,216,216);
 }
 
 .navbar-default .navbar-nav>li>a {

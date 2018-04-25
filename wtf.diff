@@ -1,0 +1,302 @@
+diff --git a/src/app/category-bar/category-bar.component.html b/src/app/category-bar/category-bar.component.html
+index b75b18f..f027cec 100644
+--- a/src/app/category-bar/category-bar.component.html
++++ b/src/app/category-bar/category-bar.component.html
+@@ -5,10 +5,10 @@
+   <ul id="categ-menu" *dropdownMenu class="dropdown-menu" role="menu">
+     <li *ngFor="let categObject of categories">
+       <a [ngClass]="{'dropdown-item': true, 'zero-events': categObject.numEvents == undefined}"
+-         (click)="filter(categObject.category)">
+-        {{categObject.formattedCategory}}
+-        <span *ngIf="categObject.numEvents" class="badge badge-secondary categ-bubble">{{categObject.numEvents}}</span>
+-      </a>
+-    </li>
+-  </ul>
++      (click)="filter(categObject.category)">
++      {{categObject.formattedCategory}}
++      <span *ngIf="categObject.numEvents" class="badge badge-secondary categ-bubble">{{categObject.numEvents}}</span>
++    </a>
++  </li>
++</ul>
+ </div>
+diff --git a/src/app/category-bar/category-bar.component.ts b/src/app/category-bar/category-bar.component.ts
+index fae62d0..68593ef 100644
+--- a/src/app/category-bar/category-bar.component.ts
++++ b/src/app/category-bar/category-bar.component.ts
+@@ -27,24 +27,24 @@ export class CategoryBarComponent implements OnInit {
+   updateCategories(): void {
+     console.log("UPDATING CATEGORIES");
+     this.categService.getCategories()
+-      .subscribe(categs => {
+-        let eventMap = this.getEventMap();
+-        this.categories = [{
+-          category: "all",
+-          formattedCategory: "all",
+-          numEvents: eventMap["all"]
+-        }];
+-        for (let categ of categs.categories) {
+-          let categName = categ.category.toLowerCase();
+-          let formattedCategName = categName.replace('_', ' ');
+-          let categObject = {
+-            category: categName,
+-            formattedCategory: formattedCategName,
+-            numEvents: eventMap[categName]
+-          };
+-          this.categories.push(categObject);
+-        }
+-      });
++    .subscribe(categs => {
++      let eventMap = this.getEventMap();
++      this.categories = [{
++        category: "all",
++        formattedCategory: "all",
++        numEvents: eventMap["all"]
++      }];
++      for (let categ of categs.categories) {
++        let categName = categ.category.toLowerCase();
++        let formattedCategName = categName.replace('_', ' ');
++        let categObject = {
++          category: categName,
++          formattedCategory: formattedCategName,
++          numEvents: eventMap[categName]
++        };
++        this.categories.push(categObject);
++      }
++    });
+   }
+ 
+   private getEventMap() {
+diff --git a/src/app/date-selector/date-selector.component.css b/src/app/date-selector/date-selector.component.css
+index 29cc0ec..db4c0ad 100644
+--- a/src/app/date-selector/date-selector.component.css
++++ b/src/app/date-selector/date-selector.component.css
+@@ -1,56 +1,56 @@
+ .selector {
+-  width: 100%;
+-  height: 40px;
+-  margin: 0 auto;
+-  background-color: white;
+-  border-color: #c8c8c8;
+-  border-style: solid;
+-  border-width: 0px 0px 1px 0px;
+-  text-align: center;
+-  display: table;
++    width: 100%;
++    height: 40px;
++    margin: 0 auto;
++    background-color: white;
++    border-color: #c8c8c8;
++    border-style: solid;
++    border-width: 0px 0px 1px 0px;
++    text-align: center;
++    display: table;
+ }
+ 
+ .custom-btn {
+-  background: none;
+-  /* color: inherit; */
+-  border: none;
+-  padding: 0;
+-  font: inherit;
+-  cursor: pointer;
+-  outline: inherit;
++    background: none;
++    /* color: inherit; */
++    border: none;
++    padding: 0;
++    font: inherit;
++    cursor: pointer;
++    outline: inherit;
+ }
+ 
+ #left-arrow {
+-  left: 20px;
+-  transition: color 0.2s ease;
+-  position: relative;
+-  float: left;
+-  font-size: 32px;
+-  color: #656565;
++    left: 20px;
++    transition: color 0.2s ease;
++    position: relative;
++    float: left;
++    font-size: 32px;
++    color: #656565;
+ }
+ 
+ #right-arrow {
+-  float: right;
+-  transition: color 0.2s ease;
+-  position: relative;
+-  font-size: 32px;
+-  float: right;
+-  color: #656565;
+-  right: 20px;
++    float: right;
++    transition: color 0.2s ease;
++    position: relative;
++    font-size: 32px;
++    float: right;
++    color: #656565;
++    right: 20px;
+ }
+ 
+ #left-arrow:hover {
+-  color: #5dbacd;
++    color: #5dbacd;
+ }
+ 
+ #right-arrow:hover {
+-  color: #5dbacd;
++    color: #5dbacd;
+ }
+ 
+ #date-text {
+-  display: table-cell;
+-  margin: 0 auto;
+-  text-align: center;
+-  vertical-align: middle;
+-  font-size: 18px;
++    display: table-cell;
++    margin: 0 auto;
++    text-align: center;
++    vertical-align: middle;
++    font-size: 18px;
+ }
+diff --git a/src/app/date-selector/date-selector.component.html b/src/app/date-selector/date-selector.component.html
+index a5bc916..a5af6f9 100644
+--- a/src/app/date-selector/date-selector.component.html
++++ b/src/app/date-selector/date-selector.component.html
+@@ -1,9 +1,9 @@
+ <div class="selector">
+-  <button [style.visibility]="showLeft ? 'visible' : 'hidden'" class="custom-btn" id="left-arrow" (click)="updateDate(-1)">
+-    <i class="fa fa-caret-left" aria-hidden="true"></i>
+-  </button>
+-  <span id="date-text">{{dateString}}</span>
+-  <button [style.visibility]="showRight ? 'visible' : 'hidden'" class="custom-btn" id="right-arrow" (click)="updateDate(1)">
+-    <i class="fa fa-caret-right" aria-hidden="true"></i>
+-  </button>
++    <button [style.visibility]="showLeft ? 'visible' : 'hidden'" class="custom-btn" id="left-arrow" (click)="updateDate(-1)">
++        <i class="fa fa-caret-left" aria-hidden="true"></i>
++    </button>
++    <span id="date-text">{{dateString}}</span>
++    <button [style.visibility]="showRight ? 'visible' : 'hidden'" class="custom-btn" id="right-arrow" (click)="updateDate(1)">
++        <i class="fa fa-caret-right" aria-hidden="true"></i>
++    </button>
+ </div>
+diff --git a/src/app/map-box/map-box.component.css b/src/app/map-box/map-box.component.css
+index 661328e..b69358a 100644
+--- a/src/app/map-box/map-box.component.css
++++ b/src/app/map-box/map-box.component.css
+@@ -1,25 +1,25 @@
+- @import "https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css";
++@import "https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css";
+ 
+ /*Override*/
+ /* It wont apply the CSS properly to a text injected through innerHTML, so https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling */
+ :host ::ng-deep .mapboxgl-popup-content {
+-  position: relative;
+-  background: #fff;
+-  border-radius: 3px;
+-  box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+-  padding: 10px 10px 15px;
+-  pointer-events: auto;
+-  text-align: center;
+-  max-width: 14em;
++    position: relative;
++    background: #fff;
++    border-radius: 3px;
++    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
++    padding: 10px 10px 15px;
++    pointer-events: auto;
++    text-align: center;
++    max-width: 14em;
+ }
+ 
+ /*Override*/
+ :host ::ng-deep .mapboxgl-popup {
+-  font-family: 'Poppins', sans-serif;
+-  max-width: 150;
+-  line-height: 150%;
+-  text-align: center;
+-  padding: inherit;
++    font-family: 'Poppins', sans-serif;
++    max-width: 150;
++    line-height: 150%;
++    text-align: center;
++    padding: inherit;
+ }
+ 
+ #map {
+@@ -32,22 +32,22 @@
+ }
+ 
+ @media only screen and (min-width: 768px) {
+-     #map {
+-         position: absolute;
+-         width: 100%;
+-         bottom: 0;
+-         top: 0;
+-         height: 95vh;
+-         box-shadow: -1px 1px 1px #888888;
+-         padding-left: 0;
++    #map {
++        position: absolute;
++        width: 100%;
++        bottom: 0;
++        top: 0;
++        height: 95vh;
++        box-shadow: -1px 1px 1px #888888;
++        padding-left: 0;
+     }
+ }
+ 
+ :host ::ng-deep #popupDate {
+-  color:  #FF3A3A;
+-  font-size: 11;
++    color:  #FF3A3A;
++    font-size: 11;
+ }
+ 
+ .noShow {
+-  display: none;
++    display: none;
+ }
+diff --git a/src/app/navbar/navbar.component.css b/src/app/navbar/navbar.component.css
+index 435a5d0..0f77911 100644
+--- a/src/app/navbar/navbar.component.css
++++ b/src/app/navbar/navbar.component.css
+@@ -24,12 +24,12 @@
+ }
+ 
+ .navbar-default .navbar-nav > .active{
+-  background: rgb(216,216,216);
++    background: rgb(216,216,216);
+ }
+ .navbar-default .navbar-nav > .active > a,
+ .navbar-default .navbar-nav > .active > a:hover,
+ .navbar-default .navbar-nav > .active > a:focus {
+-     background: rgb(216,216,216);
++    background: rgb(216,216,216);
+ }
+ 
+ .navbar-default .navbar-nav>li>a {
+diff --git a/src/app/sidebar/sidebar.component.css b/src/app/sidebar/sidebar.component.css
+index 3454d66..5b9e918 100644
+--- a/src/app/sidebar/sidebar.component.css
++++ b/src/app/sidebar/sidebar.component.css
+@@ -87,10 +87,10 @@
+ }
+ 
+ .no-events-text {
+-  width: 100%;
+-  text-align: center;
+-  top: 20px;
+-  color: #a9a9a9;
++    width: 100%;
++    text-align: center;
++    top: 20px;
++    color: #a9a9a9;
+ }
+ 
+ 
