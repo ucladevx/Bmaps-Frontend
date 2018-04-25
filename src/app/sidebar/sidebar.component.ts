@@ -41,7 +41,7 @@ export class SidebarComponent implements OnInit {
         });
         this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
             this.clickedEvent = clickedEventInfo;
-            this.scrollToEvent(selectedEventInfo);
+            this.scrollToEvent(clickedEventInfo);
         });
         this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
             this.hoveredEvent = hoveredEventInfo;

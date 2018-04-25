@@ -163,25 +163,24 @@ buildMap() {
 addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
     let point: FeatureCollection =
     { "type": "FeatureCollection",
-    "features": [
-        new GeoJson(id, {latitude, longitude})
-    }
-]
-};
+        "features": [
+          new GeoJson(id, {latitude, longitude})
+        ]
+    };
 
-this.map.addSource(id, { type: 'geojson', data: point });
+    this.map.addSource(id, { type: 'geojson', data: point });
 
-this.map.addLayer({
-    "id": id,
-    "type": "symbol",
-    "source":id,
-    "layout": {
+    this.map.addLayer({
+      "id": id,
+      "type": "symbol",
+      "source":id,
+      "layout": {
         "visibility": (visible ? "visible" : "none"),
         "icon-image": icon,
         "icon-size": size,
         "icon-allow-overlap": true
-    }
-});
+      }
+    });
 }
 
 addControls(): void {
