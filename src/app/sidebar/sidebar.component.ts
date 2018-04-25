@@ -27,7 +27,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 })
 export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
-    public selectedEvent: GeoJson;
+    public clickedEvent: GeoJson;
+    public hoveredEvent: GeoJson;
     show: boolean = true;
     @Output() pressed: EventEmitter<boolean> = new EventEmitter();
 
@@ -35,26 +36,33 @@ export class SidebarComponent implements OnInit {
 
     ngOnInit() {
         this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
-            // console.log("Filtered Events update", eventCollection.features);
             this.filteredEvents = eventCollection.features;
         });
-        this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
-            // console.log("Sidebar update", selectedEventInfo);
-            this.selectedEvent = selectedEventInfo;
-            // this.selectedEvent = selectedEventInfo;
+        this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+            this.clickedEvent = clickedEventInfo;
+        });
+        this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+            this.hoveredEvent = hoveredEventInfo;
         });
     }
 
     onSelect(event: GeoJson): void {
         // console.log("On Select", event);
-        this.selectedEvent = event;
+        this.clickedEvent = event;
         this.show = false;
-        this.eventService.updateSelectedEvent(event);
+        this.eventService.updateClickedEvent(event);
+    }
+
+    onHover(event: GeoJson): void {
+        console.log('before hovering');
+        console.log(this.hoveredEvent);
+        this.hoveredEvent = event;
+        this.eventService.updateHoveredEvent(event);
     }
 
     showSidebar(result: boolean) {
         this.show = true;
-        this.eventService.updateSelectedEvent(null);
+        this.eventService.updateClickedEvent(null);
     }
 
     mobileSidebarStatus: boolean = false;

@@ -5,10 +5,10 @@
   <ul id="categ-menu" *dropdownMenu class="dropdown-menu" role="menu">
     <li *ngFor="let categObject of categories">
       <a [ngClass]="{'dropdown-item': true, 'zero-events': categObject.numEvents == undefined}"
-         (click)="filter(categObject.category)">
-        {{categObject.formattedCategory}}
-        <span *ngIf="categObject.numEvents" class="badge badge-secondary categ-bubble">{{categObject.numEvents}}</span>
-      </a>
-    </li>
-  </ul>
+      (click)="filter(categObject.category)">
+      {{categObject.formattedCategory}}
+      <span *ngIf="categObject.numEvents" class="badge badge-secondary categ-bubble">{{categObject.numEvents}}</span>
+    </a>
+  </li>
+</ul>
 </div>

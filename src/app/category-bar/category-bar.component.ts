@@ -13,7 +13,7 @@ import { NgClass } from '@angular/common';
 export class CategoryBarComponent implements OnInit {
   private categories;
   private events: GeoJson[];
-  public selectedCategory = "all categories";
+  public selectedCategory = 'all categories';
 
   constructor(private categService: CategoryService, private eventService: EventService) { }
 
@@ -25,26 +25,26 @@ export class CategoryBarComponent implements OnInit {
   }
 
   updateCategories(): void {
-    console.log("UPDATING CATEGORIES");
+    console.log('UPDATING CATEGORIES');
     this.categService.getCategories()
-      .subscribe(categs => {
-        let eventMap = this.getEventMap();
-        this.categories = [{
-          category: "all",
-          formattedCategory: "all",
-          numEvents: eventMap["all"]
-        }];
-        for (let categ of categs.categories) {
-          let categName = categ.category.toLowerCase();
-          let formattedCategName = categName.replace('_', ' ');
-          let categObject = {
-            category: categName,
-            formattedCategory: formattedCategName,
-            numEvents: eventMap[categName]
-          };
-          this.categories.push(categObject);
-        }
-      });
+    .subscribe(categs => {
+      let eventMap = this.getEventMap();
+      this.categories = [{
+        category: 'all',
+        formattedCategory: 'all',
+        numEvents: eventMap['all']
+      }];
+      for (let categ of categs.categories) {
+        let categName = categ.category.toLowerCase();
+        let formattedCategName = categName.replace('_', ' ');
+        let categObject = {
+          category: categName,
+          formattedCategory: formattedCategName,
+          numEvents: eventMap[categName]
+        };
+        this.categories.push(categObject);
+      }
+    });
   }
 
   private getEventMap() {
@@ -52,8 +52,8 @@ export class CategoryBarComponent implements OnInit {
     let total = 0;
     for (let event of this.events) {
       let eventCateg: string = event.properties.category.toLowerCase();
-      if (eventMap[eventCateg] == undefined) {
-        eventMap[eventCateg] = 1
+      if (eventMap[eventCateg] === undefined) {
+        eventMap[eventCateg] = 1;
       }
       else {
         eventMap[eventCateg]++;
@@ -65,7 +65,7 @@ export class CategoryBarComponent implements OnInit {
   }
 
   filter(category: string): void {
-    if (category === "all") this.selectedCategory = "all categories";
+    if (category === 'all') this.selectedCategory = 'all categories';
     else this.selectedCategory = category.toLowerCase().replace('_', ' ');
     category = category.replace(' ', '_');
     this.eventService.filterEvents(category);

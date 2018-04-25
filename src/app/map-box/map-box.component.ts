@@ -6,10 +6,10 @@ import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
 
 @Component({
-  selector: 'app-map-box',
-  templateUrl: './map-box.component.html',
-  styleUrls: ['./map-box.component.css'],
-  providers: [ DateService ]
+    selector: 'app-map-box',
+    templateUrl: './map-box.component.html',
+    styleUrls: ['./map-box.component.css'],
+    providers: [ DateService ]
 })
 export class MapBoxComponent implements OnInit {
     @Input() pressed: boolean;
@@ -32,10 +32,10 @@ export class MapBoxComponent implements OnInit {
 
     // Reusable Blocks
     popup = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      offset: 20 // offset upward from pin
-    }).setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>');
+    closeButton: false,
+    closeOnClick: false,
+    offset: 20 // offset upward from pin
+}).setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>');
 
     backupPopup = new mapboxgl.Popup({
       closeButton: false,
@@ -45,108 +45,110 @@ export class MapBoxComponent implements OnInit {
 
     private events: FeatureCollection;
 
-    constructor(private _dateService: DateService, private eventService: EventService) {
-      mapboxgl.accessToken = environment.mapbox.accessToken;
-    }
+constructor(private _dateService: DateService, private eventService: EventService) {
+    mapboxgl.accessToken = environment.mapbox.accessToken;
+}
 
-    ngOnInit() {
-      this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+ngOnInit() {
+    this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
         this.events = eventCollection;
         this.updateSource();
-      });
+    });
 
-      this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
-          // console.log(selectedEventInfo);
-          // console.log(this.selectedEvent);
-          //TODO: Just put this.selectEvent here
-          console.log("map sub", selectedEventInfo);
-          this.selectEvent(selectedEventInfo);
-          //need to call zoom function for map
-      });
-      this.buildMap();
-      //I think you should use something like this to create all the promises once instead of calling function creating promise several times
-      let _promiseMapLoad = this.promiseMapLoad();
-      let _promiseGetUserLocation = this.promiseGetUserLocation();
-      let _promisePinLoad = this.promiseImageLoad(this.pinUrl);
-      let _promiseBluePinLoad = this.promiseImageLoad(this.bluePinPath);
+    this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+        //TODO: Just put this.selectEvent here
+        console.log("map sub", clickedEventInfo);
+        this.selectEvent(clickedEventInfo);
+        //need to call zoom function for map
+    });
+    console.log("before");
+    this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+        console.log("hovering from map");
+    })
+    this.buildMap();
+    //I think you should use something like this to create all the promises once instead of calling function creating promise several times
+    let _promiseMapLoad = this.promiseMapLoad();
+    let _promiseGetUserLocation = this.promiseGetUserLocation();
+    let _promisePinLoad = this.promiseImageLoad(this.pinUrl);
+    let _promiseBluePinLoad = this.promiseImageLoad(this.bluePinPath);
 
-      //Add 3D buildings, on-hover popup, and arrowcontrols
-      _promiseMapLoad.then(() => {
-        this.threeDDisplay();
-        this.hoverPopup();
-        this.addArrowControls();
-      });
+    //Add 3D buildings, on-hover popup, and arrowcontrols
+    _promiseMapLoad.then(() => {
+    this.threeDDisplay();
+    this.hoverPopup();
+    this.addArrowControls();
+});
 
-      //Add all Events pins
-      let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
-      promise_map_pin.then((promiseReturns) => {
-        let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
-        this.map.addImage('redPin', image);
-        //add events with the new pin
-        this.addEventLayer(this.events);
-      });
+//Add all Events pins
+let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
+promise_map_pin.then((promiseReturns) => {
+    let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+    this.map.addImage('redPin', image);
+    //add events with the new pin
+    this.addEventLayer(this.events);
+});
 
-      let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
-      promise_map_blue_pin.then((promiseReturns) => {
-        let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
-        this.map.addImage('bluePin', image);
-      });
+let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
+promise_map_blue_pin.then((promiseReturns) => {
+    let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+    this.map.addImage('bluePin', image);
+});
 
-      //Add user location pin
-      let promise_map_userloc_pins = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad, _promiseBluePinLoad]);
-      promise_map_userloc_pins.then( () => {
-        // this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
-      });
+//Add user location pin
+let promise_map_userloc_pins = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad, _promiseBluePinLoad]);
+promise_map_userloc_pins.then( () => {
+    // this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
+});
 
-      this.addControls();
-    }
+this.addControls();
+}
 
-    addEventLayer(data): void {
-      //TODO: Add Removal of previous event layer
-      //can change the url to a static geojson object from the service
-      this.map.addSource('events', { type: 'geojson', data: data });
+addEventLayer(data): void {
+    //TODO: Add Removal of previous event layer
+    //can change the url to a static geojson object from the service
+    this.map.addSource('events', { type: 'geojson', data: data });
 
-      this.map.addLayer({
+    this.map.addLayer({
         "id": "eventlayer",
         "type": "symbol",
         "source":"events",
         "layout": {
-          "icon-image": 'redPin',
-          "icon-size":.07,
-          "icon-allow-overlap": true
+            "icon-image": 'redPin',
+            "icon-size":.07,
+            "icon-allow-overlap": true
         }
-      });
+    });
 
-      //Add a larger pin to later use for on hover
-      this.addPinToLocation('hoveredPin', this.lat, this.lng, "bluePin", .07, false);
-      this.addPinToLocation('redBackupHoveredPin', this.lat, this.lng, 'redPin', .09, false);
-      //TEST FOR GOOD SQUARE size
-      // this.addPinToLocation('hp1', this.lat+.0001, this.lng, 'redPin', .08, true);
-      // this.addPinToLocation('hp2', this.lat, this.lng, 'redPin', .08, true);
-      // this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, 'redPin', .08, true);
-      // this.addPinToLocation('hp4', this.lat, this.lng+.0001, 'redPin', .08, true);
+    //Add a larger pin to later use for on hover
+    this.addPinToLocation('hoveredPin', this.lat, this.lng, "bluePin", .07, false);
+    this.addPinToLocation('redBackupHoveredPin', this.lat, this.lng, 'redPin', .09, false);
+    //TEST FOR GOOD SQUARE size
+    // this.addPinToLocation('hp1', this.lat+.0001, this.lng, 'redPin', .08, true);
+    // this.addPinToLocation('hp2', this.lat, this.lng, 'redPin', .08, true);
+    // this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, 'redPin', .08, true);
+    // this.addPinToLocation('hp4', this.lat, this.lng+.0001, 'redPin', .08, true);
 
-    }
+}
 
-    updateSource(): void {
-      if (this.map == undefined || this.map.getSource('events') == undefined) return;
+updateSource(): void {
+    if (this.map == undefined || this.map.getSource('events') == undefined) return;
 
       this.map.getSource('events').setData(this.events);
       this.removePinsAndPopups();
       this.selectedEvent = null;
     }
 
-    // updateSourceWithoutEvent(eventIdToRemove: number): void {
-    //   if (this.map == undefined || this.map.getSource('events') == undefined) return;
-    //   let subsetOfEvents: FeatureCollection = {
-    //     type: 'FeatureCollection',
-    //     features: this.events.features.filter(curGeoJson => curGeoJson.id != eventIdToRemove)
-    //   };
-    //   this.map.getSource('events').setData(subsetOfEvents);
-    // }
+// updateSourceWithoutEvent(eventIdToRemove: number): void {
+//   if (this.map == undefined || this.map.getSource('events') == undefined) return;
+//   let subsetOfEvents: FeatureCollection = {
+//     type: 'FeatureCollection',
+//     features: this.events.features.filter(curGeoJson => curGeoJson.id != eventIdToRemove)
+//   };
+//   this.map.getSource('events').setData(subsetOfEvents);
+// }
 
-    buildMap() {
-      this.map = new mapboxgl.Map({
+buildMap() {
+    this.map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3', // UCLA Campus Buildings (restricted by the border)
         // 'mapbox://styles/trinakat/cjashcgwq7rfo2srstatrxhyi', // UCLA Buildings
@@ -155,79 +157,47 @@ export class MapBoxComponent implements OnInit {
         maxBounds: [[-118.46, 34.056],[-118.428, 34.079]],
         zoom: 15,
         pitch: 60
-      });
-    }
+    });
+}
 
-    addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
-      let point: FeatureCollection =
-      { "type": "FeatureCollection",
-          "features": [
-            {"type": "Feature",
-              "geometry": {
-                  "type": "Point",
-                  "coordinates": [longitude, latitude]
-              }
-            }
-          ]
-      };
-
-      this.map.addSource(id, { type: 'geojson', data: point });
-
-      this.map.addLayer({
-        "id": id,
-        "type": "symbol",
-        "source":id,
-        "layout": {
-          "visibility": (visible ? "visible" : "none"),
-          "icon-image": icon,
-          "icon-size": size,
-          "icon-allow-overlap": true
+addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
+    let point: FeatureCollection =
+    { "type": "FeatureCollection",
+    "features": [
+        {"type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [longitude, latitude]
         }
-      });
     }
+]
+};
 
-    addControls(): void {
-      this.map.addControl(new mapboxgl.GeolocateControl({
-      	positionOptions: {
-        		enableHighAccuracy: true
-        	},
-        	fitBoundsOptions: {maxZoom: 17.7, speed: .3},
-        	trackUserLocation: true
-      }));
-      this.map.addControl(new mapboxgl.NavigationControl());
+this.map.addSource(id, { type: 'geojson', data: point });
+
+this.map.addLayer({
+    "id": id,
+    "type": "symbol",
+    "source":id,
+    "layout": {
+        "visibility": (visible ? "visible" : "none"),
+        "icon-image": icon,
+        "icon-size": size,
+        "icon-allow-overlap": true
     }
+});
+}
 
-    threeDDisplay(): void {
-    	// Insert the layer beneath any symbol layer.
-      let layers = this.map.getStyle().layers.reverse();
-    	let labelLayerIdx = layers.findIndex(function (layer) {
-    		return layer.type !== 'symbol';
-    	});
-
-    	this.map.addLayer({
-    		'id': 'ucla-buildings',
-    		'source': 'composite',
-    		'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
-    		// 'source-layer': 'UCLA_Buildings', // UCLA Buildings
-    		'filter': ['==', 'extrude', 'true'],
-    		'type': 'fill-extrusion',
-    		'minzoom': 15,
-    		'paint': {
-    			'fill-extrusion-color': '#aaa',
-    			'fill-extrusion-height': {
-    				'property': 'height',
-    				'type': 'identity'
-    			},
-    			'fill-extrusion-base': {
-    				'property': 'min_height',
-    				'type': 'identity',
-    			},
-    			// 'fill-extrusion-height': 20,
-    			// 'fill-extrusion-base': 0,
-    			'fill-extrusion-opacity': 0.5
-    		}
-    	}, "eventstest");
-    }
+addControls(): void {
+    this.map.addControl(new mapboxgl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+        fitBoundsOptions: {maxZoom: 17.7, speed: .3},
+        trackUserLocation: true
+    }));
+    this.map.addControl(new mapboxgl.NavigationControl());
+}
 
     addPopup(popup, coords, eventName:string, eventTime: string): void {
       if(popup == this.popup){
@@ -286,11 +256,7 @@ export class MapBoxComponent implements OnInit {
         }
       });
 
-      //UNHOVER
-    	this.map.on('mouseleave', 'eventlayer', () => {
-    		this.map.getCanvas().style.cursor = '';
-        console.log("mouseleave");
-
+      this.map.on('mouseleave', 'eventlayer', () => {
         if(this.selectedEvent !== null) {
           this.backupPopup.remove();
     		  this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'none');
@@ -308,12 +274,12 @@ export class MapBoxComponent implements OnInit {
 
         //Handle if you reclick an event
         if(this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
-          this.eventService.updateSelectedEvent(null);
+          this.eventService.updateClickedEvent(null);
           return;
         }
 
         //the service then calls selectEvent
-        this.eventService.updateSelectedEvent(e.features[0]);
+        this.eventService.updateClickedEvent(e.features[0]);
     	});
     }
 
@@ -346,95 +312,125 @@ export class MapBoxComponent implements OnInit {
 
       this.addPopup(this.popup, coords, event.properties.event_name,
                   this._dateService.formatDate(new Date(event.properties.start_time)));
-
-  		this.map.flyTo({center: coords, zoom: 17, speed: .3});
     }
 
-    addArrowControls(): void {
-      // pixels the map pans when the up or down arrow is clicked
-      const deltaDistance = 60;
-      // degrees the map rotates when the left or right arrow is clicked
-      const deltaDegrees = 25;
-      const deltaZoom = .5;
+    threeDDisplay(): void {
+        	// Insert the layer beneath any symbol layer.
+          let layers = this.map.getStyle().layers.reverse();
+        	let labelLayerIdx = layers.findIndex(function (layer) {
+        		return layer.type !== 'symbol';
+        	});
 
-      function easing(t) {
+        	this.map.addLayer({
+        		'id': 'ucla-buildings',
+        		'source': 'composite',
+        		'source-layer': 'UCLA_Campus_Buildings', // UCLA Campus Buildings
+        		// 'source-layer': 'UCLA_Buildings', // UCLA Buildings
+        		'filter': ['==', 'extrude', 'true'],
+        		'type': 'fill-extrusion',
+        		'minzoom': 15,
+        		'paint': {
+        			'fill-extrusion-color': '#aaa',
+        			'fill-extrusion-height': {
+        				'property': 'height',
+        				'type': 'identity'
+        			},
+        			'fill-extrusion-base': {
+        				'property': 'min_height',
+        				'type': 'identity',
+        			},
+        			// 'fill-extrusion-height': 20,
+        			// 'fill-extrusion-base': 0,
+        			'fill-extrusion-opacity': 0.5
+        		}
+        	}, "eventstest");
+        }
+
+addArrowControls(): void {
+    // pixels the map pans when the up or down arrow is clicked
+    const deltaDistance = 60;
+    // degrees the map rotates when the left or right arrow is clicked
+    const deltaDegrees = 25;
+    const deltaZoom = .5;
+
+    function easing(t) {
         return t * (2 - t);
-      }
-
-      this.map.getCanvas().focus();
-    	this.map.getCanvas().addEventListener('keydown', (e) => {
-    		e.preventDefault();
-    		if (e.which === 38) { // up
-    			this.map.panBy([0, -deltaDistance], {
-    				easing: easing
-    			});
-    		} else if (e.which === 40) { // down
-    			this.map.panBy([0, deltaDistance], {
-    				easing: easing
-    			});
-    		} else if (e.which === 37) { // left
-    			this.map.easeTo({
-    				bearing: this.map.getBearing() - deltaDegrees,
-    				easing: easing
-    			});
-    		} else if (e.which === 39) { // right
-    			this.map.easeTo({
-    				bearing: this.map.getBearing() + deltaDegrees,
-    				easing: easing
-    			});
-    		} else if (e.which === 32) { // zoom in (space)
-    			this.map.easeTo({
-    				zoom: this.map.getZoom() + deltaZoom,
-    				easing: easing
-    			});
-    		} else if (e.which === 8) { // zoom out (backspace)
-    			this.map.easeTo({
-    				zoom: this.map.getZoom() - deltaZoom,
-    				easing: easing
-    			});
-    		}
-    	}, true);
     }
 
-    ///////////////////////////////////////
-    // MAP CALLBACKS AS PROMISES
-    //////////////////////////////////////
-    promiseMapLoad() {
-      return new Promise((resolve, reject) => {
-        this.map.on('load', () => {
-          resolve();
-        })
-      });
-    }
-
-    promiseImageLoad(url) {
-      return new Promise((resolve, reject) => {
-        this.map.loadImage(url, (error, image) => {
-          if(error) {
-            reject(error);
-          } else {
-            resolve(image);
-          }
+    this.map.getCanvas().focus();
+    this.map.getCanvas().addEventListener('keydown', (e) => {
+        e.preventDefault();
+        if (e.which === 38) { // up
+            this.map.panBy([0, -deltaDistance], {
+            easing: easing
         });
-      });
-    }
+    } else if (e.which === 40) { // down
+        this.map.panBy([0, deltaDistance], {
+        easing: easing
+    });
+} else if (e.which === 37) { // left
+    this.map.easeTo({
+    bearing: this.map.getBearing() - deltaDegrees,
+    easing: easing
+});
+} else if (e.which === 39) { // right
+    this.map.easeTo({
+    bearing: this.map.getBearing() + deltaDegrees,
+    easing: easing
+});
+} else if (e.which === 32) { // zoom in (space)
+    this.map.easeTo({
+    zoom: this.map.getZoom() + deltaZoom,
+    easing: easing
+});
+} else if (e.which === 8) { // zoom out (backspace)
+    this.map.easeTo({
+    zoom: this.map.getZoom() - deltaZoom,
+    easing: easing
+});
+}
+}, true);
+}
 
-    //puts User location in this.lat and this.lng
-    promiseGetUserLocation() {
-      return new Promise((resolve, reject) => {
-        //if location activated
-        if (navigator.geolocation) {
-          //locate user
-          navigator.geolocation.getCurrentPosition(position => {
-            this.lat = position.coords.latitude;
-            this.lng = position.coords.longitude;
-            resolve();
-          });
-        }
-        else {
-          reject();
-        }
-      });
+///////////////////////////////////////
+// MAP CALLBACKS AS PROMISES
+//////////////////////////////////////
+promiseMapLoad() {
+return new Promise((resolve, reject) => {
+    this.map.on('load', () => {
+        resolve();
+    })
+});
+}
 
-    }
+promiseImageLoad(url) {
+    return new Promise((resolve, reject) => {
+        this.map.loadImage(url, (error, image) => {
+            if(error) {
+                reject(error);
+            } else {
+                resolve(image);
+            }
+        });
+    });
+}
+
+//puts User location in this.lat and this.lng
+promiseGetUserLocation() {
+return new Promise((resolve, reject) => {
+    //if location activated
+    if (navigator.geolocation) {
+    //locate user
+    navigator.geolocation.getCurrentPosition(position => {
+    this.lat = position.coords.latitude;
+    this.lng = position.coords.longitude;
+    resolve();
+});
+}
+else {
+    reject();
+}
+});
+
+}
 }
