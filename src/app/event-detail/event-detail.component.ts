@@ -9,7 +9,8 @@ import { EventService } from '../event.service';
 })
 export class EventDetailComponent implements OnInit {
     @Input() event: any;
-    @Output() showSideBar = new EventEmitter<boolean>();
+    @Input() revealEvent: boolean;
+    @Output() showSideBarBool = new EventEmitter<boolean>();
 
     constructor(private eventService: EventService) {
         console.log("construct me");
@@ -28,6 +29,6 @@ hideEvent($event) {
     console.log("clicked hideEvent from eventDetail");
     console.log($event);
     console.log(this.event);
-    this.showSideBar.emit(true);
+    this.showSideBarBool.emit(true);
 }
 }
