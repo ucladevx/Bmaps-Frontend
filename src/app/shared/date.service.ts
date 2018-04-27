@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class DateService {
-  apiURL = "http://www.whatsmappening.io/api/v1/";
+  apiURL = "https://dora.whatsmappening.io/api/v1/";
 
   today = new Date();
   todayD = this.today.getDate();
