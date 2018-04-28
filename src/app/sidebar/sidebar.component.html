@@ -9,7 +9,7 @@
             <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">
                 <div *ngFor="let event of filteredEvents" #eventList
                 [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
-                (mouseover)="onHover(event)"
+                (mouseenter)="onHover(event)"
                 (click)="onSelect(event)">
                 <a  class="sidebar-event">
                     <div class="sidebar-event-img-container col-sm-7 col-md-7 col-lg-7">
