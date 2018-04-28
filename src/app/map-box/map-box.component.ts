@@ -56,14 +56,9 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
-      //TODO: Just put this.selectEvent here
-      console.log("map sub", clickedEventInfo);
       this.selectEvent(clickedEventInfo);
-      //need to call zoom function for map
     });
-    console.log("before");
     this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
-      console.log("hovering from map");
     })
     this.buildMap();
     //I think you should use something like this to create all the promises once instead of calling function creating promise several times
@@ -225,7 +220,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         this.eventService.updateHoveredEvent(e.features[0]);
         // Change the cursor style as a UI indicator.
     		this.map.getCanvas().style.cursor = 'pointer';
-        console.log("mouseenter");
 
         //slice returns a copy of the array rather than the actual array
         let coords = e.features[0].geometry.coordinates.slice();
@@ -275,7 +269,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.map.on('click', 'eventlayer', (e) => {
       // Populate the popup and set its coordinates
       // based on the feature found.
-      // console.log("Click", e.features[0]);
 
       //Handle if you reclick an event
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
@@ -317,6 +310,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
     this.addPopup(this.popup, coords, event.properties.event_name,
       this._dateService.formatDate(new Date(event.properties.start_time)));
+
+    this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
 
   threeDDisplay(): void {

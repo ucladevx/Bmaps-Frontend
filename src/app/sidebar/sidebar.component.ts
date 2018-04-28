@@ -54,22 +54,17 @@ export class SidebarComponent implements OnInit {
         this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
             this.hoveredEvent = hoveredEventInfo;
             this.scrollToEvent(hoveredEventInfo);
-            console.log(this.hoveredEvent);
         });
     }
 
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
     // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
-        console.log("onSelect");
-        console.log()
         this.eventService.updateClickedEvent(event);
         this.hideSidebar(event);
     }
 
     onHover(event: GeoJson): void {
-        console.log('before hovering');
-        console.log(this.hoveredEvent);
         this.hoveredEvent = event;
         this.eventService.updateHoveredEvent(event);
     }
@@ -81,7 +76,6 @@ export class SidebarComponent implements OnInit {
 
     //output function to reveal sidebar once we exit out of the event detail
     showSidebar(result: boolean) {
-        console.log("output function");
         if (this.clickedEvent != null) {
           this.eventService.updateClickedEvent(null);
         }
@@ -89,7 +83,6 @@ export class SidebarComponent implements OnInit {
     }
 
     toggleMobileSidebar() {
-      console.log("toggle mobile sidebar");
         this.mobileSidebarStatus = !this.mobileSidebarStatus;
         this.pressed.emit(true);
     }
