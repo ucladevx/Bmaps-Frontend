@@ -47,6 +47,7 @@ export class SidebarComponent implements OnInit {
         });
         this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
             this.hoveredEvent = hoveredEventInfo;
+            console.log(this.hoveredEvent);
         });
     }
 
@@ -73,10 +74,9 @@ export class SidebarComponent implements OnInit {
 
     //output function to reveal sidebar once we exit out of the event detail
     showSidebar(result: boolean) {
-      console.log("output function");
-        this.show = true;
+        console.log("output function");
         this.eventService.updateClickedEvent(null);
-        console.log(result);
+        this.show = true;
     }
 
     toggleMobileSidebar() {

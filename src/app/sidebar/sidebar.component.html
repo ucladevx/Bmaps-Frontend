@@ -8,7 +8,7 @@
             <app-category-bar></app-category-bar>
             <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">
                 <div *ngFor="let event of filteredEvents"
-                [class.selected]="clickedEvent && event.id == clickedEvent.id"
+                [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
                 (mouseover)="onHover(event)"
                 (click)="onSelect(event)">
                 <a  class="sidebar-event">

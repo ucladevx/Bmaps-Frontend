@@ -228,6 +228,8 @@ export class MapBoxComponent implements OnInit {
   hoverPopup(): void {
     //HOVER
     this.map.on('mouseenter', 'eventlayer', (e) => {
+
+      this.eventService.updateHoveredEvent(e.features[0]);
       // Change the cursor style as a UI indicator.
       this.map.getCanvas().style.cursor = 'pointer';
       console.log("mouseenter");
@@ -267,6 +269,7 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.map.on('mouseleave', 'eventlayer', () => {
+      this.eventService.updateHoveredEvent(null);
       if (this.selectedEvent !== null) {
         this.backupPopup.remove();
         this.map.setLayoutProperty('redBackupHoveredPin', 'visibility', 'none');
