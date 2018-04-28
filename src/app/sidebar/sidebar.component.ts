@@ -44,6 +44,10 @@ export class SidebarComponent implements OnInit {
             this.clickedEvent = clickedEventInfo;
             if (this.clickedEvent != null){
               this.hideSidebar(this.clickedEvent);
+              console.log("hm");
+            }
+            else {
+              this.showSidebar();
             }
             this.scrollToEvent(clickedEventInfo);
         });
@@ -78,7 +82,9 @@ export class SidebarComponent implements OnInit {
     //output function to reveal sidebar once we exit out of the event detail
     showSidebar(result: boolean) {
         console.log("output function");
-        this.eventService.updateClickedEvent(null);
+        if (this.clickedEvent != null) {
+          this.eventService.updateClickedEvent(null);
+        }
         this.show = true;
     }
 
