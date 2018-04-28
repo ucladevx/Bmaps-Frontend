@@ -24,9 +24,11 @@
 }
 
 .event-body {
-	display: inline-block;
+	display: block;
 	z-index: 500;
 	padding: 40px;
+	overflow-wrap: break-word;
+	overflow-y: scroll;
 }
 
 .event-image {
@@ -65,6 +67,7 @@
 	font-weight: 300;
 	letter-spacing: 1px;
 	margin: 5px 0px 5px 0px;
+	white-space: pre-wrap;
 }
 
 
@@ -109,4 +112,11 @@
 
 #left-arrow:hover {
   color: #5dbacd;
+}
+
+.separator {
+	height: 1px;
+	width: 50%;
+	margin: 20px auto;
+	background: #7c7c7c;
 }
