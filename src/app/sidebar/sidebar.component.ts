@@ -75,7 +75,7 @@ export class SidebarComponent implements OnInit {
     }
 
     //output function to reveal sidebar once we exit out of the event detail
-    showSidebar(result: boolean) {
+    showSidebar() {
         if (this.clickedEvent != null) {
           this.eventService.updateClickedEvent(null);
         }
