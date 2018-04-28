@@ -61,8 +61,10 @@ export class EventService {
         this.updateEvents(today);
     }
 
-    private getEventsOnDateURL(d: number, m: number, y: number): string {
-        const monthName = this.dateService.getMonthNameFromMonthNumber(m);
+    private getEventsOnDateURL(date: Date): string {
+        const d = date.getDate();
+        const monthName = this.dateService.getMonthName(date);
+        const y = date.getFullYear();
         let dateURL = `${this.baseUrl}/event-date/${d}%20${monthName}%20${y}`;
         console.log(dateURL);
         return dateURL; // json we are pulling from for event info
@@ -73,7 +75,7 @@ export class EventService {
         console.log("UPDATING EVENTS");
         this.currDateSource.next(date);
         this.http.get<FeatureCollection>(
-            this.getEventsOnDateURL(date.getDate(), date.getMonth(), date.getFullYear())
+            this.getEventsOnDateURL(date)
         ).subscribe(events => {
             this.currEventsSource.next(events);
             this.filterEvents(this._category);
