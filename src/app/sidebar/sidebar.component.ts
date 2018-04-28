@@ -30,6 +30,7 @@ export class SidebarComponent implements OnInit {
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
     show: boolean = true;
+    mobileSidebarStatus: boolean = false;
     @Output() pressed: EventEmitter<boolean> = new EventEmitter();
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
@@ -41,19 +42,29 @@ export class SidebarComponent implements OnInit {
         });
         this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
             this.clickedEvent = clickedEventInfo;
+            if (this.clickedEvent != null){
+              this.hideSidebar(this.clickedEvent);
+              console.log("hm");
+            }
+            else {
+              this.showSidebar();
+            }
             this.scrollToEvent(clickedEventInfo);
         });
         this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
             this.hoveredEvent = hoveredEventInfo;
             this.scrollToEvent(hoveredEventInfo);
+            console.log(this.hoveredEvent);
         });
     }
 
+    // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
+    // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
-        // console.log("On Select", event);
-        this.clickedEvent = event;
-        this.show = false;
+        console.log("onSelect");
+        console.log()
         this.eventService.updateClickedEvent(event);
+        this.hideSidebar(event);
     }
 
     onHover(event: GeoJson): void {
@@ -63,24 +74,31 @@ export class SidebarComponent implements OnInit {
         this.eventService.updateHoveredEvent(event);
     }
 
-    showSidebar(result: boolean) {
-        this.show = true;
-        this.eventService.updateClickedEvent(null);
+    hideSidebar(event: GeoJson){
+      this.clickedEvent = event;
+      this.show = false;
     }
 
-    mobileSidebarStatus: boolean = false;
+    //output function to reveal sidebar once we exit out of the event detail
+    showSidebar(result: boolean) {
+        console.log("output function");
+        if (this.clickedEvent != null) {
+          this.eventService.updateClickedEvent(null);
+        }
+        this.show = true;
+    }
+
     toggleMobileSidebar() {
+      console.log("toggle mobile sidebar");
         this.mobileSidebarStatus = !this.mobileSidebarStatus;
         this.pressed.emit(true);
     }
 
     formatCategory(category: String): string {
-        if (category =="<NONE>"){
-            return "";
+        if (category === '<NONE>') {
+            return '';
         }
-        else {
-            return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
-        }
+        return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
     }
 
     // scroll to the DOM element for event
