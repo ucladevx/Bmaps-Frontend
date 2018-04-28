@@ -8,27 +8,22 @@ import { EventService } from '../event.service';
     styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-    @Input() event: any;
-    @Input() revealEvent: boolean;
-    @Output() showSideBarBool = new EventEmitter<boolean>();
+  @Input() event: any;
+  @Input() revealEvent: boolean;
+  @Output() showSideBarBool = new EventEmitter<boolean>();
 
-    constructor(private eventService: EventService) {
-        console.log("construct me");
-    }
+  constructor(private eventService: EventService) {
+  }
 
-    ngOnInit() {
-        console.log(this.event);
-    }
+  ngOnInit() {
+  }
 
-    //used for date parsing
-    toHTML(input) : any {
+  //used for date parsing
+  toHTML(input) : any {
     return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
-}
+  }
 
-hideEvent($event) {
-    console.log("clicked hideEvent from eventDetail");
-    console.log($event);
-    console.log(this.event);
-    this.showSideBarBool.emit(true);
-}
+  hideEvent($event) {
+      this.showSideBarBool.emit(true);
+  }
 }

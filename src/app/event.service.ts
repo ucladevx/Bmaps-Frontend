@@ -104,12 +104,15 @@ let tempEvents = new FeatureCollection(this._events.features
 updateClickedEvent(event: GeoJson): void {
 this._clickedEvent = event;
 this.clickedEventSource.next(this._clickedEvent);
+console.log("updating clicked event");
+console.log(this._clickedEvent);
 }
 
 // Updates the current hovered event by number
 updateHoveredEvent(event: GeoJson): void {
 this._hoveredEvent = event;
 this.hoveredEventSource.next(this._hoveredEvent);
+console.log("updating hovered event");
 console.log(this._hoveredEvent);
 }
 }
