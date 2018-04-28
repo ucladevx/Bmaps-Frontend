@@ -166,22 +166,15 @@ export class MapBoxComponent implements OnInit {
     });
   }
 
-  addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
-    let point: FeatureCollection = {
-      "type": "FeatureCollection",
-      "features": [{
-        "type": "Feature",
-        "geometry": {
-          "type": "Point",
-          "coordinates": [longitude, latitude]
-        }
-      }]
+addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
+    let point: FeatureCollection =
+    { "type": "FeatureCollection",
+        "features": [
+          new GeoJson(id, {latitude, longitude})
+        ]
     };
 
-    this.map.addSource(id, {
-      type: 'geojson',
-      data: point
-    });
+    this.map.addSource(id, { type: 'geojson', data: point });
 
     this.map.addLayer({
       "id": id,
@@ -224,49 +217,48 @@ export class MapBoxComponent implements OnInit {
     }
   }
 
-  //Not done through promises becauses no callbacks need to build off this anyway
-  hoverPopup(): void {
-    //HOVER
-    this.map.on('mouseenter', 'eventlayer', (e) => {
+    //Not done through promises becauses no callbacks need to build off this anyway
+    hoverPopup(): void {
+      //HOVER
+      this.map.on('mouseenter', 'eventlayer', (e: FeatureCollection) => {
+        // Update hovered event service.
+        this.eventService.updateHoveredEvent(e.features[0]);
+        // Change the cursor style as a UI indicator.
+    		this.map.getCanvas().style.cursor = 'pointer';
+        console.log("mouseenter");
 
-      this.eventService.updateHoveredEvent(e.features[0]);
-      // Change the cursor style as a UI indicator.
-      this.map.getCanvas().style.cursor = 'pointer';
-      console.log("mouseenter");
+        //slice returns a copy of the array rather than the actual array
+        let coords = e.features[0].geometry.coordinates.slice();
 
-      //slice returns a copy of the array rather than the actual array
-      let coords = e.features[0].geometry.coordinates.slice();
+        if(this.selectedEvent !== null) {
+          if(e.features[0].id !== this.selectedEvent.id) {
+            //add bigger red pin
+            this.map.getSource('redBackupHoveredPin').setData({
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": coords
+                },
+              "type": "Feature"
+            });
+            this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
+          }
 
-      if (this.selectedEvent !== null) {
-        if (e.features[0].id !== this.selectedEvent.id) {
-          //add bigger red pin
-          this.map.getSource('redBackupHoveredPin').setData({
+          this.addPopup(this.backupPopup, coords, e.features[0].properties.event_name,
+            this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
+        }
+        else {
+      		this.map.getSource('hoveredPin').setData({
             "geometry": {
               "type": "Point",
               "coordinates": coords
             },
             "type": "Feature"
           });
-          this.map.setLayoutProperty('redBackupHoveredPin', 'visibility', 'visible');
+          this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
+          this.addPopup(this.popup, coords, e.features[0].properties.event_name,
+            this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
         }
-
-        this.addPopup(this.backupPopup, coords, e.features[0].properties.event_name,
-          this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
-      } else {
-        this.map.getSource('hoveredPin').setData({
-          "geometry": {
-            "type": "Point",
-            "coordinates": coords
-          },
-          "type": "Feature"
-        });
-        this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-
-        //add primary popups
-        this.addPopup(this.popup, coords, e.features[0].properties.event_name,
-          this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
-      }
-    });
+      });
 
     this.map.on('mouseleave', 'eventlayer', () => {
       this.eventService.updateHoveredEvent(null);
