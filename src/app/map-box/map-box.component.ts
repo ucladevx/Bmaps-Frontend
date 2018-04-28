@@ -163,29 +163,24 @@ buildMap() {
 addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
     let point: FeatureCollection =
     { "type": "FeatureCollection",
-    "features": [
-        {"type": "Feature",
-        "geometry": {
-            "type": "Point",
-            "coordinates": [longitude, latitude]
-        }
-    }
-]
-};
+        "features": [
+          new GeoJson(id, {latitude, longitude})
+        ]
+    };
 
-this.map.addSource(id, { type: 'geojson', data: point });
+    this.map.addSource(id, { type: 'geojson', data: point });
 
-this.map.addLayer({
-    "id": id,
-    "type": "symbol",
-    "source":id,
-    "layout": {
+    this.map.addLayer({
+      "id": id,
+      "type": "symbol",
+      "source":id,
+      "layout": {
         "visibility": (visible ? "visible" : "none"),
         "icon-image": icon,
         "icon-size": size,
         "icon-allow-overlap": true
-    }
-});
+      }
+    });
 }
 
 addControls(): void {
@@ -216,7 +211,7 @@ addControls(): void {
     //Not done through promises becauses no callbacks need to build off this anyway
     hoverPopup(): void {
       //HOVER
-    	this.map.on('mouseenter', 'eventlayer', (e) => {
+      this.map.on('mouseenter', 'eventlayer', (e: FeatureCollection) => {
     		// Change the cursor style as a UI indicator.
     		this.map.getCanvas().style.cursor = 'pointer';
         console.log("mouseenter");
@@ -254,6 +249,9 @@ addControls(): void {
           this.addPopup(this.popup, coords, e.features[0].properties.event_name,
             this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
         }
+
+        // scroll to hovered event in sidebar
+        this.eventService.updateHoveredEvent(e.features[0]);
       });
 
       this.map.on('mouseleave', 'eventlayer', () => {

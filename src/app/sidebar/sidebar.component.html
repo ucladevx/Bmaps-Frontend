@@ -7,7 +7,7 @@
             <app-date-selector></app-date-selector>
             <app-category-bar></app-category-bar>
             <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">
-                <div *ngFor="let event of filteredEvents"
+                <div *ngFor="let event of filteredEvents" #eventList
                 [class.selected]="clickedEvent && event.id == clickedEvent.id"
                 (mouseover)="onHover(event)"
                 (click)="onSelect(event)">
@@ -26,6 +26,7 @@
                     </div>
                 </a>
                 <div class="seperator"></div>
+                </div>
             </div>
         </div>
     </div>

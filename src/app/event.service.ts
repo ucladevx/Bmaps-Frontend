@@ -17,7 +17,7 @@ export class EventService {
     private currDateSource: BehaviorSubject<Date>;
     // holds clicked event
     private clickedEventSource: Subject<GeoJson>;
-    // holds hoveredd event
+    // holds hovered event
     private hoveredEventSource: Subject<GeoJson>;
 
     // Observables that components can subscribe to for realtime updates
@@ -70,15 +70,15 @@ export class EventService {
 
     // Updates events for given date while persisting the current category
     updateEvents(date: Date): void {
-    console.log("UPDATING EVENTS");
-    this.currDateSource.next(date);
-    this.http.get<FeatureCollection>(
-        this.getEventsOnDateURL(date.getDate(), date.getMonth(), date.getFullYear())
-    ).subscribe(events => {
-        this.currEventsSource.next(events);
-        this.filterEvents(this._category);
-    });
-}
+        console.log("UPDATING EVENTS");
+        this.currDateSource.next(date);
+        this.http.get<FeatureCollection>(
+            this.getEventsOnDateURL(date.getDate(), date.getMonth(), date.getFullYear())
+        ).subscribe(events => {
+            this.currEventsSource.next(events);
+            this.filterEvents(this._category);
+        });
+    }
 
 // Calls updateEvents for the current date + days
 updateDateByDays(days: number) {
