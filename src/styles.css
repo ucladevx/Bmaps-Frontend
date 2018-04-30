@@ -1,5 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
+.flex {
+  display: flex;
+  flex: 1;
+}
+
+html, body, app-root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+}
+
 body {
     background-color: rgb(237, 237, 237);
     font-family: 'Poppins', sans-serif;

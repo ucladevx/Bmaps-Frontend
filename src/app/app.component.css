@@ -1,23 +1,10 @@
-.sidebar-container{
-    padding-right: 0px;
+.sidebar-container {
+  display: flex;
+  padding-right: 0px;
+  padding-left: 0px;
 }
-.map-container{
-    padding-left: 0px;
-    padding-right: 0px;
-}
-@media (min-width: 768px) {
-.sidebar-container{
-    margin-top: 0px;
-}
-  .column-1-4,
-  .column-3-4 {
-    position: relative;
-    float: left;
-  }
-  .column-1-4 {
-    right: 59%;
-  }
-  .column-3-4 {
-    left: 41%;
-  }
+.map-container {
+  display: flex;
+  padding-left: 0px;
+  padding-right: 0px;
 }

@@ -250,7 +250,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           });
           this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
           this.addPopup(this.popup, coords, e.features[0].properties.event_name,
-            this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
+            this._dateService.formatEventDate(e.features[0]));
         }
       });
 

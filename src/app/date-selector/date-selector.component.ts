@@ -33,7 +33,7 @@ export class DateSelectorComponent implements OnInit {
 
     private dateToString(date: Date): string {
         let day = date.getDate();
-        let month = this.dateService.getMonthNameFromMonthNumber(date.getMonth());
+        let month = this.dateService.getMonthName(date);
         
         let description = '';
         let today = new Date();

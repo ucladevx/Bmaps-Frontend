@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { EventService } from '../event.service';
+import { DateService } from '../shared/date.service';
 
 @Component({
     selector: 'app-event-detail',
@@ -9,18 +10,12 @@ import { EventService } from '../event.service';
 })
 export class EventDetailComponent implements OnInit {
   @Input() event: any;
-  @Input() revealEvent: boolean;
   @Output() showSideBarBool = new EventEmitter<boolean>();
 
-  constructor(private eventService: EventService) {
+  constructor(private eventService: EventService, private dateService: DateService) {
   }
 
   ngOnInit() {
-  }
-
-  //used for date parsing
-  toHTML(input) : any {
-    return new DOMParser().parseFromString(input, "text/html").documentElement.textContent;
   }
 
   hideEvent($event) {
