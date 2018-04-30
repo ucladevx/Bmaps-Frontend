@@ -10,7 +10,6 @@ import { DateService } from '../shared/date.service';
 })
 export class EventDetailComponent implements OnInit {
   @Input() event: any;
-  @Input() revealEvent: boolean;
   @Output() showSideBarBool = new EventEmitter<boolean>();
 
   constructor(private eventService: EventService, private dateService: DateService) {

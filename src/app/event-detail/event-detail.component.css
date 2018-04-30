@@ -27,8 +27,9 @@
 	display: block;
 	z-index: 500;
 	padding: 40px;
-	overflow-wrap: break-word;
+	word-break: break-word;
 	overflow-y: scroll;
+	flex: 1;
 }
 
 .event-image {
@@ -107,6 +108,7 @@
 	color: #656565;
 	font-size: 24px;
 	margin-top: 8px;
+	margin-bottom: 8px;
 	margin-left: 20px;
 }
 

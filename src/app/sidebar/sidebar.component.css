@@ -1,17 +1,6 @@
 #event-list{
-    height: 28vh;
-    overflow: scroll;
-}
-
-.event-list-show {
-    height: 81vh !important;
-}
-
-@media only screen and (min-width: 768px) {
-    #event-list{
-        height: 85vh;
-        overflow: scroll;
-    }
+    flex: 1;
+    overflow-y: scroll;
 }
 
 .search-header{
@@ -35,6 +24,7 @@
     padding: 4%;
     box-sizing: border-box;
     display: inline-block;
+    overflow-wrap: break-word;
 }
 
 .sidebar-event:hover, .sidebar-event:active{
