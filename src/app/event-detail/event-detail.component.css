@@ -48,7 +48,9 @@
 	font-family: Avenir;
 	font-weight: 600;
 	letter-spacing: 2px;
-	margin: 5px 0px 10px 0px;
+	line-height: normal;
+	text-align: center;
+	margin: 20px 0px;
 }
 
 .event-info {
@@ -58,6 +60,7 @@
 	font-weight: bolder;
 	font-style: italic;
 	letter-spacing: 2px;
+	text-align: center;
 	margin: 5px 0px 10px 0px;
 }
 
@@ -119,6 +122,6 @@
 .separator {
 	height: 1px;
 	width: 50%;
-	margin: 20px auto;
+	margin: 30px auto;
 	background: #7c7c7c;
 }

@@ -1,11 +1,11 @@
 <app-navbar></app-navbar>
 <div class="container-fluid flex">
     <div class="row flex">
-        <div class="col-sm-12 col-md-7 order-sm-first order-md-last map-container">
+        <div class="col-sm-12 col-md-7 order-sm-first order-md-last map-container" [ngClass]="{'hide-map' : pressed}">
             <app-map-box class="flex" [pressed]="pressed"></app-map-box>
             <!-- Link app's pressed variable to map-box's pressed variable-->
         </div>
-        <div class="col-sm-12 col-md-5 order-sm-last order-md-first sidebar-container">
+        <div class="col-sm-12 col-md-5 order-sm-last order-md-first sidebar-container" [ngClass]="{'hide-map': pressed}">
             <app-sidebar class="flex" (pressed)=onPressed($event)></app-sidebar>
             <!-- On the click event, executes app.ts's onPressed -->
         </div>
