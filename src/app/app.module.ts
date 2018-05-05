@@ -19,6 +19,9 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +40,8 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     SharedModule,
     AngularFontAwesomeModule,
     CollapseModule.forRoot(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production})
   ],
   providers: [CategoryService, EventService],
   bootstrap: [AppComponent]
