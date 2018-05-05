@@ -84,13 +84,11 @@
     color: #a9a9a9;
 }
 
-
 .separator
 {
     height: 1px;
     background: rgb(151,151,151);
     background-position: 0, 100%, 0, 100%;
-    margin: 3px;
 }
 
 .move-up {
