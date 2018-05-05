@@ -59,6 +59,7 @@ export class MapBoxComponent implements OnInit {
       this.selectEvent(clickedEventInfo);
     });
     this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+      this.hoverEvent(hoveredEventInfo);
     })
     this.buildMap();
     //I think you should use something like this to create all the promises once instead of calling function creating promise several times
@@ -215,54 +216,14 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     //Not done through promises becauses no callbacks need to build off this anyway
     hoverPopup(): void {
       //HOVER
-      this.map.on('mouseenter', 'eventlayer', (e: FeatureCollection) => {
+      this.map.on('mouseenter', 'eventlayer', (e) => {
         // Update hovered event service.
         this.eventService.updateHoveredEvent(e.features[0]);
-        // Change the cursor style as a UI indicator.
-    		this.map.getCanvas().style.cursor = 'pointer';
-
-        //slice returns a copy of the array rather than the actual array
-        let coords = e.features[0].geometry.coordinates.slice();
-
-        if(this.selectedEvent !== null) {
-          if(e.features[0].id !== this.selectedEvent.id) {
-            //add bigger red pin
-            this.map.getSource('redBackupHoveredPin').setData({
-              "geometry": {
-                  "type": "Point",
-                  "coordinates": coords
-                },
-              "type": "Feature"
-            });
-            this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
-          }
-
-          this.addPopup(this.backupPopup, coords, e.features[0].properties.event_name,
-            this._dateService.formatDate(new Date(e.features[0].properties.start_time)));
-        }
-        else {
-      		this.map.getSource('hoveredPin').setData({
-            "geometry": {
-              "type": "Point",
-              "coordinates": coords
-            },
-            "type": "Feature"
-          });
-          this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-          this.addPopup(this.popup, coords, e.features[0].properties.event_name,
-            this._dateService.formatEventDate(e.features[0]));
-        }
       });
 
     this.map.on('mouseleave', 'eventlayer', () => {
       this.eventService.updateHoveredEvent(null);
-      if (this.selectedEvent !== null) {
-        this.backupPopup.remove();
-        this.map.setLayoutProperty('redBackupHoveredPin', 'visibility', 'none');
-      } else {
-        this.popup.remove();
-        this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
-      }
+
     });
 
     //CLICK
@@ -307,11 +268,54 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       "type": "Feature"
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-
     this.addPopup(this.popup, coords, event.properties.event_name,
       this._dateService.formatDate(new Date(event.properties.start_time)));
-
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
+  }
+  hoverEvent(event: GeoJson): void {
+    if (event == null){
+        if (this.selectedEvent !== null) {
+          this.backupPopup.remove();
+          this.map.setLayoutProperty('redBackupHoveredPin', 'visibility', 'none');
+        } else {
+          this.popup.remove();
+          this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
+        }
+    }
+    else {
+      // Change the cursor style as a UI indicator.
+      this.map.getCanvas().style.cursor = 'pointer';
+      //slice returns a copy of the array rather than the actual array
+      let coords = event.geometry.coordinates.slice();
+      if(this.selectedEvent !== null) {
+        if(event.id !== this.selectedEvent.id) {
+          //add bigger red pin
+          this.map.getSource('redBackupHoveredPin').setData({
+            "geometry": {
+                "type": "Point",
+                "coordinates": coords
+              },
+            "type": "Feature"
+          });
+          this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
+        }
+        this.addPopup(this.backupPopup, coords, event.properties.event_name,
+          this._dateService.formatDate(new Date(event.properties.start_time)));
+      }
+      else {
+        this.map.getSource('hoveredPin').setData({
+          "geometry": {
+            "type": "Point",
+            "coordinates": coords
+          },
+          "type": "Feature"
+        });
+        this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
+        this.addPopup(this.popup, coords, event.properties.event_name,
+          this._dateService.formatEventDate(event));
+      }
+    }
+
   }
 
   threeDDisplay(): void {
