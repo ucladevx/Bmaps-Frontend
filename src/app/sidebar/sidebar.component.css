@@ -25,6 +25,7 @@
     box-sizing: border-box;
     display: inline-block;
     overflow-wrap: break-word;
+    cursor: pointer;
 }
 
 .sidebar-event:hover, .sidebar-event:active{
