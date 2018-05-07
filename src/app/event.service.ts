@@ -30,7 +30,7 @@ export class EventService {
   private _selectedEvent;
   private _category = "all";
 
-  private baseUrl = "https://api.whatsmappening.io/api/v1/events";
+  private baseUrl = "https://www.whatsmappening.io/api/v1/events";
 
   constructor(private http: HttpClient, private dateService: DateService) {
     let today = new Date();
