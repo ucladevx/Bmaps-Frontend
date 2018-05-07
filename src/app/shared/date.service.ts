@@ -1,112 +1,40 @@
 import { Injectable } from '@angular/core';
+import { GeoJson } from '../map';
+import * as moment from 'moment';
 
 @Injectable()
 export class DateService {
-  apiURL = "https://www.whatsmappening.io/api/v1/";
-
-  today = new Date();
-  todayD = this.today.getDate();
-  todayM = this.today.getMonth();
-  todayY = this.today.getFullYear();
-
-  todayDate = new Date();
-  milliDay = 86400000;
-
-  d = this.todayD;
-  m = this.todayM;
-  y = this.todayY;
-
-  currDay = this.today;
-  currCategoryName = "all categories";
-  currDate = "";
-  currDateJSON = {
-    "features": [],
-    "type": "FeatureCollection"
-  }
-  currDateFormattedJSON = {
-    "features": [],
-    "type": "FeatureCollection"
-  }
-  filteredJSON = {
-    "features": [],
-    "type": "FeatureCollection"
-  }
-  //Setting up datalist with searchbox
-  inputBox = document.getElementById('search-input');
-  list = document.getElementById('searchList');
 
   constructor() {
 
   }
 
-  getMonthNameFromMonthNumber(monthNumber: number): string {
-    let monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    return monthNames[monthNumber];
+  getMonthName(date: Date): string {
+    return moment(date).format('MMM');
   }
 
-  formatHour(hour, minutes){
-      let minuteString = ""
-      if (minutes != 0){
-          minuteString = ":" + minutes;
-      }
-      if (hour > 12){
-          hour -= 12;
-          return hour + minuteString + " PM";
-      }
-      else if (hour == 12){
-          return hour + minuteString + " PM";
-      }
-      else if (hour == 24) {
-          hour -= 12;
-          return hour + minuteString + " AM";
-      }
-      else{
-          return hour +  minuteString + " AM";
-      }
+  formatTime(date: Date | string): string {
+    return moment(date).format("h:mmA");
   }
 
-  formatDate(date: Date): any {
-      let month = date.getMonth();
-      let day = date.getDate();
-      let hour = date.getHours();
-      let minutes = date.getMinutes();
+  formatDate(date: Date | string): string {
+    return moment(date).format("MMMM D, YYYY");
+  }
 
-      let dayString = "";
-      if (day < 10) {
-          dayString = "0" + day.toString();
+  formatEventDate(event: GeoJson): string {
+      let start: string = event.properties.start_time;
+      let end: string = event.properties.end_time;
+
+      if (end != "<NONE>"){
+        return `${this.formatDate(start)} \u2022 ${this.formatTime(start)} - ${this.formatTime(end)}`;
       }
       else {
-          dayString = day.toString();
-      }
-      return this.getMonthNameFromMonthNumber(month) + " " + dayString + " &middot; " + this.formatHour(hour, minutes);
-  }
-
-  formatDateItem(item): string {
-      let dateOfStart = new Date(item.properties.start_time);
-      let dateOfEnd = new Date(item.properties.end_time);
-
-      if (item.properties.end_time != "<NONE>"){
-          return this.formatDate(dateOfStart) + " - " + this.formatHour(dateOfEnd.getHours(), dateOfEnd.getMinutes());
-      }
-      else {
-          return this.formatDate(dateOfStart);
+        return `${this.formatDate(start)} \u2022 ${this.formatTime(start)}`;
       }
   }
 
-  formatCategoryItem(item): void {
-      if (item.properties.category == "<NONE>"){
-          item.properties.category = "";
-      }
-      else{
-          item.properties.category = item.properties.category.charAt(0).toUpperCase() + item.properties.category.slice(1).toLowerCase();
-      }
-  }
-
-  equalDates(a: Date, b: Date) {
-    let dateEqual = a.getDate() === b.getDate();
-    let monthEqual = a.getMonth() === b.getMonth();
-    let yearEqual = a.getFullYear() === b.getFullYear();
-    return dateEqual && monthEqual && yearEqual;
+  equalDates(a: Date | string, b: Date | string): boolean {
+    return moment(a).isSame(b, 'day');
   }
 
   //MOVE THIS SOMEWHERE WITHIN THE APP

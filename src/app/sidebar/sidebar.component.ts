@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
@@ -27,48 +27,81 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 })
 export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
-    public selectedEvent: GeoJson;
+    public clickedEvent: GeoJson;
+    public hoveredEvent: GeoJson;
     show: boolean = true;
+    mobileSidebarStatus: boolean = false;
     @Output() pressed: EventEmitter<boolean> = new EventEmitter();
+    @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
     constructor(private eventService: EventService, private _dateService: DateService) { }
 
     ngOnInit() {
         this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
-            // console.log("Filtered Events update", eventCollection.features);
             this.filteredEvents = eventCollection.features;
         });
-        this.eventService.selectedEvent$.subscribe(selectedEventInfo => {
-            // console.log("Sidebar update", selectedEventInfo);
-            this.selectedEvent = selectedEventInfo;
-            // this.selectedEvent = selectedEventInfo;
+        this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+            this.clickedEvent = clickedEventInfo;
+            if (this.clickedEvent != null){
+              this.hideSidebar(this.clickedEvent);
+              console.log("hm");
+            }
+            else {
+              this.showSidebar();
+            }
+            this.scrollToEvent(clickedEventInfo);
+        });
+        this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+            this.hoveredEvent = hoveredEventInfo;
+            this.scrollToEvent(hoveredEventInfo);
         });
     }
 
+    // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
+    // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
-        // console.log("On Select", event);
-        this.selectedEvent = event;
-        this.show = false;
-        this.eventService.updateSelectedEvent(event);
+        this.eventService.updateClickedEvent(event);
+        this.hideSidebar(event);
     }
 
-    showSidebar(result: boolean) {
+    onHover(event: GeoJson): void {
+        this.hoveredEvent = event;
+        this.eventService.updateHoveredEvent(event);
+    }
+
+    hideSidebar(event: GeoJson){
+      this.clickedEvent = event;
+      this.show = false;
+    }
+
+    //output function to reveal sidebar once we exit out of the event detail
+    showSidebar() {
+        if (this.clickedEvent != null) {
+          this.eventService.updateClickedEvent(null);
+        }
         this.show = true;
-        this.eventService.updateSelectedEvent(null);
     }
 
-    mobileSidebarStatus: boolean = false;
     toggleMobileSidebar() {
         this.mobileSidebarStatus = !this.mobileSidebarStatus;
         this.pressed.emit(true);
     }
 
     formatCategory(category: String): string {
-        if (category =="<NONE>"){
-            return "";
+        if (category === '<NONE>') {
+            return '';
         }
-        else {
-            return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+        return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+    }
+
+    // scroll to the DOM element for event
+    scrollToEvent(event: GeoJson): void {
+      if (event) {
+        const index: number = this.filteredEvents.findIndex((e: GeoJson) => e.id == event.id);
+        const element: ElementRef = this.eventList.find((e: ElementRef, i: number) => index == i);
+        if (element) {
+          element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
+      }
     }
 }
