@@ -29,14 +29,16 @@ dora: ecr-login build-dora
 
 ##################      LOCAL DEVELOPMENT (Frontend Only)     ##################
 
-# Build and run frontend image
-dev: build
-	docker run --rm --name frontend-dev -v $(shell pwd)/static:/tmp/static -p "80:80" -it $(APP_NAME)
+# Run a dev server. Navigate to http://localhost:4200/ 
+# The app will automatically reload if you change any of the source files.
+dev: 
+	ng serve
 
-# Enter frontend container
-ash:
-	docker exec -it frontend-dev /bin/ash
+# Open whatever is currently running
+open:
+	ng serve --open
 
-# Update changes made to static files
-files:
-	./node_modules/gulp/bin/gulp.js && cp -r dist/* /app/ && cp -r static/* /app/
+# Runs the docker container locally rather than the dev server.
+# The app will be available at http://localhost:8080
+dev-docker: build
+	docker run -d -p 8080:80 $(APP_NAME)

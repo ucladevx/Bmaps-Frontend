@@ -1,0 +1,26 @@
+.sidebar-container {
+  display: flex;
+  padding-right: 0px;
+  padding-left: 0px;
+  height: calc(100% - 54vh);
+}
+.map-container {
+  display: flex;
+  padding-left: 0px;
+  padding-right: 0px;
+  height: 54vh;
+}
+
+.sidebar-container.hide-map {
+  height: 100%;
+}
+
+.map-container.hide-map {
+  height: auto;
+}
+
+@media only screen and (min-width: 768px) {
+  .sidebar-container, .map-container {
+    height: auto !important;
+  }
+}

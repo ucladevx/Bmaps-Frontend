@@ -1,0 +1,53 @@
+#categ-btn {
+  width: 100%;
+  height: 40px;
+  margin: 0 auto;
+  border-radius: 0px;
+}
+
+#categ-div {
+  width: 100%;
+}
+
+#categ-menu {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.categ-bubble {
+  float: right;
+}
+
+.zero-events {
+  color: #C0C0C0 !important;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: #5dbacd;
+}
+
+.btn-light:hover {
+  color: #5dbacd;
+}
+
+.dropdown-item:active {
+  background-color: #c4e6ed;
+  color: white;
+}
+
+.dropdown-item:focus {
+  background-color: #c4e6ed;
+  color: white;
+}
+
+#categ-btn {
+  z-index: 999;
+}
+
+.dropdown-menu {
+  z-index: 998;
+}
