@@ -12,7 +12,7 @@ const httpOptions = {
 
 @Injectable()
 export class CategoryService {
-  private apiUrl = "http://www.whatsmappening.io/api/v1/events/event-categories";
+  private apiUrl = "https://www.whatsmappening.io/api/v1/events/event-categories";
 
   constructor(
     private http: HttpClient
