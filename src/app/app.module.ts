@@ -18,6 +18,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     EventDetailComponent,
     CategoryBarComponent,
     DateSelectorComponent,
-    NavbarComponent
+    NavbarComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,

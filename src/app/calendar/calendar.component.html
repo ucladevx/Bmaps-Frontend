@@ -1,0 +1,6 @@
+<div class="calendar-month">
+  <div *ngFor="let day of days" class="calendar-day" [ngClass]="{'in-current-month': day.inCurrentMonth}">
+    <span>{{day.date}}</span>
+    <div *ngIf="day.events.length > 0" class="circle"></div>
+  </div>
+</div>
