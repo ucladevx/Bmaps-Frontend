@@ -1,3 +1,12 @@
+<div class="calendar-header">
+  <span>sun</span>
+  <span>mon</span>
+  <span>tue</span>
+  <span>wed</span>
+  <span>thu</span>
+  <span>fri</span>
+  <span>sat</span>
+</div>
 <div class="calendar-month">
   <div *ngFor="let day of days" class="calendar-day" [ngClass]="{'in-current-month': day.inCurrentMonth}">
     <span>{{day.date}}</span>
