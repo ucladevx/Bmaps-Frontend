@@ -1,3 +1,8 @@
+<div class="selector">
+  <i class="fa fa-caret-left" (click)="changeMonth(-1)" aria-hidden="true"></i>
+  <span>{{currentMonth.format('MMMM YYYY')}}</span>
+  <i class="fa fa-caret-right" (click)="changeMonth(1)" aria-hidden="true"></i>
+</div>
 <div class="calendar-header">
   <span>sun</span>
   <span>mon</span>
@@ -8,8 +13,11 @@
   <span>sat</span>
 </div>
 <div class="calendar-month">
-  <div *ngFor="let day of days" class="calendar-day" [ngClass]="{'in-current-month': day.inCurrentMonth}">
-    <span>{{day.date}}</span>
+  <div *ngFor="let day of days"
+    class="calendar-day" [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay }"
+    (click)="selectedDay = day"
+  >
+    <span>{{day.dayOfMonth}}</span>
     <div *ngIf="day.events.length > 0" class="circle"></div>
   </div>
 </div>

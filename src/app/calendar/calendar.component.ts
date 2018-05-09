@@ -5,9 +5,9 @@ import { Moment } from 'moment';
 import { GeoJson } from '../map';
 
 interface CalendarDay {
-  date: number;
-  events: GeoJson[];
+  dayOfMonth: number;
   inCurrentMonth: boolean;
+  events: GeoJson[];
 }
 
 @Component({
@@ -17,6 +17,8 @@ interface CalendarDay {
 })
 export class CalendarComponent implements OnInit {
   private days: CalendarDay[] = [];
+  private selectedDay: CalendarDay;
+  private currentMonth: Moment;
 
   constructor() { }
 
@@ -25,15 +27,40 @@ export class CalendarComponent implements OnInit {
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
-    let firstDay = moment(dateInMonth).startOf('month').startOf('week');
-    let lastDay = moment(dateInMonth).endOf('month').endOf('week');
+    this.currentMonth = moment(dateInMonth).startOf('month');
 
-    for (let day: Moment = firstDay.clone(); day.isBefore(lastDay); day.add(1, 'days')) {
-      this.days.push({
-        date: day.date(),
-        events: this.getEventsOnDate(day),
-        inCurrentMonth: day.isSame(dateInMonth, 'month'),
-      });
+    // range of days shown on calendar
+    let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
+    let lastDay: Moment = moment(dateInMonth).endOf('month').endOf('week');
+
+    this.days = [];
+    for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
+      let calendarDay: CalendarDay = {
+        dayOfMonth: d.date(),
+        inCurrentMonth: d.isSame(dateInMonth, 'month'),
+        events: this.getEventsOnDate(d),
+      };
+
+      this.days.push(calendarDay);
+
+      // set selected day to the date provided
+      if (d.isSame(dateInMonth, 'day')) {
+        this.selectedDay = calendarDay;
+      }
+    }
+  }
+
+  changeMonth(delta: number): void {
+    // 1 means advance one month, -1 means go back one month
+    let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
+
+    if (newMonth.isSame(moment(), 'month')) {
+      // if current month, make selected day today
+      this.showCalendar(new Date());
+    }
+    else {
+      // make selected day the 1st of the month
+      this.showCalendar(newMonth.startOf('month'));
     }
   }
 
@@ -63,5 +90,4 @@ export class CalendarComponent implements OnInit {
       ];
     }
   }
-
 }
