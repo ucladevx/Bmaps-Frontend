@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
@@ -11,7 +11,7 @@ import { EventService } from '../event.service';
     styleUrls: ['./map-box.component.css'],
     providers: [ DateService ]
 })
-export class MapBoxComponent implements OnInit {
+export class MapBoxComponent implements OnInit, AfterViewInit {
   @Input() pressed: boolean;
   // default settings
   map: mapboxgl.Map;
@@ -96,6 +96,10 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.addControls();
+  }
+
+  ngAfterViewInit() {
+      this.map.resize();
   }
 
   addEventLayer(data): void {

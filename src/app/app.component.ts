@@ -13,6 +13,8 @@ export class AppComponent {
 
   public mapEvents: FeatureCollection;
 
+  private currentView: string = 'map';
+
   constructor(private categService: CategoryService){}
 
   ngOnInit(): void {
@@ -24,5 +26,9 @@ export class AppComponent {
   onPressed(pressed) {
       console.log("hello");
       this.pressed = !this.pressed;
+  }
+
+  onChangeView(newView: string): void {
+    this.currentView = newView;
   }
 }

@@ -90,4 +90,8 @@ export class CalendarComponent implements OnInit {
       ];
     }
   }
+
+  onSelect(day: CalendarDay): void {
+    this.selectedDay = day;
+  }
 }

@@ -1,9 +1,10 @@
-<app-navbar></app-navbar>
+<app-navbar (changeView)="onChangeView($event)"></app-navbar>
 <div class="container-fluid flex">
     <div class="row flex">
         <div class="col-sm-12 col-md-7 order-sm-first order-md-last map-container" [ngClass]="{'hide-map' : pressed}">
-            <app-map-box class="flex" [pressed]="pressed"></app-map-box>
+            <app-map-box [hidden]="currentView != 'map'" class="flex" [pressed]="pressed"></app-map-box>
             <!-- Link app's pressed variable to map-box's pressed variable-->
+            <app-calendar [hidden]="currentView != 'calendar'" class="flex"></app-calendar>
         </div>
         <div class="col-sm-12 col-md-5 order-sm-last order-md-first sidebar-container" [ngClass]="{'hide-map': pressed}">
             <app-sidebar class="flex" (pressed)=onPressed($event)></app-sidebar>
