@@ -92,13 +92,21 @@
 }
 
 .move-up {
-    display: block;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: white;
-    color: rgb(216, 216, 216)
+    color: rgb(216, 216, 216);
+    height: 40px;
+    cursor: pointer;
+    font-size: 20px;
 }
 
 app-date-selector {
+    display: none;
+}
+
+.mobile-sidebar-hidden {
     display: none;
 }
 
@@ -106,7 +114,12 @@ app-date-selector {
     .move-up {
         display: none;
     }
+
     app-date-selector {
+        display: block;
+    }
+
+    .mobile-sidebar-hidden {
         display: block;
     }
 }

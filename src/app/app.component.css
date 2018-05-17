@@ -2,13 +2,13 @@
   display: flex;
   padding-right: 0px;
   padding-left: 0px;
-  height: calc(100% - 54vh);
+  height: 40px;
 }
 .map-container {
   display: flex;
   padding-left: 0px;
   padding-right: 0px;
-  height: 54vh;
+  height: calc(100% - 40px);
 }
 
 .sidebar-container.hide-map {
