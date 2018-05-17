@@ -16,7 +16,7 @@ export class DateSelectorComponent implements OnInit {
 
     ngOnInit() {
         this.eventService.currDate$.subscribe(date => {
-            this.dateString = `Events for ${this.dateToString(date)}`;
+            this.dateString = this.dateToString(date);
             this.showLeft = this.showLeftArrow(date);
             this.showRight = this.showRightArrow(date);
         });
