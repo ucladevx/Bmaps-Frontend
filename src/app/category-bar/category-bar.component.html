@@ -1,4 +1,4 @@
-<div id="categ-div" class="btn-group" dropdown>
+<!-- <div id="categ-div" class="btn-group" dropdown>
   <button id="categ-btn" dropdownToggle type="button" class="btn dropdown-toggle">
     {{selectedCategory}}<span class="caret"></span>
   </button>
@@ -11,4 +11,15 @@
     </a>
   </li>
 </ul>
+</div> -->
+
+<div id="categ-div" class="btn-group">
+  <button id="categ-btn" type="button" class="btn dropdown-toggle"
+          (click)="toggleDropdown()">
+    Filters<span class="caret"></span>
+  </button>
+  <div *ngIf="showDropdown" class="dropdown-content">
+    <div class="section-header">Filters</div>
+    <div class="section-header">Categories</div>
+  </div>
 </div>
