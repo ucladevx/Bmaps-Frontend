@@ -15,6 +15,7 @@ import { CategoryService } from './category.service';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
@@ -37,7 +38,8 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     SharedModule,
     AngularFontAwesomeModule,
     CollapseModule.forRoot(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    ButtonsModule.forRoot()
   ],
   providers: [CategoryService, EventService],
   bootstrap: [AppComponent]

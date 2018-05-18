@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 import { CategoryService } from '../category.service';
 import { EventService } from '../event.service';
@@ -15,7 +15,8 @@ export class CategoryBarComponent implements OnInit {
   private categories;
   private events: GeoJson[];
   public selectedCategory = 'all categories';
-  showDropdown = false;
+  private showDropdown = false;
+  private wasInside = false;
 
   constructor(private categService: CategoryService, private eventService: EventService) {}
 
@@ -74,5 +75,19 @@ export class CategoryBarComponent implements OnInit {
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
+  }
+
+  @HostListener('click')
+  clickInside() {
+    this.showDropdown = true;
+    this.wasInside = true;
+  }
+
+  @HostListener('document:click')
+  clickout() {
+    if (!this.wasInside) {
+      this.showDropdown = false;
+    }
+    this.wasInside = false;
   }
 }

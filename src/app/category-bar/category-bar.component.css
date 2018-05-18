@@ -43,7 +43,7 @@
   background-color: white;
   width: 100%;
   overflow: auto;
-  height: 500px;
+  height: 430px;
   z-index: 999;
 }
 
@@ -53,4 +53,25 @@
   padding-left: 10px;
   background-color: #E8E8E8;
   font-size: 14px;
+}
+
+.filters-wrapper {
+  text-align: center;
+}
+
+.filters-bottom-section {
+  margin-bottom: 15px;
+}
+
+.time-filter-group {
+  margin-top: 15px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.categories-list {
+  width: 100%;
+  padding: 0 0 0 0;
 }

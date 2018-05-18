@@ -1,18 +1,3 @@
-<!-- <div id="categ-div" class="btn-group" dropdown>
-  <button id="categ-btn" dropdownToggle type="button" class="btn dropdown-toggle">
-    {{selectedCategory}}<span class="caret"></span>
-  </button>
-  <ul id="categ-menu" *dropdownMenu class="dropdown-menu" role="menu">
-    <li *ngFor="let categObject of categories">
-      <a [ngClass]="{'dropdown-item': true, 'zero-events': categObject.numEvents == undefined}"
-      (click)="filter(categObject.category)">
-      {{categObject.formattedCategory}}
-      <span *ngIf="categObject.numEvents" class="badge badge-secondary categ-bubble">{{categObject.numEvents}}</span>
-    </a>
-  </li>
-</ul>
-</div> -->
-
 <div id="categ-div" class="btn-group">
   <button id="categ-btn" type="button" class="btn dropdown-toggle"
           (click)="toggleDropdown()">
@@ -20,6 +5,50 @@
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
     <div class="section-header">Filters</div>
+    <div class="filters-wrapper">
+      <div class="btn-group time-filter-group">
+        <label class="btn btn-outline-secondary"
+               btnCheckbox tabindex="0" role="button">happening now</label>
+        <label class="btn btn-outline-secondary"
+               btnCheckbox tabindex="0" role="button">upcoming</label>
+        <label class="btn btn-outline-secondary"
+               btnCheckbox tabindex="0" role="button">time periods</label>
+      </div>
+
+      <div class="btn-group loc-filter-group">
+        <label class="btn btn-outline-secondary"
+               btnCheckbox tabindex="0" role="button">on-campus</label>
+        <label class="btn btn-outline-secondary"
+               btnCheckbox tabindex="0" role="button">off-campus</label>
+        <label class="btn btn-outline-secondary"
+               btnCheckbox tabindex="0" role="button">nearby</label>
+      </div>
+
+      <div class="filters-bottom-section">
+        <button type="button" class="btn btn-outline-secondary"
+              [(ngModel)]="singleModel" btnCheckbox
+              btnCheckboxTrue="1" btnCheckboxFalse="0">
+          popular
+        </button>
+        <button type="button" class="btn btn-outline-secondary"
+              [(ngModel)]="singleModel" btnCheckbox
+              btnCheckboxTrue="1" btnCheckboxFalse="0">
+          free food
+        </button>
+      </div>
+    </div>
+
     <div class="section-header">Categories</div>
+    <div class="categories-wrapper">
+      <ul class="categories-list" role="menu">
+        <li *ngFor="let categObject of categories">
+          <a [ngClass]="{'dropdown-item': true, 'zero-events': categObject.numEvents == undefined}"
+          (click)="filter(categObject.category)">
+          {{categObject.formattedCategory}}
+          <span *ngIf="categObject.numEvents" class="badge badge-secondary categ-bubble">{{categObject.numEvents}}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
