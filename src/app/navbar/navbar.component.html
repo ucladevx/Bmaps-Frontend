@@ -1,12 +1,16 @@
 <nav class="navbar navbar-toggleable-md  navbar-default">
     <button (click)="isCollapsed = !isCollapsed" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="d-inline-block align-top" alt="">
+        <i class="fa fa-chevron-down" aria-hidden="true"></i>
     </button>
     <app-date-selector></app-date-selector>
-    <a class="navbar-brand" id="navbar-brand" href="/">
-        <img id="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="d-inline-block align-top" alt="">
-        <span>mappening</span>
-    </a>
+    <div class="navbar-brand">
+      <i class="d-md-none fa fa-sliders" id="filter-dropdown-toggle" aria-hidden="true"></i>
+      <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
+          <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="align-top" alt="">
+          <span>mappening</span>
+      </a>
+    </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent" [collapse]=isCollapsed>
         <ul class="navbar-nav mr-auto">
         </ul>
