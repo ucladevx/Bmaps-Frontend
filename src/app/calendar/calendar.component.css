@@ -45,16 +45,28 @@
 
 .calendar-day {
     position: relative;
-    display: flex;
     flex-basis: 14.2857%; /* 100/7 */
-    justify-content: center;
-    align-items: center;
+    display: block;
     border-right: 1px solid #aaa;
     border-bottom: 1px solid #aaa;
     color: #bebebe;
     background-color: #fff;
 }
 
+.calendar-day span {
+  text-align: center;
+  margin: 5%;
+  float: left;
+  clear: left;
+}
+.calendar-day-event {
+  float: left;
+  clear: left;
+  position: absolute;
+  bottom: 0;
+  font-size: 12px;
+  margin: 1%;
+}
 .calendar-day.in-current-month {
     color: inherit;
 }
@@ -64,10 +76,9 @@
 }
 
 .circle {
-    position: absolute;
-    bottom: 10%;
-    height: 6px;
-    width: 6px;
-    border-radius: 3px;
-    background-color: #59dbd6;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  background: #59dbd6;
+  color: white;
 }

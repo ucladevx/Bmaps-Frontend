@@ -16,10 +16,12 @@
   <div class="calendar-month">
     <div *ngFor="let day of days"
          class="calendar-day"
-         [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay }"
+         [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay}"
          (click)="onSelect(day)">
-      <span>{{day.dayOfMonth}}</span>
-      <div *ngIf="day.events.length > 0" class="circle"></div>
+      <span [ngClass]="{'circle': day.events.length > 0}">{{day.dayOfMonth}}</span>
+      <div class="calendar-day-event" *ngFor="let event of day.events">
+        {{event.properties.name}}
+      </div>
     </div>
   </div>
 </div>

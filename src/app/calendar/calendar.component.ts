@@ -93,5 +93,6 @@ export class CalendarComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
+    console.log(this.selectedDay);
   }
 }
