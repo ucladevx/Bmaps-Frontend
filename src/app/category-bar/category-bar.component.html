@@ -8,7 +8,8 @@
     <div class="filters-wrapper">
       <div class="btn-group time-filter-group">
         <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">happening now</label>
+               btnCheckbox tabindex="0" role="button"
+               (click)="filterClicked('happening now')">happening now</label>
         <label class="btn btn-outline-secondary"
                btnCheckbox tabindex="0" role="button">upcoming</label>
         <label class="btn btn-outline-secondary"
@@ -38,14 +39,14 @@
       </div>
     </div>
 
-    <div class="section-header">Categories</div>
+    <div *ngIf="categHash" class="section-header">Categories</div>
     <div class="categories-wrapper">
       <ul class="categories-list" role="menu">
-        <li *ngFor="let categObject of categories">
-          <a [ngClass]="{'dropdown-item': true, 'zero-events': categObject.numEvents == undefined}"
-          (click)="filter(categObject.category)">
-          {{categObject.formattedCategory}}
-          <span *ngIf="categObject.numEvents" class="badge badge-secondary categ-bubble">{{categObject.numEvents}}</span>
+        <li *ngFor="let categKey of objectKeys(categHash)">
+          <a [ngClass]="{'dropdown-item': true, 'zero-events': categHash[categKey].numEvents == undefined, 'selected': categHash[categKey].selected}"
+          (click)="categoryClicked(categKey)">
+          {{categHash[categKey].formattedCategory}}
+          <span *ngIf="categHash[categKey].numEvents" class="badge badge-secondary categ-bubble">{{categHash[categKey].numEvents}}</span>
           </a>
         </li>
       </ul>

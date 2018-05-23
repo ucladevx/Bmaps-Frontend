@@ -37,6 +37,11 @@ export class DateService {
     return moment(a).isSame(b, 'day');
   }
 
+  parseDateStr(dateStr: string): number {
+    dateStr = dateStr.slice(0, 3) + dateStr.slice(4);
+    return moment(dateStr).valueOf();
+  }
+
   //MOVE THIS SOMEWHERE WITHIN THE APP
   // nextDay() {
   // 	currDay.setDate(currDay.getDate() + 1);

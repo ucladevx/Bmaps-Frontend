@@ -21,9 +21,9 @@
   cursor: pointer;
 }
 
-.btn:hover {
+/* .btn:hover {
   color: #5dbacd;
-}
+} */
 
 .btn-light:hover {
   color: #5dbacd;
@@ -74,4 +74,8 @@ ul {
 .categories-list {
   width: 100%;
   padding: 0 0 0 0;
+}
+
+.selected {
+  background-color: #ff0000;
 }
