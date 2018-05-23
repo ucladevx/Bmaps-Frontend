@@ -89,8 +89,7 @@
     color: #a9a9a9;
 }
 
-.separator
-{
+.separator {
     height: 1px;
     background: rgb(151,151,151);
     background-position: 0, 100%, 0, 100%;
@@ -105,26 +104,4 @@
     height: 40px;
     cursor: pointer;
     font-size: 20px;
-}
-
-app-date-selector {
-    display: none;
-}
-
-.mobile-sidebar-hidden {
-    display: none;
-}
-
-@media only screen and (min-width: 768px) {
-    .move-up {
-        display: none;
-    }
-
-    app-date-selector {
-        display: block;
-    }
-
-    .mobile-sidebar-hidden {
-        display: block;
-    }
 }

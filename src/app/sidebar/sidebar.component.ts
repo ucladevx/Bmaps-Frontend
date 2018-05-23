@@ -6,6 +6,7 @@ import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import {Subject} from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-sidebar',
@@ -31,27 +32,24 @@ export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
-    show: boolean = true;
-    mobileSidebarStatus: boolean = false;
+    private mobileSidebarVisible: boolean = false;
     private _pressed: Subject<void> = new Subject<void>();
     @Output() pressed: Observable<void> = this._pressed.asObservable();
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
-    constructor(private eventService: EventService, private _dateService: DateService) { }
+    constructor(
+        private router: Router,
+        private eventService: EventService,
+        private _dateService: DateService
+    ) {}
 
     ngOnInit() {
+        // TODO: unsubscribe on destroy
         this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
             this.filteredEvents = eventCollection.features;
         });
         this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
             this.clickedEvent = clickedEventInfo;
-            if (this.clickedEvent != null){
-              this.hideSidebar(this.clickedEvent);
-              console.log("hm");
-            }
-            else {
-              this.showSidebar();
-            }
             this.scrollToEvent(clickedEventInfo);
         });
         this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
@@ -64,7 +62,7 @@ export class SidebarComponent implements OnInit {
     // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
         this.eventService.updateClickedEvent(event);
-        this.hideSidebar(event);
+        this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
     }
 
     onHover(event: GeoJson): void {
@@ -72,21 +70,8 @@ export class SidebarComponent implements OnInit {
         this.eventService.updateHoveredEvent(event);
     }
 
-    hideSidebar(event: GeoJson){
-      this.clickedEvent = event;
-      this.show = false;
-    }
-
-    //output function to reveal sidebar once we exit out of the event detail
-    showSidebar() {
-        if (this.clickedEvent != null) {
-          this.eventService.updateClickedEvent(null);
-        }
-        this.show = true;
-    }
-
     toggleMobileSidebar() {
-        this.mobileSidebarStatus = !this.mobileSidebarStatus;
+        this.mobileSidebarVisible = !this.mobileSidebarVisible;
         this._pressed.next();
     }
 

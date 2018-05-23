@@ -16,11 +16,12 @@
 }
 
 .map-container.hide-map {
-  height: auto;
+  display: none;
 }
 
 @media only screen and (min-width: 768px) {
   .sidebar-container, .map-container {
     height: auto !important;
+    display: flex !important;
   }
 }

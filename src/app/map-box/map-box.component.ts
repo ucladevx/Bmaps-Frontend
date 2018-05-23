@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
@@ -12,7 +13,6 @@ import { EventService } from '../event.service';
     providers: [ DateService ]
 })
 export class MapBoxComponent implements OnInit {
-  @Input() pressed: boolean;
   // default settings
   map: mapboxgl.Map;
   message = 'Hello World!';
@@ -45,7 +45,11 @@ export class MapBoxComponent implements OnInit {
 
   private events: FeatureCollection;
 
-  constructor(private _dateService: DateService, private eventService: EventService) {
+  constructor(
+      private router: Router,
+      private _dateService: DateService,
+      private eventService: EventService
+  ) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
@@ -234,11 +238,13 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       //Handle if you reclick an event
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
         this.eventService.updateClickedEvent(null);
+        this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
         return;
       }
 
       //the service then calls selectEvent
       this.eventService.updateClickedEvent(e.features[0]);
+      this.router.navigate(['', {outlets: {sidebar: ['detail', e.features[0].id]}}]);
     });
   }
 

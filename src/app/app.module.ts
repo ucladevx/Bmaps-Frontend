@@ -24,7 +24,7 @@ const appRoutes: Routes = [
   { path: 'map', component: MapBoxComponent },
   //{ path: 'calendar', component: CalendarComponent },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
-  { path: 'detail', outlet: 'sidebar', component: EventDetailComponent },
+  { path: 'detail/:id', outlet: 'sidebar', component: EventDetailComponent },
   { path: '**', redirectTo: '/map(sidebar:list)', pathMatch: 'full' },
 ];
 

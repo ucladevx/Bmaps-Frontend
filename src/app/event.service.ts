@@ -82,39 +82,43 @@ export class EventService {
         });
     }
 
-// Calls updateEvents for the current date + days
-updateDateByDays(days: number) {
-let newDate = this._date;
-newDate.setDate(newDate.getDate() + days);
-this.updateEvents(newDate);
-}
+    // Calls updateEvents for the current date + days
+    updateDateByDays(days: number) {
+        let newDate = this._date;
+        newDate.setDate(newDate.getDate() + days);
+        this.updateEvents(newDate);
+    }
 
-// Filters current events given category name
-filterEvents(category: string): void {
-console.log("FILTERING EVENTS");
-this._category = category;
-if (category === "all") {
-    this.filteredCurrEventsSource.next(this._events);
-    return;
-}
-let tempEvents = new FeatureCollection(this._events.features
-    .filter(e => e.properties.category.toLowerCase() === category.toLowerCase()));
-    this.filteredCurrEventsSource.next(tempEvents);
-}
+    // Filters current events given category name
+    filterEvents(category: string): void {
+        console.log("FILTERING EVENTS");
+        this._category = category;
+        if (category === "all") {
+            this.filteredCurrEventsSource.next(this._events);
+            return;
+        }
+        let tempEvents = new FeatureCollection(this._events.features
+            .filter(e => e.properties.category.toLowerCase() === category.toLowerCase()));
+            this.filteredCurrEventsSource.next(tempEvents);
+    }
 
-// Updates the current clicked event by number
-updateClickedEvent(event: GeoJson): void {
-this._clickedEvent = event;
-this.clickedEventSource.next(this._clickedEvent);
-console.log("updating clicked event");
-console.log(this._clickedEvent);
-}
+    // Updates the current clicked event by number
+    updateClickedEvent(event: GeoJson): void {
+        this._clickedEvent = event;
+        this.clickedEventSource.next(this._clickedEvent);
+        console.log("updating clicked event");
+        console.log(this._clickedEvent);
+    }
 
-// Updates the current hovered event by number
-updateHoveredEvent(event: GeoJson): void {
-this._hoveredEvent = event;
-this.hoveredEventSource.next(this._hoveredEvent);
-console.log("updating hovered event");
-console.log(this._hoveredEvent);
-}
+    // Updates the current hovered event by number
+    updateHoveredEvent(event: GeoJson): void {
+        this._hoveredEvent = event;
+        this.hoveredEventSource.next(this._hoveredEvent);
+        console.log("updating hovered event");
+        console.log(this._hoveredEvent);
+    }
+
+    getEventById(id: string): GeoJson {
+        return this._events.features.find((e: GeoJson) => e.id == id);
+    }
 }

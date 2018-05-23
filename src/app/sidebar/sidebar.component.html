@@ -1,9 +1,9 @@
 <div class="sidebar-outer flex flex-column">
-    <div class="move-up" (click)="toggleMobileSidebar()">
-        <i aria-hidden="true" class="fa fa-lg" [ngClass]="mobileSidebarStatus ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+    <div class="move-up d-md-none" (click)="toggleMobileSidebar()">
+        <i aria-hidden="true" class="fa fa-lg" [ngClass]="mobileSidebarVisible ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
     </div>
-    <div class="sidebar flex flex-column" [hidden]="!show" [ngClass]="{'mobile-sidebar-hidden': !mobileSidebarStatus}">
-        <app-date-selector></app-date-selector>
+    <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-block': !mobileSidebarVisible}">
+        <app-date-selector class="d-none d-md-block"></app-date-selector>
         <app-category-bar></app-category-bar>
         <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">
             <div *ngFor="let event of filteredEvents" #eventList>
@@ -28,5 +28,4 @@
             </div>
         </div>
     </div>
-    <app-event-detail class="flex" [hidden]="show" [event]="clickedEvent" (showSideBarBool)="showSidebar()"></app-event-detail>
 </div>
