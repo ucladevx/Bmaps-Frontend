@@ -32,52 +32,6 @@ export class CategoryBarComponent implements OnInit {
     });
   }
 
-  updateCategories(): void {
-    console.log('UPDATING CATEGORIES');
-    this.categService.getCategories()
-      .subscribe(categs => {
-        let eventMap = this.getEventMap();
-        this.categories = [{
-          category: 'all',
-          formattedCategory: 'all',
-          numEvents: eventMap['all']
-        }];
-        for (let categ of categs.categories) {
-          let categName = categ.category.toLowerCase();
-          let formattedCategName = categName.replace('_', ' ');
-          let categObject = {
-            category: categName,
-            formattedCategory: formattedCategName,
-            numEvents: eventMap[categName]
-          };
-          this.categories.push(categObject);
-        }
-      });
-  }
-
-  private getEventMap() {
-    let eventMap = {};
-    let total = 0;
-    for (let event of this.events) {
-      let eventCateg: string = event.properties.category.toLowerCase();
-      if (eventMap[eventCateg] === undefined) {
-        eventMap[eventCateg] = 1;
-      } else {
-        eventMap[eventCateg]++;
-      }
-      total++;
-    }
-    eventMap['all'] = total;
-    return eventMap;
-  }
-
-  filter(category: string): void {
-    if (category === 'all') this.selectedCategory = 'all categories';
-    else this.selectedCategory = category.toLowerCase().replace('_', ' ');
-    category = category.replace(' ', '_');
-    this.eventService.filterEvents(category);
-  }
-
   filterClicked(filter: string): void {
     this.eventService.toggleFilter(filter);
   }
