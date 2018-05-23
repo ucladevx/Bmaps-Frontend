@@ -1,5 +1,10 @@
 @import "https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css";
 
+:host {
+    display: flex;
+    flex: 1;
+}
+
 /*Override*/
 /* It wont apply the CSS properly to a text injected through innerHTML, so https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling */
 :host ::ng-deep .mapboxgl-popup-content {

@@ -4,6 +4,8 @@ import { EventService } from '../event.service';
 import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import {Subject} from 'rxjs/Subject';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
     selector: 'app-sidebar',
@@ -31,7 +33,8 @@ export class SidebarComponent implements OnInit {
     public hoveredEvent: GeoJson;
     show: boolean = true;
     mobileSidebarStatus: boolean = false;
-    @Output() pressed: EventEmitter<boolean> = new EventEmitter();
+    private _pressed: Subject<void> = new Subject<void>();
+    @Output() pressed: Observable<void> = this._pressed.asObservable();
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
     constructor(private eventService: EventService, private _dateService: DateService) { }
@@ -84,7 +87,7 @@ export class SidebarComponent implements OnInit {
 
     toggleMobileSidebar() {
         this.mobileSidebarStatus = !this.mobileSidebarStatus;
-        this.pressed.emit(true);
+        this._pressed.next();
     }
 
     formatCategory(category: String): string {

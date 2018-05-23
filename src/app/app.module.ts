@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';  // replaces previous Http service
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './app.component';
@@ -18,6 +19,14 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
+
+const appRoutes: Routes = [
+  { path: 'map', component: MapBoxComponent },
+  //{ path: 'calendar', component: CalendarComponent },
+  { path: 'list', outlet: 'sidebar', component: SidebarComponent },
+  { path: 'detail', outlet: 'sidebar', component: EventDetailComponent },
+  { path: '**', redirectTo: '/map(sidebar:list)', pathMatch: 'full' },
+];
 
 @NgModule({
   declarations: [
@@ -37,7 +46,8 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     SharedModule,
     AngularFontAwesomeModule,
     CollapseModule.forRoot(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    RouterModule.forRoot(appRoutes, {useHash: true}),
   ],
   providers: [CategoryService, EventService],
   bootstrap: [AppComponent]

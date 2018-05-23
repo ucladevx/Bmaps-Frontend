@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Observable} from 'rxjs/Rx';
 import { CategoryService } from './category.service';
 import { GeoJson, FeatureCollection } from './map';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +22,13 @@ export class AppComponent {
   }
   pressed = false;
 
-  onPressed(pressed) {
-      console.log("hello");
+  onPressed(): void {
       this.pressed = !this.pressed;
+  }
+
+  onSidebarRouterActivate(component: any): void {
+    if (component instanceof SidebarComponent) {
+      component.pressed.subscribe(() => this.onPressed());
+    }
   }
 }
