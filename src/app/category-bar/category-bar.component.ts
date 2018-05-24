@@ -25,7 +25,6 @@ export class CategoryBarComponent implements OnInit {
   ngOnInit() {
     this.eventService.currEvents$.subscribe(eventCollection => {
       this.events = eventCollection.features;
-      // this.updateCategories();
     });
     this.eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;

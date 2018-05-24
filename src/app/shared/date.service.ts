@@ -25,7 +25,8 @@ export class DateService {
       let start: string = event.properties.start_time;
       let end: string = event.properties.end_time;
 
-      if (end != "<NONE>"){
+      // end might be undefined
+      if (end){
         return `${this.formatDate(start)} \u2022 ${this.formatTime(start)} - ${this.formatTime(end)}`;
       }
       else {

@@ -101,6 +101,7 @@ export class EventService {
           }
         }
         this.categHashSource.next(tempHash);
+        this.applyCategories();
       });
   }
 
@@ -109,11 +110,13 @@ export class EventService {
     let total = 0;
 
     for (let event of this._events.features) {
-      let eventCateg: string = event.properties.category.toLowerCase();
-      if (eventMap[eventCateg] === undefined) {
-        eventMap[eventCateg] = 1;
-      } else {
-        eventMap[eventCateg]++;
+      for (let category of event.properties.categories) {
+        let eventCateg: string = category.toLowerCase();
+        if (eventMap[eventCateg] === undefined) {
+          eventMap[eventCateg] = 1;
+        } else {
+          eventMap[eventCateg]++;
+        }
       }
       total++;
     }
@@ -140,7 +143,7 @@ export class EventService {
     ).subscribe(events => {
       console.log(events);
       this.currEventsSource.next(events);
-      this.filterEvents(this._category);
+      // this.filterEvents(this._category);
 
       // Update list of categories
       this.initCategories();
@@ -154,18 +157,18 @@ export class EventService {
     this.updateEvents(newDate);
   }
 
-  // Filters current events given category name
-  filterEvents(category: string): void {
-    console.log("FILTERING EVENTS");
-    this._category = category;
-    if (category === "all") {
-      this.filteredCurrEventsSource.next(this._events);
-      return;
-    }
-    let tempEvents = new FeatureCollection(this._events.features
-      .filter(e => e.properties.category.toLowerCase() === category.toLowerCase()));
-    this.filteredCurrEventsSource.next(tempEvents);
-  }
+  // Filters current events given category name (OLD CODE)
+  // filterEvents(category: string): void {
+  //   console.log("FILTERING EVENTS");
+  //   this._category = category;
+  //   if (category === "all") {
+  //     this.filteredCurrEventsSource.next(this._events);
+  //     return;
+  //   }
+  //   let tempEvents = new FeatureCollection(this._events.features
+  //     .filter(e => e.properties.category.toLowerCase() === category.toLowerCase()));
+  //   this.filteredCurrEventsSource.next(tempEvents);
+  // }
 
   // Toggle filter
   toggleFilter(filter: string) {
@@ -198,11 +201,15 @@ export class EventService {
   private applyCategories() {
     console.log("APPLYING CATEGORIES");
     let tempEvents = new FeatureCollection([]);
+
     for (let event of this._events.features) {
-      let categObject = this._categHash[event.properties.category.toLowerCase()];
       let allSelected = this._categHash['all'].selected;
-      if (allSelected || (categObject && categObject.selected)) {
-        tempEvents.features.push(event);
+      for (let category of event.properties.categories) {
+        let categObject = this._categHash[category.toLowerCase()];
+        if (allSelected || (categObject && categObject.selected)) {
+          tempEvents.features.push(event);
+          break;
+        }
       }
     }
     this.filteredCurrEventsSource.next(tempEvents);

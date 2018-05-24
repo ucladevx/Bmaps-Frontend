@@ -87,11 +87,15 @@ export class SidebarComponent implements OnInit {
         this.pressed.emit(true);
     }
 
-    formatCategory(category: String): string {
-        if (category === '<NONE>') {
+    formatCategory(categories): string {
+        if (categories) {
             return '';
         }
-        return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+        let categStr: string;
+        for (let category of categories) {
+          categStr += category.charAt(0).toUpperCase() + category.slice(1).toLowerCase() + ', ';
+        }
+        return categStr.slice(0, categStr.length - 2);
     }
 
     // scroll to the DOM element for event
