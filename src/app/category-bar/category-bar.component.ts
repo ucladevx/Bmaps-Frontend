@@ -16,7 +16,7 @@ export class CategoryBarComponent implements OnInit {
   private categHash = undefined;
   private events: GeoJson[];
   public selectedCategory = 'all categories';
-  private showDropdown = false;
+  public showDropdown = false;
   private wasInside = false;
   private filters = ['happening now', 'upcoming', 'time period', 'on-campus', 'off-campus', 'nearby', 'popular', 'free food'];
 
