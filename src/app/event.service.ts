@@ -48,7 +48,7 @@ export class EventService {
   };
   private _categHash;
 
-  private baseUrl = "https://www.whatsmappening.io/api/v1/events";
+  private baseUrl = "https://www.mappening.io/api/v1/events";
 
   constructor(private http: HttpClient, private dateService: DateService, private categService: CategoryService) {
     let today = new Date();

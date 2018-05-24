@@ -4,7 +4,7 @@
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
-    <div class="section-header">Filters</div>
+    <!-- <div class="section-header">Filters</div>
     <div class="filters-wrapper">
       <div class="btn-group time-filter-group">
         <label class="btn btn-outline-secondary"
@@ -37,14 +37,16 @@
           free food
         </button>
       </div>
-    </div>
+    </div> -->
 
     <div *ngIf="categHash" class="section-header">Categories</div>
     <div class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <a [ngClass]="{'dropdown-item': true, 'zero-events': categHash[categKey].numEvents == undefined, 'selected': categHash[categKey].selected}"
+          <a [ngClass]="{'dropdown-item': true, 'zero-events': categHash[categKey].numEvents == undefined || categHash[categKey].numEvents == 0, 'selected': categHash[categKey].selected}"
           (click)="categoryClicked(categKey)">
+          <i *ngIf="!categHash[categKey].selected" class="fa fa-square-o categ-checkbox" aria-hidden="true"></i>
+          <i *ngIf="categHash[categKey].selected" class="fa fa-check-square-o categ-checkbox-checked" aria-hidden="true"></i>
           {{categHash[categKey].formattedCategory}}
           <span *ngIf="categHash[categKey].numEvents" class="badge badge-secondary categ-bubble">{{categHash[categKey].numEvents}}</span>
           </a>
