@@ -93,8 +93,8 @@ export class EventService {
             selected: this._categHash ? this._categHash['all'].selected : true
           }
         };
-        for (let categ of categs.categories) {
-          let categName = categ.category.toLowerCase();
+        for (let categ of categs) {
+          let categName = categ.toLowerCase();
           tempHash[categName] = {
             formattedCategory: categName.replace('_', ' '),
             numEvents: eventMap[categName],

@@ -88,7 +88,7 @@ export class SidebarComponent implements OnInit {
     }
 
     formatCategory(categories): string {
-        if (categories) {
+        if (!categories) {
             return '';
         }
         let categStr: string;
