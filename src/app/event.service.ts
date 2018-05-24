@@ -130,7 +130,8 @@ export class EventService {
     const d = date.getDate();
     const monthName = this.dateService.getMonthName(date);
     const y = date.getFullYear();
-    let dateURL = `${this.baseUrl}/event-date/${d}%20${monthName}%20${y}`;
+    // let dateURL = `${this.baseUrl}/event-date/${d}%20${monthName}%20${y}`;
+    let dateURL = `${this.baseUrl}/search?date=${d}%20${monthName}%20${y}`;
     console.log(dateURL);
     return dateURL; // json we are pulling from for event info
   }
