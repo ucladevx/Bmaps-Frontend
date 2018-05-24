@@ -41,7 +41,7 @@
     }
 }
 
-:host ::ng-deep #popupDate {
+:host ::ng-deep #popupDate, :host ::ng-deep #backupPopupDate {
     color:  #FF3A3A;
     font-size: 11;
 }
