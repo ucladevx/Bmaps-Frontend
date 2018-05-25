@@ -3,6 +3,7 @@
     <button id="left-arrow" class="custom-btn" [routerLink]="['', {outlets: {sidebar: ['list']}}]">
       <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </button>
+    <span class="header-text">Explore Events</span>
   </div>
   <div *ngIf="event && event.properties" class="event-body">
     <img class="event-image" src="{{event.properties.cover_picture}}">
