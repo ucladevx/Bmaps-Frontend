@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Observable} from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/Rx';
 import { CategoryService } from './category.service';
 import { GeoJson, FeatureCollection } from './map';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -16,19 +16,23 @@ export class AppComponent {
 
   constructor(private categService: CategoryService){}
 
+  private pressed: boolean;
+  private pressed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   ngOnInit(): void {
     // this.categService.getCategories()
     //   .subscribe(categs => console.log(categs));
+    this.pressed$.subscribe(pressed => this.pressed = pressed);
   }
-  pressed = false;
 
-  onPressed(): void {
-      this.pressed = !this.pressed;
+  onPress(): void {
+      this.pressed$.next(!this.pressed);
   }
 
   onSidebarRouterActivate(component: any): void {
     if (component instanceof SidebarComponent) {
-      component.pressed.subscribe(() => this.onPressed());
+      component.onPress = () => this.onPress();
+      component.pressed$ = this.pressed$.asObservable();
     }
   }
 }

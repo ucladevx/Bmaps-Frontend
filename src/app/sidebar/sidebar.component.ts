@@ -4,7 +4,6 @@ import { EventService } from '../event.service';
 import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import {Subject} from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { Router } from '@angular/router';
 
@@ -33,8 +32,8 @@ export class SidebarComponent implements OnInit {
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
     private mobileSidebarVisible: boolean = false;
-    private _pressed: Subject<void> = new Subject<void>();
-    @Output() pressed: Observable<void> = this._pressed.asObservable();
+    @Input() onPress: () => void;
+    @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
     constructor(
@@ -56,6 +55,7 @@ export class SidebarComponent implements OnInit {
             this.hoveredEvent = hoveredEventInfo;
             this.scrollToEvent(hoveredEventInfo);
         });
+        this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
     }
 
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
@@ -71,8 +71,7 @@ export class SidebarComponent implements OnInit {
     }
 
     toggleMobileSidebar() {
-        this.mobileSidebarVisible = !this.mobileSidebarVisible;
-        this._pressed.next();
+        this.onPress();
     }
 
     formatCategory(category: String): string {
