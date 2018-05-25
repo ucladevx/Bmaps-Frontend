@@ -3,7 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';  // replaces previous Http service
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
+import { CustomReuseStrategy } from './router-strategy';
 import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './app.component';
@@ -49,7 +50,11 @@ const appRoutes: Routes = [
     BsDropdownModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
   ],
-  providers: [CategoryService, EventService],
+  providers: [
+    CategoryService,
+    EventService,
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
