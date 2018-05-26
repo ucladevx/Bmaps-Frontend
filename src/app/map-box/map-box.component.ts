@@ -35,13 +35,13 @@ export class MapBoxComponent implements OnInit {
     closeButton: false,
     closeOnClick: false,
     offset: 20 // offset upward from pin
-  }).setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>');
+  }).setHTML('<div id="popupContainer"><div id="popupEvent"></div> <div id="popupDate"></div></div>');
 
   backupPopup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
     offset: 20 // offset upward from pin
-  }).setHTML('<div id="backupPopupEvent"></div> <div id="backupPopupDate"></div>');
+  }).setHTML('<div id="backupPopupContainer"><div id="backupPopupEvent"></div> <div id="backupPopupDate"></div></div>');
 
   private events: FeatureCollection;
 
@@ -203,17 +203,20 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.map.addControl(new mapboxgl.NavigationControl());
   }
 
-  addPopup(popup, coords, eventName: string, eventTime: string): void {
+  addPopup(popup, coords, id: string|number, eventName: string, eventTime: string): void {
+    var openDetails = () => this.router.navigate(['', {outlets: {sidebar: ['detail', id]}}]);
     if (popup == this.popup) {
       popup.setLngLat(coords)
         .addTo(this.map);
       document.getElementById('popupEvent').innerHTML = eventName;
       document.getElementById('popupDate').innerHTML = eventTime;
+      document.getElementById('popupContainer').onclick = openDetails;
     } else {
       popup.setLngLat(coords)
         .addTo(this.map);
       document.getElementById('backupPopupEvent').innerHTML = eventName;
       document.getElementById('backupPopupDate').innerHTML = eventTime;
+      document.getElementById('backupPopupContainer').onclick = openDetails;
     }
   }
 
@@ -244,7 +247,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
       //the service then calls selectEvent
       this.eventService.updateClickedEvent(e.features[0]);
-      this.router.navigate(['', {outlets: {sidebar: ['detail', e.features[0].id]}}]);
     });
   }
 
@@ -274,8 +276,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       "type": "Feature"
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-    this.addPopup(this.popup, coords, event.properties.event_name,
-      this._dateService.formatDate(new Date(event.properties.start_time)));
+    this.addPopup(this.popup, coords, event.id, event.properties.event_name,
+      this._dateService.formatEventDate(event));
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
   hoverEvent(event: GeoJson): void {
@@ -305,8 +307,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           });
           this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
         }
-        this.addPopup(this.backupPopup, coords, event.properties.event_name,
-          this._dateService.formatDate(new Date(event.properties.start_time)));
+        this.addPopup(this.backupPopup, coords, event.id, event.properties.event_name,
+          this._dateService.formatEventDate(event));
       }
       else {
         this.map.getSource('hoveredPin').setData({
@@ -317,7 +319,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           "type": "Feature"
         });
         this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-        this.addPopup(this.popup, coords, event.properties.event_name,
+        this.addPopup(this.popup, coords, event.id, event.properties.event_name,
           this._dateService.formatEventDate(event));
       }
     }
