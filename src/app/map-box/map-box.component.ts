@@ -268,7 +268,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       "type": "Feature"
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-    this.addPopup(this.popup, coords, event.properties.event_name,
+    this.addPopup(this.popup, coords, event.properties.name,
       this._dateService.formatDate(new Date(event.properties.start_time)));
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
@@ -299,7 +299,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           });
           this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
         }
-        this.addPopup(this.backupPopup, coords, event.properties.event_name,
+        this.addPopup(this.backupPopup, coords, event.properties.name,
           this._dateService.formatDate(new Date(event.properties.start_time)));
       }
       else {
@@ -311,7 +311,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           "type": "Feature"
         });
         this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-        this.addPopup(this.popup, coords, event.properties.event_name,
+        this.addPopup(this.popup, coords, event.properties.name,
           this._dateService.formatEventDate(event));
       }
     }

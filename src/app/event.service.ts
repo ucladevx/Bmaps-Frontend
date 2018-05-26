@@ -50,6 +50,7 @@ export class EventService {
 
   // private baseUrl = "https://www.mappening.io/api/v1/events";
   private baseUrl = "https://www.mappening.io/api/v2/events"
+  // private baseUrl = "http://0.0.0.0:5000/api/v2/events"
 
   constructor(private http: HttpClient, private dateService: DateService, private categService: CategoryService) {
     let today = new Date();
@@ -93,7 +94,7 @@ export class EventService {
             selected: this._categHash ? this._categHash['all'].selected : true
           }
         };
-        for (let categ of categs) {
+        for (let categ of categs.categories) {
           let categName = categ.toLowerCase();
           tempHash[categName] = {
             formattedCategory: categName.replace('_', ' '),
