@@ -4,7 +4,7 @@ import { EventService } from '../event.service';
 import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
 @Component({

@@ -4,7 +4,6 @@ import {Subject} from 'rxjs/Subject';
 import { FeatureCollection, GeoJson } from './map';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
 import { DateService } from './shared/date.service';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CategoryService } from './category.service';
 import { GeoJson, FeatureCollection } from './map';
 import { SidebarComponent } from './sidebar/sidebar.component';
