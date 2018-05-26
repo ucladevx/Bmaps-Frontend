@@ -34,7 +34,7 @@ export class EventService {
     private _hoveredEvent;
     private _category = "all";
 
-    private baseUrl = "http://www.whatsmappening.io/api/v1/events";
+    private baseUrl = "http://api.mappening.io:5000/api/v1/events";
 
     constructor(private http: HttpClient, private dateService: DateService) {
         let today = new Date();
