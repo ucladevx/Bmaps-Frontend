@@ -91,7 +91,7 @@ export class SidebarComponent implements OnInit {
         if (!categories) {
             return '';
         }
-        let categStr: string;
+        let categStr: string = '';
         for (let category of categories) {
           categStr += category.charAt(0).toUpperCase() + category.slice(1).toLowerCase() + ', ';
         }

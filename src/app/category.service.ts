@@ -13,14 +13,15 @@ const httpOptions = {
 @Injectable()
 export class CategoryService {
   // private apiUrl = "https://www.mappening.io/api/v1/events/event-categories";
-  private apiUrl = "http://www.mappening.io/api/v2/events/categories";
+  // private apiUrl = "http://www.mappening.io/api/v2/events/categories";
+  private apiUrl = "http://0.0.0.0:5000/api/v2/events/categories";
 
   constructor(
     private http: HttpClient
   ) { }
 
   /** GET categories from the server */
-  getCategories(): Observable<string[]> {
-    return this.http.get<string[]>(this.apiUrl);
+  getCategories(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
   }
 }
