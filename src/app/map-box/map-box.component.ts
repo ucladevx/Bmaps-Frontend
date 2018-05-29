@@ -25,6 +25,7 @@ export class MapBoxComponent implements OnInit {
 
   // state
   selectedEvent: any = null;
+  private lastClickEvent: MouseEvent;
 
   // Resources
   pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
@@ -235,6 +236,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
     //CLICK
     this.map.on('click', 'eventlayer', (e) => {
+      // save this event
+      this.lastClickEvent = e.originalEvent;
+
       // Populate the popup and set its coordinates
       // based on the feature found.
 
@@ -247,6 +251,14 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
       //the service then calls selectEvent
       this.eventService.updateClickedEvent(e.features[0]);
+    });
+
+    this.map.on('click', (e: mapboxgl.MapMouseEvent) => {
+      // deselect event if this event was not an eventlayer click
+      if (this.lastClickEvent == e.originalEvent) {
+        this.eventService.updateClickedEvent(null);
+        this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+      }
     });
   }
 
