@@ -1,5 +1,6 @@
 .navbar {
     z-index: 100;
+    flex-wrap: nowrap;
 }
 
 .navbar-default{
@@ -10,6 +11,8 @@
 .navbar-default .navbar-toggler {
     display: flex;
     align-items: center;
+    padding: 0;
+    margin-right: 10px;
 }
 
 .navbar-default .navbar-toggler i {
@@ -34,6 +37,12 @@
 
 .no-display{
     display: none !important;
+}
+
+.navbar-brand {
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
 }
 
 #navbar-brand{
