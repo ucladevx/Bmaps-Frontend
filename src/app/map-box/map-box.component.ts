@@ -78,6 +78,7 @@ export class MapBoxComponent implements OnInit {
       this.threeDDisplay();
       this.hoverPopup();
       this.addArrowControls();
+      this.map.resize();
     });
 
     //Add all Events pins
@@ -205,19 +206,23 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   }
 
   addPopup(popup, coords, id: string|number, eventName: string, eventTime: string): void {
-    var openDetails = () => this.router.navigate(['', {outlets: {sidebar: ['detail', id]}}]);
+    var openDetails = (e: MouseEvent|TouchEvent): void => {
+      this.router.navigate(['', {outlets: {sidebar: ['detail', id]}}]);
+    };
     if (popup == this.popup) {
       popup.setLngLat(coords)
         .addTo(this.map);
       document.getElementById('popupEvent').innerHTML = eventName;
       document.getElementById('popupDate').innerHTML = eventTime;
       document.getElementById('popupContainer').onclick = openDetails;
+      document.getElementById('popupContainer').ontouchstart = openDetails;
     } else {
       popup.setLngLat(coords)
         .addTo(this.map);
       document.getElementById('backupPopupEvent').innerHTML = eventName;
       document.getElementById('backupPopupDate').innerHTML = eventTime;
       document.getElementById('backupPopupContainer').onclick = openDetails;
+      document.getElementById('backupPopupContainer').ontouchstart = openDetails;
     }
   }
 
@@ -255,7 +260,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
     this.map.on('click', (e: mapboxgl.MapMouseEvent) => {
       // deselect event if this event was not an eventlayer click
-      if (this.lastClickEvent == e.originalEvent) {
+      if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
         this.eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
       }
