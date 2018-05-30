@@ -58,9 +58,7 @@ export class MapBoxComponent implements OnInit {
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
     });
-    this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
-      this.hoverEvent(hoveredEventInfo);
-    })
+
     this.buildMap();
     //I think you should use something like this to create all the promises once instead of calling function creating promise several times
     let _promiseMapLoad = this.promiseMapLoad();
@@ -73,6 +71,10 @@ export class MapBoxComponent implements OnInit {
       this.threeDDisplay();
       this.hoverPopup();
       this.addArrowControls();
+      this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+        console.log('here');
+        this.hoverEvent(hoveredEventInfo);
+      });
     });
 
     //Add all Events pins
@@ -269,7 +271,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
     this.addPopup(this.popup, coords, event.properties.name,
-      this._dateService.formatDate(new Date(event.properties.start_time)));
+      this._dateService.formatTime(new Date(event.properties.start_time)));
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
   hoverEvent(event: GeoJson): void {
@@ -300,7 +302,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
         }
         this.addPopup(this.backupPopup, coords, event.properties.name,
-          this._dateService.formatDate(new Date(event.properties.start_time)));
+          this._dateService.formatTime(new Date(event.properties.start_time)));
       }
       else {
         this.map.getSource('hoveredPin').setData({
@@ -312,7 +314,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         });
         this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
         this.addPopup(this.popup, coords, event.properties.name,
-          this._dateService.formatEventDate(event));
+          this._dateService.formatTime(new Date(event.properties.start_time)));
       }
     }
 

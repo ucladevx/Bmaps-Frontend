@@ -13,6 +13,10 @@
   float: right;
 }
 
+.categ-bubble-selected {
+  background-color: #8cd3d6;
+}
+
 .zero-events {
   color: #c6c6c6 !important;
 }

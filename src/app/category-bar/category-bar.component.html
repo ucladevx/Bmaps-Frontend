@@ -48,7 +48,8 @@
           <i *ngIf="!categHash[categKey].selected" class="fa fa-square-o categ-checkbox" aria-hidden="true"></i>
           <i *ngIf="categHash[categKey].selected" class="fa fa-check-square-o categ-checkbox-checked" aria-hidden="true"></i>
           {{categHash[categKey].formattedCategory}}
-          <span *ngIf="categHash[categKey].numEvents" class="badge badge-secondary categ-bubble">{{categHash[categKey].numEvents}}</span>
+          <span *ngIf="categHash[categKey].numEvents"
+                [ngClass]="{'badge': true, 'badge-secondary': true, 'categ-bubble': true, 'categ-bubble-selected': categHash[categKey].selected}">{{categHash[categKey].numEvents}}</span>
           </a>
         </li>
       </ul>
