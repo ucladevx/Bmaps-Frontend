@@ -25,7 +25,8 @@ export class DateService {
       let start: string = event.properties.start_time;
       let end: string = event.properties.end_time;
 
-      if (end != "<NONE>"){
+      // end might be undefined
+      if (end){
         return `${this.formatDate(start)} \u2022 ${this.formatTime(start)} - ${this.formatTime(end)}`;
       }
       else {
@@ -35,6 +36,11 @@ export class DateService {
 
   equalDates(a: Date | string, b: Date | string): boolean {
     return moment(a).isSame(b, 'day');
+  }
+
+  parseDateStr(dateStr: string): number {
+    dateStr = dateStr.slice(0, 3) + dateStr.slice(4);
+    return moment(dateStr).valueOf();
   }
 
   //MOVE THIS SOMEWHERE WITHIN THE APP

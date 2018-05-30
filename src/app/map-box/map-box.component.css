@@ -20,7 +20,7 @@
 }
 
 :host ::ng-deep .mapboxgl-popup-content > div {
-    padding: 10px 10px 15px;
+    padding: 10px 10px 10px;
 }
 
 /*Override*/

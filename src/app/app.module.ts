@@ -17,6 +17,7 @@ import { CategoryService } from './category.service';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
@@ -48,6 +49,7 @@ const appRoutes: Routes = [
     AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
+    ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
   ],
   providers: [

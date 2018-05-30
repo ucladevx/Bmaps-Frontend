@@ -15,13 +15,13 @@
                         <img src="{{event.properties.cover_picture}}" class="sidebar-event-img">
                     </div>
                     <div class="sidebar-event-details">
-                        <p class="sidebar-event-name">{{event.properties.event_name}}</p>
+                        <p class="sidebar-event-name">{{event.properties.name}}</p>
                         <p class="sidebar-event-date">{{_dateService.formatEventDate(event)}}</p>
-                        <p class="sidebar-event-location" *ngIf="event.properties.venue.name;else venue_street">
-                            {{event.properties.venue.name}}
+                        <p class="sidebar-event-location" *ngIf="event.properties.place.name;else venue_street">
+                            {{event.properties.place.name}}
                         </p>
-                        <ng-template #venue_street>{{event.properties.venue.location.street}}</ng-template>
-                        <p class="sidebar-event-category" [innerHTML]="formatCategory(event.properties.category)"></p>
+                        <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
+                        <p class="sidebar-event-category" [innerHTML]="formatCategory(event.properties.categories)"></p>
                     </div>
                 </div>
                 <div class="separator"></div>
