@@ -1,14 +1,30 @@
+:host {
+    --navbar-height: 64px;
+    --sidebartoggle-height: 40px;
+}
+
+app-navbar {
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: var(--navbar-height);
+}
+
+.main {
+    margin-top: var(--navbar-height);
+}
+
 .sidebar-container {
   display: flex;
   padding-right: 0px;
   padding-left: 0px;
-  height: 40px;
+  height: var(--sidebartoggle-height);
 }
 .map-container {
   display: flex;
   padding-left: 0px;
   padding-right: 0px;
-  height: calc(100% - 40px);
+  height: calc(100% - var(--sidebartoggle-height));
 }
 
 .sidebar-container.hide-map {
