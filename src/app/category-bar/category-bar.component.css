@@ -97,3 +97,12 @@ ul {
 a:active {
   background-color: #F0F0F0;
 }
+
+.clear-btn {
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  color: #808080 !important;
+  padding-left: 3px;
+  padding-right: 3px;
+}

@@ -47,6 +47,7 @@ export class EventService {
     'free food': false
   };
   private _categHash;
+  private _selectedCategCount = 0;
 
   // private baseUrl = "https://www.mappening.io/api/v1/events";
   private baseUrl = "https://www.mappening.io/api/v2/events"
@@ -87,13 +88,14 @@ export class EventService {
     this.categService.getCategories()
       .subscribe(categs => {
         let eventMap = this.getEventMap();
-        let tempHash = {
-          'all': {
-            formattedCategory: 'all',
-            numEvents: eventMap['all'],
-            selected: this._categHash ? this._categHash['all'].selected : true
-          }
-        };
+        let tempHash = {};
+        // let tempHash = {
+        //   'all': {
+        //     formattedCategory: 'all',
+        //     numEvents: eventMap['all'],
+        //     selected: this._categHash ? this._categHash['all'].selected : true
+        //   }
+        // };
         for (let categ of categs.categories) {
           let categName = categ.toLowerCase();
           tempHash[categName] = {
@@ -185,6 +187,12 @@ export class EventService {
   toggleCategory(category: string) {
     if (this._categHash[category] != undefined) {
       this._categHash[category].selected = !this._categHash[category].selected;
+      if (this._categHash[category].selected) {
+        this._selectedCategCount++;
+      }
+      else {
+        this._selectedCategCount--;
+      }
     }
     this.applyCategories();
   }
@@ -203,13 +211,18 @@ export class EventService {
   // Appy current _categHash
   private applyCategories() {
     console.log("APPLYING CATEGORIES");
-    let tempEvents = new FeatureCollection([]);
 
+    // If no categories are selected, show all events and return
+    if (this._selectedCategCount == 0) {
+      this.filteredCurrEventsSource.next(this._events);
+      return;
+    }
+
+    let tempEvents = new FeatureCollection([]);
     for (let event of this._events.features) {
-      let allSelected = this._categHash['all'].selected;
       for (let category of event.properties.categories) {
         let categObject = this._categHash[category.toLowerCase()];
-        if (allSelected || (categObject && categObject.selected)) {
+        if (categObject && categObject.selected) {
           tempEvents.features.push(event);
           break;
         }

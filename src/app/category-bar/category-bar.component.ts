@@ -43,6 +43,14 @@ export class CategoryBarComponent implements OnInit {
     this.showDropdown = !this.showDropdown;
   }
 
+  clearCategories(): void {
+    for (let key in this.categHash) {
+      if (this.categHash[key].selected) {
+        this.eventService.toggleCategory(key);
+      }
+    }
+  }
+
   @HostListener('click')
   clickInside() {
     this.wasInside = true;
