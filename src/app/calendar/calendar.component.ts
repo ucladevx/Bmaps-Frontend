@@ -28,9 +28,22 @@ export class CalendarComponent implements OnInit {
     this.showCalendar(new Date());
     this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
         this.filteredEvents = eventCollection.features;
+        console.log(this.filteredEvents);
+    });
+    this.eventService.filteredAllEvents$.subscribe(allEventCollection => {
+      console.log("hwate");
+      console.log(allEventCollection.features);
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
+        // if (this.clickedEvent != null){
+        //   this.hideSidebar(this.clickedEvent);
+        //   console.log("hm");
+        // }
+        // else {
+        //   this.showSidebar();
+        // }
+        // this.scrollToEvent(clickedEventInfo);
     });
   }
 
