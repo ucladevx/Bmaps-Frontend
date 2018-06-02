@@ -4,7 +4,6 @@ import {Subject} from 'rxjs/Subject';
 import { FeatureCollection, GeoJson } from './map';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
 import { DateService } from './shared/date.service';
 import { CategoryService } from './category.service';
 import { CategoryList } from './category';
@@ -232,5 +231,9 @@ export class EventService {
     this.hoveredEventSource.next(this._hoveredEvent);
     console.log("updating hovered event");
     console.log(this._hoveredEvent);
+  }
+
+  getEventById(id: string): GeoJson {
+    return this._events.features.find((e: GeoJson) => e.id == id);
   }
 }
