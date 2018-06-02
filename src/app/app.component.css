@@ -1,17 +1,17 @@
 :host {
-    --navbar-height: 64px;
+    --navbar-height: 58px;
     --sidebartoggle-height: 40px;
 }
 
 app-navbar {
-    position: fixed;
+    /*position: fixed;*/
     z-index: 100;
     width: 100%;
-    height: var(--navbar-height);
+    /*height: var(--navbar-height);*/
 }
 
 .main {
-    margin-top: var(--navbar-height);
+    /*margin-top: var(--navbar-height);*/
 }
 
 .sidebar-container {
