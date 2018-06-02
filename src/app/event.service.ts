@@ -96,7 +96,7 @@ export class EventService {
 
     // Update events for today
     this.updateEvents(today);
-    // this.updateMonthEvents(monthyear);
+    this.updateMonthEvents(monthyear);
   }
 
   // Update categories
@@ -176,14 +176,14 @@ export class EventService {
   // Updates events for given date while persisting the current category
   updateMonthEvents(monthyear: string): void {
     console.log("UPDATING EVENTS");
-    this.currDateSource.next(monthyear);
-    this.http.get <FeatureCollection> (
-      this.getEventsURL()
-    ).subscribe(events => {
-      console.log(events);
-      this.currEventsSource.next(events);
-      this.initCategories(monthyear);
-    });
+    this.currMonthYearSource.next(monthyear);
+    // this.http.get <FeatureCollection> (
+    //   this.getEventsURL()
+    // ).subscribe(events => {
+    //   console.log(events);
+    //   this.currEventsSource.next(events);
+    //   this.initCategories(monthyear);
+    // });
   }
 
   // Calls updateEvents for the current date + days
