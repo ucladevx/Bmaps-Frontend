@@ -21,6 +21,8 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
   { path: 'map', component: MapBoxComponent },
@@ -49,6 +51,7 @@ const appRoutes: Routes = [
     AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
+    ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
     ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
   ],
