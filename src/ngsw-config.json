@@ -38,7 +38,7 @@
     "updateMode": "prefetch",
     "resources": {
       "urls": [
-        "http://www.whatsmappening.io/api/v1/**"
+        "http://www.mappening.io/api/v2/**"
       ]
     }
   }],

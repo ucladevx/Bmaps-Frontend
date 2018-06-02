@@ -3,6 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';  // replaces previous Http service
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
+import { CustomReuseStrategy } from './router-strategy';
 import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './app.component';
@@ -19,9 +21,16 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
-
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+
+const appRoutes: Routes = [
+  { path: 'map', component: MapBoxComponent },
+  //{ path: 'calendar', component: CalendarComponent },
+  { path: 'list', outlet: 'sidebar', component: SidebarComponent },
+  { path: 'detail/:id', outlet: 'sidebar', component: EventDetailComponent },
+  { path: '**', redirectTo: '/map(sidebar:list)', pathMatch: 'full' },
+];
 
 @NgModule({
   declarations: [
@@ -43,9 +52,14 @@ import { environment } from '../environments/environment';
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    RouterModule.forRoot(appRoutes, {useHash: true}),
   ],
-  providers: [CategoryService, EventService],
+  providers: [
+    CategoryService,
+    EventService,
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
