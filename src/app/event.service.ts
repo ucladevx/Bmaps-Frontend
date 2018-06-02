@@ -20,6 +20,8 @@ export class EventService {
   private currEventsSource: BehaviorSubject <FeatureCollection>;
   // holds filtered events that components can see
   private filteredCurrEventsSource: BehaviorSubject <FeatureCollection> ;
+  // holds the current month and year in (MM YYYY) string format
+  private currMonthYearSource: BehaviorSubject <string> ;
   // holds the current date that components can see
   private currDateSource: BehaviorSubject <Date> ;
   // holds clicked event
@@ -170,6 +172,7 @@ export class EventService {
 
   private getEventsURL(): string {
     let allEventsURL = `${this.baseUrl}/`;
+    console.log(allEventsURL);
     return allEventsURL; // json we are pulling from for event info
   }
 
@@ -177,13 +180,13 @@ export class EventService {
   updateMonthEvents(monthyear: string): void {
     console.log("UPDATING EVENTS");
     this.currMonthYearSource.next(monthyear);
-    // this.http.get <FeatureCollection> (
-    //   this.getEventsURL()
-    // ).subscribe(events => {
-    //   console.log(events);
-    //   this.currEventsSource.next(events);
-    //   this.initCategories(monthyear);
-    // });
+    this.http.get <FeatureCollection> (
+      this.getEventsURL()
+    ).subscribe(monthyearEvents => {
+      console.log(monthyearEvents);
+      this.allEventsSource.next(monthyearEvents);
+      this.initCategories(monthyear);
+    });
   }
 
   // Calls updateEvents for the current date + days
@@ -206,7 +209,7 @@ export class EventService {
     if (this._categHash[category] != undefined) {
       this._categHash[category].selected = !this._categHash[category].selected;
     }
-    this.applyCategories();
+    this.applyCategories(category);
   }
 
   // Apply current _filters
@@ -235,7 +238,11 @@ export class EventService {
           }
         }
       }
-    this.filteredCurrEventsSource.next(tempEvents);
+    if (monthyear == ''){
+      this.filteredCurrEventsSource.next(tempEvents);
+    } else {
+      this.filteredAllEventsSource.next(tempEvents);
+    }
   }
 
   // Updates the current clicked event by number
