@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
@@ -30,7 +30,9 @@ export class SidebarComponent implements OnInit {
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
     show: boolean = true;
+    mobileSidebarStatus: boolean = false;
     @Output() pressed: EventEmitter<boolean> = new EventEmitter();
+    @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
     constructor(private eventService: EventService, private _dateService: DateService) { }
 
@@ -40,43 +42,70 @@ export class SidebarComponent implements OnInit {
         });
         this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
             this.clickedEvent = clickedEventInfo;
+            if (this.clickedEvent != null){
+              this.hideSidebar(this.clickedEvent);
+              console.log("hm");
+            }
+            else {
+              this.showSidebar();
+            }
+            this.scrollToEvent(clickedEventInfo);
         });
         this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
             this.hoveredEvent = hoveredEventInfo;
+            this.scrollToEvent(hoveredEventInfo);
         });
     }
 
+    // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
+    // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
-        // console.log("On Select", event);
-        this.clickedEvent = event;
-        this.show = false;
         this.eventService.updateClickedEvent(event);
+        this.hideSidebar(event);
     }
 
     onHover(event: GeoJson): void {
-        console.log('before hovering');
-        console.log(this.hoveredEvent);
         this.hoveredEvent = event;
         this.eventService.updateHoveredEvent(event);
     }
 
-    showSidebar(result: boolean) {
-        this.show = true;
-        this.eventService.updateClickedEvent(null);
+    hideSidebar(event: GeoJson){
+      this.clickedEvent = event;
+      this.show = false;
     }
 
-    mobileSidebarStatus: boolean = false;
+    //output function to reveal sidebar once we exit out of the event detail
+    showSidebar() {
+        if (this.clickedEvent != null) {
+          this.eventService.updateClickedEvent(null);
+        }
+        this.show = true;
+    }
+
     toggleMobileSidebar() {
         this.mobileSidebarStatus = !this.mobileSidebarStatus;
         this.pressed.emit(true);
     }
 
-    formatCategory(category: String): string {
-        if (category =="<NONE>"){
-            return "";
+    formatCategory(categories): string {
+        if (!categories) {
+            return '';
         }
-        else {
-            return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+        let categStr: string = '';
+        for (let category of categories) {
+          categStr += category.charAt(0).toUpperCase() + category.slice(1).toLowerCase() + ', ';
         }
+        return categStr.slice(0, categStr.length - 2);
+    }
+
+    // scroll to the DOM element for event
+    scrollToEvent(event: GeoJson): void {
+      if (event) {
+        const index: number = this.filteredEvents.findIndex((e: GeoJson) => e.id == event.id);
+        const element: ElementRef = this.eventList.find((e: ElementRef, i: number) => index == i);
+        if (element) {
+          element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
     }
 }
