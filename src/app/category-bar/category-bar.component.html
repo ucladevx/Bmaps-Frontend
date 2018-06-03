@@ -1,6 +1,7 @@
 <div id="categ-div" class="btn-group">
   <button id="categ-btn" type="button" class="btn dropdown-toggle"
-          (click)="toggleDropdown()">
+          (click)="toggleDropdown()"
+          [disabled]="events.length == 0">
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
@@ -46,8 +47,9 @@
     <div class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <a [ngClass]="{'dropdown-item': true, 'zero-events': categHash[categKey].numEvents == undefined || categHash[categKey].numEvents == 0, 'selected': categHash[categKey].selected}"
-          (click)="categoryClicked(categKey)">
+          <a *ngIf="categHash[categKey].numEvents != undefined && categHash[categKey].numEvents > 0"
+             [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+             (click)="categoryClicked(categKey)">
           <i *ngIf="!categHash[categKey].selected" class="fa fa-square-o categ-checkbox" aria-hidden="true"></i>
           <i *ngIf="categHash[categKey].selected" class="fa fa-check-square-o categ-checkbox-checked" aria-hidden="true"></i>
           {{categHash[categKey].formattedCategory}}
