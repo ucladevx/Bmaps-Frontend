@@ -101,9 +101,10 @@ export class EventService {
           tempHash[categName] = {
             formattedCategory: categName.replace('_', ' '),
             numEvents: eventMap[categName],
-            selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
+            selected: false
           }
         }
+        this._selectedCategCount = 0;
         this.categHashSource.next(tempHash);
         this.applyCategories();
       });
