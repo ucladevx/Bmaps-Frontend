@@ -74,7 +74,7 @@ export class CalendarComponent implements OnInit {
   changeMonth(delta: number): void {
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
-
+    console.log(newMonth);
     if (newMonth.isSame(moment(), 'month')) {
       // if current month, make selected day today
       this.showCalendar(new Date());
@@ -83,6 +83,9 @@ export class CalendarComponent implements OnInit {
       // make selected day the 1st of the month
       this.showCalendar(newMonth.startOf('month'));
     }
+    // console.log(newMonth.month().toString() + " " + newMonth.year().toString());
+    let monthyear = newMonth.month().toString() + " " + newMonth.year().toString()
+    this.eventService.updateMonthEvents(monthyear);
   }
 
   getEventsOnDate(date: Moment): GeoJson[] {

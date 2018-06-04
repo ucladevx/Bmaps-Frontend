@@ -184,9 +184,32 @@ export class EventService {
       this.getEventsURL()
     ).subscribe(monthyearEvents => {
       console.log(monthyearEvents);
-      this.allEventsSource.next(monthyearEvents);
+      this.allEventsSource.next(this.filterByMonthYear(monthyearEvents, monthyear));
       this.initCategories(monthyear);
     });
+  }
+
+  filterByMonthYear(monthyearEvents, monthyear){
+    console.log(monthyearEvents);
+    console.log(monthyear);
+    let tempEvents = new FeatureCollection([]);
+    var filteredJSON = monthyearEvents.features.filter(el => {
+      var d = new Date(el.properties.start_time);
+      var month = d.getMonth();
+      var year = d.getYear() - 100 + 2000;
+      console.log(month);
+      console.log(year);
+      var res = monthyear.split(" ");
+      console.log(Number(res[0]));
+      console.log(Number(res[1]));
+      if ((month == Number(res[0])) && (year == Number(res[1])))
+        tempEvents.features.push(el)
+      return (month == Number(res[0])) && (year == Number(res[1]));
+    });
+    console.log(tempEvents);
+    // var monthyearEvents.features = filteredJSON;
+    // console.log(monthyearEvents);
+    return monthyearEvents;
   }
 
   // Calls updateEvents for the current date + days
@@ -226,21 +249,44 @@ export class EventService {
   // Appy current _categHash
   private applyCategories(monthyear: string) {
     console.log("APPLYING CATEGORIES");
-    // apply monthyear here
-    let tempEvents = new FeatureCollection([]);
-      for (let event of this._events.features) {
-        let allSelected = this._categHash['all'].selected;
-        for (let category of event.properties.categories) {
-          let categObject = this._categHash[category.toLowerCase()];
-          if (allSelected || (categObject && categObject.selected)) {
-            tempEvents.features.push(event);
-            break;
+    if (monthyear == ''){
+      console.log("monthyear is nothing");
+      let tempEvents = new FeatureCollection([]);
+        for (let event of this._events.features) {
+          let allSelected = this._categHash['all'].selected;
+          for (let category of event.properties.categories) {
+            let categObject = this._categHash[category.toLowerCase()];
+            if (allSelected || (categObject && categObject.selected)) {
+              tempEvents.features.push(event);
+              break;
+            }
           }
         }
-      }
-    if (monthyear == ''){
       this.filteredCurrEventsSource.next(tempEvents);
     } else {
+      console.log("monthyear is something");
+      console.log(monthyear);
+      let tempEvents = new FeatureCollection([]);
+        for (let event of this._events.features) {
+          var d = new Date(event.properties.start_time);
+          var month = d.getMonth();
+          var year = d.getYear() - 100 + 2000;
+          console.log(month);
+          console.log(year);
+          var res = monthyear.split(" ");
+          console.log(Number(res[0]));
+          console.log(Number(res[1]));
+          console.log (month == Number(res[0]));
+          console.log (year == Number(res[1]));
+          let allSelected = this._categHash['all'].selected;
+          for (let category of event.properties.categories) {
+            let categObject = this._categHash[category.toLowerCase()];
+            if (( allSelected || (categObject && categObject.selected)) && (month == res[0] && year == res[1])) {
+              tempEvents.features.push(event);
+              break;
+            }
+          }
+        }
       this.filteredAllEventsSource.next(tempEvents);
     }
   }
