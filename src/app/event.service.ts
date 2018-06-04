@@ -193,7 +193,7 @@ export class EventService {
     console.log(monthyearEvents);
     console.log(monthyear);
     let tempEvents = new FeatureCollection([]);
-    var filteredJSON = monthyearEvents.features.filter(el => {
+    monthyearEvents.features.filter(el => {
       var d = new Date(el.properties.start_time);
       var month = d.getMonth();
       var year = d.getYear() - 100 + 2000;
@@ -204,12 +204,9 @@ export class EventService {
       console.log(Number(res[1]));
       if ((month == Number(res[0])) && (year == Number(res[1])))
         tempEvents.features.push(el)
-      return (month == Number(res[0])) && (year == Number(res[1]));
     });
     console.log(tempEvents);
-    // var monthyearEvents.features = filteredJSON;
-    // console.log(monthyearEvents);
-    return monthyearEvents;
+    return tempEvents;
   }
 
   // Calls updateEvents for the current date + days
@@ -267,21 +264,11 @@ export class EventService {
       console.log("monthyear is something");
       console.log(monthyear);
       let tempEvents = new FeatureCollection([]);
-        for (let event of this._events.features) {
-          var d = new Date(event.properties.start_time);
-          var month = d.getMonth();
-          var year = d.getYear() - 100 + 2000;
-          console.log(month);
-          console.log(year);
-          var res = monthyear.split(" ");
-          console.log(Number(res[0]));
-          console.log(Number(res[1]));
-          console.log (month == Number(res[0]));
-          console.log (year == Number(res[1]));
+        for (let event of this._allevents.features) {
           let allSelected = this._categHash['all'].selected;
           for (let category of event.properties.categories) {
             let categObject = this._categHash[category.toLowerCase()];
-            if (( allSelected || (categObject && categObject.selected)) && (month == res[0] && year == res[1])) {
+            if (allSelected || (categObject && categObject.selected)) {
               tempEvents.features.push(event);
               break;
             }

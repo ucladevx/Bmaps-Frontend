@@ -20,6 +20,7 @@ export class CalendarComponent implements OnInit {
   private selectedDay: CalendarDay;
   private currentMonth: Moment;
   private filteredEvents: GeoJson[];
+  private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
 
   constructor(private eventService: EventService) { }
@@ -31,8 +32,9 @@ export class CalendarComponent implements OnInit {
         console.log(this.filteredEvents);
     });
     this.eventService.filteredAllEvents$.subscribe(allEventCollection => {
-      console.log("hwate");
-      console.log(allEventCollection.features);
+      // console.log(allEventCollection.features);
+      this.filteredMonthYearEvents = allEventCollection.features;
+      console.log(this.filteredMonthYearEvents);
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
