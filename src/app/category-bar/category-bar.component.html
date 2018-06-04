@@ -5,25 +5,30 @@
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
-    <!-- <div class="section-header">Filters</div>
+    <div class="section-header">Filters</div>
     <div class="filters-wrapper">
-      <div class="btn-group time-filter-group">
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button"
-               (click)="filterClicked('happening now')">happening now</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">upcoming</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">time periods</label>
+      <div class="time-filter-group">
+        <div class="btn-group">
+          <label (click)="filterClicked('happening now')"
+                 class="btn btn-outline-secondary"
+                 [ngClass]="{'active': filters['happening now']}">happening now</label>
+          <label class="btn btn-outline-secondary"
+                 (click)="filterClicked('upcoming')"
+                 [ngClass]="{'active': filters['upcoming']}">upcoming</label>
+          <label class="btn btn-outline-secondary"
+                 btnCheckbox tabindex="0" role="button">time periods</label>
+        </div>
       </div>
 
-      <div class="btn-group loc-filter-group">
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">on-campus</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">off-campus</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">nearby</label>
+      <div class="loc-filter-group">
+        <div class="btn-group">
+          <label class="btn btn-outline-secondary"
+                 btnCheckbox tabindex="0" role="button">on-campus</label>
+          <label class="btn btn-outline-secondary"
+                 btnCheckbox tabindex="0" role="button">off-campus</label>
+          <label class="btn btn-outline-secondary"
+                 btnCheckbox tabindex="0" role="button">nearby</label>
+        </div>
       </div>
 
       <div class="filters-bottom-section">
@@ -38,7 +43,7 @@
           free food
         </button>
       </div>
-    </div> -->
+    </div>
 
     <div *ngIf="categHash" class="section-header">
       Categories

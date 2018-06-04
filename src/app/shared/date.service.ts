@@ -5,9 +5,7 @@ import * as moment from 'moment';
 @Injectable()
 export class DateService {
 
-  constructor() {
-
-  }
+  constructor() {}
 
   getMonthName(date: Date): string {
     return moment(date).format('MMM');
@@ -41,6 +39,30 @@ export class DateService {
   parseDateStr(dateStr: string): number {
     dateStr = dateStr.slice(0, 3) + dateStr.slice(4);
     return moment(dateStr).valueOf();
+  }
+
+  // Returns true if moment mmt is between moments start and end
+  checkRange(mmt, start, end): boolean {
+    let val = mmt.valueOf();
+    return (val >= start.valueOf() && val <= end.valueOf());
+  }
+
+  // Returns true if given time is 'happening now'
+  isHappeningNow(dateStr: string): boolean {
+    let range = {
+      start: moment(),
+      end: moment().add(2, 'hours')
+    };
+    return this.checkRange(moment(dateStr), range.start, range.end);
+  }
+
+  // Returns true if given time is 'upcoming'
+  isUpcoming(dateStr: string): boolean {
+    let range = {
+      start: moment().add(2, 'hours'),
+      end: moment().add(7, 'hours')
+    };
+    return this.checkRange(moment(dateStr), range.start, range.end);
   }
 
   //MOVE THIS SOMEWHERE WITHIN THE APP

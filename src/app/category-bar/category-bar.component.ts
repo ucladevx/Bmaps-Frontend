@@ -18,7 +18,15 @@ export class CategoryBarComponent implements OnInit {
   public selectedCategory = 'all categories';
   public showDropdown = false;
   private wasInside = false;
-  private filters = ['happening now', 'upcoming', 'time period', 'on-campus', 'off-campus', 'nearby', 'popular', 'free food'];
+  // private filters = ['happening now', 'upcoming', 'time period', 'on-campus', 'off-campus', 'nearby', 'popular', 'free food'];
+  private filters = {
+    'happening now': false,
+    'upcoming': false,
+    'on-campus': false,
+    'off-campus': false,
+    'nearby': false,
+    'free food': false
+  };
 
   constructor(private categService: CategoryService, private eventService: EventService) {}
 
@@ -32,6 +40,7 @@ export class CategoryBarComponent implements OnInit {
   }
 
   filterClicked(filter: string): void {
+    this.filters[filter] = !this.filters[filter];
     this.eventService.toggleFilter(filter);
   }
 

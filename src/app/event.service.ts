@@ -47,6 +47,7 @@ export class EventService {
     'free food': false
   };
   private _categHash;
+  private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
 
   // private baseUrl = "https://www.mappening.io/api/v1/events";
@@ -84,7 +85,7 @@ export class EventService {
   }
 
   // Update categories
-  private initCategories() {
+  private updateCategories() {
     this.categService.getCategories()
       .subscribe(categs => {
         let eventMap = this.getEventMap();
@@ -104,9 +105,8 @@ export class EventService {
             selected: false
           }
         }
-        this._selectedCategCount = 0;
         this.categHashSource.next(tempHash);
-        this.applyCategories();
+        this.applyFiltersAndCategories();
       });
   }
 
@@ -149,10 +149,11 @@ export class EventService {
     ).subscribe(events => {
       console.log(events);
       this.currEventsSource.next(events);
-      // this.filterEvents(this._category);
 
-      // Update list of categories
-      this.initCategories();
+      // Update list of categories and reset filters
+      this._selectedFilterCount = 0;
+      this._selectedCategCount = 0;
+      this.updateCategories();
     });
   }
 
@@ -180,8 +181,14 @@ export class EventService {
   toggleFilter(filter: string) {
     if (this._filters[filter] != undefined) {
       this._filters[filter] = !this._filters[filter];
+      if (this._filters[filter]) {
+        this._selectedFilterCount++;
+      }
+      else {
+        this._selectedFilterCount--;
+      }
     }
-    this.applyFilters();
+    this.applyFiltersAndCategories();
   }
 
   // Toggle category
@@ -195,41 +202,95 @@ export class EventService {
         this._selectedCategCount--;
       }
     }
-    this.applyCategories();
+    this.applyFiltersAndCategories();
   }
 
   // Apply current _filters
-  private applyFilters() {
-    console.log("APPLYING FILTERS");
-    let tempEvents = new FeatureCollection([]);
-    for (let event in this._events.features) {
-      if (this._filters['happening now']) {
-        console.log('Filtering by happening now');
-      }
-    }
-  }
+  // private applyFilters() {
+  //   console.log("APPLYING FILTERS");
+  //   console.log(this._filters);
+  //   let tempEvents = new FeatureCollection([]);
+  //   for (let event of this._events.features) {
+  //     if (this._filters['happening now'] && this.dateService.isHappeningNow(event.start_time)) {
+  //       tempEvents.features.push(event);
+  //     }
+  //   }
+  //   this.filteredCurrEventsSource.next(tempEvents);
+  // }
 
   // Appy current _categHash
-  private applyCategories() {
-    console.log("APPLYING CATEGORIES");
+  // private applyCategories() {
+  //   console.log("APPLYING CATEGORIES");
+  //
+  //   // If no categories are selected, show all events and return
+  //   if (this._selectedCategCount == 0) {
+  //     this.filteredCurrEventsSource.next(this._events);
+  //     return;
+  //   }
+  //
+  //   let tempEvents = new FeatureCollection([]);
+  //   for (let event of this._events.features) {
+  //     for (let category of event.properties.categories) {
+  //       let categObject = this._categHash[category.toLowerCase()];
+  //       if (categObject && categObject.selected) {
+  //         tempEvents.features.push(event);
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   this.filteredCurrEventsSource.next(tempEvents);
+  // }
 
-    // If no categories are selected, show all events and return
-    if (this._selectedCategCount == 0) {
-      this.filteredCurrEventsSource.next(this._events);
-      return;
-    }
+  private applyFiltersAndCategories() {
+    console.log("APPLYING FILTERS & CATEGORIES");
 
     let tempEvents = new FeatureCollection([]);
-    for (let event of this._events.features) {
-      for (let category of event.properties.categories) {
-        let categObject = this._categHash[category.toLowerCase()];
-        if (categObject && categObject.selected) {
-          tempEvents.features.push(event);
-          break;
+    if (this._selectedCategCount == 0) {
+      // If no categories selected, show all events
+      tempEvents = this._events;
+    }
+    else {
+      // Otherwise apply categories
+      for (let event of this._events.features) {
+        for (let category of event.properties.categories) {
+          let categObject = this._categHash[category.toLowerCase()];
+          if (categObject && categObject.selected) {
+            tempEvents.features.push(event);
+            break;
+          }
         }
       }
     }
-    this.filteredCurrEventsSource.next(tempEvents);
+
+    let tempEvents2 = new FeatureCollection([]);
+    if (this._selectedFilterCount == 0) {
+      // If no filters selected, show all tempEvents
+      tempEvents2 = tempEvents;
+    }
+    else {
+      // Otherwise apply filters
+      for (let event of tempEvents.features) {
+        for (let filter in this._filters) {
+          if (this._filters[filter] && this.checkFilter(filter, event)) {
+            tempEvents2.features.push(event);
+            break;
+          }
+        }
+      }
+    }
+
+    this.filteredCurrEventsSource.next(tempEvents2);
+  }
+
+  // Returns true if event passes the given filter
+  private checkFilter(filter: string, event): boolean {
+    if (filter == 'happening now') {
+      return this.dateService.isHappeningNow(event.properties.start_time);
+    }
+    else if (filter == 'upcoming') {
+      return this.dateService.isUpcoming(event.properties.start_time);
+    }
+    return false;
   }
 
   // Updates the current clicked event by number
