@@ -10,25 +10,25 @@
       <div class="time-filter-group">
         <div class="btn-group">
           <label (click)="filterClicked('happening now')"
-                 class="btn btn-outline-secondary"
+                 class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['happening now']}">happening now</label>
-          <label class="btn btn-outline-secondary"
+          <label class="btn btn-outline-secondary filter-btn"
                  (click)="filterClicked('upcoming')"
                  [ngClass]="{'active': filterHash['upcoming']}">upcoming</label>
-          <label class="btn btn-outline-secondary"
+          <label class="btn btn-outline-secondary filter-btn"
                  btnCheckbox tabindex="0" role="button">time periods</label>
         </div>
       </div>
 
       <div class="loc-filter-group">
         <div class="btn-group">
-          <label class="btn btn-outline-secondary"
+          <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['on-campus']}"
                  (click)="filterClicked('on-campus')">on-campus</label>
-          <label class="btn btn-outline-secondary"
+          <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['off-campus']}"
                  (click)="filterClicked('off-campus')">off-campus</label>
-          <label class="btn btn-outline-secondary"
+          <label class="btn btn-outline-secondary filter-btn"
                  btnCheckbox tabindex="0" role="button">nearby</label>
         </div>
       </div>

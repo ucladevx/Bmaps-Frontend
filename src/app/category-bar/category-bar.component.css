@@ -44,7 +44,7 @@
 
 .dropdown-content {
   position: absolute;
-  top: 42px;
+  top: 40px;
   background-color: white;
   width: 100%;
   overflow: auto;
@@ -110,4 +110,28 @@ a:active {
   color: #808080 !important;
   padding-left: 3px;
   padding-right: 3px;
+}
+
+.btn.filter-btn {
+  border-color: #ffffff;
+  border-width: 2px;
+  background-color: #E8E8E8;
+}
+
+.btn.filter-btn:hover {
+  background-color: #F5F5F5;
+  color: #6d747c;
+}
+
+.btn.filter-btn.active:hover {
+  color: #ffffff;
+}
+
+.btn.filter-btn:active {
+  border-color: #ffffff;
+}
+
+.btn.filter-btn.active {
+  background-color: #8dd3d6;
+  border-color: #ffffff;
 }
