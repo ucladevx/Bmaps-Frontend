@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Input } from '@angular/core';
 
 import { CategoryService } from '../category.service';
 import { EventService } from '../event.service';
@@ -12,6 +12,7 @@ import { NgClass } from '@angular/common';
 })
 
 export class CategoryBarComponent implements OnInit {
+  @Input() showToggleButton: boolean;
   private categHash = undefined;
   private filterHash = undefined;
   private events: GeoJson[];

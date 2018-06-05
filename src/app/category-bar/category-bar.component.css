@@ -52,6 +52,11 @@
   z-index: 999;
 }
 
+.dropdown-content.show-toggle-btn {
+  position: absolute;
+  top: 42px;
+}
+
 .section-header {
   padding-top: 8px;
   padding-bottom: 8px;
