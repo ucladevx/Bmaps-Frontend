@@ -191,7 +191,7 @@ export class EventService {
 
   filterByMonthYear(monthyearEvents, monthyear){
     let tempEvents = new FeatureCollection([]);
-    monthyearEvents.features.filter(el => {
+    monthyearEvents.features.forEach(el => {
       var d = new Date(el.properties.start_time);
       var month = d.getMonth();
       var year = d.getFullYear();

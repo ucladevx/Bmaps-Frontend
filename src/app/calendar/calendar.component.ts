@@ -22,34 +22,24 @@ export class CalendarComponent implements OnInit {
   private filteredEvents: GeoJson[];
   private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
+  private eventsByDay: GeoJson{};
 
   constructor(private eventService: EventService) { }
 
   ngOnInit() {
-    this.showCalendar(new Date());
-    this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
-        this.filteredEvents = eventCollection.features;
-        console.log(this.filteredEvents);
-    });
     this.eventService.filteredAllEvents$.subscribe(allEventCollection => {
-      // console.log(allEventCollection.features);
       this.filteredMonthYearEvents = allEventCollection.features;
       console.log(this.filteredMonthYearEvents);
+      this.showCalendar(new Date());
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
-        // if (this.clickedEvent != null){
-        //   this.hideSidebar(this.clickedEvent);
-        //   console.log("hm");
-        // }
-        // else {
-        //   this.showSidebar();
-        // }
-        // this.scrollToEvent(clickedEventInfo);
     });
+    // this.showCalendar(new Date());
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
+    this.fillEventsByDay();
     this.currentMonth = moment(dateInMonth).startOf('month');
 
     // range of days shown on calendar
@@ -58,6 +48,7 @@ export class CalendarComponent implements OnInit {
 
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
+      console.log(this.getEventsOnDate(d));
       let calendarDay: CalendarDay = {
         dayOfMonth: d.date(),
         inCurrentMonth: d.isSame(dateInMonth, 'month'),
@@ -90,31 +81,27 @@ export class CalendarComponent implements OnInit {
     this.eventService.updateMonthEvents(monthyear);
   }
 
+  fillEventsByDay(){
+    console.log("hey");
+    console.log(this.filteredMonthYearEvents);
+    this.filteredMonthYearEvents.forEach(el => {
+      let eventDate = moment(el.properties.start_time);
+      console.log(el)
+      console.log(eventDate.dayOfYear());
+      console.log(this.eventsByDay);
+      let dayOfYear = eventDate.dayOfYear();
+      this.eventsByDay.dayOfYear.push(el);
+      console.log(this.eventsByDay[eventDate.dayOfYear()]);
+    });
+  }
+
   getEventsOnDate(date: Moment): GeoJson[] {
-    console.log()
-    // test data
-    if (date.date() % 3 != 0) {
-      return [];
+    let dayOfYear = date.dayOfYear();
+    if (dayOfYear in this.eventsByDay){
+      return [this.eventsByDay[dayOfYear]];
     }
     else {
-      return [
-        {
-          "geometry": {
-            "coordinates": [-118.44681959102,
-            34.070367696979
-            ],
-            "type": "Point"
-          },
-          "id": "175752283196850",
-          "properties": {
-            "end_time": "2018-04-01T15:00:00-0700",
-            "hoster": "LA Hacks",
-            "name": "LA Hacks 2018",
-            "start_time": "2018-03-30T16:00:00-0700",
-          },
-          "type": "Feature"
-        },
-      ];
+      return [];
     }
   }
 
