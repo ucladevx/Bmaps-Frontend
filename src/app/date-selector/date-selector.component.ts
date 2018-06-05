@@ -34,7 +34,7 @@ export class DateSelectorComponent implements OnInit {
     private dateToString(date: Date): string {
         let day = date.getDate();
         let month = this.dateService.getMonthName(date);
-        
+
         let description = '';
         let today = new Date();
         let tomorrow = new Date();
@@ -50,6 +50,7 @@ export class DateSelectorComponent implements OnInit {
     }
 
     public updateDate(days: number) {
+      console.log(days);
         // 1 means advance one day, -1 means go back one day
         this.eventService.updateDateByDays(days);
     }

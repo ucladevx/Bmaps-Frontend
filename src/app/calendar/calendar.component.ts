@@ -30,15 +30,15 @@ export class CalendarComponent implements OnInit {
     this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
       console.log(this.filteredMonthYearEvents);
-      this.showCalendar(new Date());
+      this.fillEventsByDay();
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
+    this.showCalendar(new Date());
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
-    this.fillEventsByDay();
     this.currentMonth = moment(dateInMonth).startOf('month');
 
     // range of days shown on calendar
@@ -47,7 +47,8 @@ export class CalendarComponent implements OnInit {
 
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
-      console.log(this.getEventsOnDate(d));
+      // console.log(this.getEventsOnDate(d));
+      console.log('no');
       let calendarDay: CalendarDay = {
         dayOfMonth: d.date(),
         inCurrentMonth: d.isSame(dateInMonth, 'month'),
@@ -66,7 +67,7 @@ export class CalendarComponent implements OnInit {
   changeMonth(delta: number): void {
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
-    console.log(newMonth);
+    // console.log(newMonth);
     if (newMonth.isSame(moment(), 'month')) {
       // if current month, make selected day today
       this.showCalendar(new Date());
@@ -81,14 +82,18 @@ export class CalendarComponent implements OnInit {
   }
 
   fillEventsByDay(){
+    console.log('hey');
+    console.log(this.filteredMonthYearEvents);
     this.filteredMonthYearEvents.forEach(el => {
       let eventDate = moment(el.properties.start_time);
       let dayOfYear = eventDate.dayOfYear();
       this.eventsByDay[dayOfYear] = el;
     });
+    console.log(this.eventsByDay);
   }
 
   getEventsOnDate(date: Moment): GeoJson[] {
+    console.log('get events on date');
     let dayOfYear = date.dayOfYear();
     if (dayOfYear in this.eventsByDay){
       return [this.eventsByDay[dayOfYear]];
@@ -101,5 +106,6 @@ export class CalendarComponent implements OnInit {
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
     console.log(this.selectedDay);
+    // this.eventService.updateDateByDays(days);
   }
 }
