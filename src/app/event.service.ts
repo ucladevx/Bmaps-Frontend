@@ -158,6 +158,8 @@ export class EventService {
 
   // Updates events for given date while persisting the current category
   updateEvents(date: Date): void {
+  // console.log(date);
+  // console.log('hello');
     console.log("UPDATING EVENTS");
     this.currDateSource.next(date);
     this.http.get <FeatureCollection> (

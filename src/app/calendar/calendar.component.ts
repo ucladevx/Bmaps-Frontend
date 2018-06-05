@@ -17,6 +17,8 @@ interface CalendarDay {
 })
 export class CalendarComponent implements OnInit {
   private days: CalendarDay[] = [];
+  private selectedMonth: Integer;
+  private selectedYear: Integer;
   private selectedDay: CalendarDay;
   private currentMonth: Moment;
   private filteredEvents: GeoJson[];
@@ -30,6 +32,8 @@ export class CalendarComponent implements OnInit {
     this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
       console.log(this.filteredMonthYearEvents);
+      this.selectedMonth = moment().month();
+      this.selectedYear = moment().year();
       this.fillEventsByDay();
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -76,8 +80,9 @@ export class CalendarComponent implements OnInit {
       // make selected day the 1st of the month
       this.showCalendar(newMonth.startOf('month'));
     }
-    // console.log(newMonth.month().toString() + " " + newMonth.year().toString());
-    let monthyear = newMonth.month().toString() + " " + newMonth.year().toString()
+    this.selectedMonth = newMonth.month();
+    this.selectedYear = newMonth.year()
+    let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
     this.eventService.updateMonthEvents(monthyear);
   }
 
@@ -106,6 +111,9 @@ export class CalendarComponent implements OnInit {
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
     console.log(this.selectedDay);
+    let date = moment().date(day).month(this.selectedMonth).year(this.selectedYear).toDate();
+    // console.log(date.toDate());
     // this.eventService.updateDateByDays(days);
+    this.eventService.updateEvents(date);
   }
 }
