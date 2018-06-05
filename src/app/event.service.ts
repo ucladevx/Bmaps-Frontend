@@ -42,8 +42,24 @@ export class EventService {
   private _hoveredEvent;
   private _categHash;
   private _filterHash;
+
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
+  private _filterGroups = [
+    ['happening now', 'upcoming'],
+    ['morning', 'afternoon', 'evening'],
+    ['on-campus', 'off-campus', 'nearby']
+  ];
+  private _filterGroupMap = {
+    'happening now': 0,
+    'upcoming': 0,
+    'on-campus': 2,
+    'off-campus': 2,
+    'nearby': 2,
+    'morning': 1,
+    'afternoon': 1,
+    'evening': 1
+  };
 
   // private baseUrl = "https://www.mappening.io/api/v1/events";
   private baseUrl = "https://www.mappening.io/api/v2/events"
@@ -90,7 +106,9 @@ export class EventService {
       'on-campus': false,
       'off-campus': false,
       'nearby': false,
-      'free food': false
+      'morning': false,
+      'afternoon': false,
+      'evening': false
     };
     this.filterHashSource.next(tempFilters);
   }
@@ -186,6 +204,13 @@ export class EventService {
       else {
         this._selectedFilterCount--;
       }
+      // Unselect selected filters in the same group
+      for (let f of this._filterGroups[this._filterGroupMap[filter]]) {
+        if (f != filter && this._filterHash[f]) {
+          this._filterHash[f] = false;
+          this._selectedFilterCount--;
+        }
+      }
     }
     this.applyFiltersAndCategories();
   }
@@ -261,6 +286,18 @@ export class EventService {
     }
     else if (filter == 'off-campus') {
       return !this.dateService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+    }
+    else if (filter == 'morning') {
+      return this.dateService.isMorning(event.properties.start_time);
+    }
+    else if (filter == 'afternoon') {
+      return this.dateService.isAfternoon(event.properties.start_time);
+    }
+    else if (filter == 'evening') {
+      return this.dateService.isEvening(event.properties.start_time);
+    }
+    else if (filter == 'nearby') {
+      return this.dateService.isNearby([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
     }
     return true;
   }

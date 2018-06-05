@@ -66,8 +66,32 @@ export class DateService {
     return this.checkRange(moment(dateStr), range.start, range.end);
   }
 
+  // Returns true if given time is 'morning'
+  isMorning(dateStr: string): boolean {
+    let hour = moment(dateStr).hour();
+    return hour >= 4 && hour < 12;
+  }
+
+  // Returns true if given time is 'afternoon'
+  isAfternoon(dateStr: string): boolean {
+    let hour = moment(dateStr).hour();
+    return hour >= 12 && hour < 17;
+  }
+
+  // Returns true if given time is 'evening'
+  isEvening(dateStr: string): boolean {
+    let hour = moment(dateStr).hour();
+    return (hour >= 17 && hour < 24) || (hour >= 0 && hour < 4);
+  }
+
+  // Returns true if given point is 'nearby'
+  // Passed in point should be [lat,lng]
+  isNearby(point): boolean {
+    return true;
+  }
+
   // Returns true if given point is 'on campus'
-  // Passes in point should be [lat, lng]
+  // Passed in point should be [lat, lng]
   isOnCampus(point): boolean {
     let lat = point[0];
     let lng = point[1];

@@ -47,7 +47,7 @@
   top: 40px;
   background-color: white;
   width: 100%;
-  overflow: auto;
+  overflow: scroll;
   height: inherit;
   z-index: 999;
 }
@@ -116,6 +116,9 @@ a:active {
   border-color: #ffffff;
   border-width: 2px;
   background-color: #E8E8E8;
+  height: 40px;
+  pointer-events: auto;
+  transition: unset;
 }
 
 .btn.filter-btn:hover {
@@ -134,4 +137,8 @@ a:active {
 .btn.filter-btn.active {
   background-color: #8dd3d6;
   border-color: #ffffff;
+}
+
+.btn.filter-btn.disabled {
+  pointer-events: none;
 }
