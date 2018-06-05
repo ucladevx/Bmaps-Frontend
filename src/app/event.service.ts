@@ -23,6 +23,8 @@ export class EventService {
   private hoveredEventSource: Subject <GeoJson> ;
   // holds object of categories
   private categHashSource: Subject <any> ;
+  // holds object of filters
+  private filterHashSource: Subject <any> ;
 
   // Observables that components can subscribe to for realtime updates
   currEvents$;
@@ -31,22 +33,15 @@ export class EventService {
   clickedEvent$;
   hoveredEvent$;
   categHash$;
+  filterHash$;
 
   // Used internally to keep a realtime, subscribed set of values
   private _events;
   private _date;
   private _clickedEvent;
   private _hoveredEvent;
-  private _category = "all";
-  private _filters = {
-    'happening now': false,
-    'upcoming': false,
-    'on-campus': false,
-    'off-campus': false,
-    'nearby': false,
-    'free food': false
-  };
   private _categHash;
+  private _filterHash;
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
 
@@ -64,6 +59,7 @@ export class EventService {
     this.clickedEventSource = new Subject < GeoJson > ();
     this.hoveredEventSource = new Subject < GeoJson > ();
     this.categHashSource = new Subject < any > ();
+    this.filterHashSource = new Subject <any>();
 
     // Observable string streams
     this.currEvents$ = this.currEventsSource.asObservable();
@@ -72,6 +68,7 @@ export class EventService {
     this.clickedEvent$ = this.clickedEventSource.asObservable();
     this.hoveredEvent$ = this.hoveredEventSource.asObservable();
     this.categHash$ = this.categHashSource.asObservable();
+    this.filterHash$ = this.filterHashSource.asObservable();
 
     // Maintain a set of self-subscribed local values
     this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
@@ -79,6 +76,7 @@ export class EventService {
     this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
     this.hoveredEvent$.subscribe(hoveredEventInfo => this._hoveredEvent = hoveredEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
+    this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
 
     // Update events for today
     this.updateEvents(today);
@@ -86,7 +84,15 @@ export class EventService {
 
   // Reset all filters to be false
   private resetFilters() {
-
+    let tempFilters = {
+      'happening now': false,
+      'upcoming': false,
+      'on-campus': false,
+      'off-campus': false,
+      'nearby': false,
+      'free food': false
+    };
+    this.filterHashSource.next(tempFilters);
   }
 
   // Update categories
@@ -111,7 +117,6 @@ export class EventService {
           }
         }
         this.categHashSource.next(tempHash);
-        this.applyFiltersAndCategories();
       });
   }
 
@@ -160,6 +165,7 @@ export class EventService {
       this._selectedCategCount = 0;
       this.updateCategories();
       this.resetFilters();
+      this.applyFiltersAndCategories();
     });
   }
 
@@ -172,9 +178,9 @@ export class EventService {
 
   // Toggle filter
   toggleFilter(filter: string) {
-    if (this._filters[filter] != undefined) {
-      this._filters[filter] = !this._filters[filter];
-      if (this._filters[filter]) {
+    if (this._filterHash[filter] != undefined) {
+      this._filterHash[filter] = !this._filterHash[filter];
+      if (this._filterHash[filter]) {
         this._selectedFilterCount++;
       }
       else {
@@ -228,8 +234,8 @@ export class EventService {
       // Otherwise apply filters
       for (let event of tempEvents.features) {
         let passesAllFilters = true;
-        for (let filter in this._filters) {
-          if (this._filters[filter] && !this.checkFilter(filter, event)) {
+        for (let filter in this._filterHash) {
+          if (this._filterHash[filter] && !this.checkFilter(filter, event)) {
             passesAllFilters = false;
           }
         }

@@ -14,19 +14,11 @@ import { NgClass } from '@angular/common';
 export class CategoryBarComponent implements OnInit {
   private categories;
   private categHash = undefined;
+  private filterHash = undefined;
   private events: GeoJson[];
   public selectedCategory = 'all categories';
   public showDropdown = false;
   private wasInside = false;
-  // private filters = ['happening now', 'upcoming', 'time period', 'on-campus', 'off-campus', 'nearby', 'popular', 'free food'];
-  private filters = {
-    'happening now': false,
-    'upcoming': false,
-    'on-campus': false,
-    'off-campus': false,
-    'nearby': false,
-    'free food': false
-  };
 
   constructor(private categService: CategoryService, private eventService: EventService) {}
 
@@ -37,10 +29,12 @@ export class CategoryBarComponent implements OnInit {
     this.eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
+    this.eventService.filterHash$.subscribe(filterHash => {
+      this.filterHash = filterHash;
+    });
   }
 
   filterClicked(filter: string): void {
-    this.filters[filter] = !this.filters[filter];
     this.eventService.toggleFilter(filter);
   }
 
