@@ -6,6 +6,7 @@ import { FeatureCollection, GeoJson } from './map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { DateService } from './shared/date.service';
+import { LocationService } from './shared/location.service';
 import { CategoryService } from './category.service';
 import { CategoryList } from './category';
 
@@ -65,7 +66,7 @@ export class EventService {
   private baseUrl = "https://www.mappening.io/api/v2/events"
   // private baseUrl = "http://0.0.0.0:5000/api/v2/events"
 
-  constructor(private http: HttpClient, private dateService: DateService, private categService: CategoryService) {
+  constructor(private http: HttpClient, private dateService: DateService, private locationService: LocationService, private categService: CategoryService) {
     let today = new Date();
 
     // Observable string sources, BehaviorSubjects have an intial state
@@ -282,10 +283,13 @@ export class EventService {
       return this.dateService.isUpcoming(event.properties.start_time);
     }
     else if (filter == 'on-campus') {
-      return this.dateService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+      return this.locationService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
     }
     else if (filter == 'off-campus') {
-      return !this.dateService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+      return !this.locationService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+    }
+    else if (filter == 'nearby') {
+      return this.locationService.isNearby([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
     }
     else if (filter == 'morning') {
       return this.dateService.isMorning(event.properties.start_time);
@@ -295,9 +299,6 @@ export class EventService {
     }
     else if (filter == 'evening') {
       return this.dateService.isEvening(event.properties.start_time);
-    }
-    else if (filter == 'nearby') {
-      return this.dateService.isNearby([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
     }
     return true;
   }
