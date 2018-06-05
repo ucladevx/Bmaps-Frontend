@@ -23,15 +23,17 @@
       <div class="loc-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary"
-                 btnCheckbox tabindex="0" role="button">on-campus</label>
+                 [ngClass]="{'active': filters['on-campus']}"
+                 (click)="filterClicked('on-campus')">on-campus</label>
           <label class="btn btn-outline-secondary"
-                 btnCheckbox tabindex="0" role="button">off-campus</label>
+                 [ngClass]="{'active': filters['off-campus']}"
+                 (click)="filterClicked('off-campus')">off-campus</label>
           <label class="btn btn-outline-secondary"
                  btnCheckbox tabindex="0" role="button">nearby</label>
         </div>
       </div>
 
-      <div class="filters-bottom-section">
+      <!-- <div class="filters-bottom-section">
         <button type="button" class="btn btn-outline-secondary"
               [(ngModel)]="singleModel" btnCheckbox
               btnCheckboxTrue="1" btnCheckboxFalse="0">
@@ -42,7 +44,7 @@
               btnCheckboxTrue="1" btnCheckboxFalse="0">
           free food
         </button>
-      </div>
+      </div> -->
     </div>
 
     <div *ngIf="categHash" class="section-header">

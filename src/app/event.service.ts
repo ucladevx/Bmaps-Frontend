@@ -84,6 +84,11 @@ export class EventService {
     this.updateEvents(today);
   }
 
+  // Reset all filters to be false
+  private resetFilters() {
+
+  }
+
   // Update categories
   private updateCategories() {
     this.categService.getCategories()
@@ -154,6 +159,7 @@ export class EventService {
       this._selectedFilterCount = 0;
       this._selectedCategCount = 0;
       this.updateCategories();
+      this.resetFilters();
     });
   }
 
@@ -163,19 +169,6 @@ export class EventService {
     newDate.setDate(newDate.getDate() + days);
     this.updateEvents(newDate);
   }
-
-  // Filters current events given category name (OLD CODE)
-  // filterEvents(category: string): void {
-  //   console.log("FILTERING EVENTS");
-  //   this._category = category;
-  //   if (category === "all") {
-  //     this.filteredCurrEventsSource.next(this._events);
-  //     return;
-  //   }
-  //   let tempEvents = new FeatureCollection(this._events.features
-  //     .filter(e => e.properties.category.toLowerCase() === category.toLowerCase()));
-  //   this.filteredCurrEventsSource.next(tempEvents);
-  // }
 
   // Toggle filter
   toggleFilter(filter: string) {
@@ -204,42 +197,6 @@ export class EventService {
     }
     this.applyFiltersAndCategories();
   }
-
-  // Apply current _filters
-  // private applyFilters() {
-  //   console.log("APPLYING FILTERS");
-  //   console.log(this._filters);
-  //   let tempEvents = new FeatureCollection([]);
-  //   for (let event of this._events.features) {
-  //     if (this._filters['happening now'] && this.dateService.isHappeningNow(event.start_time)) {
-  //       tempEvents.features.push(event);
-  //     }
-  //   }
-  //   this.filteredCurrEventsSource.next(tempEvents);
-  // }
-
-  // Appy current _categHash
-  // private applyCategories() {
-  //   console.log("APPLYING CATEGORIES");
-  //
-  //   // If no categories are selected, show all events and return
-  //   if (this._selectedCategCount == 0) {
-  //     this.filteredCurrEventsSource.next(this._events);
-  //     return;
-  //   }
-  //
-  //   let tempEvents = new FeatureCollection([]);
-  //   for (let event of this._events.features) {
-  //     for (let category of event.properties.categories) {
-  //       let categObject = this._categHash[category.toLowerCase()];
-  //       if (categObject && categObject.selected) {
-  //         tempEvents.features.push(event);
-  //         break;
-  //       }
-  //     }
-  //   }
-  //   this.filteredCurrEventsSource.next(tempEvents);
-  // }
 
   private applyFiltersAndCategories() {
     console.log("APPLYING FILTERS & CATEGORIES");
@@ -270,11 +227,14 @@ export class EventService {
     else {
       // Otherwise apply filters
       for (let event of tempEvents.features) {
+        let passesAllFilters = true;
         for (let filter in this._filters) {
-          if (this._filters[filter] && this.checkFilter(filter, event)) {
-            tempEvents2.features.push(event);
-            break;
+          if (this._filters[filter] && !this.checkFilter(filter, event)) {
+            passesAllFilters = false;
           }
+        }
+        if (passesAllFilters) {
+          tempEvents2.features.push(event);
         }
       }
     }
@@ -290,7 +250,13 @@ export class EventService {
     else if (filter == 'upcoming') {
       return this.dateService.isUpcoming(event.properties.start_time);
     }
-    return false;
+    else if (filter == 'on-campus') {
+      return this.dateService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+    }
+    else if (filter == 'off-campus') {
+      return !this.dateService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+    }
+    return true;
   }
 
   // Updates the current clicked event by number
@@ -305,7 +271,5 @@ export class EventService {
   updateHoveredEvent(event: GeoJson): void {
     this._hoveredEvent = event;
     this.hoveredEventSource.next(this._hoveredEvent);
-    console.log("updating hovered event");
-    console.log(this._hoveredEvent);
   }
 }

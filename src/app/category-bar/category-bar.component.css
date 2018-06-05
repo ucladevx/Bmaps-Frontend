@@ -72,6 +72,10 @@
   margin-top: 15px;
 }
 
+.loc-filter-group {
+  margin-bottom: 6px;
+}
+
 ul {
   list-style-type: none;
 }
