@@ -190,18 +190,12 @@ export class EventService {
   }
 
   filterByMonthYear(monthyearEvents, monthyear){
-    console.log(monthyearEvents);
-    console.log(monthyear);
     let tempEvents = new FeatureCollection([]);
     monthyearEvents.features.filter(el => {
       var d = new Date(el.properties.start_time);
       var month = d.getMonth();
-      var year = d.getYear() - 100 + 2000;
-      console.log(month);
-      console.log(year);
+      var year = d.getFullYear();
       var res = monthyear.split(" ");
-      console.log(Number(res[0]));
-      console.log(Number(res[1]));
       if ((month == Number(res[0])) && (year == Number(res[1])))
         tempEvents.features.push(el)
     });
