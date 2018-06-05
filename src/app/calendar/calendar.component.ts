@@ -82,16 +82,16 @@ export class CalendarComponent implements OnInit {
   }
 
   fillEventsByDay(){
-    console.log("hey");
-    console.log(this.filteredMonthYearEvents);
+    // console.log("hey");
+    // console.log(this.filteredMonthYearEvents);
     this.filteredMonthYearEvents.forEach(el => {
       let eventDate = moment(el.properties.start_time);
-      console.log(el)
-      console.log(eventDate.dayOfYear());
-      console.log(this.eventsByDay);
+      // console.log(el)
+      // console.log(eventDate.dayOfYear());
+      // console.log(this.eventsByDay);
       let dayOfYear = eventDate.dayOfYear();
-      this.eventsByDay.dayOfYear.push(el);
-      console.log(this.eventsByDay[eventDate.dayOfYear()]);
+      this.eventsByDay[dayOfYear] = el;
+      // console.log(this.eventsByDay[eventDate.dayOfYear()]);
     });
   }
 
