@@ -27,6 +27,7 @@ export class FeatureCollection {
   constructor(public features: Array<GeoJson>) {}
 }
 
+// Coordinates are formatted [lng, lat]!
 let UCLA_CAMPUS_BOUNDARY =
 {
   "coordinates": [

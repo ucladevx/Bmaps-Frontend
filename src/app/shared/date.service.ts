@@ -2,6 +2,17 @@ import { Injectable } from '@angular/core';
 import { GeoJson } from '../map';
 import * as moment from 'moment';
 
+// Constants used as filter rules
+const HAPPENINGNOW_LEN = 2; // up until how many hours from now is considered happening now?
+const UPCOMING_START = 2; // how many hours from now does upcoming start?
+const UPCOMING_LEN = 5; // how many hours after UPCOMING_START does upcoming end?
+const MORNING_START = 4; // what time does morning start? (using 24 hr clock, inclusive)
+const MORNING_END = 12; // what time does morning end? (exclusive)
+const AFTERNOON_START = 12;
+const AFTERNOON_END = 17;
+const EVENING_START = 17;
+const EVENING_END = 4;
+
 @Injectable()
 export class DateService {
 
@@ -51,7 +62,7 @@ export class DateService {
   isHappeningNow(dateStr: string): boolean {
     let range = {
       start: moment(),
-      end: moment().add(2, 'hours')
+      end: moment().add(HAPPENINGNOW_LEN, 'hours')
     };
     return this.checkRange(moment(dateStr), range.start, range.end);
   }
@@ -59,8 +70,8 @@ export class DateService {
   // Returns true if given time is 'upcoming'
   isUpcoming(dateStr: string): boolean {
     let range = {
-      start: moment().add(2, 'hours'),
-      end: moment().add(7, 'hours')
+      start: moment().add(UPCOMING_START, 'hours'),
+      end: moment().add(UPCOMING_START + UPCOMING_LEN, 'hours')
     };
     return this.checkRange(moment(dateStr), range.start, range.end);
   }
@@ -68,19 +79,19 @@ export class DateService {
   // Returns true if given time is 'morning'
   isMorning(dateStr: string): boolean {
     let hour = moment(dateStr).hour();
-    return hour >= 4 && hour < 12;
+    return hour >= MORNING_START && hour < MORNING_END;
   }
 
   // Returns true if given time is 'afternoon'
   isAfternoon(dateStr: string): boolean {
     let hour = moment(dateStr).hour();
-    return hour >= 12 && hour < 17;
+    return hour >= AFTERNOON_START && hour < AFTERNOON_END;
   }
 
   // Returns true if given time is 'evening'
   isEvening(dateStr: string): boolean {
     let hour = moment(dateStr).hour();
-    return (hour >= 17 && hour < 24) || (hour >= 0 && hour < 4);
+    return (hour >= EVENING_START && hour < 24) || (hour >= 0 && hour < EVENING_END);
   }
 
   //MOVE THIS SOMEWHERE WITHIN THE APP

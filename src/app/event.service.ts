@@ -283,13 +283,13 @@ export class EventService {
       return this.dateService.isUpcoming(event.properties.start_time);
     }
     else if (filter == 'on-campus') {
-      return this.locationService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+      return this.locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
     }
     else if (filter == 'off-campus') {
-      return !this.locationService.isOnCampus([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+      return !this.locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
     }
     else if (filter == 'nearby') {
-      return this.locationService.isNearby([event.geometry.coordinates[0], event.geometry.coordinates[1]]);
+      return this.locationService.isNearby(event.geometry.coordinates[1], event.geometry.coordinates[0]);
     }
     else if (filter == 'morning') {
       return this.dateService.isMorning(event.properties.start_time);
