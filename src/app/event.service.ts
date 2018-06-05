@@ -13,9 +13,9 @@ import * as moment from 'moment';
 @Injectable()
 export class EventService {
   // holds all events
-  private allEventsSource: BehaviorSubject <FeatureCollection>;
+  private monthEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all filtered events
-  private filteredAllEventsSource: BehaviorSubject <FeatureCollection>;
+  private filteredMonthEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all events of the current date that components can see
   private currEventsSource: BehaviorSubject <FeatureCollection>;
   // holds filtered events that components can see
@@ -32,8 +32,8 @@ export class EventService {
   private categHashSource: Subject <any> ;
 
   // Observables that components can subscribe to for realtime updates
-  allEvents$;
-  filteredAllEvents$;
+  monthEvents$;
+  filteredMonthEvents$;
   currEvents$;
   filteredCurrEvents$;
   currMonthYear$;
@@ -67,8 +67,8 @@ export class EventService {
     console.log(monthyear);
 
     // Observable string sources, BehaviorSubjects have an intial state
-    this.allEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
-    this.filteredAllEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
+    this.monthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
+    this.filteredMonthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject < Date > (today);
@@ -78,8 +78,8 @@ export class EventService {
     this.categHashSource = new Subject < any > ();
 
     // Observable string streams
-    this.allEvents$  = this.allEventsSource.asObservable();
-    this.filteredAllEvents$  = this.filteredAllEventsSource.asObservable();
+    this.monthEvents$  = this.monthEventsSource.asObservable();
+    this.filteredMonthEvents$  = this.filteredMonthEventsSource.asObservable();
     this.currEvents$ = this.currEventsSource.asObservable();
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
@@ -89,7 +89,7 @@ export class EventService {
     this.categHash$ = this.categHashSource.asObservable();
 
     // Maintain a set of self-subscribed local values
-    this.allEvents$.subscribe(allEventCollection => this._allevents = allEventCollection);
+    this.monthEvents$.subscribe(monthEventCollection => this._allevents = monthEventCollection);
     this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
     this.currDate$.subscribe(date => this._date = date);
     this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
@@ -184,7 +184,7 @@ export class EventService {
       this.getEventsURL()
     ).subscribe(monthyearEvents => {
       console.log(monthyearEvents);
-      this.allEventsSource.next(this.filterByMonthYear(monthyearEvents, monthyear));
+      this.monthEventsSource.next(this.filterByMonthYear(monthyearEvents, monthyear));
       this.initCategories(monthyear);
     });
   }
@@ -268,7 +268,7 @@ export class EventService {
             }
           }
         }
-      this.filteredAllEventsSource.next(tempEvents);
+      this.filteredMonthEventsSource.next(tempEvents);
     }
   }
 

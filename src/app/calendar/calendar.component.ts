@@ -27,15 +27,14 @@ export class CalendarComponent implements OnInit {
   constructor(private eventService: EventService) { }
 
   ngOnInit() {
-    this.eventService.filteredAllEvents$.subscribe(allEventCollection => {
-      this.filteredMonthYearEvents = allEventCollection.features;
+    this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
+      this.filteredMonthYearEvents = monthEventCollection.features;
       console.log(this.filteredMonthYearEvents);
       this.showCalendar(new Date());
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
-    // this.showCalendar(new Date());
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
@@ -82,16 +81,10 @@ export class CalendarComponent implements OnInit {
   }
 
   fillEventsByDay(){
-    // console.log("hey");
-    // console.log(this.filteredMonthYearEvents);
     this.filteredMonthYearEvents.forEach(el => {
       let eventDate = moment(el.properties.start_time);
-      // console.log(el)
-      // console.log(eventDate.dayOfYear());
-      // console.log(this.eventsByDay);
       let dayOfYear = eventDate.dayOfYear();
       this.eventsByDay[dayOfYear] = el;
-      // console.log(this.eventsByDay[eventDate.dayOfYear()]);
     });
   }
 
