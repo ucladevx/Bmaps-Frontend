@@ -5,7 +5,10 @@
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
-    <div *ngIf="filterHash" class="section-header">Filters</div>
+    <div *ngIf="filterHash" class="section-header">
+      Filters
+      <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
+    </div>
     <div *ngIf="filterHash" class="filters-wrapper">
       <div class="time-filter-group">
         <div class="btn-group">
@@ -67,7 +70,7 @@
 
     <div *ngIf="categHash" class="section-header">
       Categories
-      <a class="clear-btn" (click)="clearCategories()">CLEAR ALL</a>
+      <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
     </div>
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">

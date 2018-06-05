@@ -103,13 +103,21 @@ a:active {
   background-color: #F0F0F0;
 }
 
-.clear-btn {
+a.clear-all-btn {
   float: right;
   margin-right: 15px;
   cursor: pointer;
-  color: #808080 !important;
+  color: #808080;
   padding-left: 3px;
   padding-right: 3px;
+}
+
+a.clear-all-btn:hover {
+  color: #BEBEBE;
+}
+
+a.clear-all-btn:active {
+  background-color: inherit;
 }
 
 .btn.filter-btn {

@@ -12,7 +12,6 @@ import { NgClass } from '@angular/common';
 })
 
 export class CategoryBarComponent implements OnInit {
-  private categories;
   private categHash = undefined;
   private filterHash = undefined;
   private events: GeoJson[];
@@ -50,6 +49,14 @@ export class CategoryBarComponent implements OnInit {
     for (let key in this.categHash) {
       if (this.categHash[key].selected) {
         this.eventService.toggleCategory(key);
+      }
+    }
+  }
+
+  clearFilters(): void {
+    for (let key in this.filterHash) {
+      if (this.filterHash[key]) {
+        this.eventService.toggleFilter(key);
       }
     }
   }
