@@ -1,10 +1,10 @@
 <div id="categ-div" class="btn-group">
-  <button id="categ-btn" type="button" class="btn dropdown-toggle"
+  <button *ngIf="showToggleButton" id="categ-btn" type="button" class="btn dropdown-toggle"
           (click)="toggleDropdown()"
           [disabled]="events.length == 0">
     Filters<span class="caret"></span>
   </button>
-  <div *ngIf="showDropdown" class="dropdown-content">
+  <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
     <div *ngIf="filterHash" class="section-header">
       Filters
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
