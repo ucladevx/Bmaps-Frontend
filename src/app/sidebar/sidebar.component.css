@@ -116,3 +116,18 @@
     cursor: pointer;
     font-size: 20px;
 }
+
+#no-events-section {
+  margin-top: 50px;
+  text-align: center;
+  color: #a6a6a6;
+}
+
+#no-events-icon {
+  font-size: 50px;
+  color: #a6a6a6;
+}
+
+#no-events-label {
+  margin-top: 10px;
+}

@@ -1,31 +1,60 @@
 <div id="categ-div" class="btn-group">
   <button *ngIf="showToggleButton" id="categ-btn" type="button" class="btn dropdown-toggle"
-          (click)="toggleDropdown()">
+          (click)="toggleDropdown()"
+          [disabled]="events.length == 0">
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
-    <!-- <div class="section-header">Filters</div>
-    <div class="filters-wrapper">
-      <div class="btn-group time-filter-group">
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button"
-               (click)="filterClicked('happening now')">happening now</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">upcoming</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">time periods</label>
+    <div *ngIf="filterHash" class="section-header">
+      Filters
+      <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
+    </div>
+    <div *ngIf="filterHash" class="filters-wrapper">
+      <div class="time-filter-group">
+        <div class="btn-group">
+          <label (click)="filterClicked('happening now')"
+                 class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['happening now'],
+                             'disabled': filterHash['morning'] || filterHash['afternoon'] || filterHash['evening']}">happening now</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 (click)="filterClicked('upcoming')"
+                 [ngClass]="{'active': filterHash['upcoming'],
+                             'disabled': filterHash['morning'] || filterHash['afternoon'] || filterHash['evening']}">upcoming</label>
+        </div>
       </div>
 
-      <div class="btn-group loc-filter-group">
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">on-campus</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">off-campus</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">nearby</label>
+      <div class="tod-filter-group">
+        <div class="btn-group">
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['morning'],
+                             'disabled': filterHash['happening now'] || filterHash['upcoming']}"
+                 (click)="filterClicked('morning')">morning</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['afternoon'],
+                             'disabled': filterHash['happening now'] || filterHash['upcoming']}"
+                 (click)="filterClicked('afternoon')">afternoon</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['evening'],
+                             'disabled': filterHash['happening now'] || filterHash['upcoming']}"
+                 (click)="filterClicked('evening')">evening</label>
+        </div>
       </div>
 
-      <div class="filters-bottom-section">
+      <div class="loc-filter-group">
+        <div class="btn-group">
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['on-campus']}"
+                 (click)="filterClicked('on-campus')">on-campus</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['off-campus']}"
+                 (click)="filterClicked('off-campus')">off-campus</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['nearby']}"
+                 (click)="filterClicked('nearby')">nearby</label>
+        </div>
+      </div>
+
+      <!-- <div class="filters-bottom-section">
         <button type="button" class="btn btn-outline-secondary"
               [(ngModel)]="singleModel" btnCheckbox
               btnCheckboxTrue="1" btnCheckboxFalse="0">
@@ -36,15 +65,19 @@
               btnCheckboxTrue="1" btnCheckboxFalse="0">
           free food
         </button>
-      </div>
-    </div> -->
+      </div> -->
+    </div>
 
-    <div *ngIf="categHash" class="section-header">Categories</div>
+    <div *ngIf="categHash" class="section-header">
+      Categories
+      <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
+    </div>
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <a [ngClass]="{'dropdown-item': true, 'zero-events': categHash[categKey].numEvents == undefined || categHash[categKey].numEvents == 0, 'selected': categHash[categKey].selected}"
-          (click)="categoryClicked(categKey)">
+          <a *ngIf="categHash[categKey].numEvents != undefined && categHash[categKey].numEvents > 0"
+             [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+             (click)="categoryClicked(categKey)">
           <i *ngIf="!categHash[categKey].selected" class="fa fa-square-o categ-checkbox" aria-hidden="true"></i>
           <i *ngIf="categHash[categKey].selected" class="fa fa-check-square-o categ-checkbox-checked" aria-hidden="true"></i>
           {{categHash[categKey].formattedCategory}}

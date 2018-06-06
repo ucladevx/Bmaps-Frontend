@@ -20,7 +20,7 @@
 .header-text {
 	color: #e8e8e8;
 	font-size: 22px;
-	font-family: Avenir;
+	font-family: 'Poppins', sans-serif;
 	font-weight: bolder;
 	letter-spacing: 2px;
 	margin: auto;
@@ -48,7 +48,7 @@
 .event-title {
 	color: #3c3c3c;
 	font-size: 32px;
-	font-family: Avenir;
+	font-family: 'Poppins', sans-serif;
 	font-weight: 600;
 	letter-spacing: 2px;
 	line-height: normal;
@@ -59,7 +59,7 @@
 .event-info {
 	color: #3c3c3c;
 	font-size: 18px;
-	font-family: Avenir;
+	font-family: 'Poppins', sans-serif;
 	font-weight: bolder;
 	font-style: italic;
 	letter-spacing: 2px;
@@ -70,7 +70,7 @@
 .event-description {
 	color: #7c7c7c;
 	font-size: 14px;
-	font-family: Avenir;
+	font-family: 'Poppins', sans-serif;
 	font-weight: 300;
 	letter-spacing: 1px;
 	margin: 5px 0px 5px 0px;

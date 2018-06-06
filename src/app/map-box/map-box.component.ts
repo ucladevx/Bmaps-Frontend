@@ -5,6 +5,7 @@ import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
+import { LocationService } from '../shared/location.service';
 
 @Component({
     selector: 'app-map-box',
@@ -49,7 +50,8 @@ export class MapBoxComponent implements OnInit {
   constructor(
       private router: Router,
       private _dateService: DateService,
-      private eventService: EventService
+      private eventService: EventService,
+      private locationService: LocationService
   ) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
@@ -78,7 +80,6 @@ export class MapBoxComponent implements OnInit {
       this.addArrowControls();
       this.map.resize();
       this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
-        console.log('here');
         this.hoverEvent(hoveredEventInfo);
       });
     });
@@ -455,6 +456,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         navigator.geolocation.getCurrentPosition(position => {
           this.lat = position.coords.latitude;
           this.lng = position.coords.longitude;
+          this.locationService.userLat = this.lat;
+          this.locationService.userLng = this.lng;
           resolve();
         });
       } else {
