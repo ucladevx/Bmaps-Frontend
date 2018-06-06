@@ -43,12 +43,10 @@
 }
 
 .dropdown-content {
-  position: absolute;
   top: 40px;
   background-color: white;
   width: 100%;
-  overflow: scroll;
-  height: inherit;
+  max-height: 415px;
   z-index: 999;
 }
 
@@ -67,6 +65,11 @@
 
 .filters-wrapper {
   text-align: center;
+}
+
+.categories-wrapper {
+  max-height: 176px;
+  overflow-y: scroll;
 }
 
 .filters-bottom-section {
