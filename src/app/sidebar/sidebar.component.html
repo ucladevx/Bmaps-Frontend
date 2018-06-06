@@ -2,7 +2,7 @@
     <div class="move-up d-md-none" (click)="toggleMobileSidebar()">
         <i aria-hidden="true" class="fa fa-lg" [ngClass]="mobileSidebarVisible ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
     </div>
-    <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-block': !mobileSidebarVisible}">
+    <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
         <app-date-selector class="d-none d-md-block"></app-date-selector>
         <app-category-bar [showToggleButton]="true" class="d-none d-md-block"></app-category-bar>
         <div *ngIf="filteredEvents.length == 0" id="no-events-section">
