@@ -7,6 +7,8 @@
 
 #categ-div {
   width: 100%;
+  flex-direction: column;
+  border-bottom: 1px solid rgb(151, 151, 151);
 }
 
 .categ-bubble {
@@ -50,10 +52,12 @@
   z-index: 999;
 }
 
+/*
 .dropdown-content.show-toggle-btn {
   position: absolute;
   top: 40px;
 }
+*/
 
 .section-header {
   padding-top: 8px;
