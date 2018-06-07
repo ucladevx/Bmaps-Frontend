@@ -9,7 +9,7 @@
           <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
           <div id="no-events-label">No Events</div>
         </div>
-        <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">
+        <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
             <div *ngFor="let event of filteredEvents" #eventList>
                 <div class="sidebar-event"
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
