@@ -46,7 +46,6 @@
   top: 40px;
   background-color: white;
   width: 100%;
-  max-height: 415px;
   z-index: 999;
 }
 
@@ -73,15 +72,11 @@
 }
 
 .filters-bottom-section {
-  margin-bottom: 15px;
+  margin-bottom: 6px;
 }
 
 .time-filter-group {
   margin-top: 15px;
-}
-
-.loc-filter-group {
-  margin-bottom: 6px;
 }
 
 ul {
