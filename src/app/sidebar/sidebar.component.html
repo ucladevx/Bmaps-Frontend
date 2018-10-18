@@ -16,7 +16,7 @@
                     (mouseenter)="onHover(event)"
                     (click)="onSelect(event)">
                     <div class="sidebar-event-img-container">
-                        <img src="{{event.properties.cover_picture}}" class="sidebar-event-img">
+                        <img src="{{event.properties.cover_picture == '<NONE>' ? '/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png' : event.properties.cover_picture}}" class="sidebar-event-img">
                     </div>
                     <div class="sidebar-event-details">
                         <p class="sidebar-event-name">{{event.properties.name}}</p>
