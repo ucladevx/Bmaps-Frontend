@@ -23,11 +23,14 @@ export class DateService {
   }
 
   formatTime(date: Date | string): string {
-    return moment(date).format("h:mmA");
+    if(moment(date).format("mm") == "00"){
+      return moment(date).format("h");
+    }
+    return moment(date).format("h:mm");
   }
 
   formatDate(date: Date | string): string {
-    return moment(date).format("MMMM D, YYYY");
+    return moment(date).format("MMM D");
   }
 
   formatEventDate(event: GeoJson): string {
@@ -36,7 +39,7 @@ export class DateService {
 
       // end might be undefined
       if (end){
-        return `${this.formatDate(start)} \u2022 ${this.formatTime(start)} - ${this.formatTime(end)}`;
+        return `${this.formatDate(start)} \u2022 ${this.formatTime(start)} - ${this.formatTime(end)} ${moment(end).format('A')}`;
       }
       else {
         return `${this.formatDate(start)} \u2022 ${this.formatTime(start)}`;
