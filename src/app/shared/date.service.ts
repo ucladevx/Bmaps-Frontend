@@ -24,9 +24,9 @@ export class DateService {
 
   formatTime(date: Date | string): string {
     if(moment(date).format("mm") == "00"){
-      return moment(date).format("h");
+      return moment(date).format("hA");
     }
-    return moment(date).format("h:mm");
+    return moment(date).format("h:mmA");
   }
 
   formatDate(date: Date | string): string {
@@ -39,7 +39,7 @@ export class DateService {
 
       // end might be undefined
       if (end){
-        return `${this.formatDate(start)} \u2022 ${this.formatTime(start)} - ${this.formatTime(end)} ${moment(end).format('A')}`;
+        return `${this.formatDate(start)} \u2022 ${this.formatTime(start)} - ${this.formatTime(end)}`;
       }
       else {
         return `${this.formatDate(start)} \u2022 ${this.formatTime(start)}`;
