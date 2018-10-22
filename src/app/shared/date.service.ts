@@ -22,15 +22,12 @@ export class DateService {
     return moment(date).format('MMM');
   }
 
-  formatTime(date: Date | string): string {
-    if(moment(date).format("mm") == "00"){
-      return moment(date).format("hA");
-    }
+  formatTime(date : Date | string){
     return moment(date).format("h:mmA");
   }
 
   formatDate(date: Date | string): string {
-    return moment(date).format("MMM D");
+    return moment(date).format("MMMM D, YYYY");
   }
 
   formatEventDate(event: GeoJson): string {

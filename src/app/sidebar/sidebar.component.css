@@ -10,7 +10,10 @@
 
 .search-header{
     border-bottom: 1px solid rgb(167,167,167);
+}
 
+.sidebar-outer{
+  
 }
 
 .sidebar-header{
@@ -76,7 +79,7 @@
 }
 
 .sidebar-event-details p {
-    margin-bottom: 0px;
+    margin-bottom: 3px;
 }
 
 .sidebar-event-name {
@@ -86,7 +89,7 @@
 }
 
 .sidebar-event-category{
-    font-style: italic;
+
 }
 
 .dropdown-menu {
