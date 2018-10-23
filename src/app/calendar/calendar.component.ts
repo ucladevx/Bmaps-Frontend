@@ -17,14 +17,14 @@ interface CalendarDay {
 })
 export class CalendarComponent implements OnInit {
   private days: CalendarDay[] = [];
-  private selectedMonth: Integer;
-  private selectedYear: Integer;
+  private selectedMonth: Number;
+  private selectedYear: Number;
   private selectedDay: CalendarDay;
   private currentMonth: Moment;
   private filteredEvents: GeoJson[];
   private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
-  private eventsByDay: GeoJson{};
+  private eventsByDay: GeoJson[];
 
   constructor(private eventService: EventService) { }
 
@@ -111,7 +111,7 @@ export class CalendarComponent implements OnInit {
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
     console.log(this.selectedDay);
-    let date = moment().date(day).month(this.selectedMonth).year(this.selectedYear).toDate();
+    let date = moment().date(day.dayOfMonth).month(this.selectedMonth.valueOf()).year(this.selectedYear.valueOf()).toDate();
     // console.log(date.toDate());
     // this.eventService.updateDateByDays(days);
     this.eventService.updateEvents(date);
