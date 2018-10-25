@@ -48,7 +48,8 @@ export class EventService {
   private _filterGroups = [
     ['happening now', 'upcoming'],
     ['morning', 'afternoon', 'evening'],
-    ['on-campus', 'off-campus', 'nearby']
+    ['on-campus', 'off-campus', 'nearby'],
+    ['free food']
   ];
   private _filterGroupMap = {
     'happening now': 0,
@@ -58,7 +59,8 @@ export class EventService {
     'nearby': 2,
     'morning': 1,
     'afternoon': 1,
-    'evening': 1
+    'evening': 1,
+    'free food': 3
   };
 
   // private baseUrl = "https://www.mappening.io/api/v1/events";
@@ -108,7 +110,8 @@ export class EventService {
       'nearby': false,
       'morning': false,
       'afternoon': false,
-      'evening': false
+      'evening': false,
+      'free food': false
     };
     this.filterHashSource.next(tempFilters);
   }
@@ -298,6 +301,9 @@ export class EventService {
     }
     else if (filter == 'evening') {
       return this.dateService.isEvening(event.properties.start_time);
+    }
+    else if (filter == 'free food') {
+      return event.properties.free_food == 1;
     }
     return true;
   }
