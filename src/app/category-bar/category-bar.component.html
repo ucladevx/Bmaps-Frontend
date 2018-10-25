@@ -76,8 +76,16 @@
           <a *ngIf="categHash[categKey].numEvents != undefined && categHash[categKey].numEvents > 0"
              [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
              (click)="categoryClicked(categKey)">
-          <i *ngIf="!categHash[categKey].selected" class="fa fa-square-o categ-checkbox" aria-hidden="true"></i>
-          <i *ngIf="categHash[categKey].selected" class="fa fa-check-square-o categ-checkbox-checked" aria-hidden="true"></i>
+          <div class="checkbox-container">
+            <div *ngIf="categHash[categKey].selected; else unchecked">
+              <img class="checkbox" width="16px" src="assets/images/check.svg"/>
+            </div>
+          </div>
+          <ng-template #unchecked>
+              <div>
+                <img class="checkbox" width="16px" src="assets/images/box.svg" />
+              </div>
+          </ng-template>
           {{categHash[categKey].formattedCategory}}
           <span *ngIf="categHash[categKey].numEvents"
                 [ngClass]="{'badge': true, 'badge-secondary': true, 'categ-bubble': true, 'categ-bubble-selected': categHash[categKey].selected}">{{categHash[categKey].numEvents}}</span>
