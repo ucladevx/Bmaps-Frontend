@@ -12,7 +12,7 @@
 }
 
 .categ-bubble {
-  float: right;
+  margin-left: auto;
 }
 
 .categ-bubble-selected {
@@ -26,6 +26,12 @@
 .dropdown-item {
   cursor: pointer;
   color: #747473;
+  line-height: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .btn:hover {
@@ -161,4 +167,11 @@ a.clear-all-btn:active {
 
 .btn.filter-btn.disabled {
   pointer-events: none;
+}
+
+.checkbox-container {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-right: 11px;
 }
