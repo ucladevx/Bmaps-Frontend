@@ -10,7 +10,7 @@
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div *ngIf="filterHash" class="filters-wrapper">
-      <div *ngIf="this.eventService.isToday()" class="time-filter-group">
+      <div *ngIf="this.eventService.isToday()" class="filter-group time-filter-group">
         <div class="btn-group">
           <label (click)="filterClicked('happening now')"
                  class="btn btn-outline-secondary filter-btn"
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div class="tod-filter-group">
+      <div class="filter-group tod-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['morning'],
@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <div class="loc-filter-group">
+      <div class="filter-group loc-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['on-campus']}"
