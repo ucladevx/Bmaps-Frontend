@@ -45,21 +45,33 @@ export class EventService {
 
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
+  // Filters in the same group should be mutually exclusive
   private _filterGroups = [
     ['happening now', 'upcoming'],
-    ['morning', 'afternoon', 'evening'],
-    ['on-campus', 'off-campus', 'nearby']
+    ['on-campus', 'off-campus', 'nearby'],
+    ['morning'],['afternoon'],['evening']
   ];
+  // Maps filters to _filterGroups indices for quick access
   private _filterGroupMap = {
     'happening now': 0,
     'upcoming': 0,
-    'on-campus': 2,
-    'off-campus': 2,
-    'nearby': 2,
-    'morning': 1,
-    'afternoon': 1,
-    'evening': 1
+    'on-campus': 1,
+    'off-campus': 1,
+    'nearby': 1,
+    'morning': 2,
+    'afternoon': 3,
+    'evening': 4
   };
+  // Filters in the same group will be OR'ed
+  // Every group will be AND'ed
+  private _filterLists = [
+    ['happening now'],
+    ['upcoming'],
+    ['on-campus'],
+    ['off-campus'],
+    ['nearby'],
+    ['morning', 'afternoon', 'evening']
+  ];
 
   // private baseUrl = "https://www.mappening.io/api/v1/events";
   private baseUrl = "https://www.mappening.io/api/v2/events"
@@ -259,9 +271,24 @@ export class EventService {
       // Otherwise apply filters
       for (let event of tempEvents.features) {
         let passesAllFilters = true;
-        for (let filter in this._filterHash) {
-          if (this._filterHash[filter] && !this.checkFilter(filter, event)) {
+
+        for (let filterList of this._filterLists) {
+          let passesThisFilter = false;
+          let filterUsed = false;
+
+          for (let filter of filterList) {
+            if (this._filterHash[filter]) {
+              filterUsed = true;
+            }
+            if (this._filterHash[filter] && this.checkFilter(filter, event)) {
+              passesThisFilter = true;
+              break;
+            }
+          }
+
+          if (filterUsed && !passesThisFilter) {
             passesAllFilters = false;
+            break;
           }
         }
         if (passesAllFilters) {
@@ -318,5 +345,9 @@ export class EventService {
 
   getEventById(id: string): GeoJson {
     return this._events.features.find((e: GeoJson) => e.id == id);
+  }
+
+  isToday(): boolean {
+    return this.dateService.isToday(this._date);
   }
 }

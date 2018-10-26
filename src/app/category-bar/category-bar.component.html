@@ -10,16 +10,16 @@
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div *ngIf="filterHash" class="filters-wrapper">
-      <div class="time-filter-group">
+      <div *ngIf="this.eventService.isToday()" class="time-filter-group">
         <div class="btn-group">
           <label (click)="filterClicked('happening now')"
                  class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['happening now'],
-                             'disabled': filterHash['morning'] || filterHash['afternoon'] || filterHash['evening']}">happening now</label>
+                             'disabled': !this.eventService.isToday() || filterHash['morning'] || filterHash['afternoon'] || filterHash['evening']}">happening now</label>
           <label class="btn btn-outline-secondary filter-btn"
                  (click)="filterClicked('upcoming')"
                  [ngClass]="{'active': filterHash['upcoming'],
-                             'disabled': filterHash['morning'] || filterHash['afternoon'] || filterHash['evening']}">upcoming</label>
+                             'disabled': !this.eventService.isToday() || filterHash['morning'] || filterHash['afternoon'] || filterHash['evening']}">upcoming</label>
         </div>
       </div>
 
