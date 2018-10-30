@@ -10,32 +10,27 @@
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div *ngIf="filterHash" class="filters-wrapper">
-      <div *ngIf="this.eventService.isToday()" class="filter-group time-filter-group">
+      <div *ngIf="!this.eventService.isToday()" class="filter-group time-filter-group">
         <div class="btn-group">
           <label (click)="filterClicked('happening now')"
                  class="btn btn-outline-secondary filter-btn"
-                 [ngClass]="{'active': filterHash['happening now'],
-                             'disabled': !this.eventService.isToday() || filterHash['morning'] || filterHash['afternoon'] || filterHash['evening']}">happening now</label>
+                 [ngClass]="{'active': filterHash['happening now']}">happening now</label>
           <label class="btn btn-outline-secondary filter-btn"
                  (click)="filterClicked('upcoming')"
-                 [ngClass]="{'active': filterHash['upcoming'],
-                             'disabled': !this.eventService.isToday() || filterHash['morning'] || filterHash['afternoon'] || filterHash['evening']}">upcoming</label>
+                 [ngClass]="{'active': filterHash['upcoming']}">upcoming</label>
         </div>
       </div>
 
       <div class="filter-group tod-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
-                 [ngClass]="{'active': filterHash['morning'],
-                             'disabled': filterHash['happening now'] || filterHash['upcoming']}"
+                 [ngClass]="{'active': filterHash['morning']}"
                  (click)="filterClicked('morning')">morning</label>
           <label class="btn btn-outline-secondary filter-btn"
-                 [ngClass]="{'active': filterHash['afternoon'],
-                             'disabled': filterHash['happening now'] || filterHash['upcoming']}"
+                 [ngClass]="{'active': filterHash['afternoon']}"
                  (click)="filterClicked('afternoon')">afternoon</label>
           <label class="btn btn-outline-secondary filter-btn"
-                 [ngClass]="{'active': filterHash['evening'],
-                             'disabled': filterHash['happening now'] || filterHash['upcoming']}"
+                 [ngClass]="{'active': filterHash['evening']}"
                  (click)="filterClicked('evening')">evening</label>
         </div>
       </div>
@@ -54,15 +49,17 @@
         </div>
       </div>
 
-      <div class="filters-bottom-section">
+      <div class="filter-group misc-filter-group">
         <!-- <button type="button" class="btn btn-outline-secondary"
               [(ngModel)]="singleModel" btnCheckbox
               btnCheckboxTrue="1" btnCheckboxFalse="0">
           popular
         </button> -->
-        <label class="btn btn-outline-secondary filter-btn"
+        <div class="btn-group">
+          <label class="btn btn-outline-secondary filter-btn"
                [ngClass]="{'active': filterHash['free food']}"
                (click)="filterClicked('free food')">free food</label>
+        </div>
       </div>
     </div>
 

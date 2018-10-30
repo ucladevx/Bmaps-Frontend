@@ -47,9 +47,11 @@ export class EventService {
   private _selectedCategCount = 0;
   // Filters in the same group should be mutually exclusive
   private _filterGroups = [
-    ['happening now', 'upcoming'],
+    ['happening now', 'upcoming', 'morning', 'afternoon', 'evening'],
     ['on-campus', 'off-campus', 'nearby'],
-    ['morning'],['afternoon'],['evening'],
+    ['morning', 'happening now', 'upcoming'],
+    ['afternoon', 'happening now', 'upcoming'],
+    ['evening', 'happening now', 'upcoming'],
     ['free food']
   ];
   // Maps filters to _filterGroups indices for quick access
