@@ -54,18 +54,16 @@
         </div>
       </div>
 
-      <!-- <div class="filters-bottom-section">
-        <button type="button" class="btn btn-outline-secondary"
+      <div class="filters-bottom-section">
+        <!-- <button type="button" class="btn btn-outline-secondary"
               [(ngModel)]="singleModel" btnCheckbox
               btnCheckboxTrue="1" btnCheckboxFalse="0">
           popular
-        </button>
-        <button type="button" class="btn btn-outline-secondary"
-              [(ngModel)]="singleModel" btnCheckbox
-              btnCheckboxTrue="1" btnCheckboxFalse="0">
-          free food
-        </button>
-      </div> -->
+        </button> -->
+        <label class="btn btn-outline-secondary filter-btn"
+               [ngClass]="{'active': filterHash['free food']}"
+               (click)="filterClicked('free food')">free food</label>
+      </div>
     </div>
 
     <div *ngIf="categHash" class="section-header">
