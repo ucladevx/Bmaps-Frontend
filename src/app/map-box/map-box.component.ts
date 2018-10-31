@@ -218,10 +218,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   }
 
   addPopup(popup, coords, eventList): void {
-    console.log(eventList);
 
     if (popup == this.popup) {
-      console.log("marker1");
       popup.setLngLat(coords)
         .addTo(this.map);
         document.getElementById('popupBody').innerHTML = "";
@@ -243,7 +241,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           document.getElementById('popupContainer'+eIndex).append(newDate);
         }
     } else {
-      console.log("marker2");
       popup.setLngLat(coords)
         .addTo(this.map);
         document.getElementById('backupPopupBody').innerHTML = "";
@@ -309,7 +306,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   }
 
   removePinsAndPopups(): void {
-    console.log("remove");
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
     this.map.setLayoutProperty('redBackupHoveredPin', 'visibility', 'none');
     this.backupPopup.remove();
@@ -329,6 +325,13 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           eventList.push(ev);
         }
     }
+    eventList.sort(function(a, b) {
+      a = a["properties"]["start_time"];
+      b = b["properties"]["start_time"];
+      return a<b ? -1 : a>b ? 1 : 0;
+    });
+
+
     return eventList;
   }
 
@@ -359,7 +362,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   }
   hoverEvent(event: GeoJson): void {
     if (event == null){
-      console.log("here4");
         if (this.selectedEvent !== null) {
           this.backupPopup.remove();
           this.map.setLayoutProperty('redBackupHoveredPin', 'visibility', 'none');
@@ -377,9 +379,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       //slice returns a copy of the array rather than the actual array
       let coords = event.geometry.coordinates.slice();
       if(this.selectedEvent !== null) {
-        console.log("here1");
         if(event.id !== this.selectedEvent.id) {
-          console.log("here2");
           //add bigger red pin
           this.map.getSource('redBackupHoveredPin').setData({
             "geometry": {
@@ -393,7 +393,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         this.addPopup(this.backupPopup, coords, eventList);
       }
       else {
-        console.log("here3");
         this.map.getSource('hoveredPin').setData({
           "geometry": {
             "type": "Point",
