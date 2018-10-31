@@ -51,14 +51,14 @@
     }
 }
 
-:host ::ng-deep #popupEvent, :host ::ng-deep #backupPopupEvent {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+:host ::ng-deep .popupEvent, :host ::ng-deep .backupPopupEvent {
+  overflow : hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
-:host ::ng-deep #popupDate, :host ::ng-deep #backupPopupDate {
+:host ::ng-deep .popupDate, :host ::ng-deep .backupPopupDate {
     color:  #FF3A3A;
     font-size: 11;
 }

@@ -25,6 +25,7 @@
     "@angular/service-worker": "^7.0.0",
     "ajv": "^6.1.1",
     "angular-font-awesome": "^3.1.2",
+    "clamp-js-main": "^0.11.5",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
     "jquery": "^1.9.1",
@@ -35,8 +36,8 @@
     "npm": "^5.7.1",
     "popper.js": "^1.12.9",
     "rxjs": "^6.3.3",
-    "zone.js": "^0.8.19",
-    "rxjs-compat": "^6.0.0-rc.0"
+    "rxjs-compat": "^6.0.0-rc.0",
+    "zone.js": "^0.8.19"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",

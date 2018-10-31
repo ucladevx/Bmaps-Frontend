@@ -37,13 +37,13 @@ export class MapBoxComponent implements OnInit {
     closeButton: false,
     closeOnClick: false,
     offset: 20 // offset upward from pin
-  }).setHTML('<div id="popupContainer"><div id="popupEvent"></div> <div id="popupDate"></div></div>');
+  }).setHTML('<div id="popupBody"></div>');
 
   backupPopup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
     offset: 20 // offset upward from pin
-  }).setHTML('<div id="backupPopupContainer"><div id="backupPopupEvent"></div> <div id="backupPopupDate"></div></div>');
+  }).setHTML('<div id="backupPopupBody"></div>');
 
   private events: FeatureCollection;
 
@@ -63,6 +63,7 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+
       this.selectEvent(clickedEventInfo);
     });
 
@@ -208,24 +209,61 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.map.addControl(new mapboxgl.NavigationControl());
   }
 
-  addPopup(popup, coords, id: string|number, eventName: string, eventTime: string): void {
+  addClickBehavior(div, id: number){
     var openDetails = (e: MouseEvent|TouchEvent): void => {
       this.router.navigate(['', {outlets: {sidebar: ['detail', id]}}]);
     };
+    div.onclick = openDetails;
+    div.ontouchstart = openDetails;
+  }
+
+  addPopup(popup, coords, eventList): void {
+    console.log(eventList);
+
     if (popup == this.popup) {
+      console.log("marker1");
       popup.setLngLat(coords)
         .addTo(this.map);
-      document.getElementById('popupEvent').innerHTML = eventName;
-      document.getElementById('popupDate').innerHTML = eventTime;
-      document.getElementById('popupContainer').onclick = openDetails;
-      document.getElementById('popupContainer').ontouchstart = openDetails;
+        document.getElementById('popupBody').innerHTML = "";
+        for(var eIndex in eventList){
+          var newDiv = document.createElement('div');
+          newDiv.id = 'popupContainer'+eIndex;
+          newDiv.className = 'popupContainer';
+          this.addClickBehavior(newDiv,eventList[eIndex].id);
+          document.getElementById('popupBody').append(newDiv);
+          var newEvent = document.createElement('div');
+          newEvent.id = 'popupEvent'+eIndex;
+          newEvent.className = 'popupEvent';
+          newEvent.innerHTML = eventList[eIndex].properties.name;
+          document.getElementById('popupContainer'+eIndex).append(newEvent);
+          var newDate = document.createElement('div');
+          newDate.id = 'popupDate'+eIndex;
+          newDate.className = 'popupDate';
+          newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
+          document.getElementById('popupContainer'+eIndex).append(newDate);
+        }
     } else {
+      console.log("marker2");
       popup.setLngLat(coords)
         .addTo(this.map);
-      document.getElementById('backupPopupEvent').innerHTML = eventName;
-      document.getElementById('backupPopupDate').innerHTML = eventTime;
-      document.getElementById('backupPopupContainer').onclick = openDetails;
-      document.getElementById('backupPopupContainer').ontouchstart = openDetails;
+        document.getElementById('backupPopupBody').innerHTML = "";
+        for(var eIndex in eventList){
+          var newDiv = document.createElement('div');
+          newDiv.id = 'backupPopupContainer'+eIndex;
+          newDiv.className = 'backupPopupContainer';
+          this.addClickBehavior(newDiv,eventList[eIndex].id);
+          document.getElementById('backupPopupBody').append(newDiv);
+          var newEvent = document.createElement('div');
+          newEvent.id = 'backupPopupEvent'+eIndex;
+          newEvent.className = 'backupPopupEvent';
+          newEvent.innerHTML = eventList[eIndex].properties.name;
+          document.getElementById('backupPopupContainer'+eIndex).append(newEvent);
+          var newDate = document.createElement('div');
+          newDate.id = 'backupPopupDate'+eIndex;
+          newDate.className = 'backupPopupDate';
+          newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
+          document.getElementById('backupPopupContainer'+eIndex).append(newDate);
+        }
     }
   }
 
@@ -271,21 +309,41 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   }
 
   removePinsAndPopups(): void {
+    console.log("remove");
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'none');
     this.map.setLayoutProperty('redBackupHoveredPin', 'visibility', 'none');
     this.backupPopup.remove();
     this.popup.remove();
   }
 
+  listEventsByLocation(location : string){
+    if(typeof location != 'string'){
+      location = JSON.stringify(location);
+    }
+    //retrieve list of all events at the specified coordinates
+    var eventList = [];
+    for(var eventIndex in this.events.features){
+        var ev = this.events.features[eventIndex];
+        var evLocation = JSON.stringify(ev["properties"]["place"]);
+        if(evLocation === location){
+          eventList.push(ev);
+        }
+    }
+    return eventList;
+  }
+
+
   //if event exists put popup and blue pin, else unselect
   selectEvent(event: GeoJson): void {
     this.selectedEvent = event;
+
     this.removePinsAndPopups();
 
     if (event === null) {
       return;
     }
 
+    var eventList = this.listEventsByLocation(event["properties"].place);
     // add blue hovered Pin
     let coords = event.geometry.coordinates.slice();
     this.map.getSource('hoveredPin').setData({
@@ -296,12 +354,12 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       "type": "Feature"
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-    this.addPopup(this.popup, coords, event.id, event.properties.name,
-      this._dateService.formatTime(new Date(event.properties.start_time)));
+    this.addPopup(this.popup, coords, eventList);
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
   hoverEvent(event: GeoJson): void {
     if (event == null){
+      console.log("here4");
         if (this.selectedEvent !== null) {
           this.backupPopup.remove();
           this.map.setLayoutProperty('redBackupHoveredPin', 'visibility', 'none');
@@ -313,10 +371,15 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     else {
       // Change the cursor style as a UI indicator.
       this.map.getCanvas().style.cursor = 'pointer';
+
+      var eventList = this.listEventsByLocation(event["properties"].place);
+
       //slice returns a copy of the array rather than the actual array
       let coords = event.geometry.coordinates.slice();
       if(this.selectedEvent !== null) {
+        console.log("here1");
         if(event.id !== this.selectedEvent.id) {
+          console.log("here2");
           //add bigger red pin
           this.map.getSource('redBackupHoveredPin').setData({
             "geometry": {
@@ -327,10 +390,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           });
           this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
         }
-        this.addPopup(this.backupPopup, coords, event.id, event.properties.name,
-          this._dateService.formatTime(new Date(event.properties.start_time)));
+        this.addPopup(this.backupPopup, coords, eventList);
       }
       else {
+        console.log("here3");
         this.map.getSource('hoveredPin').setData({
           "geometry": {
             "type": "Point",
@@ -339,8 +402,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           "type": "Feature"
         });
         this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-        this.addPopup(this.popup, coords, event.id, event.properties.name,
-          this._dateService.formatTime(new Date(event.properties.start_time)));
+        this.addPopup(this.popup, coords, eventList);
       }
     }
 
