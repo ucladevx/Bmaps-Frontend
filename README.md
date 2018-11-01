@@ -16,9 +16,12 @@ A single platform for events across campus. Mappening helps raise awareness of e
 - Clone this repository 
   - `git clone https://github.com/ucladevx/Mappening-Frontend.git`  
 - Install necessary packages
-  - Install yarn (test with command `yarn`) with `brew install yarn`
-  - Install Angular CLI with `yarn global add @angular/cli`
-  - Install node modules with `yarn add`
+  - Install yarn with `brew install yarn`
+  - Import node modules with command `yarn` or `yarn install`
+    - Uses `package.json` for installing packages
+    - Install specific packages as needed with `yarn add <package>`
+    - Install Angular CLI with `yarn global add @angular/cli`
+  - NOTE: Commit/keep lock files as they change. `package.json` defines the intended versions of dependencies while the lock files keep track of the most recently used versions.
 
 ## How to Push Image to AWS ECS
 - Enter the repository
