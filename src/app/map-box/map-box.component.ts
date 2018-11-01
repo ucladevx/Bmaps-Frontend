@@ -227,6 +227,15 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           var newDiv = document.createElement('div');
           newDiv.id = 'popupContainer'+eIndex;
           newDiv.className = 'popupContainer';
+          if(eIndex != 0){
+            newDiv.style.paddingTop = "10px";
+            newDiv.style.borderTopStyle = "solid";
+            newDiv.style.borderTopColor = "grey";
+            newDiv.style.borderTopWidth = "thin";
+          }
+          else if(eIndex != eventList.length && eventList.length != 1){
+            newDiv.style.paddingBottom = "10px";
+          }
           this.addClickBehavior(newDiv,eventList[eIndex].id);
           document.getElementById('popupBody').append(newDiv);
           var newEvent = document.createElement('div');
@@ -248,6 +257,15 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           var newDiv = document.createElement('div');
           newDiv.id = 'backupPopupContainer'+eIndex;
           newDiv.className = 'backupPopupContainer';
+          if(eIndex != 0){
+            newDiv.style.paddingTop = "10px";
+            newDiv.style.borderTopStyle = "solid";
+            newDiv.style.borderTopColor = "grey";
+            newDiv.style.borderTopWidth = "thin";
+          }
+          else if(eIndex != eventList.length && eventList.length != 1){
+            newDiv.style.paddingBottom = "10px";
+          }
           this.addClickBehavior(newDiv,eventList[eIndex].id);
           document.getElementById('backupPopupBody').append(newDiv);
           var newEvent = document.createElement('div');
