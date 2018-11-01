@@ -94,14 +94,11 @@ export class DateService {
     return (hour >= EVENING_START && hour < 24) || (hour >= 0 && hour < EVENING_END);
   }
 
-<<<<<<< HEAD
-=======
   // Returns true if given date is today
   isToday(date: string): boolean {
     return moment(date).isSame(moment(), 'day');
   }
 
->>>>>>> master
   //MOVE THIS SOMEWHERE WITHIN THE APP
   // nextDay() {
   // 	currDay.setDate(currDay.getDate() + 1);
