@@ -12,7 +12,7 @@
 }
 
 .categ-bubble {
-  float: right;
+  margin-left: auto;
 }
 
 .categ-bubble-selected {
@@ -26,6 +26,12 @@
 .dropdown-item {
   cursor: pointer;
   color: #747473;
+  line-height: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .btn:hover {
@@ -68,6 +74,8 @@
 
 .filters-wrapper {
   text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .categories-wrapper {
@@ -76,11 +84,7 @@
 }
 
 .filters-bottom-section {
-  margin-bottom: 6px;
-}
-
-.time-filter-group {
-  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 ul {
@@ -128,12 +132,19 @@ a.clear-all-btn:active {
 }
 
 .btn.filter-btn {
-  border-color: #ffffff;
-  border-width: 2px;
-  background-color: #E8E8E8;
+  border-color: #d3d3d3;
+  border-width: 1px;
+  /* background-color: #E8E8E8; */
   height: 40px;
   pointer-events: auto;
   transition: unset;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.filter-group + .filter-group {
+  margin-top: 10px;
 }
 
 .btn.filter-btn:hover {
@@ -146,14 +157,22 @@ a.clear-all-btn:active {
 }
 
 .btn.filter-btn:active {
-  border-color: #ffffff;
+  border-color: #d3d3d3;
 }
 
 .btn.filter-btn.active {
-  background-color: #8dd3d6;
-  border-color: #ffffff;
+  background-color: #4ad3d3;
+  border-color: #d3d3d3;
 }
 
 .btn.filter-btn.disabled {
   pointer-events: none;
+  opacity: .5;
+}
+
+.checkbox-container {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-right: 11px;
 }
