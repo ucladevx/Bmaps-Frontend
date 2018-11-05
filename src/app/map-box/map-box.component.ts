@@ -209,14 +209,16 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.map.addControl(new mapboxgl.NavigationControl());
   }
 
-  addClickBehavior(div, id: number){
+  //add click behavior to an eventPopup (open event in sidebar)
+  addClickBehavior(eventPopup, id: number){
     var openDetails = (e: MouseEvent|TouchEvent): void => {
       this.router.navigate(['', {outlets: {sidebar: ['detail', id]}}]);
     };
-    div.onclick = openDetails;
-    div.ontouchstart = openDetails;
+    eventPopup.onclick = openDetails;
+    eventPopup.ontouchstart = openDetails;
   }
 
+  //add popup to a mapbox pin, containing sections for every event in that location
   addPopup(popup, coords, eventList): void {
 
     if (popup == this.popup) {
@@ -224,25 +226,25 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         .addTo(this.map);
         document.getElementById('popupBody').innerHTML = "";
         for(var eIndex in eventList){
-          var newDiv = document.createElement('div');
-          newDiv.id = 'popupContainer'+eIndex;
-          newDiv.className = 'popupContainer';
-          if(eIndex != 0){
-            newDiv.style.paddingTop = "10px";
-            newDiv.style.borderTopStyle = "solid";
-            newDiv.style.borderTopColor = "grey";
-            newDiv.style.borderTopWidth = "thin";
+          //create new popup section for an event
+          var newPopupSection = document.createElement('div');
+          newPopupSection.className = 'popupContainer';
+          newPopupSection.id = 'popupContainer'+eIndex;
+          //set styling to separate multiple events
+          if(eIndex != '0'){
+            newPopupSection.style.paddingTop = "10px";
+            newPopupSection.style.borderTop = "thin solid grey";
           }
-          else if(eIndex != eventList.length && eventList.length != 1){
-            newDiv.style.paddingBottom = "10px";
-          }
-          this.addClickBehavior(newDiv,eventList[eIndex].id);
-          document.getElementById('popupBody').append(newDiv);
+          //add click behavior to open up event in sidebar
+          this.addClickBehavior(newPopupSection,eventList[eIndex].id);
+          document.getElementById('popupBody').append(newPopupSection);
+          //create new event name
           var newEvent = document.createElement('div');
-          newEvent.id = 'popupEvent'+eIndex;
           newEvent.className = 'popupEvent';
+          newEvent.id = 'popupEvent'+eIndex;
           newEvent.innerHTML = eventList[eIndex].properties.name;
           document.getElementById('popupContainer'+eIndex).append(newEvent);
+          //create new event date
           var newDate = document.createElement('div');
           newDate.id = 'popupDate'+eIndex;
           newDate.className = 'popupDate';
@@ -254,25 +256,25 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         .addTo(this.map);
         document.getElementById('backupPopupBody').innerHTML = "";
         for(var eIndex in eventList){
-          var newDiv = document.createElement('div');
-          newDiv.id = 'backupPopupContainer'+eIndex;
-          newDiv.className = 'backupPopupContainer';
-          if(eIndex != 0){
-            newDiv.style.paddingTop = "10px";
-            newDiv.style.borderTopStyle = "solid";
-            newDiv.style.borderTopColor = "grey";
-            newDiv.style.borderTopWidth = "thin";
+          //create new popup section for an event
+          var newPopupSection = document.createElement('div');
+          newPopupSection.className = 'backupPopupContainer';
+          newPopupSection.id = 'backupPopupContainer'+eIndex;
+          //set styling to separate multiple events
+          if(eIndex != '0'){
+            newPopupSection.style.paddingTop = "10px";
+            newPopupSection.style.borderTop = "thin solid grey";
           }
-          else if(eIndex != eventList.length && eventList.length != 1){
-            newDiv.style.paddingBottom = "10px";
-          }
-          this.addClickBehavior(newDiv,eventList[eIndex].id);
-          document.getElementById('backupPopupBody').append(newDiv);
+          //add click behavior to open up event in sidebar
+          this.addClickBehavior(newPopupSection,eventList[eIndex].id);
+          document.getElementById('backupPopupBody').append(newPopupSection);
+          //create new event name
           var newEvent = document.createElement('div');
-          newEvent.id = 'backupPopupEvent'+eIndex;
           newEvent.className = 'backupPopupEvent';
+          newEvent.id = 'backupPopupEvent'+eIndex;
           newEvent.innerHTML = eventList[eIndex].properties.name;
           document.getElementById('backupPopupContainer'+eIndex).append(newEvent);
+          //create new event date
           var newDate = document.createElement('div');
           newDate.id = 'backupPopupDate'+eIndex;
           newDate.className = 'backupPopupDate';
@@ -330,40 +332,41 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.popup.remove();
   }
 
+  //compile list of events at a specific location
   listEventsByLocation(location : string){
+    //convert all location input to string format
     if(typeof location != 'string'){
       location = JSON.stringify(location);
     }
-    //retrieve list of all events at the specified coordinates
+    //start list of all events at the specified coordinates
     var eventList = [];
+    //iterate through all events
     for(var eventIndex in this.events.features){
         var ev = this.events.features[eventIndex];
+        //capture event location
         var evLocation = JSON.stringify(ev["properties"]["place"]);
+        //compare event location to provided location
         if(evLocation === location){
           eventList.push(ev);
         }
     }
+    //sort event list by start time
     eventList.sort(function(a, b) {
       a = a["properties"]["start_time"];
       b = b["properties"]["start_time"];
       return a<b ? -1 : a>b ? 1 : 0;
     });
-
-
+    //return list of events
     return eventList;
   }
-
 
   //if event exists put popup and blue pin, else unselect
   selectEvent(event: GeoJson): void {
     this.selectedEvent = event;
-
     this.removePinsAndPopups();
-
     if (event === null) {
       return;
     }
-
     var eventList = this.listEventsByLocation(event["properties"].place);
     // add blue hovered Pin
     let coords = event.geometry.coordinates.slice();
@@ -391,9 +394,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     else {
       // Change the cursor style as a UI indicator.
       this.map.getCanvas().style.cursor = 'pointer';
-
       var eventList = this.listEventsByLocation(event["properties"].place);
-
       //slice returns a copy of the array rather than the actual array
       let coords = event.geometry.coordinates.slice();
       if(this.selectedEvent !== null) {

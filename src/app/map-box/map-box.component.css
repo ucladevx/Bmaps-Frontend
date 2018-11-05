@@ -19,10 +19,6 @@
     max-width: 14em;
 }
 
-:host ::ng-deep .mapboxgl-popup-content > div {
-
-}
-
 /*Override*/
 :host ::ng-deep .mapboxgl-popup {
     font-family: 'Poppins', sans-serif;
@@ -54,9 +50,6 @@
 
 :host ::ng-deep .popupContainer, :host ::ng-deep .backupPopupContainer {
   padding: 10px 10px 10px;
-}
-:host ::ng-deep .popupContainer:hover, :host ::ng-deep .backupPopupContainer:hover {
-  background-color: #E8E8E8;
 }
 
 :host ::ng-deep .popupEvent, :host ::ng-deep .backupPopupEvent {
