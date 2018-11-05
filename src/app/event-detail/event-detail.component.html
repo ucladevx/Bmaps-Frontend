@@ -6,7 +6,13 @@
     <span class="header-text">Explore Events</span>
   </div>
   <div *ngIf="event && event.properties" class="event-body">
-    <img class="event-image" src="{{event.properties.cover_picture == '<NONE>' ? '/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png' : event.properties.cover_picture}}">
+    <img src="{{
+      event.properties.cover_picture == '<NONE>' ?
+        checkImage('/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
+        '/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
+        : '/assets/images/fb-banner-default.png'
+      : event.properties.cover_picture
+    }}" class="event-image">
 		<div class="event-title" id="event-title">{{event.properties.name}}</div>
 		<div class="event-info" id="event-info">
       {{dateService.formatEventDate(event) +' \u2022 '}} {{event.properties.hoster}}
