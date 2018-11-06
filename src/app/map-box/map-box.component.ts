@@ -107,6 +107,7 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.addControls();
+
   }
 
   addEventLayer(data): void {
@@ -210,12 +211,13 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   }
 
   //add click behavior to an eventPopup (open event in sidebar)
-  addClickBehavior(eventPopup, id: number){
+  addClickBehavior(eventPopup, event){
     var openDetails = (e: MouseEvent|TouchEvent): void => {
-      this.router.navigate(['', {outlets: {sidebar: ['detail', id]}}]);
+      this.selectedEvent = event;
+      this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
+      this.eventService.boldPopup(event);
     };
     eventPopup.onclick = openDetails;
-    eventPopup.ontouchstart = openDetails;
   }
 
   //add popup to a mapbox pin, containing sections for every event in that location
@@ -229,27 +231,27 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           //create new popup section for an event
           var newPopupSection = document.createElement('div');
           newPopupSection.className = 'popupContainer';
-          newPopupSection.id = 'popupContainer'+eIndex;
+          newPopupSection.id = 'popupContainer'+eventList[eIndex].id;
           //set styling to separate multiple events
           if(eIndex != '0'){
             newPopupSection.style.paddingTop = "10px";
             newPopupSection.style.borderTop = "thin solid grey";
           }
           //add click behavior to open up event in sidebar
-          this.addClickBehavior(newPopupSection,eventList[eIndex].id);
+          this.addClickBehavior(newPopupSection,eventList[eIndex]);
           document.getElementById('popupBody').append(newPopupSection);
           //create new event name
           var newEvent = document.createElement('div');
           newEvent.className = 'popupEvent';
-          newEvent.id = 'popupEvent'+eIndex;
+          newEvent.id = 'popupEvent'+eventList[eIndex].id;
           newEvent.innerHTML = eventList[eIndex].properties.name;
-          document.getElementById('popupContainer'+eIndex).append(newEvent);
+          document.getElementById('popupContainer'+eventList[eIndex].id).append(newEvent);
           //create new event date
           var newDate = document.createElement('div');
-          newDate.id = 'popupDate'+eIndex;
+          newDate.id = 'popupDate'+eventList[eIndex].id;
           newDate.className = 'popupDate';
           newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
-          document.getElementById('popupContainer'+eIndex).append(newDate);
+          document.getElementById('popupContainer'+eventList[eIndex].id).append(newDate);
         }
     } else {
       popup.setLngLat(coords)
@@ -259,27 +261,27 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           //create new popup section for an event
           var newPopupSection = document.createElement('div');
           newPopupSection.className = 'backupPopupContainer';
-          newPopupSection.id = 'backupPopupContainer'+eIndex;
+          newPopupSection.id = 'backupPopupContainer'+eventList[eIndex].id;
           //set styling to separate multiple events
           if(eIndex != '0'){
             newPopupSection.style.paddingTop = "10px";
             newPopupSection.style.borderTop = "thin solid grey";
           }
           //add click behavior to open up event in sidebar
-          this.addClickBehavior(newPopupSection,eventList[eIndex].id);
+          this.addClickBehavior(newPopupSection,eventList[eIndex]);
           document.getElementById('backupPopupBody').append(newPopupSection);
           //create new event name
           var newEvent = document.createElement('div');
           newEvent.className = 'backupPopupEvent';
-          newEvent.id = 'backupPopupEvent'+eIndex;
+          newEvent.id = 'backupPopupEvent'+eventList[eIndex].id;
           newEvent.innerHTML = eventList[eIndex].properties.name;
-          document.getElementById('backupPopupContainer'+eIndex).append(newEvent);
+          document.getElementById('backupPopupContainer'+eventList[eIndex].id).append(newEvent);
           //create new event date
           var newDate = document.createElement('div');
-          newDate.id = 'backupPopupDate'+eIndex;
+          newDate.id = 'backupPopupDate'+eventList[eIndex].id;
           newDate.className = 'backupPopupDate';
           newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
-          document.getElementById('backupPopupContainer'+eIndex).append(newDate);
+          document.getElementById('backupPopupContainer'+eventList[eIndex].id).append(newDate);
         }
     }
   }
@@ -309,6 +311,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
         this.eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+        this.eventService.boldPopup(null);
         return;
       }
 
@@ -321,6 +324,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
         this.eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+        this.eventService.boldPopup(null);
       }
     });
   }

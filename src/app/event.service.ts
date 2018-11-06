@@ -352,6 +352,30 @@ export class EventService {
     this.hoveredEventSource.next(this._hoveredEvent);
   }
 
+  //bold
+  boldPopup(event: GeoJson): void {
+    var popups = document.getElementsByClassName("popupEvent");
+    for(var i = 0; i < popups.length; i++){
+      popups.item(i).style.fontWeight = "normal";
+    }
+    if(event != null){
+      var selectedPopup = document.getElementById("popupEvent"+event.id);
+      if(selectedPopup != null){
+        selectedPopup.style.fontWeight = "bold";
+      }
+    }
+    var bpopups = document.getElementsByClassName("backupPopupEvent");
+    for(var i = 0; i < bpopups.length; i++){
+      bpopups.item(i).style.fontWeight = "normal";
+    }
+    if(event != null){
+      var bselectedPopup = document.getElementById("backupPopupEvent"+event.id);
+      if(bselectedPopup != null){
+        bselectedPopup.style.fontWeight = "bold";
+      }
+    }
+  }
+
   getEventById(id: string): GeoJson {
     return this._events.features.find((e: GeoJson) => e.id == id);
   }
