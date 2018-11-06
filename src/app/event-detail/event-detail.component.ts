@@ -24,4 +24,16 @@ export class EventDetailComponent implements OnInit {
           this.event = this.eventService.getEventById(id);
       });
   }
+
+  //check whether an image source exists
+  checkImage(imageSrc) {
+      var img = new Image();
+      try {
+        img.src = imageSrc;
+        return true;
+      } catch(err) {
+        return false;
+      }
+    }
+
 }

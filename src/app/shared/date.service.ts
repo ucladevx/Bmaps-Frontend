@@ -22,6 +22,8 @@ export class DateService {
     return moment(date).format('MMM');
   }
 
+
+
   formatTime(date: Date | string): string {
     return moment(date).format("h:mmA");
   }
@@ -93,6 +95,7 @@ export class DateService {
     let hour = moment(dateStr).hour();
     return (hour >= EVENING_START && hour < 24) || (hour >= 0 && hour < EVENING_END);
   }
+
 
   // Returns true if given date is today
   isToday(date: string): boolean {
