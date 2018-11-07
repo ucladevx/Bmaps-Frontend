@@ -21,6 +21,8 @@ export class EventService {
   private clickedEventSource: Subject <GeoJson> ;
   // holds hovered event
   private hoveredEventSource: Subject <GeoJson> ;
+  //holds expanded event
+  private expandedEventSource: Subject <GeoJson> ;
   // holds object of categories
   private categHashSource: Subject <any> ;
   // holds object of filters
@@ -32,6 +34,7 @@ export class EventService {
   currDate$;
   clickedEvent$;
   hoveredEvent$;
+  expandedEvent$;
   categHash$;
   filterHash$;
 
@@ -40,6 +43,7 @@ export class EventService {
   private _date;
   private _clickedEvent;
   private _hoveredEvent;
+  private _expandedEvent;
   private _categHash;
   private _filterHash;
 
@@ -91,6 +95,7 @@ export class EventService {
     this.currDateSource = new BehaviorSubject < Date > (today);
     this.clickedEventSource = new Subject < GeoJson > ();
     this.hoveredEventSource = new Subject < GeoJson > ();
+    this.expandedEventSource = new Subject < GeoJson > ();
     this.categHashSource = new Subject < any > ();
     this.filterHashSource = new Subject <any>();
 
@@ -100,6 +105,7 @@ export class EventService {
     this.currDate$ = this.currDateSource.asObservable();
     this.clickedEvent$ = this.clickedEventSource.asObservable();
     this.hoveredEvent$ = this.hoveredEventSource.asObservable();
+    this.expandedEvent$ = this.expandedEventSource.asObservable();
     this.categHash$ = this.categHashSource.asObservable();
     this.filterHash$ = this.filterHashSource.asObservable();
 
@@ -108,6 +114,7 @@ export class EventService {
     this.currDate$.subscribe(date => this._date = date);
     this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
     this.hoveredEvent$.subscribe(hoveredEventInfo => this._hoveredEvent = hoveredEventInfo);
+    this.expandedEvent$.subscribe(expandedEventInfo => this._expandedEvent = expandedEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
     this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
 
@@ -352,22 +359,36 @@ export class EventService {
     this.hoveredEventSource.next(this._hoveredEvent);
   }
 
-  //bold
+  // Updates the current expanded event by number
+  updateExpandedEvent(event: GeoJson): void {
+    this._expandedEvent = event;
+    this.expandedEventSource.next(this._expandedEvent);
+  }
+
+  //bold the popup event title for the given event, while unbolding all other event titles
   boldPopup(event: GeoJson): void {
+    //iterate through popup event titles and unbold
     var popups = document.getElementsByClassName("popupEvent");
     for(var i = 0; i < popups.length; i++){
-      popups.item(i).style.fontWeight = "normal";
+      if(this._expandedEvent == undefined || (this._expandedEvent != null && popups.item(i).id != "popupEvent"+this._expandedEvent.id)){
+        popups.item(i).style.fontWeight = "normal";
+      }
     }
+    //bold the selected event title
     if(event != null){
       var selectedPopup = document.getElementById("popupEvent"+event.id);
       if(selectedPopup != null){
         selectedPopup.style.fontWeight = "bold";
       }
     }
+    //iterate through backup popup event titles and unbold
     var bpopups = document.getElementsByClassName("backupPopupEvent");
     for(var i = 0; i < bpopups.length; i++){
-      bpopups.item(i).style.fontWeight = "normal";
+      if(this._expandedEvent == undefined || (this._expandedEvent != null && bpopups.item(i).id != "popupEvent"+this._expandedEvent.id)){
+        bpopups.item(i).style.fontWeight = "normal";
+      }
     }
+    //bold the selected backup event title
     if(event != null){
       var bselectedPopup = document.getElementById("backupPopupEvent"+event.id);
       if(bselectedPopup != null){

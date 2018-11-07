@@ -215,17 +215,28 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     var openDetails = (e: MouseEvent|TouchEvent): void => {
       this.selectedEvent = event;
       this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
+      this.eventService.updateExpandedEvent(event);
       this.eventService.boldPopup(event);
     };
     eventPopup.onclick = openDetails;
+  }
+  //add hover behavior to an eventPopup (bold and unbold)
+  addHoverBehavior(eventPopup, event){
+    var bold = (e: MouseEvent|TouchEvent): void => {
+      this.eventService.boldPopup(event);
+    };
+    var unbold = (e: MouseEvent|TouchEvent): void => {
+      this.eventService.boldPopup(null);
+    };
+    eventPopup.onmouseenter = bold;
+    eventPopup.onmouseleave = unbold;
   }
 
   //add popup to a mapbox pin, containing sections for every event in that location
   addPopup(popup, coords, eventList): void {
 
     if (popup == this.popup) {
-      popup.setLngLat(coords)
-        .addTo(this.map);
+      popup.setLngLat(coords).addTo(this.map);
         document.getElementById('popupBody').innerHTML = "";
         for(var eIndex in eventList){
           //create new popup section for an event
@@ -237,8 +248,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
             newPopupSection.style.paddingTop = "10px";
             newPopupSection.style.borderTop = "thin solid grey";
           }
-          //add click behavior to open up event in sidebar
+          //add click and hover behavior to open up event in sidebar
           this.addClickBehavior(newPopupSection,eventList[eIndex]);
+          this.addHoverBehavior(newPopupSection,eventList[eIndex]);
           document.getElementById('popupBody').append(newPopupSection);
           //create new event name
           var newEvent = document.createElement('div');
@@ -254,8 +266,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           document.getElementById('popupContainer'+eventList[eIndex].id).append(newDate);
         }
     } else {
-      popup.setLngLat(coords)
-        .addTo(this.map);
+      popup.setLngLat(coords).addTo(this.map);
         document.getElementById('backupPopupBody').innerHTML = "";
         for(var eIndex in eventList){
           //create new popup section for an event
@@ -267,8 +278,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
             newPopupSection.style.paddingTop = "10px";
             newPopupSection.style.borderTop = "thin solid grey";
           }
-          //add click behavior to open up event in sidebar
+          //add click and hover behavior to open up event in sidebar
           this.addClickBehavior(newPopupSection,eventList[eIndex]);
+          this.addHoverBehavior(newPopupSection,eventList[eIndex]);
           document.getElementById('backupPopupBody').append(newPopupSection);
           //create new event name
           var newEvent = document.createElement('div');
@@ -311,6 +323,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
         this.eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+        this.eventService.updateExpandedEvent(null);
         this.eventService.boldPopup(null);
         return;
       }
@@ -324,6 +337,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
         this.eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+        this.eventService.updateExpandedEvent(null);
         this.eventService.boldPopup(null);
       }
     });

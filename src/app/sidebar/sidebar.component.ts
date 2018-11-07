@@ -62,6 +62,7 @@ export class SidebarComponent implements OnInit {
     // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
         this.eventService.updateClickedEvent(event);
+        this.eventService.updateExpandedEvent(event);
         this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
         this.eventService.boldPopup(event);
         var popups = document.getElementsByClassName("popupEvent");

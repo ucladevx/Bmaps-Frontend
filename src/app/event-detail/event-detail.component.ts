@@ -25,4 +25,12 @@ export class EventDetailComponent implements OnInit {
       });
   }
 
+  //behavior for back arrow
+  back() {
+    //update expanded event
+    this.eventService.updateExpandedEvent(null);
+    //unbold the popup event title
+    this.eventService.boldPopup(null);
+  }
+
 }
