@@ -55,3 +55,24 @@
     color:  #FF3A3A;
     font-size: 11;
 }
+
+:host ::ng-deep #resetButton {
+  right: 10px;
+  z-index: 1000;
+  position: absolute;
+  top: 150px;
+  width: 31px;
+  height: 31px;
+  border-radius: 7px;
+  padding: 0;
+  border-style: none;
+  box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.1);
+  background-color: white;
+  font-size: 20px;
+  color: #333333;
+  outline: none !important;
+}
+:host ::ng-deep #resetButton:hover {
+  background-color: #F5F5F5;
+  cursor: pointer;
+}

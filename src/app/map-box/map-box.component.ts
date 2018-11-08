@@ -206,6 +206,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       trackUserLocation: true
     }));
     this.map.addControl(new mapboxgl.NavigationControl());
+    this.addResetControls();
   }
 
   addPopup(popup, coords, id: string|number, eventName: string, eventTime: string): void {
@@ -378,6 +379,23 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     }, "eventstest");
   }
 
+  addResetControls(): void {
+    var mapCanvas = document.getElementById("map");
+    var resetButton = document.createElement("BUTTON");
+    resetButton.id = 'resetButton';
+    var resetDetails = (e: MouseEvent|TouchEvent): void => {
+      this.map.easeTo({
+        center: [-118.445320, 34.066915],
+        zoom: 15,
+        pitch: 60,
+        bearing: 0
+      });
+    };
+    resetButton.onclick = resetDetails;
+    resetButton.innerHTML = '<i id="resetIcon" class="fa fa-home" aria-hidden="true"></i>';
+    mapCanvas.appendChild(resetButton);
+  }
+
   addArrowControls(): void {
     // pixels the map pans when the up or down arrow is clicked
     const deltaDistance = 60;
@@ -424,6 +442,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     }, true);
   }
 
+
+
   ///////////////////////////////////////
   // MAP CALLBACKS AS PROMISES
   //////////////////////////////////////
@@ -466,4 +486,5 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     });
 
   }
+
 }
