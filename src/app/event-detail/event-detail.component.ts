@@ -10,7 +10,7 @@ import { DateService } from '../shared/date.service';
     styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-  private event: GeoJson;
+  public event: GeoJson;
 
   constructor(
       private route: ActivatedRoute,

@@ -12,7 +12,7 @@ export class NavbarComponent implements OnInit {
     }
 
     isCollapsed: boolean = true;
-    private isFilterCollapsed: boolean = true;
+    public isFilterCollapsed: boolean = true;
 
     toggleMenuCollapse(): void {
       this.isCollapsed = !this.isCollapsed;
