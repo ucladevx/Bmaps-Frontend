@@ -16,8 +16,8 @@ export class AppComponent {
 
   constructor(private categService: CategoryService){}
 
-  private pressed: boolean;
-  private pressed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public pressed: boolean;
+  public pressed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   ngOnInit(): void {
     // this.categService.getCategories()

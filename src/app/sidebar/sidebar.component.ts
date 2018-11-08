@@ -31,7 +31,7 @@ export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
-    private mobileSidebarVisible: boolean = false;
+    public mobileSidebarVisible: boolean = false;
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
