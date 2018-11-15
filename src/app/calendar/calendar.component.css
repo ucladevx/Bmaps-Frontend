@@ -75,10 +75,41 @@
     background-color: #ececec;
 }
 
+.calendar-day.today {
+  color: #59dbd6;
+  font-weight: 900;
+
+}
+
 .circle {
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  background: #59dbd6;
-  color: white;
+  /* border-radius: 50%; */
+  /* width: 25px; */
+  /* height: 25px; */
+  /* background: #59dbd6; */
+  /* color: #59dbd6; */
+}
+
+.calendar-header > .short-abbr {
+    display: none;
+}
+
+
+/* mobile css */
+@media screen and (max-width: 768px) {
+    /* display short day abbreviations */
+    .calendar-header > .short-abbr {
+        display: flex;
+    }
+    .calendar-header > .long-abbr {
+        display: none;
+    }
+
+    /* make day text centered */
+    .calendar-day {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
 }
