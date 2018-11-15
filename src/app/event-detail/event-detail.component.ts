@@ -10,7 +10,7 @@ import { DateService } from '../shared/date.service';
     styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-  private event: GeoJson;
+  public event: GeoJson;
 
   constructor(
       private route: ActivatedRoute,
@@ -32,5 +32,16 @@ export class EventDetailComponent implements OnInit {
     //unbold the popup event title
     this.eventService.boldPopup(null);
   }
+
+  //check whether an image source exists
+  checkImage(imageSrc) {
+      var img = new Image();
+      try {
+        img.src = imageSrc;
+        return true;
+      } catch(err) {
+        return false;
+      }
+    }
 
 }

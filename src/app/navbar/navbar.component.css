@@ -48,6 +48,10 @@
     font-weight: 600;
 }
 
+#brand-name{
+  margin-left: 9px;
+}
+
 #filter-dropdown-toggle {
     color: #9d9d9d;
     font-size: 30px;

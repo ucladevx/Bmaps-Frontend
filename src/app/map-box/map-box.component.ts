@@ -208,6 +208,24 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       trackUserLocation: true
     }));
     this.map.addControl(new mapboxgl.NavigationControl());
+    this.addResetControls();
+  }
+
+  addResetControls(): void {
+    var mapCanvas = document.getElementById("map");
+    var resetButton = document.createElement("BUTTON");
+    resetButton.id = 'resetButton';
+    var resetDetails = (e: MouseEvent|TouchEvent): void => {
+      this.map.easeTo({
+        center: [-118.445320, 34.066915],
+        zoom: 15,
+        pitch: 60,
+        bearing: 0
+      });
+    };
+    resetButton.onclick = resetDetails;
+    resetButton.innerHTML = '<i id="resetIcon" class="fa fa-home" aria-hidden="true"></i>';
+    mapCanvas.appendChild(resetButton);
   }
 
   //add click behavior to an eventPopup (open event in sidebar)

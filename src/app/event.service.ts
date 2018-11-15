@@ -371,7 +371,7 @@ export class EventService {
     var popups = document.getElementsByClassName("popupEvent");
     for(var i = 0; i < popups.length; i++){
       if(this._expandedEvent == undefined || (this._expandedEvent != null && popups.item(i).id != "popupEvent"+this._expandedEvent.id)){
-        popups.item(i).style.fontWeight = "normal";
+        (<any>popups.item(i)).style.fontWeight = "normal";
       }
     }
     //bold the selected event title
@@ -385,7 +385,7 @@ export class EventService {
     var bpopups = document.getElementsByClassName("backupPopupEvent");
     for(var i = 0; i < bpopups.length; i++){
       if(this._expandedEvent == undefined || (this._expandedEvent != null && bpopups.item(i).id != "popupEvent"+this._expandedEvent.id)){
-        bpopups.item(i).style.fontWeight = "normal";
+        (<any>bpopups.item(i)).style.fontWeight = "normal";
       }
     }
     //bold the selected backup event title

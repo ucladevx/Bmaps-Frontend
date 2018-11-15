@@ -31,7 +31,7 @@ export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
-    private mobileSidebarVisible: boolean = false;
+    public mobileSidebarVisible: boolean = false;
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
@@ -62,10 +62,9 @@ export class SidebarComponent implements OnInit {
     // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
         this.eventService.updateClickedEvent(event);
-        this.eventService.updateExpandedEvent(event);
         this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
+        this.eventService.updateExpandedEvent(event);
         this.eventService.boldPopup(event);
-        var popups = document.getElementsByClassName("popupEvent");
     }
 
     onHover(event: GeoJson): void {
@@ -98,4 +97,16 @@ export class SidebarComponent implements OnInit {
         }
       }
     }
+
+  //check whether an image source exists
+  checkImage(imageSrc) {
+      var img = new Image();
+      try {
+        img.src = imageSrc;
+        return true;
+      } catch(err) {
+        return false;
+      }
+    }
+
 }

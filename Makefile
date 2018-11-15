@@ -1,6 +1,7 @@
 ECR_REPO=698514710897.dkr.ecr.us-west-1.amazonaws.com
 APP_NAME=mappening/frontend
 DEV_NAME=mappening/dev
+DEV_DOCKERFILE=Dora-Dockerfile
 
 ##########################      AWS / PRODUCTION      ##########################
 
@@ -21,7 +22,7 @@ push: ecr-login build
 
 # Build backend image for dora
 build-dora:
-	docker build . -t $(DEV_NAME):dora
+	docker build . -t $(DEV_NAME):dora -f $(DEV_DOCKERFILE)
 
 # Login, build, and push latest image to AWS for dev testing
 dora: ecr-login build-dora
@@ -30,9 +31,9 @@ dora: ecr-login build-dora
 
 ##################      LOCAL DEVELOPMENT (Frontend Only)     ##################
 
-# Run a dev server. Navigate to http://localhost:4200/ 
+# Run a dev server. Navigate to http://localhost:4200/
 # The app will automatically reload if you change any of the source files.
-dev: 
+dev:
 	ng serve
 
 # Open whatever is currently running
