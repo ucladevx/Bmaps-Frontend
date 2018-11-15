@@ -19,10 +19,6 @@
     max-width: 14em;
 }
 
-:host ::ng-deep .mapboxgl-popup-content > div {
-    padding: 10px 10px 10px;
-}
-
 /*Override*/
 :host ::ng-deep .mapboxgl-popup {
     font-family: 'Poppins', sans-serif;
@@ -51,7 +47,18 @@
     }
 }
 
-:host ::ng-deep #popupDate, :host ::ng-deep #backupPopupDate {
+
+:host ::ng-deep .popupContainer, :host ::ng-deep .backupPopupContainer {
+  padding: 10px 10px 10px;
+}
+
+:host ::ng-deep .popupEvent, :host ::ng-deep .backupPopupEvent {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+:host ::ng-deep .popupDate, :host ::ng-deep .backupPopupDate {
     color:  #FF3A3A;
     font-size: 11;
 }

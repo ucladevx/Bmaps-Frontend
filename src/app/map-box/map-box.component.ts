@@ -37,13 +37,13 @@ export class MapBoxComponent implements OnInit {
     closeButton: false,
     closeOnClick: false,
     offset: 20 // offset upward from pin
-  }).setHTML('<div id="popupContainer"><div id="popupEvent"></div> <div id="popupDate"></div></div>');
+  }).setHTML('<div id="popupBody"></div>');
 
   backupPopup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
     offset: 20 // offset upward from pin
-  }).setHTML('<div id="backupPopupContainer"><div id="backupPopupEvent"></div> <div id="backupPopupDate"></div></div>');
+  }).setHTML('<div id="backupPopupBody"></div>');
 
   private events: FeatureCollection;
 
@@ -63,6 +63,7 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+
       this.selectEvent(clickedEventInfo);
     });
 
@@ -106,6 +107,7 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.addControls();
+
   }
 
   addEventLayer(data): void {
@@ -209,24 +211,108 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.addResetControls();
   }
 
-  addPopup(popup, coords, id: string|number, eventName: string, eventTime: string): void {
-    var openDetails = (e: MouseEvent|TouchEvent): void => {
-      this.router.navigate(['', {outlets: {sidebar: ['detail', id]}}]);
+  addResetControls(): void {
+    var mapCanvas = document.getElementById("map");
+    var resetButton = document.createElement("BUTTON");
+    resetButton.id = 'resetButton';
+    var resetDetails = (e: MouseEvent|TouchEvent): void => {
+      this.map.easeTo({
+        center: [-118.445320, 34.066915],
+        zoom: 15,
+        pitch: 60,
+        bearing: 0
+      });
     };
+    resetButton.onclick = resetDetails;
+    resetButton.innerHTML = '<i id="resetIcon" class="fa fa-home" aria-hidden="true"></i>';
+    mapCanvas.appendChild(resetButton);
+  }
+
+  //add click behavior to an eventPopup (open event in sidebar)
+  addClickBehavior(eventPopup, event){
+    var openDetails = (e: MouseEvent|TouchEvent): void => {
+      this.selectedEvent = event;
+      this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
+      this.eventService.updateExpandedEvent(event);
+      this.eventService.boldPopup(event);
+    };
+    eventPopup.onclick = openDetails;
+  }
+  //add hover behavior to an eventPopup (bold and unbold)
+  addHoverBehavior(eventPopup, event){
+    var bold = (e: MouseEvent|TouchEvent): void => {
+      this.eventService.boldPopup(event);
+    };
+    var unbold = (e: MouseEvent|TouchEvent): void => {
+      this.eventService.boldPopup(null);
+    };
+    eventPopup.onmouseenter = bold;
+    eventPopup.onmouseleave = unbold;
+  }
+
+  //add popup to a mapbox pin, containing sections for every event in that location
+  addPopup(popup, coords, eventList): void {
+
     if (popup == this.popup) {
-      popup.setLngLat(coords)
-        .addTo(this.map);
-      document.getElementById('popupEvent').innerHTML = eventName;
-      document.getElementById('popupDate').innerHTML = eventTime;
-      document.getElementById('popupContainer').onclick = openDetails;
-      document.getElementById('popupContainer').ontouchstart = openDetails;
+      popup.setLngLat(coords).addTo(this.map);
+        document.getElementById('popupBody').innerHTML = "";
+        for(var eIndex in eventList){
+          //create new popup section for an event
+          var newPopupSection = document.createElement('div');
+          newPopupSection.className = 'popupContainer';
+          newPopupSection.id = 'popupContainer'+eventList[eIndex].id;
+          //set styling to separate multiple events
+          if(eIndex != '0'){
+            newPopupSection.style.paddingTop = "10px";
+            newPopupSection.style.borderTop = "thin solid grey";
+          }
+          //add click and hover behavior to open up event in sidebar
+          this.addClickBehavior(newPopupSection,eventList[eIndex]);
+          this.addHoverBehavior(newPopupSection,eventList[eIndex]);
+          document.getElementById('popupBody').append(newPopupSection);
+          //create new event name
+          var newEvent = document.createElement('div');
+          newEvent.className = 'popupEvent';
+          newEvent.id = 'popupEvent'+eventList[eIndex].id;
+          newEvent.innerHTML = eventList[eIndex].properties.name;
+          document.getElementById('popupContainer'+eventList[eIndex].id).append(newEvent);
+          //create new event date
+          var newDate = document.createElement('div');
+          newDate.id = 'popupDate'+eventList[eIndex].id;
+          newDate.className = 'popupDate';
+          newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
+          document.getElementById('popupContainer'+eventList[eIndex].id).append(newDate);
+        }
     } else {
-      popup.setLngLat(coords)
-        .addTo(this.map);
-      document.getElementById('backupPopupEvent').innerHTML = eventName;
-      document.getElementById('backupPopupDate').innerHTML = eventTime;
-      document.getElementById('backupPopupContainer').onclick = openDetails;
-      document.getElementById('backupPopupContainer').ontouchstart = openDetails;
+      popup.setLngLat(coords).addTo(this.map);
+        document.getElementById('backupPopupBody').innerHTML = "";
+        for(var eIndex in eventList){
+          //create new popup section for an event
+          var newPopupSection = document.createElement('div');
+          newPopupSection.className = 'backupPopupContainer';
+          newPopupSection.id = 'backupPopupContainer'+eventList[eIndex].id;
+          //set styling to separate multiple events
+          if(eIndex != '0'){
+            newPopupSection.style.paddingTop = "10px";
+            newPopupSection.style.borderTop = "thin solid grey";
+          }
+          //add click and hover behavior to open up event in sidebar
+          this.addClickBehavior(newPopupSection,eventList[eIndex]);
+          this.addHoverBehavior(newPopupSection,eventList[eIndex]);
+          document.getElementById('backupPopupBody').append(newPopupSection);
+          //create new event name
+          var newEvent = document.createElement('div');
+          newEvent.className = 'backupPopupEvent';
+          newEvent.id = 'backupPopupEvent'+eventList[eIndex].id;
+          newEvent.innerHTML = eventList[eIndex].properties.name;
+          document.getElementById('backupPopupContainer'+eventList[eIndex].id).append(newEvent);
+          //create new event date
+          var newDate = document.createElement('div');
+          newDate.id = 'backupPopupDate'+eventList[eIndex].id;
+          newDate.className = 'backupPopupDate';
+          newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
+          document.getElementById('backupPopupContainer'+eventList[eIndex].id).append(newDate);
+        }
     }
   }
 
@@ -255,6 +341,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
         this.eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+        this.eventService.updateExpandedEvent(null);
+        this.eventService.boldPopup(null);
         return;
       }
 
@@ -267,6 +355,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
         this.eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+        this.eventService.updateExpandedEvent(null);
+        this.eventService.boldPopup(null);
       }
     });
   }
@@ -278,15 +368,42 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.popup.remove();
   }
 
+  //compile list of events at a specific location
+  listEventsByLocation(location : string){
+    //convert all location input to string format
+    if(typeof location != 'string'){
+      location = JSON.stringify(location);
+    }
+    //start list of all events at the specified coordinates
+    var eventList = [];
+    //iterate through all events
+    for(var eventIndex in this.events.features){
+        var ev = this.events.features[eventIndex];
+        //capture event location
+        var evLocation = JSON.stringify(ev["properties"]["place"]);
+        //compare event location to provided location
+        if(evLocation === location){
+          eventList.push(ev);
+        }
+    }
+    //sort event list by start time
+    eventList.sort(function(a, b) {
+      a = a["properties"]["start_time"];
+      b = b["properties"]["start_time"];
+      return a<b ? -1 : a>b ? 1 : 0;
+    });
+    //return list of events
+    return eventList;
+  }
+
   //if event exists put popup and blue pin, else unselect
   selectEvent(event: GeoJson): void {
     this.selectedEvent = event;
     this.removePinsAndPopups();
-
     if (event === null) {
       return;
     }
-
+    var eventList = this.listEventsByLocation(event["properties"].place);
     // add blue hovered Pin
     let coords = event.geometry.coordinates.slice();
     this.map.getSource('hoveredPin').setData({
@@ -297,8 +414,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       "type": "Feature"
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-    this.addPopup(this.popup, coords, event.id, event.properties.name,
-      this._dateService.formatTime(new Date(event.properties.start_time)));
+    this.addPopup(this.popup, coords, eventList);
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
   hoverEvent(event: GeoJson): void {
@@ -314,6 +430,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     else {
       // Change the cursor style as a UI indicator.
       this.map.getCanvas().style.cursor = 'pointer';
+      var eventList = this.listEventsByLocation(event["properties"].place);
       //slice returns a copy of the array rather than the actual array
       let coords = event.geometry.coordinates.slice();
       if(this.selectedEvent !== null) {
@@ -328,8 +445,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           });
           this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
         }
-        this.addPopup(this.backupPopup, coords, event.id, event.properties.name,
-          this._dateService.formatTime(new Date(event.properties.start_time)));
+        this.addPopup(this.backupPopup, coords, eventList);
       }
       else {
         this.map.getSource('hoveredPin').setData({
@@ -340,8 +456,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           "type": "Feature"
         });
         this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-        this.addPopup(this.popup, coords, event.id, event.properties.name,
-          this._dateService.formatTime(new Date(event.properties.start_time)));
+        this.addPopup(this.popup, coords, eventList);
       }
     }
 
@@ -377,23 +492,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         'fill-extrusion-opacity': 0.5
       }
     }, "eventstest");
-  }
-
-  addResetControls(): void {
-    var mapCanvas = document.getElementById("map");
-    var resetButton = document.createElement("BUTTON");
-    resetButton.id = 'resetButton';
-    var resetDetails = (e: MouseEvent|TouchEvent): void => {
-      this.map.easeTo({
-        center: [-118.445320, 34.066915],
-        zoom: 15,
-        pitch: 60,
-        bearing: 0
-      });
-    };
-    resetButton.onclick = resetDetails;
-    resetButton.innerHTML = '<i id="resetIcon" class="fa fa-home" aria-hidden="true"></i>';
-    mapCanvas.appendChild(resetButton);
   }
 
   addArrowControls(): void {
@@ -442,8 +540,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     }, true);
   }
 
-
-
   ///////////////////////////////////////
   // MAP CALLBACKS AS PROMISES
   //////////////////////////////////////
@@ -486,5 +582,4 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     });
 
   }
-
 }
