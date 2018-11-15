@@ -12,6 +12,10 @@
     border-bottom: 1px solid rgb(167,167,167);
 }
 
+.sidebar-outer{
+
+}
+
 .sidebar-header{
     background-color: white;
     box-shadow: -1px 1px 1px rgb(207,207,207);
