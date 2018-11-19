@@ -20,6 +20,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { WeekComponent } from './week/week.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { CalendarComponent } from './calendar/calendar.component';
     CategoryBarComponent,
     DateSelectorComponent,
     NavbarComponent,
-    CalendarComponent
+    CalendarComponent,
+    WeekComponent
   ],
   imports: [
     BrowserModule,

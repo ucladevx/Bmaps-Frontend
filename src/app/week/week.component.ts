@@ -7,21 +7,24 @@ import { GeoJson } from '../map';
 interface CalendarDay {
   dayOfMonth: number;
   inCurrentMonth: boolean;
+  month: number;
+  year: number;
   events: GeoJson[];
 }
 
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css']
+  selector: 'app-week',
+  templateUrl: './week.component.html',
+  styleUrls: ['./week.component.css']
 })
-export class CalendarComponent implements OnInit {
+export class WeekComponent implements OnInit {
   private days: CalendarDay[] = [];
   private selectedMonth: Number;
   private selectedYear: Number;
   private selectedDay: CalendarDay;
   private today: CalendarDay;
   private currentMonth: Moment;
+  private currentWeek: Moment;
   private filteredEvents: GeoJson[];
   private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
@@ -40,91 +43,50 @@ export class CalendarComponent implements OnInit {
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
-    // this.eventsByDay =
     this.showCalendar(new Date());
-
-    // let todayDate = moment();
-    // this.today = {
-    //   dayOfMonth: todayDate.date(),
-    //   inCurrentMonth: todayDate.isSame(todayDate, 'month'),
-    //   events: this.getEventsOnDate(todayDate),
-    // };
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
     this.currentMonth = moment(dateInMonth).startOf('month');
-
+    this.currentWeek = moment(dateInMonth).startOf('week');
     // range of days shown on calendar
-    let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
-    let lastDay: Moment = moment(dateInMonth).endOf('month').endOf('week');
-
+    let firstDay: Moment = moment(dateInMonth).startOf('week');
+    let lastDay: Moment = moment(dateInMonth).endOf('week');
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
       // console.log(this.getEventsOnDate(d));
-      let calendarDay: CalendarDay = {
+      let weekDay: CalendarDay = {
         dayOfMonth: d.date(),
         inCurrentMonth: d.isSame(dateInMonth, 'month'),
+        month: parseInt(d.format('M'))-1,
+        year: parseInt(d.format('YYYY')),
         events: this.getEventsOnDate(d),
       };
-
       if (d == moment()){
-        this.today = calendarDay;
+        this.today = weekDay;
       }
-
-      this.days.push(calendarDay);
-
+      this.days.push(weekDay);
       // set selected day to the date provided
       if (d.isSame(dateInMonth, 'day')) {
-        this.selectedDay = calendarDay;
+        this.selectedDay = weekDay;
+        this.onSelect(weekDay);
       }
     }
   }
 
-  changeMonth(delta: number): void {
+  changeWeek(delta: number): void {
     // 1 means advance one month, -1 means go back one month
-    let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
-    // console.log(newMonth);
-    if (newMonth.isSame(moment(), 'month')) {
+    let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
+    if (newWeek.isSame(moment(), 'week')) {
       // if current month, make selected day today
-      // this.today = new Date();
       this.showCalendar( new Date());
-
-      // moment(new Date());
-
-      // let todayDate = moment();
-      // this.today = {
-      //   dayOfMonth: todayDate,
-      //   inCurrentMonth: todayDate.isSame(dateInMonth, 'month'),
-      //   events: this.getEventsOnDate(d),
-      // };
-
-      // let today: CalendarDay = {
-      //   dayOfMonth: new Date(),
-      //   inCurrentMonth: true,
-      //   events: this.getEventsOnDate(d),
-      // };
-
-
-      // let todayDate = moment();
-      // this.today = {
-      //   dayOfMonth: todayDate.date(),
-      //   inCurrentMonth: true,
-      //   events: this.getEventsOnDate(todayDate),
-      // };
     }
     else {
-      // make selected day the 1st of the month
-      this.showCalendar(newMonth.startOf('month'));
-
-      // let todayDate = moment();
-      // this.today = {
-      //   dayOfMonth: todayDate.date(),
-      //   inCurrentMonth: false,
-      //   events: this.getEventsOnDate(todayDate),
-      // };
+      // make selected day the 1st of the week
+      this.showCalendar(newWeek.startOf('week'));
     }
-    this.selectedMonth = newMonth.month();
-    this.selectedYear = newMonth.year()
+    this.selectedMonth = newWeek.month();
+    this.selectedYear = newWeek.year();
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
     this.eventService.updateMonthEvents(monthyear);
   }
@@ -152,9 +114,7 @@ export class CalendarComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
-    let date = moment().date(day.dayOfMonth).month(this.selectedMonth.valueOf()).year(this.selectedYear.valueOf()).toDate();
-    // console.log(date.toDate());
-    // this.eventService.updateDateByDays(days);
+    let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     this.eventService.updateEvents(date);
   }
 }
