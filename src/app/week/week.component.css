@@ -59,22 +59,21 @@
   float: left;
   clear: left;
 }
+
 .weekview-day-event {
   float: left;
   clear: left;
   font-size: 10px;
   width: 96%;
-  padding-right: 3%;
-  padding-left: 3%;
-  padding-bottom: 3%;
-  padding-top: 3%;
-  background-color: #59dbd6;
+  padding: 3% 3% 3% 3%;
+  margin: 0% 2% 2% 2%;
   color: black;
-  margin: 1%;
-  margin-bottom: 2%;
-  margin-left: 2%;
-  margin-right: 2%;
+  background-color: #e3e6ea;
 }
+.weekview-day-event.in-current-month {
+  background-color: #59dbd6;
+}
+
 .weekview-day.in-current-month {
     color: inherit;
 }

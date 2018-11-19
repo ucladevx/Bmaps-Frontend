@@ -23,7 +23,7 @@ export class WeekComponent implements OnInit {
   private selectedMonth: Number;
   private selectedYear: Number;
   private selectedDay: CalendarDay;
-  private viewDate: Moment | Date | string;
+  private viewDate: Date ;
   private today: CalendarDay;
   private currentMonth: Moment;
   private currentWeek: Moment;
@@ -35,10 +35,8 @@ export class WeekComponent implements OnInit {
 
   ngOnInit() {
     //subscriptions
-    this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
-      this.filteredEvents = monthEventCollection.features;
-      console.log(this.filteredEvents);
-      console.log(this.viewDate);
+    this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
+      this.filteredEvents = weekEventCollection.features;
       this.showCalendar(this.viewDate);
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -53,10 +51,8 @@ export class WeekComponent implements OnInit {
   }
 
   updateWeekView(){
-    //update monthyear
-    let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
     //update month events (subscribed to by ngOnInit)
-    this.eventService.updateMonthEvents(monthyear);
+    this.eventService.updateWeekEvents(this.viewDate);
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
@@ -109,7 +105,7 @@ export class WeekComponent implements OnInit {
     // make selected day the 1st of the week
     else {
       //update view date
-      this.viewDate = newWeek.startOf('week');
+      this.viewDate = newWeek.startOf('week').toDate();
       //update view
       this.updateWeekView();
     }

@@ -26,7 +26,7 @@
          [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay, 'today': day === today}"
          (click)="onSelect(day)">
       <span [ngClass]="{'circle': day === selectedDay}">{{day.dayOfMonth}}</span>
-      <div class="weekview-day-event" *ngFor="let event of day.events">
+      <div class="weekview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" *ngFor="let event of day.events">
         {{event.properties.name}}
       </div>
     </div>

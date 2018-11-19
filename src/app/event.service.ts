@@ -16,6 +16,8 @@ export class EventService {
   private monthEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all filtered events
   private filteredMonthEventsSource: BehaviorSubject <FeatureCollection>;
+  // holds all filtered events for a week
+  private filteredWeekEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all events of the current date that components can see
   private currEventsSource: BehaviorSubject <FeatureCollection>;
   // holds filtered events that components can see
@@ -34,6 +36,7 @@ export class EventService {
   // Observables that components can subscribe to for realtime updates
   monthEvents$;
   filteredMonthEvents$;
+  filteredWeekEvents$;
   currEvents$;
   filteredCurrEvents$;
   currMonthYear$;
@@ -68,6 +71,7 @@ export class EventService {
     // Observable string sources, BehaviorSubjects have an intial state
     this.monthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredMonthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
+    this.filteredWeekEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject < Date > (today);
@@ -79,6 +83,7 @@ export class EventService {
     // Observable string streams
     this.monthEvents$  = this.monthEventsSource.asObservable();
     this.filteredMonthEvents$  = this.filteredMonthEventsSource.asObservable();
+    this.filteredWeekEvents$ = this.filteredWeekEventsSource.asObservable();
     this.currEvents$ = this.currEventsSource.asObservable();
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
@@ -181,6 +186,33 @@ export class EventService {
       this.initCategories(monthyear);
     });
   }
+
+  //added for week view
+
+  updateWeekEvents(firstDay: Date): void {
+    this.http.get <FeatureCollection> (
+      this.getEventsURL()
+    ).subscribe(allEvents => {
+      this.filteredWeekEventsSource.next(this.filterByWeek(allEvents, firstDay));
+      let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
+      this.initCategories(monthyear);
+    });
+  }
+
+  filterByWeek(allEvents, firstDay){
+    let tempEvents = new FeatureCollection([]);
+    var lastDay = moment(firstDay).clone().add(6, 'days').toDate();
+    allEvents.features.forEach(el => {
+      var d = new Date(el.properties.start_time);
+      var month = d.getMonth();
+      var year = d.getFullYear();
+      if (((month == firstDay.getMonth()) && (year == firstDay.getFullYear())) || ((month == lastDay.getMonth()) && (year == lastDay.getFullYear())))
+        tempEvents.features.push(el)
+    });
+    return tempEvents;
+  }
+
+  //end of week view methods
 
   filterByMonthYear(monthyearEvents, monthyear){
     let tempEvents = new FeatureCollection([]);
