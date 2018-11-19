@@ -62,10 +62,18 @@
 .weekview-day-event {
   float: left;
   clear: left;
-  position: absolute;
-  bottom: 0;
-  font-size: 12px;
+  font-size: 10px;
+  width: 96%;
+  padding-right: 3%;
+  padding-left: 3%;
+  padding-bottom: 3%;
+  padding-top: 3%;
+  background-color: #59dbd6;
+  color: black;
   margin: 1%;
+  margin-bottom: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
 }
 .weekview-day.in-current-month {
     color: inherit;

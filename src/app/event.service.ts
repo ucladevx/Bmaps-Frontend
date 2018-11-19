@@ -64,7 +64,6 @@ export class EventService {
   constructor(private http: HttpClient, private dateService: DateService, private categService: CategoryService) {
     let today = new Date();
     let monthyear = moment().month().toString() + " " + moment().year().toString();
-    console.log(monthyear);
 
     // Observable string sources, BehaviorSubjects have an intial state
     this.monthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
@@ -152,20 +151,15 @@ export class EventService {
     const y = date.getFullYear();
     // let dateURL = `${this.baseUrl}/event-date/${d}%20${monthName}%20${y}`;
     let dateURL = `${this.baseUrl}/search?date=${d}%20${monthName}%20${y}`;
-    console.log(dateURL);
     return dateURL; // json we are pulling from for event info
   }
 
   // Updates events for given date while persisting the current category
   updateEvents(date: Date): void {
-  // console.log(date);
-  // console.log('hello');
-    console.log("UPDATING EVENTS");
     this.currDateSource.next(date);
     this.http.get <FeatureCollection> (
       this.getEventsOnDateURL(date)
     ).subscribe(events => {
-      console.log(events);
       this.currEventsSource.next(events);
       // Update list of categories
       this.initCategories('');
@@ -174,18 +168,15 @@ export class EventService {
 
   private getEventsURL(): string {
     let allEventsURL = `${this.baseUrl}/`;
-    console.log(allEventsURL);
     return allEventsURL; // json we are pulling from for event info
   }
 
   // Updates events for given date while persisting the current category
   updateMonthEvents(monthyear: string): void {
-    console.log("UPDATING EVENTS");
     this.currMonthYearSource.next(monthyear);
     this.http.get <FeatureCollection> (
       this.getEventsURL()
     ).subscribe(monthyearEvents => {
-      console.log(monthyearEvents);
       this.monthEventsSource.next(this.filterByMonthYear(monthyearEvents, monthyear));
       this.initCategories(monthyear);
     });
@@ -201,7 +192,6 @@ export class EventService {
       if ((month == Number(res[0])) && (year == Number(res[1])))
         tempEvents.features.push(el)
     });
-    console.log(tempEvents);
     return tempEvents;
   }
 
@@ -230,20 +220,17 @@ export class EventService {
 
   // Apply current _filters
   private applyFilters() {
-    console.log("APPLYING FILTERS");
     let tempEvents = new FeatureCollection([]);
     for (let event in this._events.features) {
       if (this._filters['happening now']) {
-        console.log('Filtering by happening now');
+        //console.log('Filtering by happening now');
       }
     }
   }
 
   // Appy current _categHash
   private applyCategories(monthyear: string) {
-    console.log("APPLYING CATEGORIES");
     if (monthyear == ''){
-      console.log("monthyear is nothing");
       let tempEvents = new FeatureCollection([]);
         for (let event of this._events.features) {
           let allSelected = this._categHash['all'].selected;
@@ -257,8 +244,6 @@ export class EventService {
         }
       this.filteredCurrEventsSource.next(tempEvents);
     } else {
-      console.log("monthyear is something");
-      console.log(monthyear);
       let tempEvents = new FeatureCollection([]);
         for (let event of this._allevents.features) {
           let allSelected = this._categHash['all'].selected;
@@ -278,15 +263,11 @@ export class EventService {
   updateClickedEvent(event: GeoJson): void {
     this._clickedEvent = event;
     this.clickedEventSource.next(this._clickedEvent);
-    console.log("updating clicked event");
-    console.log(this._clickedEvent);
   }
 
   // Updates the current hovered event by number
   updateHoveredEvent(event: GeoJson): void {
     this._hoveredEvent = event;
     this.hoveredEventSource.next(this._hoveredEvent);
-    console.log("updating hovered event");
-    console.log(this._hoveredEvent);
   }
 }
