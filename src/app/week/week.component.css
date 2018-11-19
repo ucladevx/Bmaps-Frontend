@@ -67,8 +67,10 @@
   width: 96%;
   padding: 3% 3% 3% 3%;
   margin: 0% 2% 2% 2%;
+  border-radius: 2px;
   color: black;
   background-color: #e3e6ea;
+  cursor: pointer;
 }
 .weekview-day-event.in-current-month {
   background-color: #59dbd6;
