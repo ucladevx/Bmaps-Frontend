@@ -30,6 +30,29 @@ export class WeekComponent implements OnInit {
   private filteredEvents: GeoJson[];
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
+  private weekNumber: string;
+  private zeroWeeks: Moment[] = [
+    //2018-2019
+    moment([2018,8,23]),
+    moment([2019,0,6]),
+    moment([2019,2,30]),
+    //2019-2020
+    moment([2019,8,22]),
+    moment([2020,0,5]),
+    moment([2020,2,29]),
+    //2020-2021
+    moment([2020,8,27]),
+    moment([2021,0,4]),
+    moment([2021,2,29]),
+    //2021-2022
+    moment([2021,8,19]),
+    moment([2022,0,2]),
+    moment([2022,2,28]),
+    //2022-2023
+    moment([2022,8,19]),
+    moment([2023,0,9]),
+    moment([2023,3,2])
+  ];
 
   constructor(private eventService: EventService) { }
 
@@ -55,22 +78,50 @@ export class WeekComponent implements OnInit {
     this.eventService.updateWeekEvents(this.viewDate);
   }
 
+  enumerateWeek(){
+    var weekCount;
+    //iterate backwards to find the first positive week
+    for(var i = this.zeroWeeks.length-1; i>=0; i--){
+      weekCount = Math.floor(moment(this.viewDate).diff(this.zeroWeeks[i],'days') / 7);
+      if(weekCount>=0){
+        if(i%3 != 0){
+          weekCount++;
+        }
+        i = -1;
+      }
+    }
+    if(weekCount == 11){
+      this.weekNumber = "Finals Week";
+    }
+    else if(weekCount > 11 || weekCount < 0 || weekCount == undefined){
+      this.weekNumber = "";
+    }
+    else {
+      this.weekNumber = "Week " + weekCount;
+    }
+  }
+
   showCalendar(dateInMonth: Moment | Date | string): void {
     //fill events by day for the week
     this.fillEventsByDay();
+    //update week Number
+    this.enumerateWeek();
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('week');
+    if(parseInt(lastDay.format('DD')) > 3 && parseInt(lastDay.format('DD')) < 7){
+      this.currentMonth.add(1,'month');
+    }
     //fill days
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
       //create CalendarDay object
       let weekDay: CalendarDay = {
         dayOfMonth: d.date(),
-        inCurrentMonth: d.isSame(dateInMonth, 'month'),
+        inCurrentMonth: d.isSame(this.currentMonth, 'month'),
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
         events: this.getEventsOnDate(d)
@@ -148,6 +199,10 @@ export class WeekComponent implements OnInit {
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     //update sidebar to display events for that date
     this.eventService.updateEvents(date);
+  }
+
+  openEvent(event: GeoJson): void{
+    this.eventService.updateClickedEvent(event);
   }
 
 }

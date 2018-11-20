@@ -72,7 +72,6 @@ export class MapBoxComponent implements OnInit, AfterViewInit {
       this.hoverPopup();
       this.addArrowControls();
       this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
-        console.log('here');
         this.hoverEvent(hoveredEventInfo);
       });
     });

@@ -1,8 +1,11 @@
 <div class="weekview-container">
   <div class="selector">
     <i class="fa fa-caret-left" (click)="changeWeek(-1)" aria-hidden="true"></i>
-    <span>{{currentWeek.format('MMM DD, YYYY')  + " - " + currentWeek.clone().add(6, 'days').format('MMM DD, YYYY')}}</span>
+    <span>{{currentMonth.format('MMMM YYYY')}}</span>
     <i class="fa fa-caret-right" (click)="changeWeek(1)" aria-hidden="true"></i>
+    <div class="weekNumber">
+      <span>{{weekNumber}}</span>
+    </div>
   </div>
   <div class="weekview-header">
     <span class="long-abbr">sun</span>
@@ -26,7 +29,10 @@
          [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay, 'today': day === today}"
          (click)="onSelect(day)">
       <span [ngClass]="{'circle': day === selectedDay}">{{day.dayOfMonth}}</span>
-      <div class="weekview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" *ngFor="let event of day.events">
+      <div class="weekview-day-event"
+        [ngClass]="{'in-current-month': day.inCurrentMonth}"
+        *ngFor="let event of day.events"
+        (click)="openEvent(event)">
         {{event.properties.name}}
       </div>
     </div>

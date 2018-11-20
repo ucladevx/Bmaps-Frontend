@@ -13,6 +13,10 @@
     text-align: center;
     padding: 10px;
 }
+.weekNumber {
+  position: absolute;
+  left: 5%;
+}
 
 .selector i {
     font-size: 34px;
@@ -45,10 +49,9 @@
 
 .weekview-day {
     position: relative;
-    flex-basis: 14.2857%; /* 100/7 */
+    width: 14.2857%; /* 100/7 */
     display: block;
     border-right: 1px solid #aaa;
-    border-bottom: 1px solid #aaa;
     color: #bebebe;
     background-color: #fff;
 }
@@ -69,11 +72,8 @@
   margin: 0% 2% 2% 2%;
   border-radius: 2px;
   color: black;
-  background-color: #e3e6ea;
-  cursor: pointer;
-}
-.weekview-day-event.in-current-month {
   background-color: #59dbd6;
+  cursor: pointer;
 }
 
 .weekview-day.in-current-month {

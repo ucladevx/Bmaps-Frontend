@@ -44,7 +44,6 @@ export class SidebarComponent implements OnInit {
             this.clickedEvent = clickedEventInfo;
             if (this.clickedEvent != null){
               this.hideSidebar(this.clickedEvent);
-              console.log("hm");
             }
             else {
               this.showSidebar();
