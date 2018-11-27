@@ -144,9 +144,13 @@
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
+  line-height: 100%;
   text-overflow: ellipsis;
   position: absolute;
   z-index: 2;
+  display: flex;
+flex-direction: column;
+justify-content: center;
 }
 
 .weekview-day.in-current-month {
