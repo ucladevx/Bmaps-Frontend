@@ -75,19 +75,19 @@
     background-color: #ececec;
 }
 
-.calendar-day.today {
+.today {
   color: #59dbd6;
   font-weight: 900;
 
 }
 
-.circle {
+/* .circle { */
   /* border-radius: 50%; */
   /* width: 25px; */
   /* height: 25px; */
   /* background: #59dbd6; */
   /* color: #59dbd6; */
-}
+/* } */
 
 .calendar-header > .short-abbr {
     display: none;
