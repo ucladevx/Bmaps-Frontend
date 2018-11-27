@@ -20,5 +20,6 @@ export class EventDetailComponent implements OnInit {
 
   hideEvent($event) {
       this.showSideBarBool.emit(true);
+      this.eventService.boldEvent(null);
   }
 }

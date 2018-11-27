@@ -71,6 +71,7 @@ export class WeekComponent implements OnInit {
     this.viewDate = new Date();
     //update view
     this.updateWeekView();
+    document.getElementById("scrollable").scrollTop = 112;
   }
 
   updateWeekView(){
@@ -203,6 +204,7 @@ export class WeekComponent implements OnInit {
 
   openEvent(event: GeoJson): void{
     this.eventService.updateClickedEvent(event);
+    this.eventService.boldEvent(event);
   }
 
   //position and size event to match actual start time and duration

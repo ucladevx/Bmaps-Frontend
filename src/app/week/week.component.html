@@ -24,7 +24,7 @@
     <span class="short-abbr">f</span>
     <span class="short-abbr">s</span>
   </div>
-  <div class="scrollable">
+  <div id="scrollable">
   <div class="timebar">
     <div class="filler-block"></div>
     <table class="time-of-day">
@@ -76,6 +76,7 @@
         *ngFor="let event of day.events"
         [style.top]="positionEvent(event)"
         [style.height]="sizeEvent(event)"
+        id="{{ 'event-' + event.id }}"
         (click)="openEvent(event)">
         {{event.properties.name}}
       </div>
