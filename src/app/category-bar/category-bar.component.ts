@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, Input } from '@angular/core';
 
 import { CategoryService } from '../category.service';
 import { EventService } from '../event.service';
@@ -10,64 +10,72 @@ import { NgClass } from '@angular/common';
   templateUrl: './category-bar.component.html',
   styleUrls: ['./category-bar.component.css']
 })
+
 export class CategoryBarComponent implements OnInit {
-  private categories;
+  @Input() showToggleButton: boolean;
+  private categHash = undefined;
+  private filterHash = undefined;
   private events: GeoJson[];
   public selectedCategory = 'all categories';
+  public showDropdown = false;
+  private wasInside = false;
 
-  constructor(private categService: CategoryService, private eventService: EventService) { }
+  constructor(private categService: CategoryService, private eventService: EventService) {}
 
   ngOnInit() {
     this.eventService.currEvents$.subscribe(eventCollection => {
       this.events = eventCollection.features;
-      this.updateCategories();
+    });
+    this.eventService.categHash$.subscribe(categHash => {
+      this.categHash = categHash;
+    });
+    this.eventService.filterHash$.subscribe(filterHash => {
+      this.filterHash = filterHash;
     });
   }
 
-  updateCategories(): void {
-    console.log('UPDATING CATEGORIES');
-    this.categService.getCategories()
-    .subscribe(categs => {
-      let eventMap = this.getEventMap();
-      this.categories = [{
-        category: 'all',
-        formattedCategory: 'all',
-        numEvents: eventMap['all']
-      }];
-      for (let categ of categs.categories) {
-        let categName = categ.category.toLowerCase();
-        let formattedCategName = categName.replace('_', ' ');
-        let categObject = {
-          category: categName,
-          formattedCategory: formattedCategName,
-          numEvents: eventMap[categName]
-        };
-        this.categories.push(categObject);
-      }
-    });
+  filterClicked(filter: string): void {
+    this.eventService.toggleFilter(filter);
   }
 
-  private getEventMap() {
-    let eventMap = {};
-    let total = 0;
-    for (let event of this.events) {
-      let eventCateg: string = event.properties.category.toLowerCase();
-      if (eventMap[eventCateg] === undefined) {
-        eventMap[eventCateg] = 1;
+  categoryClicked(category: string): void {
+    this.eventService.toggleCategory(category);
+  }
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  clearCategories(): void {
+    for (let key in this.categHash) {
+      if (this.categHash[key].selected) {
+        this.eventService.toggleCategory(key);
       }
-      else {
-        eventMap[eventCateg]++;
-      }
-      total++;
     }
-    eventMap['all'] = total;
-    return eventMap;
   }
 
-  filter(category: string): void {
-    if (category === 'all') this.selectedCategory = 'all categories';
-    else this.selectedCategory = category.toLowerCase().replace('_', ' ');
-    category = category.replace(' ', '_');
-    this.eventService.filterEvents(category);
+  clearFilters(): void {
+    for (let key in this.filterHash) {
+      if (this.filterHash[key]) {
+        this.eventService.toggleFilter(key);
+      }
+    }
+  }
+
+  @HostListener('click')
+  clickInside() {
+    this.wasInside = true;
+  }
+
+  @HostListener('document:click')
+  clickout() {
+    if (!this.wasInside) {
+      this.showDropdown = false;
+    }
+    this.wasInside = false;
+  }
+
+  private objectKeys(obj) {
+    return Object.keys(obj);
   }
 }

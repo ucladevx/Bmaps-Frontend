@@ -1,3 +1,8 @@
+:host {
+    display: flex;
+    flex: 1;
+}
+
 #event-list{
     flex: 1;
     overflow-y: scroll;
@@ -5,6 +10,9 @@
 
 .search-header{
     border-bottom: 1px solid rgb(167,167,167);
+}
+
+.sidebar-outer{
 
 }
 
@@ -23,9 +31,11 @@
     width: 100%;
     padding: 4%;
     box-sizing: border-box;
-    display: inline-block;
     overflow-wrap: break-word;
     cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
 }
 
 .sidebar-event:hover, .sidebar-event:active{
@@ -39,38 +49,55 @@
 .sidebar-event-img{
     object-fit: cover;
     width: 100%;
-    height: 16vh;
-    vertical-align: top;
+    padding-right: 4%;
+    height: 140px;
 }
 
 .sidebar-event-img-container{
     display: inline-block;
-    width: 58%;
-    padding-right: 1%;
-    padding-left: 1%;
+    width: 80%;
+    padding: 5px;
 }
 
 .sidebar-event-details {
     display: inline-block;
-    font-size: 11px;
+    font-size: 13px;
     display: inline-block;
     vertical-align: top;
     color: rgb(116,116,116);
-    width: 40%;
+    width: 100%;
 }
 
-.sidebar-event-details p {
-    margin-bottom: 0px;
+@media only screen and (min-width: 768px) {
+  .sidebar-event-img-container {
+    width: 50%;
+  }
+
+  .sidebar-event-details {
+    width: 48%;
+    text-align: left;
+  }
 }
 
 .sidebar-event-name {
     color: rgb(116,116,116);
-    font-size: 19px;
+    font-size: 20px;
     font-weight: 500;
+    line-height: 30px;
+    margin-bottom: 7px;
+}
+
+.sidebar-event-date {
+  margin-bottom: 0px;
+}
+
+.sidebar-event-location {
+  margin-bottom: 0px;
 }
 
 .sidebar-event-category{
-    font-style: italic;
+  margin-top: 7px;
+  font-style: italic;
 }
 
 .dropdown-menu {
@@ -84,22 +111,34 @@
     color: #a9a9a9;
 }
 
-.separator
-{
+.separator {
     height: 1px;
     background: rgb(151,151,151);
     background-position: 0, 100%, 0, 100%;
 }
 
 .move-up {
-    display: block;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: white;
-    color: rgb(216, 216, 216)
+    color: rgb(130, 130, 130);
+    height: 40px;
+    cursor: pointer;
+    font-size: 20px;
 }
 
-@media only screen and (min-width: 768px) {
-    .move-up {
-        display: none;
-    }
+#no-events-section {
+  margin-top: 50px;
+  text-align: center;
+  color: #a6a6a6;
+}
+
+#no-events-icon {
+  font-size: 50px;
+  color: #a6a6a6;
+}
+
+#no-events-label {
+  margin-top: 10px;
 }

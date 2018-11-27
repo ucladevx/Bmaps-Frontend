@@ -1,32 +1,41 @@
 <div class="sidebar-outer flex flex-column">
-    <div class="move-up">
-        <i aria-hidden="true" (click)="toggleMobileSidebar()" [ngClass]="mobileSidebarStatus ? 'fa fa-chevron-down fa-lg' : 'fa fa-chevron-up fa-lg sidebar-up'"></i>
+    <div class="move-up d-md-none" (click)="toggleMobileSidebar()">
+        <i aria-hidden="true" class="fa fa-lg" [ngClass]="mobileSidebarVisible ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
     </div>
-    <div class="sidebar flex flex-column" [hidden]="!show">
-        <app-date-selector></app-date-selector>
-        <app-category-bar></app-category-bar>
-        <div id="event-list" [ngClass]="mobileSidebarStatus ? 'event-list-show' : ''">
+    <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
+        <app-date-selector class="d-none d-md-block"></app-date-selector>
+        <app-category-bar [showToggleButton]="true" class="d-none d-md-block"></app-category-bar>
+        <div *ngIf="filteredEvents.length == 0" id="no-events-section">
+          <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
+          <div id="no-events-label">No Events</div>
+        </div>
+        <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
             <div *ngFor="let event of filteredEvents" #eventList>
                 <div class="sidebar-event"
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
-                    (mouseover)="onHover(event)"
+                    (mouseenter)="onHover(event)"
                     (click)="onSelect(event)">
-                    <div class="sidebar-event-img-container col-sm-7 col-md-7 col-lg-7">
-                        <img src="{{event.properties.cover_picture}}" class="sidebar-event-img">
+                    <div class="sidebar-event-img-container">
+                        <img src="{{
+                          event.properties.cover_picture == '<NONE>' ?
+                            checkImage('/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
+                            '/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
+                            : '/assets/images/fb-banner-default.png'
+                          : event.properties.cover_picture
+                        }}" class="sidebar-event-img">
                     </div>
-                    <div class="sidebar-event-details col-sm-5 col-md-5 col-lg-5">
-                        <p class="sidebar-event-name">{{event.properties.event_name}}</p>
+                    <div class="sidebar-event-details">
+                        <p class="sidebar-event-name">{{event.properties.name}}</p>
                         <p class="sidebar-event-date">{{_dateService.formatEventDate(event)}}</p>
-                        <p class="sidebar-event-location" *ngIf="event.properties.venue.name;else venue_street">
-                            {{event.properties.venue.name}}
-                        </p>
-                        <ng-template #venue_street>{{event.properties.venue.location.street}}</ng-template>
-                        <p class="sidebar-event-category" [innerHTML]="formatCategory(event.properties.category)"></p>
+                          <p class="sidebar-event-location" *ngIf="event.properties.place.name;else venue_street">
+                            {{event.properties.place.name}}
+                          </p>
+                        <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
+                        <p class="sidebar-event-category" [innerHTML]="formatCategory(event.properties.categories)"></p>
                     </div>
                 </div>
                 <div class="separator"></div>
             </div>
         </div>
     </div>
-    <app-event-detail class="flex" [hidden]="show" [event]="clickedEvent" (showSideBarBool)="showSidebar()"></app-event-detail>
 </div>
