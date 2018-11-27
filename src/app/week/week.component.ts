@@ -205,4 +205,23 @@ export class WeekComponent implements OnInit {
     this.eventService.updateClickedEvent(event);
   }
 
+  //position and size event to match actual start time and duration
+  positionEvent(event: GeoJson): string{
+    var start = event.properties.start_time;
+    var top = 4;
+    if(moment(start).format("A") == "PM"){
+      top += 41.4;
+    }
+    top += (parseInt(moment(start).format("H"))%12)*3.45;
+    top += (parseInt(moment(start).format("mm"))/15)*0.8625;
+    return top+"%";
+  }
+  sizeEvent(event: GeoJson): string{
+    var start = moment(event.properties.start_time);
+    var end = moment(event.properties.end_time);
+    var hours = moment.duration(end.diff(start)).asHours();
+    var size = hours*3.45;
+    return size+"%";
+  }
+
 }
