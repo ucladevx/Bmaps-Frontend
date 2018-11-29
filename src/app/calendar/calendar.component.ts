@@ -30,7 +30,7 @@ export class CalendarComponent implements OnInit {
   constructor(private eventService: EventService) { }
 
   ngOnInit() {
-    this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
+    this.eventService.filterHash$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
       console.log(this.filteredMonthYearEvents);
       this.selectedMonth = moment().month();
@@ -90,7 +90,7 @@ export class CalendarComponent implements OnInit {
     this.selectedMonth = newMonth.month();
     this.selectedYear = newMonth.year()
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
-    this.eventService.updateMonthEvents(monthyear);
+    // this.eventService.updateMonthEvents(monthyear);
   }
 
   fillEventsByDay(){

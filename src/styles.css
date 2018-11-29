@@ -5,6 +5,11 @@
   flex: 1;
 }
 
+html {
+  position: fixed;
+  overflow: hidden;
+}
+
 html, body, app-root {
   height: 100%;
   width: 100%;

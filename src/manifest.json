@@ -1,0 +1,22 @@
+{
+  "name": "Mappening.io",
+  "short_name": "Mappening",
+  "description": "Find UCLA events on a map",  
+  "icons": [{
+      "src": "assets/favicons/icon-152x152.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }, {
+      "src": "assets/favicons/android-chrome-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }, {
+      "src": "assets/favicons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }],
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#53D8D8"
+}

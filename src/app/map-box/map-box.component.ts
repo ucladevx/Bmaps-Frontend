@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
+import { LocationService } from '../shared/location.service';
 
 @Component({
     selector: 'app-map-box',
@@ -11,8 +13,7 @@ import { EventService } from '../event.service';
     styleUrls: ['./map-box.component.css'],
     providers: [ DateService ]
 })
-export class MapBoxComponent implements OnInit, AfterViewInit {
-  @Input() pressed: boolean;
+export class MapBoxComponent implements OnInit {
   // default settings
   map: mapboxgl.Map;
   message = 'Hello World!';
@@ -25,6 +26,7 @@ export class MapBoxComponent implements OnInit, AfterViewInit {
 
   // state
   selectedEvent: any = null;
+  private lastClickEvent: MouseEvent;
 
   // Resources
   pinUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png";
@@ -35,17 +37,22 @@ export class MapBoxComponent implements OnInit, AfterViewInit {
     closeButton: false,
     closeOnClick: false,
     offset: 20 // offset upward from pin
-  }).setHTML('<div id="popupEvent"></div> <div id="popupDate"></div>');
+  }).setHTML('<div id="popupContainer"><div id="popupEvent"></div> <div id="popupDate"></div></div>');
 
   backupPopup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
     offset: 20 // offset upward from pin
-  }).setHTML('<div id="backupPopupEvent"></div> <div id="backupPopupDate"></div>');
+  }).setHTML('<div id="backupPopupContainer"><div id="backupPopupEvent"></div> <div id="backupPopupDate"></div></div>');
 
   private events: FeatureCollection;
 
-  constructor(private _dateService: DateService, private eventService: EventService) {
+  constructor(
+      private router: Router,
+      private _dateService: DateService,
+      private eventService: EventService,
+      private locationService: LocationService
+  ) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
@@ -71,8 +78,8 @@ export class MapBoxComponent implements OnInit, AfterViewInit {
       this.threeDDisplay();
       this.hoverPopup();
       this.addArrowControls();
+      this.map.resize();
       this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
-        console.log('here');
         this.hoverEvent(hoveredEventInfo);
       });
     });
@@ -99,10 +106,6 @@ export class MapBoxComponent implements OnInit, AfterViewInit {
     });
 
     this.addControls();
-  }
-
-  ngAfterViewInit() {
-      this.map.resize();
   }
 
   addEventLayer(data): void {
@@ -205,17 +208,24 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.map.addControl(new mapboxgl.NavigationControl());
   }
 
-  addPopup(popup, coords, eventName: string, eventTime: string): void {
+  addPopup(popup, coords, id: string|number, eventName: string, eventTime: string): void {
+    var openDetails = (e: MouseEvent|TouchEvent): void => {
+      this.router.navigate(['', {outlets: {sidebar: ['detail', id]}}]);
+    };
     if (popup == this.popup) {
       popup.setLngLat(coords)
         .addTo(this.map);
       document.getElementById('popupEvent').innerHTML = eventName;
       document.getElementById('popupDate').innerHTML = eventTime;
+      document.getElementById('popupContainer').onclick = openDetails;
+      document.getElementById('popupContainer').ontouchstart = openDetails;
     } else {
       popup.setLngLat(coords)
         .addTo(this.map);
       document.getElementById('backupPopupEvent').innerHTML = eventName;
       document.getElementById('backupPopupDate').innerHTML = eventTime;
+      document.getElementById('backupPopupContainer').onclick = openDetails;
+      document.getElementById('backupPopupContainer').ontouchstart = openDetails;
     }
   }
 
@@ -234,17 +244,29 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
     //CLICK
     this.map.on('click', 'eventlayer', (e) => {
+      // save this event
+      this.lastClickEvent = e.originalEvent;
+
       // Populate the popup and set its coordinates
       // based on the feature found.
 
       //Handle if you reclick an event
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
         this.eventService.updateClickedEvent(null);
+        this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
         return;
       }
 
       //the service then calls selectEvent
       this.eventService.updateClickedEvent(e.features[0]);
+    });
+
+    this.map.on('click', (e: mapboxgl.MapMouseEvent) => {
+      // deselect event if this event was not an eventlayer click
+      if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
+        this.eventService.updateClickedEvent(null);
+        this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+      }
     });
   }
 
@@ -274,7 +296,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       "type": "Feature"
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-    this.addPopup(this.popup, coords, event.properties.name,
+    this.addPopup(this.popup, coords, event.id, event.properties.name,
       this._dateService.formatTime(new Date(event.properties.start_time)));
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
@@ -305,7 +327,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           });
           this.map.setLayoutProperty('redBackupHoveredPin','visibility', 'visible');
         }
-        this.addPopup(this.backupPopup, coords, event.properties.name,
+        this.addPopup(this.backupPopup, coords, event.id, event.properties.name,
           this._dateService.formatTime(new Date(event.properties.start_time)));
       }
       else {
@@ -317,7 +339,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           "type": "Feature"
         });
         this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-        this.addPopup(this.popup, coords, event.properties.name,
+        this.addPopup(this.popup, coords, event.id, event.properties.name,
           this._dateService.formatTime(new Date(event.properties.start_time)));
       }
     }
@@ -434,6 +456,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         navigator.geolocation.getCurrentPosition(position => {
           this.lat = position.coords.latitude;
           this.lng = position.coords.longitude;
+          this.locationService.userLat = this.lat;
+          this.locationService.userLng = this.lng;
           resolve();
         });
       } else {
