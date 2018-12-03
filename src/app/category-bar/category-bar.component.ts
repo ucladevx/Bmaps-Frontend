@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Input } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 import { CategoryService } from '../category.service';
 import { EventService } from '../event.service';
@@ -12,13 +12,13 @@ import { NgClass } from '@angular/common';
 })
 
 export class CategoryBarComponent implements OnInit {
-  @Input() showToggleButton: boolean;
+  private categories;
   private categHash = undefined;
-  private filterHash = undefined;
   private events: GeoJson[];
   public selectedCategory = 'all categories';
   public showDropdown = false;
   private wasInside = false;
+  private filters = ['happening now', 'upcoming', 'time period', 'on-campus', 'off-campus', 'nearby', 'popular', 'free food'];
 
   constructor(private categService: CategoryService, private eventService: EventService) {}
 
@@ -28,9 +28,6 @@ export class CategoryBarComponent implements OnInit {
     });
     this.eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
-    });
-    this.eventService.filterHash$.subscribe(filterHash => {
-      this.filterHash = filterHash;
     });
   }
 
@@ -44,22 +41,6 @@ export class CategoryBarComponent implements OnInit {
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
-  }
-
-  clearCategories(): void {
-    for (let key in this.categHash) {
-      if (this.categHash[key].selected) {
-        this.eventService.toggleCategory(key);
-      }
-    }
-  }
-
-  clearFilters(): void {
-    for (let key in this.filterHash) {
-      if (this.filterHash[key]) {
-        this.eventService.toggleFilter(key);
-      }
-    }
   }
 
   @HostListener('click')

@@ -1,11 +1,14 @@
-<app-navbar></app-navbar>
-<div class="main container-fluid flex">
+<app-navbar (changeView)="onChangeView($event)"></app-navbar>
+<div class="container-fluid flex">
     <div class="row flex">
         <div class="col-sm-12 col-md-7 order-sm-first order-md-last map-container" [ngClass]="{'hide-map' : pressed}">
-            <router-outlet></router-outlet>
+            <app-map-box [hidden]="currentView != 'map'" class="flex" [pressed]="pressed"></app-map-box>
+            <!-- Link app's pressed variable to map-box's pressed variable-->
+            <app-calendar [hidden]="currentView != 'calendar'" class="flex"></app-calendar>
         </div>
         <div class="col-sm-12 col-md-5 order-sm-last order-md-first sidebar-container" [ngClass]="{'hide-map': pressed}">
-            <router-outlet name="sidebar" (activate)="onSidebarRouterActivate($event)"></router-outlet>
+            <app-sidebar class="flex" (pressed)=onPressed($event)></app-sidebar>
+            <!-- On the click event, executes app.ts's onPressed -->
         </div>
     </div>
 </div>

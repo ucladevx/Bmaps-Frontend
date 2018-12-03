@@ -1,30 +1,14 @@
-:host {
-    --navbar-height: 58px;
-    --sidebartoggle-height: 40px;
-}
-
-app-navbar {
-    /*position: fixed;*/
-    z-index: 100;
-    width: 100%;
-    /*height: var(--navbar-height);*/
-}
-
-.main {
-    /*margin-top: var(--navbar-height);*/
-}
-
 .sidebar-container {
   display: flex;
   padding-right: 0px;
   padding-left: 0px;
-  height: var(--sidebartoggle-height);
+  height: calc(100% - 54vh);
 }
 .map-container {
   display: flex;
   padding-left: 0px;
   padding-right: 0px;
-  height: calc(100% - var(--sidebartoggle-height));
+  height: 54vh;
 }
 
 .sidebar-container.hide-map {
@@ -32,6 +16,7 @@ app-navbar {
 }
 
 .map-container.hide-map {
+  height: auto;
   display: none;
 }
 

@@ -10,14 +10,13 @@ will need to figure out forRoot if we have both declarations and providers
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DateService } from './date.service';
-import { LocationService } from './location.service'
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [],
-  providers: [DateService, LocationService]
+  providers: [DateService]
 })
 export class SharedModule {
 

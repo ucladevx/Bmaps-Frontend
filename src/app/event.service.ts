@@ -4,17 +4,24 @@ import {Subject} from 'rxjs/Subject';
 import { FeatureCollection, GeoJson } from './map';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/Rx';
 import { DateService } from './shared/date.service';
-import { LocationService } from './shared/location.service';
 import { CategoryService } from './category.service';
 import { CategoryList } from './category';
+import * as moment from 'moment';
 
 @Injectable()
 export class EventService {
+  // holds all events
+  private monthEventsSource: BehaviorSubject <FeatureCollection>;
+  // holds all filtered events
+  private filteredMonthEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all events of the current date that components can see
   private currEventsSource: BehaviorSubject <FeatureCollection>;
   // holds filtered events that components can see
   private filteredCurrEventsSource: BehaviorSubject <FeatureCollection> ;
+  // holds the current month and year in (MM YYYY) string format
+  private currMonthYearSource: BehaviorSubject <string> ;
   // holds the current date that components can see
   private currDateSource: BehaviorSubject <Date> ;
   // holds clicked event
@@ -23,136 +30,99 @@ export class EventService {
   private hoveredEventSource: Subject <GeoJson> ;
   // holds object of categories
   private categHashSource: Subject <any> ;
-  // holds object of filters
-  private filterHashSource: Subject <any> ;
 
   // Observables that components can subscribe to for realtime updates
+  monthEvents$;
+  filteredMonthEvents$;
   currEvents$;
   filteredCurrEvents$;
+  currMonthYear$;
   currDate$;
   clickedEvent$;
   hoveredEvent$;
   categHash$;
-  filterHash$;
 
   // Used internally to keep a realtime, subscribed set of values
+  private _allevents;
   private _events;
   private _date;
   private _clickedEvent;
   private _hoveredEvent;
-  private _categHash;
-  private _filterHash;
-
-  private _selectedFilterCount = 0;
-  private _selectedCategCount = 0;
-  // Filters in the same group should be mutually exclusive
-  private _filterGroups = [
-    ['happening now', 'upcoming', 'morning', 'afternoon', 'evening'],
-    ['on-campus', 'off-campus', 'nearby'],
-    ['morning', 'happening now', 'upcoming'],
-    ['afternoon', 'happening now', 'upcoming'],
-    ['evening', 'happening now', 'upcoming'],
-    ['free food']
-  ];
-  // Maps filters to _filterGroups indices for quick access
-  private _filterGroupMap = {
-    'happening now': 0,
-    'upcoming': 0,
-    'on-campus': 1,
-    'off-campus': 1,
-    'nearby': 1,
-    'morning': 2,
-    'afternoon': 3,
-    'evening': 4,
-    'free food': 5
+  private _category = "all";
+  private _filters = {
+    'happening now': false,
+    'upcoming': false,
+    'on-campus': false,
+    'off-campus': false,
+    'nearby': false,
+    'free food': false
   };
-  // Filters in the same group will be OR'ed
-  // Every group will be AND'ed
-  private _filterLists = [
-    ['happening now'],
-    ['upcoming'],
-    ['on-campus'],
-    ['off-campus'],
-    ['nearby'],
-    ['morning', 'afternoon', 'evening'],
-    ['free food']
-  ];
+  private _categHash;
 
-  // private baseUrl = "https://www.mappening.io/api/v1/events";
   private baseUrl = "https://www.mappening.io/api/v2/events"
-  // private baseUrl = "http://0.0.0.0:5000/api/v2/events"
 
-  constructor(private http: HttpClient, private dateService: DateService, private locationService: LocationService, private categService: CategoryService) {
+  constructor(private http: HttpClient, private dateService: DateService, private categService: CategoryService) {
     let today = new Date();
+    let monthyear = moment().month().toString() + " " + moment().year().toString();
+    console.log(monthyear);
 
     // Observable string sources, BehaviorSubjects have an intial state
+    this.monthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
+    this.filteredMonthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject < Date > (today);
+    this.currMonthYearSource = new BehaviorSubject < string > (monthyear);
     this.clickedEventSource = new Subject < GeoJson > ();
     this.hoveredEventSource = new Subject < GeoJson > ();
     this.categHashSource = new Subject < any > ();
-    this.filterHashSource = new Subject <any>();
 
     // Observable string streams
+    this.monthEvents$  = this.monthEventsSource.asObservable();
+    this.filteredMonthEvents$  = this.filteredMonthEventsSource.asObservable();
     this.currEvents$ = this.currEventsSource.asObservable();
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
+    this.currMonthYear$  = this.currMonthYearSource.asObservable();
     this.clickedEvent$ = this.clickedEventSource.asObservable();
     this.hoveredEvent$ = this.hoveredEventSource.asObservable();
     this.categHash$ = this.categHashSource.asObservable();
-    this.filterHash$ = this.filterHashSource.asObservable();
 
     // Maintain a set of self-subscribed local values
+    this.monthEvents$.subscribe(monthEventCollection => this._allevents = monthEventCollection);
     this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
     this.currDate$.subscribe(date => this._date = date);
     this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
     this.hoveredEvent$.subscribe(hoveredEventInfo => this._hoveredEvent = hoveredEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
-    this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
 
     // Update events for today
     this.updateEvents(today);
-  }
-
-  // Reset all filters to be false
-  private resetFilters() {
-    let tempFilters = {
-      'happening now': false,
-      'upcoming': false,
-      'on-campus': false,
-      'off-campus': false,
-      'nearby': false,
-      'morning': false,
-      'afternoon': false,
-      'evening': false,
-      'free food': false
-    };
-    this.filterHashSource.next(tempFilters);
+    this.updateMonthEvents(monthyear);
   }
 
   // Update categories
-  private updateCategories() {
+  private initCategories(monthyear: string) {
     this.categService.getCategories()
       .subscribe(categs => {
         let eventMap = this.getEventMap();
-        let tempHash = {};
-        // let tempHash = {
-        //   'all': {
-        //     formattedCategory: 'all',
-        //     numEvents: eventMap['all'],
-        //     selected: this._categHash ? this._categHash['all'].selected : true
-        //   }
-        // };
+        let tempHash = {
+          'all': {
+            formattedCategory: 'all',
+            numEvents: eventMap['all'],
+            selected: this._categHash ? this._categHash['all'].selected : true
+          }
+        };
         for (let categ of categs.categories) {
           let categName = categ.toLowerCase();
           tempHash[categName] = {
             formattedCategory: categName.replace('_', ' '),
             numEvents: eventMap[categName],
-            selected: false
+            selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
           }
         }
         this.categHashSource.next(tempHash);
+        this.applyCategories(monthyear);
       });
   }
 
@@ -188,6 +158,8 @@ export class EventService {
 
   // Updates events for given date while persisting the current category
   updateEvents(date: Date): void {
+  // console.log(date);
+  // console.log('hello');
     console.log("UPDATING EVENTS");
     this.currDateSource.next(date);
     this.http.get <FeatureCollection> (
@@ -195,14 +167,42 @@ export class EventService {
     ).subscribe(events => {
       console.log(events);
       this.currEventsSource.next(events);
-
-      // Update list of categories and reset filters
-      this._selectedFilterCount = 0;
-      this._selectedCategCount = 0;
-      this.updateCategories();
-      this.resetFilters();
-      this.applyFiltersAndCategories();
+      // Update list of categories
+      this.initCategories('');
     });
+  }
+
+  private getEventsURL(): string {
+    let allEventsURL = `${this.baseUrl}/`;
+    console.log(allEventsURL);
+    return allEventsURL; // json we are pulling from for event info
+  }
+
+  // Updates events for given date while persisting the current category
+  updateMonthEvents(monthyear: string): void {
+    console.log("UPDATING EVENTS");
+    this.currMonthYearSource.next(monthyear);
+    this.http.get <FeatureCollection> (
+      this.getEventsURL()
+    ).subscribe(monthyearEvents => {
+      console.log(monthyearEvents);
+      this.monthEventsSource.next(this.filterByMonthYear(monthyearEvents, monthyear));
+      this.initCategories(monthyear);
+    });
+  }
+
+  filterByMonthYear(monthyearEvents, monthyear){
+    let tempEvents = new FeatureCollection([]);
+    monthyearEvents.features.forEach(el => {
+      var d = new Date(el.properties.start_time);
+      var month = d.getMonth();
+      var year = d.getFullYear();
+      var res = monthyear.split(" ");
+      if ((month == Number(res[0])) && (year == Number(res[1])))
+        tempEvents.features.push(el)
+    });
+    console.log(tempEvents);
+    return tempEvents;
   }
 
   // Calls updateEvents for the current date + days
@@ -214,128 +214,64 @@ export class EventService {
 
   // Toggle filter
   toggleFilter(filter: string) {
-    if (this._filterHash[filter] != undefined) {
-      this._filterHash[filter] = !this._filterHash[filter];
-      if (this._filterHash[filter]) {
-        this._selectedFilterCount++;
-      }
-      else {
-        this._selectedFilterCount--;
-      }
-      // Unselect selected filters in the same group
-      for (let f of this._filterGroups[this._filterGroupMap[filter]]) {
-        if (f != filter && this._filterHash[f]) {
-          this._filterHash[f] = false;
-          this._selectedFilterCount--;
-        }
-      }
+    if (this._filters[filter] != undefined) {
+      this._filters[filter] = !this._filters[filter];
     }
-    this.applyFiltersAndCategories();
+    this.applyFilters();
   }
 
   // Toggle category
   toggleCategory(category: string) {
     if (this._categHash[category] != undefined) {
       this._categHash[category].selected = !this._categHash[category].selected;
-      if (this._categHash[category].selected) {
-        this._selectedCategCount++;
-      }
-      else {
-        this._selectedCategCount--;
-      }
     }
-    this.applyFiltersAndCategories();
+    this.applyCategories(category);
   }
 
-  private applyFiltersAndCategories() {
-    console.log("APPLYING FILTERS & CATEGORIES");
-
+  // Apply current _filters
+  private applyFilters() {
+    console.log("APPLYING FILTERS");
     let tempEvents = new FeatureCollection([]);
-    if (this._selectedCategCount == 0) {
-      // If no categories selected, show all events
-      tempEvents = this._events;
-    }
-    else {
-      // Otherwise apply categories
-      for (let event of this._events.features) {
-        for (let category of event.properties.categories) {
-          let categObject = this._categHash[category.toLowerCase()];
-          if (categObject && categObject.selected) {
-            tempEvents.features.push(event);
-            break;
-          }
-        }
+    for (let event in this._events.features) {
+      if (this._filters['happening now']) {
+        console.log('Filtering by happening now');
       }
     }
+  }
 
-    let tempEvents2 = new FeatureCollection([]);
-    if (this._selectedFilterCount == 0) {
-      // If no filters selected, show all tempEvents
-      tempEvents2 = tempEvents;
-    }
-    else {
-      // Otherwise apply filters
-      for (let event of tempEvents.features) {
-        let passesAllFilters = true;
-
-        for (let filterList of this._filterLists) {
-          let passesThisFilter = false;
-          let filterUsed = false;
-
-          for (let filter of filterList) {
-            if (this._filterHash[filter]) {
-              filterUsed = true;
-            }
-            if (this._filterHash[filter] && this.checkFilter(filter, event)) {
-              passesThisFilter = true;
+  // Appy current _categHash
+  private applyCategories(monthyear: string) {
+    console.log("APPLYING CATEGORIES");
+    if (monthyear == ''){
+      console.log("monthyear is nothing");
+      let tempEvents = new FeatureCollection([]);
+        for (let event of this._events.features) {
+          let allSelected = this._categHash['all'].selected;
+          for (let category of event.properties.categories) {
+            let categObject = this._categHash[category.toLowerCase()];
+            if (allSelected || (categObject && categObject.selected)) {
+              tempEvents.features.push(event);
               break;
             }
           }
-
-          if (filterUsed && !passesThisFilter) {
-            passesAllFilters = false;
-            break;
+        }
+      this.filteredCurrEventsSource.next(tempEvents);
+    } else {
+      console.log("monthyear is something");
+      console.log(monthyear);
+      let tempEvents = new FeatureCollection([]);
+        for (let event of this._allevents.features) {
+          let allSelected = this._categHash['all'].selected;
+          for (let category of event.properties.categories) {
+            let categObject = this._categHash[category.toLowerCase()];
+            if (allSelected || (categObject && categObject.selected)) {
+              tempEvents.features.push(event);
+              break;
+            }
           }
         }
-        if (passesAllFilters) {
-          tempEvents2.features.push(event);
-        }
-      }
+      this.filteredMonthEventsSource.next(tempEvents);
     }
-
-    this.filteredCurrEventsSource.next(tempEvents2);
-  }
-
-  // Returns true if event passes the given filter
-  private checkFilter(filter: string, event): boolean {
-    if (filter == 'happening now') {
-      return this.dateService.isHappeningNow(event.properties.start_time);
-    }
-    else if (filter == 'upcoming') {
-      return this.dateService.isUpcoming(event.properties.start_time);
-    }
-    else if (filter == 'on-campus') {
-      return this.locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
-    }
-    else if (filter == 'off-campus') {
-      return !this.locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
-    }
-    else if (filter == 'nearby') {
-      return this.locationService.isNearby(event.geometry.coordinates[1], event.geometry.coordinates[0]);
-    }
-    else if (filter == 'morning') {
-      return this.dateService.isMorning(event.properties.start_time);
-    }
-    else if (filter == 'afternoon') {
-      return this.dateService.isAfternoon(event.properties.start_time);
-    }
-    else if (filter == 'evening') {
-      return this.dateService.isEvening(event.properties.start_time);
-    }
-    else if (filter == 'free food') {
-      return event.properties.free_food == 1;
-    }
-    return true;
   }
 
   // Updates the current clicked event by number
@@ -350,13 +286,7 @@ export class EventService {
   updateHoveredEvent(event: GeoJson): void {
     this._hoveredEvent = event;
     this.hoveredEventSource.next(this._hoveredEvent);
-  }
-
-  getEventById(id: string): GeoJson {
-    return this._events.features.find((e: GeoJson) => e.id == id);
-  }
-
-  isToday(): boolean {
-    return this.dateService.isToday(this._date);
+    console.log("updating hovered event");
+    console.log(this._hoveredEvent);
   }
 }

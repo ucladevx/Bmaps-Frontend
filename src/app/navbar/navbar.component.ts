@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'app-navbar',
@@ -6,21 +6,23 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+    @Output() changeView: EventEmitter<string> = new EventEmitter();
 
     constructor() { }
     ngOnInit() {
     }
 
     isCollapsed: boolean = true;
-    private isFilterCollapsed: boolean = true;
 
-    toggleMenuCollapse(): void {
-      this.isCollapsed = !this.isCollapsed;
-      this.isFilterCollapsed = true;
+    collapsed(event: any): void {
+        console.log(event);
     }
 
-    toggleFilterCollapse(): void {
-      this.isFilterCollapsed = !this.isFilterCollapsed;
-      this.isCollapsed = true;
+    expanded(event: any): void {
+        console.log(event);
+    }
+
+    emitChangeView(newView: string): void {
+      this.changeView.emit(newView);
     }
 }

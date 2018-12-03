@@ -1,19 +1,12 @@
 <nav class="navbar navbar-toggleable-md  navbar-default">
-    <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="d-inline-block align-top" alt="">
-        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+    <button (click)="isCollapsed = !isCollapsed" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
-    <app-date-selector class="d-md-none"></app-date-selector>
-    <div class="navbar-brand">
-      <button (click)="toggleFilterCollapse()" class="navbar-toggler" type="button">
-        <i class="d-md-none fa fa-sliders" id="filter-dropdown-toggle" aria-hidden="true"></i>
-      </button>
-      <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
-          <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="align-top" alt="">
-          <span>mappening</span>
-      </a>
-    </div>
-    <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">
+    <a class="navbar-brand" id="navbar-brand" href="/">
+        <img id="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="d-inline-block align-top" alt="">
+        <span>mappening</span>
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" [collapse]=isCollapsed>
         <ul class="navbar-nav mr-auto">
         </ul>
         <span class="navbar-text" (click)="emitChangeView('map')">Map View</span>
@@ -21,8 +14,5 @@
         <span class="navbar-text">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">feedback</a>
         </span>
-    </div>
-    <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
-      <app-category-bar [showToggleButton]="false"></app-category-bar>
     </div>
 </nav>

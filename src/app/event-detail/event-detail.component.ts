@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FeatureCollection, GeoJson } from '../map';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
@@ -10,18 +9,16 @@ import { DateService } from '../shared/date.service';
     styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-  private event: GeoJson;
+  @Input() event: any;
+  @Output() showSideBarBool = new EventEmitter<boolean>();
 
-  constructor(
-      private route: ActivatedRoute,
-      private eventService: EventService,
-      private dateService: DateService
-  ) {}
+  constructor(private eventService: EventService, private dateService: DateService) {
+  }
 
   ngOnInit() {
-      this.route.params.subscribe(() => {
-          const id: string = this.route.snapshot.paramMap.get('id');
-          this.event = this.eventService.getEventById(id);
-      });
+  }
+
+  hideEvent($event) {
+      this.showSideBarBool.emit(true);
   }
 }

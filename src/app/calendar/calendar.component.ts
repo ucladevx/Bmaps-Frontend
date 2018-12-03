@@ -25,12 +25,13 @@ export class CalendarComponent implements OnInit {
   private filteredEvents: GeoJson[];
   private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
-  private eventsByDay = new Map<number, GeoJson[]>();
+  private eventsByDay: GeoJson[];
+  private eventsByDayHakan : { [day: number ] : GeoJson[] } = {};
 
   constructor(private eventService: EventService) { }
 
   ngOnInit() {
-    this.eventService.filterHash$.subscribe(monthEventCollection => {
+    this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
       console.log(this.filteredMonthYearEvents);
       this.selectedMonth = moment().month();
@@ -40,8 +41,15 @@ export class CalendarComponent implements OnInit {
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
+    // this.eventsByDay = 
     this.showCalendar(new Date());
 
+    // let todayDate = moment();
+    // this.today = {
+    //   dayOfMonth: todayDate.date(),
+    //   inCurrentMonth: todayDate.isSame(todayDate, 'month'),
+    //   events: this.getEventsOnDate(todayDate),
+    // };
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
@@ -54,19 +62,18 @@ export class CalendarComponent implements OnInit {
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
       // console.log(this.getEventsOnDate(d));
-      // console.log('no');
+      console.log('no');
       let calendarDay: CalendarDay = {
         dayOfMonth: d.date(),
         inCurrentMonth: d.isSame(dateInMonth, 'month'),
         events: this.getEventsOnDate(d),
       };
 
-      this.days.push(calendarDay);
-
-      // set today's date!
-      if (d.isSame(new Date(), 'day')) {
+      if (d == moment()){
         this.today = calendarDay;
       }
+
+      this.days.push(calendarDay);
 
       // set selected day to the date provided
       if (d.isSame(dateInMonth, 'day')) {
@@ -81,38 +88,68 @@ export class CalendarComponent implements OnInit {
     // console.log(newMonth);
     if (newMonth.isSame(moment(), 'month')) {
       // if current month, make selected day today
+      // this.today = new Date();
       this.showCalendar( new Date());
+
+      // moment(new Date());
+
+      // let todayDate = moment();
+      // this.today = {
+      //   dayOfMonth: todayDate,
+      //   inCurrentMonth: todayDate.isSame(dateInMonth, 'month'),
+      //   events: this.getEventsOnDate(d),
+      // };
+
+      // let today: CalendarDay = {
+      //   dayOfMonth: new Date(),
+      //   inCurrentMonth: true,
+      //   events: this.getEventsOnDate(d),
+      // };
+
+
+      // let todayDate = moment();
+      // this.today = {
+      //   dayOfMonth: todayDate.date(),
+      //   inCurrentMonth: true,
+      //   events: this.getEventsOnDate(todayDate),
+      // };
     }
     else {
       // make selected day the 1st of the month
       this.showCalendar(newMonth.startOf('month'));
+
+      // let todayDate = moment();
+      // this.today = {
+      //   dayOfMonth: todayDate.date(),
+      //   inCurrentMonth: false,
+      //   events: this.getEventsOnDate(todayDate),
+      // };
     }
     this.selectedMonth = newMonth.month();
     this.selectedYear = newMonth.year()
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
-    // this.eventService.updateMonthEvents(monthyear);
+    this.eventService.updateMonthEvents(monthyear);
   }
 
   fillEventsByDay(){
-    console.log('fillEventsByDay');
+    console.log('hey');
     console.log(this.filteredMonthYearEvents);
+    console.log('yoooo');
+    console.log(this.eventsByDayHakan);
     this.filteredMonthYearEvents.forEach(el => {
       let eventDate = moment(el.properties.start_time);
       let dayOfYear = eventDate.dayOfYear();
       console.log(el);
-      let arr : GeoJson[] = [];
-      arr.push(...this.eventsByDay.get(dayOfYear));
-      arr.push(el);
-      this.eventsByDay.set(dayOfYear,arr);
+      this.eventsByDayHakan[dayOfYear].push(el);
     });
-    console.log(this.eventsByDay);
+    console.log(this.eventsByDayHakan);
   }
 
   getEventsOnDate(date: Moment): GeoJson[] {
     console.log('get events on date');
     let dayOfYear = date.dayOfYear();
-    if (dayOfYear in this.eventsByDay){
-      return this.eventsByDay.get(dayOfYear);
+    if (dayOfYear in this.eventsByDayHakan){
+      return this.eventsByDayHakan[dayOfYear];
     }
     else {
       return [];

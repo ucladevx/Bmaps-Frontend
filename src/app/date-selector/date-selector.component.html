@@ -2,14 +2,7 @@
     <button [style.visibility]="showLeft ? 'visible' : 'hidden'" class="custom-btn" id="left-arrow" (click)="updateDate(-1)">
         <i class="fa fa-caret-left" aria-hidden="true"></i>
     </button>
-    <div id="date-text">
-      <span class="sm-text">
-        <span class="small-font">displaying events for</span> <br> {{dateString | lowercase}}
-      </span>
-      <span class="md-text">
-        Events for {{dateString}}
-      </span>
-    </div>
+    <span id="date-text">{{dateString}}</span>
     <button [style.visibility]="showRight ? 'visible' : 'hidden'" class="custom-btn" id="right-arrow" (click)="updateDate(1)">
         <i class="fa fa-caret-right" aria-hidden="true"></i>
     </button>
