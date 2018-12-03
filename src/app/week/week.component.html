@@ -56,9 +56,11 @@
         *ngFor="let event of day.events"
         [style.top]="positionEvent(event)"
         [style.height]="sizeEvent(event)"
-        id="{{ 'event-' + event.id }}"
+        [style.left]="handleOverlap(event,day.events)[0]"
+        [style.width]="handleOverlap(event,day.events)[1]"
+        id="{{ 'event-' + event.id}}"
         (click)="openEvent(event)">
-        {{event.properties.name}}
+        {{eventCard(event)}}
       </div>
     </div>
   </div>

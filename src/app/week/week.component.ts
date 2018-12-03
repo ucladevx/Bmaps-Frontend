@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { EventService } from '../event.service';
+import { DateService } from '../shared/date.service';
 import { GeoJson } from '../map';
 
 interface CalendarDay {
@@ -54,7 +55,7 @@ export class WeekComponent implements OnInit {
     moment([2023,3,2])
   ];
 
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService, private dateService: DateService) { }
 
   ngOnInit() {
     //subscriptions
@@ -153,6 +154,7 @@ export class WeekComponent implements OnInit {
       this.viewDate = new Date();
       //update view
       this.updateWeekView();
+      document.getElementById("scrollable").scrollTop = 112;
     }
     // make selected day the 1st of the week
     else {
@@ -160,6 +162,7 @@ export class WeekComponent implements OnInit {
       this.viewDate = newWeek.startOf('week').toDate();
       //update view
       this.updateWeekView();
+      document.getElementById("scrollable").scrollTop = 112;
     }
   }
 
@@ -185,7 +188,19 @@ export class WeekComponent implements OnInit {
     let dayOfYear = date.dayOfYear();
     //retrieve event list from eventsByDay
     if (this.eventsByDay.hasOwnProperty(dayOfYear)){
-      return this.eventsByDay[dayOfYear];
+      var eventList = this.eventsByDay[dayOfYear];
+      eventList.sort(function compare(a, b) {
+        var timeA = new Date(a.properties.start_time);
+        var timeB = new Date(b.properties.start_time);
+        if(timeA-timeB == 0){
+          var timeAA = new Date(a.properties.end_time);
+          var timeBB = new Date(b.properties.end_time);
+          return timeBB - timeAA;
+        }
+        return timeA - timeB;
+      });
+      console.log(eventList);
+      return eventList;
     }
     //if no events, return empty array
     else {
@@ -208,6 +223,9 @@ export class WeekComponent implements OnInit {
   }
 
   //position and size event to match actual start time and duration
+  eventCard(event: GeoJson): string{
+    return event.properties.name;
+  }
   positionEvent(event: GeoJson): string{
     var start = event.properties.start_time;
     var top = 4;
@@ -222,8 +240,59 @@ export class WeekComponent implements OnInit {
     var start = moment(event.properties.start_time);
     var end = moment(event.properties.end_time);
     var hours = moment.duration(end.diff(start)).asHours();
+    if(hours>24){ hours = (hours%24)+1; }
     var size = hours*3.45;
     return size+"%";
   }
+  handleOverlap(event: GeoJson, events: GeoJson[]): string[] {
+      //get start and end time
+      var start = moment(event.properties.start_time);
+      var tempEnd = moment(event.properties.end_time);
+      var hours = moment.duration(tempEnd.diff(start)).asHours();
+      if(hours>24){ hours = (hours%24)+1; }
+      var end = start.clone().add(hours,"hours");
+      //store list of overlapping events
+      var overlapped = [];
+      var eventIndex = 0;
+      //iterate through all events
+      for(var j = 0; j < events.length; j++){
+          //if event is the same as the event in question, set eventIndex
+          if(events[j] == event){ eventIndex = overlapped.length; }
+          //get start and end time of second event
+          var newStart = moment(events[j].properties.start_time);
+          var tempNewEnd = moment(events[j].properties.end_time);
+          var newHours = moment.duration(tempNewEnd.diff(newStart)).asHours();
+          if(newHours>24){ newHours = (newHours%24)+1; }
+          var newEnd = newStart.clone().add(newHours,"hours");
+          //if days are the same
+            //Case 1: exact overlap
+            if(newStart.isSame(start) && newEnd.isSame(end)){
+              overlapped.push(events[j]);
+            }
+            //Case 1.5: overlap only on border
+            else if(newStart.isSame(end) || newEnd.isSame(start)){
+            }
+            //Case 2: partial overlap
+            else if(
+              (newStart.isSameOrAfter(start) && newStart.isBefore(end)) ||
+              (newEnd.isSameOrAfter(start) && newEnd.isBefore(end)) ||
+              (start.isSameOrAfter(newStart) && start.isBefore(newEnd)) ||
+              (end.isSameOrAfter(newStart) && end.isBefore(newEnd))
+            ){
+              overlapped.push(events[j]);
+            }
+        }
+      //create dimensions for width and left
+      var widthLeft = [];
+      //calculate left
+      var left = 2+((98/overlapped.length)*eventIndex);
+      widthLeft.push(left + "%");
+      //calculate width
+      var width = 98-left;
+      width -= (5*(overlapped.length-1-eventIndex));
+      widthLeft.push(width + "%");
+      //return dimensions
+      return widthLeft;
+    }
 
 }

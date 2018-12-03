@@ -306,7 +306,7 @@ export class EventService {
   boldEvent(event: GeoJson): void{
     var events = document.getElementsByClassName("weekview-day-event");
       for(var i = 0; i < events.length; i++){
-        events[i].style.fontWeight = "normal";
+        (<any>events[i]).style.fontWeight = "normal";
       }
     if(event != null){
       var ev = document.getElementById("event-"+event.id);

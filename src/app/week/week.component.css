@@ -53,7 +53,7 @@
 }
 
 .time-of-day td {
-  vertical-align: middle;
+  vertical-align: top;
 }
 
 .day-blocks {
@@ -134,23 +134,20 @@
 .weekview-day-event {
   float: left;
   clear: left;
+  position: absolute;
   font-size: 10px;
-  width: 96%;
-  padding: 3% 3% 3% 3%;
-  margin: 0% 2% 2% 2%;
+  padding: 3%;
+  margin: 0%;
   border-radius: 2px;
   color: black;
   background-color: #59dbd6;
   cursor: pointer;
+  z-index: 2;
+  border: 1px solid #aaa;
+  width: 100%;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  line-height: 100%;
-  text-overflow: ellipsis;
-  position: absolute;
-  z-index: 2;
-  display: flex;
-flex-direction: column;
-justify-content: center;
 }
 
 .weekview-day.in-current-month {
