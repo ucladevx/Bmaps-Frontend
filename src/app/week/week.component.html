@@ -48,7 +48,7 @@
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
         </table>
         <div class="current-time" [ngClass]="{'today': day === today}" [style.top]="currentTime()"></div>
-        <div class="weekview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{ 'event-' + event.id}}"
+        <div class="weekview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{'event-' + event.id}}"
         *ngFor="let event of day.events" (click)="openEvent(event)"
         [ngStyle]="styleEvent(event,day.events)">
         <div class="event-details">

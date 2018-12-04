@@ -303,15 +303,4 @@ export class EventService {
     this.hoveredEventSource.next(this._hoveredEvent);
   }
 
-  boldEvent(event: GeoJson): void{
-    var events = document.getElementsByClassName("weekview-day-event");
-      for(var i = 0; i < events.length; i++){
-        (<any>events[i]).style.fontWeight = "normal";
-      }
-    if(event != null){
-      var ev = document.getElementById("event-"+event.id);
-      ev.style.fontWeight = "bold";
-    }
-  }
-
 }

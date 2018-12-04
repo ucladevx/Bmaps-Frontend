@@ -66,7 +66,7 @@ export class WeekComponent implements OnInit {
       this.showCalendar(this.viewDate);
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
-        this.clickedEvent = clickedEventInfo;
+        this.highlightEvent(clickedEventInfo);
     });
     //on startup
     this.selectedMonth = moment().month();
@@ -242,7 +242,23 @@ export class WeekComponent implements OnInit {
   //open event in sidebar
   openEvent(event: GeoJson): void{
     this.eventService.updateClickedEvent(event);
-    this.eventService.boldEvent(event);
+  }
+  //bold event when opened
+  highlightEvent(clickedEventInfo: GeoJson): void{
+    //restyle currently selected event card
+    if(this.clickedEvent != null){
+      var selCard = document.getElementById("event-"+this.clickedEvent.id);
+      selCard.style.fontWeight = "normal";
+      selCard.style.zIndex = selCard.style.tabSize;
+    }
+    //update clicked event
+    this.clickedEvent = clickedEventInfo;
+    //style new clicked event
+    if(this.clickedEvent != null){
+      var eCard = document.getElementById("event-"+this.clickedEvent.id);
+      eCard.style.fontWeight = "bold";
+      eCard.style.zIndex = "100";
+    }
   }
 
   //retrieve and format event title and event time
@@ -292,12 +308,16 @@ export class WeekComponent implements OnInit {
     var left = 2+((98/overlapped.length)*eventIndex);
     // CALCULATE WIDTH
     var width = 98-left-(5*(overlapped.length-1-eventIndex));
+    // CALCULATE ZINDEX
+    var z = eventIndex+1;
     // CREATE STYLE
     var style = {
       'top' : top+"%",
       'height' : height+"%",
       'left' : left+"%",
-      'width' : width+"%"
+      'width' : width+"%",
+      'zIndex' : z,
+      'tabSize' : z
     }
     return style;
   }
