@@ -31,6 +31,7 @@ export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
+    show: boolean = true;
     public mobileSidebarVisible: boolean = false;
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
@@ -76,6 +77,19 @@ export class SidebarComponent implements OnInit {
     onHover(event: GeoJson): void {
         this.hoveredEvent = event;
         this.eventService.updateHoveredEvent(event);
+    }
+
+    hideSidebar(event: GeoJson){
+      this.clickedEvent = event;
+      this.show = false;
+    }
+
+    //output function to reveal sidebar once we exit out of the event detail
+    showSidebar() {
+        if (this.clickedEvent != null) {
+          this.eventService.updateClickedEvent(null);
+        }
+        this.show = true;
     }
 
     toggleMobileSidebar() {

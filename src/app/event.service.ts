@@ -331,6 +331,42 @@ export class EventService {
     this.applyFiltersAndCategories();
   }
 
+  // TODO(wijayak)
+  // Appy current _categHash
+  private applyCategories(monthyear: string) {
+    console.log("APPLYING CATEGORIES");
+    if (monthyear == ''){
+      console.log("monthyear is nothing");
+      let tempEvents = new FeatureCollection([]);
+        for (let event of this._events.features) {
+          let allSelected = this._categHash['all'].selected;
+          for (let category of event.properties.categories) {
+            let categObject = this._categHash[category.toLowerCase()];
+            if (allSelected || (categObject && categObject.selected)) {
+              tempEvents.features.push(event);
+              break;
+            }
+          }
+        }
+      this.filteredCurrEventsSource.next(tempEvents);
+    } else {
+      console.log("monthyear is something");
+      console.log(monthyear);
+      let tempEvents = new FeatureCollection([]);
+        for (let event of this._allevents.features) {
+          let allSelected = this._categHash['all'].selected;
+          for (let category of event.properties.categories) {
+            let categObject = this._categHash[category.toLowerCase()];
+            if (allSelected || (categObject && categObject.selected)) {
+              tempEvents.features.push(event);
+              break;
+            }
+          }
+        }
+      this.filteredMonthEventsSource.next(tempEvents);
+    }
+  }
+  
   private applyFiltersAndCategories() {
     console.log("APPLYING FILTERS & CATEGORIES");
 
@@ -361,43 +397,15 @@ export class EventService {
       // Otherwise apply filters
       for (let event of tempEvents.features) {
         let passesAllFilters = true;
-
-        for (let filterList of this._filterLists) {
-          let passesThisFilter = false;
-          let filterUsed = false;
-
-          for (let filter of filterList) {
-            if (this._filterHash[filter]) {
-              filterUsed = true;
-            }
-            if (this._filterHash[filter] && this.checkFilter(filter, event)) {
-              passesThisFilter = true;
-              break;
-            }
-          }
-
-          if (filterUsed && !passesThisFilter) {
+        for (let filter in this._filterHash) {
+          if (this._filterHash[filter] && !this.checkFilter(filter, event)) {
             passesAllFilters = false;
-            break;
           }
         }
         if (passesAllFilters) {
           tempEvents2.features.push(event);
         }
-      this.filteredCurrEventsSource.next(tempEvents);
-    } else {
-      let tempEvents = new FeatureCollection([]);
-        for (let event of this._allevents.features) {
-          let allSelected = this._categHash['all'].selected;
-          for (let category of event.properties.categories) {
-            let categObject = this._categHash[category.toLowerCase()];
-            if (allSelected || (categObject && categObject.selected)) {
-              tempEvents.features.push(event);
-              break;
-            }
-          }
-        }
-      this.filteredMonthEventsSource.next(tempEvents);
+      }
     }
 
     this.filteredCurrEventsSource.next(tempEvents2);
