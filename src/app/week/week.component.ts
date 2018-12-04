@@ -20,8 +20,6 @@ interface CalendarDay {
 })
 
 export class WeekComponent implements OnInit {
-  @Output() changeView: EventEmitter<string> = new EventEmitter();
-
   private days: CalendarDay[] = [];
   private selectedMonth: Number;
   private selectedYear: Number;
@@ -34,6 +32,7 @@ export class WeekComponent implements OnInit {
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
   private weekNumber: string;
+  // retrieved from UCLA online academic calendar
   private zeroWeeks: Moment[] = [
     //2018-2019
     moment([2018,8,23]),
@@ -57,6 +56,7 @@ export class WeekComponent implements OnInit {
     moment([2023,3,2])
   ];
 
+  //constructor statement
   constructor(private eventService: EventService, private dateService: DateService) { }
 
   ngOnInit() {
@@ -74,48 +74,58 @@ export class WeekComponent implements OnInit {
     this.viewDate = new Date();
     //update view
     this.updateWeekView();
-    document.getElementById("scrollable").scrollTop = 119;
   }
 
-  currentTime() {
-    var now = moment();
-    var top = 4;
-    if(moment(now).format("A") == "PM"){
-      top += 41.4;
-    }
-    top += (parseInt(moment(now).format("H"))%12)*3.45;
-    top += (parseInt(moment(now).format("mm"))/15)*0.8625;
-    return top+"%";
-  }
-
+  //update the week view
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
     this.eventService.updateWeekEvents(this.viewDate);
+    //set scroll bar to show view of rogughly 8am-10pm
+    document.getElementById("scrollable").scrollTop = 119;
   }
 
+  //determine the position of the current time bar
+  currentTime() {
+    //retrieve current time moment
+    var now = moment();
+    //calculate top position
+    var top = 4;
+    if(moment(now).format("A") == "PM"){ top += 41.4; }
+    top += (parseInt(moment(now).format("H"))%12)*3.45;
+    top += (parseInt(moment(now).format("mm"))/15)*0.8625;
+    //return as percentage
+    return top+"%";
+  }
+
+  //set the week number
   enumerateWeek(){
+    //count weeks
     var weekCount;
-    //iterate backwards to find the first positive week
+    //iterate backwards through zeroWeeks array to find the first positive week
     for(var i = this.zeroWeeks.length-1; i>=0; i--){
+      //determine week count
       weekCount = Math.floor(moment(this.viewDate).diff(this.zeroWeeks[i],'days') / 7);
+      //handle zero week
       if(weekCount>=0){
-        if(i%3 != 0){
-          weekCount++;
-        }
+        if(i%3 != 0){ weekCount++; }
         i = -1;
       }
     }
+    // Week 11 -> Finals Week
     if(weekCount == 11){
       this.weekNumber = "Finals Week";
     }
+    // Week 12+ or Week 0- -> Break
     else if(weekCount > 11 || weekCount < 0 || weekCount == undefined){
       this.weekNumber = "";
     }
+    // Week 0-12 -> Within Quarter
     else {
       this.weekNumber = "Week " + weekCount;
     }
   }
 
+  //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
     //fill events by day for the week
     this.fillEventsByDay();
@@ -155,6 +165,7 @@ export class WeekComponent implements OnInit {
     }
   }
 
+  //increment or decrement week
   changeWeek(delta: number): void {
     // 1 means advance one week, -1 means go back one week
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
@@ -165,20 +176,17 @@ export class WeekComponent implements OnInit {
     if (newWeek.isSame(moment(), 'week')) {
       //update view date
       this.viewDate = new Date();
-      //update view
-      this.updateWeekView();
-      document.getElementById("scrollable").scrollTop = 119;
     }
     // make selected day the 1st of the week
     else {
       //update view date
       this.viewDate = newWeek.startOf('week').toDate();
-      //update view
-      this.updateWeekView();
-      document.getElementById("scrollable").scrollTop = 119;
     }
+    //update view
+    this.updateWeekView();
   }
 
+  //retrieve events for the given week
   fillEventsByDay(){
     //clear events by day for the week
     this.eventsByDay = [];
@@ -195,12 +203,13 @@ export class WeekComponent implements OnInit {
       this.eventsByDay[dayOfYear].push(el);
     });
   }
-
+  //retrieve events for a specific day
   getEventsOnDate(date: Moment): GeoJson[] {
     //determine day of year
     let dayOfYear = date.dayOfYear();
     //retrieve event list from eventsByDay
     if (this.eventsByDay.hasOwnProperty(dayOfYear)){
+      //sort array by start time, then by duration
       var eventList = this.eventsByDay[dayOfYear];
       eventList.sort(function compare(a, b) {
         var timeA = +new Date(a.properties.start_time);
@@ -212,6 +221,7 @@ export class WeekComponent implements OnInit {
         }
         return timeA - timeB;
       });
+      //return sorted list of events
       return eventList;
     }
     //if no events, return empty array
@@ -220,6 +230,7 @@ export class WeekComponent implements OnInit {
     }
   }
 
+  //highlight selected day
   onSelect(day: CalendarDay): void {
     //update selectedDay
     this.selectedDay = day;
@@ -228,91 +239,67 @@ export class WeekComponent implements OnInit {
     //update sidebar to display events for that date
     this.eventService.updateEvents(date);
   }
-
+  //open event in sidebar
   openEvent(event: GeoJson): void{
     this.eventService.updateClickedEvent(event);
     this.eventService.boldEvent(event);
   }
 
-  //position and size event to match actual start time and duration
-  eventTime(event: GeoJson): string{
-    var start = this.dateService.formatTime(event.properties.start_time);
-    var end = this.dateService.formatTime(event.properties.end_time);
-    return start + " - " + end;
-  }
+  //retrieve and format event title and event time
   eventName(event: GeoJson): string{
     return event.properties.name;
   }
-  eventLocation(event: GeoJson): string{
-    return event.properties.place.name;
+  eventTime(event: GeoJson): string{
+    return this.dateService.formatTime(event.properties.start_time) + " - " + this.dateService.formatTime(event.properties.end_time);
   }
-  positionEvent(event: GeoJson): string{
-    var start = event.properties.start_time;
-    var top = 4;
-    if(moment(start).format("A") == "PM"){
-      top += 41.4;
-    }
-    top += (parseInt(moment(start).format("H"))%12)*3.45;
-    top += (parseInt(moment(start).format("mm"))/15)*0.8625;
-    return top+"%";
-  }
-  sizeEvent(event: GeoJson): string{
+
+  // position and size event to match actual start time and duration
+  styleEvent(event: GeoJson, events: GeoJson[]): string{
+    // CALCULATE TOP //
     var start = moment(event.properties.start_time);
+    var top = 4;
+    if(start.format("A") == "PM"){ top += 41.4; }
+    top += (parseInt(start.format("H"))%12)*3.45;
+    top += (parseInt(start.format("mm"))/15)*0.8625;
+    // CALCULATE HEIGHT //
     var end = moment(event.properties.end_time);
     var hours = moment.duration(end.diff(start)).asHours();
     if(hours>24){ hours = (hours%24)+1; }
-    var size = hours*3.45;
-    return size+"%";
-  }
-  handleOverlap(event: GeoJson, events: GeoJson[]): string[] {
-      //get start and end time
-      var start = moment(event.properties.start_time);
-      var tempEnd = moment(event.properties.end_time);
-      var hours = moment.duration(tempEnd.diff(start)).asHours();
-      if(hours>24){ hours = (hours%24)+1; }
-      var end = start.clone().add(hours,"hours");
-      //store list of overlapping events
-      var overlapped = [];
-      var eventIndex = 0;
-      //iterate through all events
-      for(var j = 0; j < events.length; j++){
-          //if event is the same as the event in question, set eventIndex
-          if(events[j] == event){ eventIndex = overlapped.length; }
-          //get start and end time of second event
-          var newStart = moment(events[j].properties.start_time);
-          var tempNewEnd = moment(events[j].properties.end_time);
-          var newHours = moment.duration(tempNewEnd.diff(newStart)).asHours();
-          if(newHours>24){ newHours = (newHours%24)+1; }
-          var newEnd = newStart.clone().add(newHours,"hours");
-          //if days are the same
-            //Case 1: exact overlap
-            if(newStart.isSame(start) && newEnd.isSame(end)){
-              overlapped.push(events[j]);
-            }
-            //Case 1.5: overlap only on border
-            else if(newStart.isSame(end) || newEnd.isSame(start)){
-            }
-            //Case 2: partial overlap
-            else if(
-              (newStart.isSameOrAfter(start) && newStart.isBefore(end)) ||
-              (newEnd.isSameOrAfter(start) && newEnd.isBefore(end)) ||
-              (start.isSameOrAfter(newStart) && start.isBefore(newEnd)) ||
-              (end.isSameOrAfter(newStart) && end.isBefore(newEnd))
-            ){
-              overlapped.push(events[j]);
-            }
-        }
-      //create dimensions for width and left
-      var widthLeft = [];
-      //calculate left
-      var left = 2+((98/overlapped.length)*eventIndex);
-      widthLeft.push(left + "%");
-      //calculate width
-      var width = 98-left;
-      width -= (5*(overlapped.length-1-eventIndex));
-      widthLeft.push(width + "%");
-      //return dimensions
-      return widthLeft;
+    let end = start.clone().add(hours,"hours");
+    var height = hours*3.45;
+    // CALCULATE WIDTH AND LEFT //
+    var overlapped = [];
+    var eventIndex = 0;
+    //iterate through surrounding events
+    for(var j = 0; j < events.length; j++){
+        if(events[j] == event){ eventIndex = overlapped.length; }
+        //retrieve start and end time for new event
+        var s = moment(events[j].properties.start_time);
+        let e = moment(events[j].properties.end_time);
+        var h = moment.duration(e.diff(s)).asHours();
+        if(h>24){ h = (h%24)+1; }
+        let e = s.clone().add(h,"hours");
+        //determine whether events overlap
+        if(!s.isSame(end) && !e.isSame(start) &&
+            ((s.isSame(start) && e.isSame(end)) ||
+            (s.isSameOrAfter(start) && s.isBefore(end)) ||
+            (e.isSameOrAfter(start) && e.isBefore(end)) ||
+            (start.isSameOrAfter(s) && start.isBefore(e)) ||
+            (end.isSameOrAfter(s) && end.isBefore(e)))
+        { overlapped.push(events[j]); }
     }
+    // CALCULATE LEFT
+    var left = 2+((98/overlapped.length)*eventIndex);
+    // CALCULATE WIDTH
+    var width = 98-left-(5*(overlapped.length-1-eventIndex));
+    // CREATE STYLE
+    var style = {
+      'top' : top+"%",
+      'height' : height+"%",
+      'left' : left+"%",
+      'width' : width+"%"
+    }
+    return style;
+  }
 
 }
