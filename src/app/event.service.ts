@@ -331,7 +331,7 @@ export class EventService {
     this.applyFiltersAndCategories();
   }
 
-  // TODO(wijayak)
+  // TODO: this file kind of turned into a shit show because some functions were refactored/renamed
   // Appy current _categHash
   private applyCategories(monthyear: string) {
     console.log("APPLYING CATEGORIES");

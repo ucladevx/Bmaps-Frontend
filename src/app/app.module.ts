@@ -26,7 +26,8 @@ import { WeekComponent } from './week/week.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
-// TODO(wijayak) app.component.html
+// TODO: routing, app.component.html or use buttons?
+// https://github.com/ucladevx/Mappening-Frontend/commit/9cc323b45b164ed9b0ee1f1a7d6d48ef05e30d62
 const appRoutes: Routes = [
   { path: 'map', component: MapBoxComponent },
   //{ path: 'calendar', component: CalendarComponent },

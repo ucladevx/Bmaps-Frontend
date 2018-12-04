@@ -25,7 +25,7 @@ export class EventDetailComponent implements OnInit {
       });
   }
 
-  // TODO(wijayak)
+  // TODO: this file was changed, not sure what's relevant and should be hooked up where
   hideEvent($event) {
       // this.showSideBarBool.emit(true);
       this.eventService.boldEvent(null);
