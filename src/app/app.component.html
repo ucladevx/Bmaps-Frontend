@@ -8,8 +8,7 @@
             <app-week [hidden]="currentView != 'week'" class="flex"></app-week>
         </div>
         <div class="col-sm-12 col-md-5 order-sm-last order-md-first sidebar-container" [ngClass]="{'hide-map': pressed}">
-            <app-sidebar class="flex" (pressed)=onPressed($event)></app-sidebar>
-            <!-- On the click event, executes app.ts's onPressed -->
+            <router-outlet name="sidebar" (activate)="onSidebarRouterActivate($event)"></router-outlet>
         </div>
     </div>
 </div>

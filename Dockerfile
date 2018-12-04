@@ -1,25 +1,31 @@
 # start with a lightweight linux image
-FROM alpine:3.6 as builder
+FROM alpine:3.8 as builder
 
 # add necessary packages
 RUN apk update && \
     apk upgrade && \
-    apk add bash 'nodejs-npm<=6.11' nginx make && \
+    apk add --update-cache bash yarn nginx make && \
     rm -rf /var/cache/apk/*
 
-COPY package.json package-lock.json ./
+# https://pkgs.alpinelinux.org/package/edge/main/x86_64/nodejs
+# https://stackoverflow.com/questions/37416671/node-not-found-in-alpine-docker
+# https://superuser.com/questions/1252624/what-is-the-best-way-to-install-latest-nodejs-with-npm-on-alpine-linux/1252982
+RUN apk add nodejs
 
-RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
+COPY package.json yarn.lock ./
+
+# RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
 ## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
-RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
+RUN yarn install && mkdir /ng-app && cp -R ./node_modules ./ng-app
 
 WORKDIR /ng-app
 
 COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder
-RUN $(npm bin)/ng build --prod --build-optimizer
+RUN yarn global add @angular/cli
+RUN ng build --prod --build-optimizer
 
 # Copy the configuration file
 RUN mkdir -p /run/nginx

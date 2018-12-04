@@ -13,13 +13,16 @@ export class NavbarComponent implements OnInit {
     }
 
     isCollapsed: boolean = true;
+    public isFilterCollapsed: boolean = true;
 
-    collapsed(event: any): void {
-        console.log(event);
+    toggleMenuCollapse(): void {
+      this.isCollapsed = !this.isCollapsed;
+      this.isFilterCollapsed = true;
     }
 
-    expanded(event: any): void {
-        console.log(event);
+    toggleFilterCollapse(): void {
+      this.isFilterCollapsed = !this.isFilterCollapsed;
+      this.isCollapsed = true;
     }
 
     emitChangeView(newView: string): void {
