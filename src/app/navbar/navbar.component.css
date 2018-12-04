@@ -108,3 +108,9 @@ li a {
 a:hover{
     text-decoration: none;
 }
+
+.navbar-text {
+    color: white;
+    cursor: pointer;
+    margin: 0 10px;
+}
