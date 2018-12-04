@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { EventService } from '../event.service';
@@ -20,6 +20,8 @@ interface CalendarDay {
 })
 
 export class WeekComponent implements OnInit {
+  @Output() changeView: EventEmitter<string> = new EventEmitter();
+
   private days: CalendarDay[] = [];
   private selectedMonth: Number;
   private selectedYear: Number;
@@ -72,7 +74,7 @@ export class WeekComponent implements OnInit {
     this.viewDate = new Date();
     //update view
     this.updateWeekView();
-    document.getElementById("scrollable").scrollTop = 112;
+    document.getElementById("scrollable").scrollTop = 119;
   }
 
   currentTime() {
@@ -165,7 +167,7 @@ export class WeekComponent implements OnInit {
       this.viewDate = new Date();
       //update view
       this.updateWeekView();
-      document.getElementById("scrollable").scrollTop = 112;
+      document.getElementById("scrollable").scrollTop = 119;
     }
     // make selected day the 1st of the week
     else {
@@ -173,7 +175,7 @@ export class WeekComponent implements OnInit {
       this.viewDate = newWeek.startOf('week').toDate();
       //update view
       this.updateWeekView();
-      document.getElementById("scrollable").scrollTop = 112;
+      document.getElementById("scrollable").scrollTop = 119;
     }
   }
 

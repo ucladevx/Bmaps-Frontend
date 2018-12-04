@@ -104,7 +104,7 @@
     display: flex;
     flex-wrap: wrap;
     flex: 1;
-    border-top: 1px solid #aaa;
+    border-top: 1px solid #979797;
 }
 
 .weekview-day {
@@ -112,7 +112,7 @@
     width: 14.2857%; /* 100/7 */
     display: block;
     align-items: flex-start;
-    border-right: 1px solid #aaa;
+    border-right: 1px solid #979797;
     color: #bebebe;
     background-color: #fff;
 }
@@ -132,14 +132,13 @@
   background-color: inherit;
   z-index: 15;
   top: 0;
+  border-bottom: 1px solid #979797;
 }
 
-.day-of-month.underline {
-  text-decoration: underline;
+.day-of-month.selected {
+  color: #59dbd6;
 }
-.day-of-month:hover {
-  text-decoration: underline;
-}
+
 
 
 .weekview-day-event {
