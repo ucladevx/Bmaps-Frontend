@@ -41,7 +41,7 @@
          class="weekview-day"
          [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay, 'today': day === today}"
          (click)="onSelect(day)">
-      <span class="day-of-month" [ngClass]="{'circle': day === selectedDay}">{{day.dayOfMonth}}</span>
+      <span class="day-of-month" [ngClass]="{'underline': day === selectedDay}">{{day.dayOfMonth}}</span>
 
       <table class="time-of-day">
         <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
@@ -50,6 +50,8 @@
         <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
         <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
       </table>
+
+      <div class="currentTime" [ngClass]="{'today': day === today}" [style.top]="currentTime()"></div>
 
       <div class="weekview-day-event"
         [ngClass]="{'in-current-month': day.inCurrentMonth}"
@@ -60,7 +62,14 @@
         [style.width]="handleOverlap(event,day.events)[1]"
         id="{{ 'event-' + event.id}}"
         (click)="openEvent(event)">
-        {{eventCard(event)}}
+        <div class="eventDetails">
+          <div class="eventTime">
+          {{eventTime(event)}}
+          </div>
+          <div class="eventName">
+          {{eventName(event)}}
+          </div>
+        </div>
       </div>
     </div>
   </div>

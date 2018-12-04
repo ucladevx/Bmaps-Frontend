@@ -75,6 +75,17 @@ export class WeekComponent implements OnInit {
     document.getElementById("scrollable").scrollTop = 112;
   }
 
+  currentTime() {
+    var now = moment();
+    var top = 4;
+    if(moment(now).format("A") == "PM"){
+      top += 41.4;
+    }
+    top += (parseInt(moment(now).format("H"))%12)*3.45;
+    top += (parseInt(moment(now).format("mm"))/15)*0.8625;
+    return top+"%";
+  }
+
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
     this.eventService.updateWeekEvents(this.viewDate);
@@ -129,7 +140,7 @@ export class WeekComponent implements OnInit {
         events: this.getEventsOnDate(d)
       };
       //determine whether it is the current day
-      if (d == moment()){
+      if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
         this.today = weekDay;
       }
       //add weekDay to display days array
@@ -190,16 +201,15 @@ export class WeekComponent implements OnInit {
     if (this.eventsByDay.hasOwnProperty(dayOfYear)){
       var eventList = this.eventsByDay[dayOfYear];
       eventList.sort(function compare(a, b) {
-        var timeA = new Date(a.properties.start_time);
-        var timeB = new Date(b.properties.start_time);
+        var timeA = +new Date(a.properties.start_time);
+        var timeB = +new Date(b.properties.start_time);
         if(timeA-timeB == 0){
-          var timeAA = new Date(a.properties.end_time);
-          var timeBB = new Date(b.properties.end_time);
+          var timeAA = +new Date(a.properties.end_time);
+          var timeBB = +new Date(b.properties.end_time);
           return timeBB - timeAA;
         }
         return timeA - timeB;
       });
-      console.log(eventList);
       return eventList;
     }
     //if no events, return empty array
@@ -223,8 +233,16 @@ export class WeekComponent implements OnInit {
   }
 
   //position and size event to match actual start time and duration
-  eventCard(event: GeoJson): string{
+  eventTime(event: GeoJson): string{
+    var start = this.dateService.formatTime(event.properties.start_time);
+    var end = this.dateService.formatTime(event.properties.end_time);
+    return start + " - " + end;
+  }
+  eventName(event: GeoJson): string{
     return event.properties.name;
+  }
+  eventLocation(event: GeoJson): string{
+    return event.properties.place.name;
   }
   positionEvent(event: GeoJson): string{
     var start = event.properties.start_time;
