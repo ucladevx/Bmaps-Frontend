@@ -4,70 +4,33 @@
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
-    <div class="section-header">Categories</div>
-    
-    <select name="categories" id="categories" class="custom-select">
-      <option value="{{categHash[categKey].formattedCategory}}" *ngFor="let categKey of objectKeys(categHash)">{{categHash[categKey].formattedCategory}}</option>
-    </select>
-    
-    <div class="section-header">Location</div>
-    <input class="form-control" type="text" placeholder="Enter a location">
-    
-    <div class="section-header">Organizer</div>
-    <select name="organizer" id="organizer" class="custom-select">
-      <option value="acm">acm</option>
-    </select>
-    
-    <div class="section-header">Date</div>
-    From:
-    <input type="date" class="form-control">
-    To:
-    <input type="date" class="form-control">
-    
-    <div class="section-header">Time</div>
-    From:
-    <input type="time" class="form-control">
-    To:
-    <input type="time" class="form-control">
-
-
-    <div class="section-header">Tags</div>
-    <div class="filters-wrapper">
-      <!-- <div class="btn-group time-filter-group">
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button"
-               (click)="filterClicked('happening now')">happening now</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">upcoming</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">time periods</label>
-      </div> -->
-
-
-
-      <div class="btn-group loc-filter-group">
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">on-campus</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">off-campus</label>
-        <label class="btn btn-outline-secondary"
-               btnCheckbox tabindex="0" role="button">nearby</label>
-      </div>
-
-      <div class="filters-bottom-section">
-        <button type="button" class="btn btn-outline-secondary"
-              [(ngModel)]="singleModel" btnCheckbox
-              btnCheckboxTrue="1" btnCheckboxFalse="0">
-          popular
-        </button>
-        <button type="button" class="btn btn-outline-secondary"
-              [(ngModel)]="singleModel" btnCheckbox
-              btnCheckboxTrue="1" btnCheckboxFalse="0">
-          free food
-        </button>
-      </div>
-    </div>
-
+   
+      <div class="section-header">Categories</div>
+      
+      <select name="categories" id="categories" class="custom-select">
+        <option value="{{categHash[categKey].formattedCategory}}" *ngFor="let categKey of objectKeys(categHash)">{{categHash[categKey].formattedCategory}}</option>
+      </select>
+      
+      <div class="section-header">Location</div>
+      <input class="form-control" type="text" placeholder="Enter a location">
+      
+      <div class="section-header">Organizer</div>
+      <select name="organizer" id="organizer" class="custom-select">
+        <option value="acm">acm</option>
+      </select>
+      
+      <div class="section-header">Date</div>
+      From:
+      <input type="date" class="form-control">
+      To:
+      <input type="date" class="form-control">
+      
+      <div class="section-header">Time</div>
+      From:
+      <input type="time" class="form-control">
+      To:
+      <input type="time" class="form-control">
+  
     <div *ngIf="categHash" class="section-header">Categories</div>
     <div class="categories-wrapper">
       <ul class="categories-list" role="menu">
