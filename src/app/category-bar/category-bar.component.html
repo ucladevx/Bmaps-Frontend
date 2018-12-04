@@ -38,7 +38,32 @@
         </button>
       </div>
     </div> -->
-
+      <div class="section-header">Categories</div>
+      
+      <select name="categories" id="categories" class="custom-select">
+        <option value="{{categHash[categKey].formattedCategory}}" *ngFor="let categKey of objectKeys(categHash)">{{categHash[categKey].formattedCategory}}</option>
+      </select>
+      
+      <div class="section-header">Location</div>
+      <input class="form-control" type="text" placeholder="Enter a location">
+      
+      <div class="section-header">Organizer</div>
+      <select name="organizer" id="organizer" class="custom-select">
+        <option value="acm">acm</option>
+      </select>
+      
+      <div class="section-header">Date</div>
+      From:
+      <input type="date" class="form-control">
+      To:
+      <input type="date" class="form-control">
+      
+      <div class="section-header">Time</div>
+      From:
+      <input type="time" class="form-control">
+      To:
+      <input type="time" class="form-control">
+  
     <div *ngIf="categHash" class="section-header">Categories</div>
     <div class="categories-wrapper">
       <ul class="categories-list" role="menu">

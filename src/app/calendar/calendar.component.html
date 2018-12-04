@@ -26,9 +26,16 @@
          [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay}"
          (click)="onSelect(day)">
       <span [ngClass]="{'today': day === today}">{{day.dayOfMonth}}</span>
-      <div class="calendar-day-event" *ngFor="let event of day.events">
-        {{event.properties.name}}
-      </div>
+      <!-- <div class="calendar-day-event" *ngFor="let events of eventsByDay | keyvalue "> -->
+      <ul class="calendar-day-event" >
+        <li *ngFor="let event of day.events">
+            {{event.properties.name.length > 30 ? event.properties.name.substring(0,30) + "..." : event.properties.name}}
+        </li>
+        <!-- <div *ngFor="let event of events.value"> -->
+        <!-- </div> -->
+        
+        
+        </ul>
     </div>
   </div>
 </div>

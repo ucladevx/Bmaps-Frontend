@@ -99,11 +99,15 @@ export class CalendarComponent implements OnInit {
     this.filteredMonthYearEvents.forEach(el => {
       let eventDate = moment(el.properties.start_time);
       let dayOfYear = eventDate.dayOfYear();
+      let dayOfMonth = eventDate.date();
       console.log(el);
       let arr : GeoJson[] = [];
       arr.push(...this.eventsByDay.get(dayOfYear));
       arr.push(el);
       this.eventsByDay.set(dayOfYear,arr);
+      console.log(dayOfYear);
+      console.log(this.days);
+      this.days.find(obj => obj.dayOfMonth == dayOfMonth).events = arr;
     });
     console.log(this.eventsByDay);
   }
@@ -111,10 +115,18 @@ export class CalendarComponent implements OnInit {
   getEventsOnDate(date: Moment): GeoJson[] {
     console.log('get events on date');
     let dayOfYear = date.dayOfYear();
-    if (dayOfYear in this.eventsByDay){
+    if (this.eventsByDay.get(dayOfYear)){
+      console.log("this.days");
+      
+      console.log(this.days);
       return this.eventsByDay.get(dayOfYear);
+
     }
     else {
+      console.log("faillllllll");
+      console.log(dayOfYear);
+      console.log(this.days);
+      console.log(this.eventsByDay);
       return [];
     }
   }

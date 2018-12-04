@@ -63,10 +63,19 @@
   float: left;
   clear: left;
   position: absolute;
-  bottom: 0;
+  top: 30px;
   font-size: 12px;
   margin: 1%;
+  padding: 0;
+  list-style-type: none;
+  margin: 5%;
 }
+
+.calendar-day-event li {
+    line-height: 15px;
+    margin-bottom: 5px;
+}
+
 .calendar-day.in-current-month {
     color: inherit;
 }
@@ -111,5 +120,8 @@
         justify-content: center;
     }
 
+    .calendar-day-event{
+        display: none;
+    }
 
 }
