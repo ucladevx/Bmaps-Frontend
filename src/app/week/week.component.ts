@@ -252,8 +252,10 @@ export class WeekComponent implements OnInit {
     //restyle currently selected event card
     if(this.clickedEvent != null){
       var selCard = document.getElementById("event-"+this.clickedEvent.id);
-      selCard.style.fontWeight = "normal";
-      selCard.style.zIndex = this.zIndexArray[this.clickedEvent.id];
+      if(selCard != null){
+        selCard.style.fontWeight = "normal";
+        selCard.style.zIndex = this.zIndexArray[this.clickedEvent.id];
+      }
     }
     //update clicked event
     this.clickedEvent = clickedEventInfo;
