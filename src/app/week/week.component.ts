@@ -253,7 +253,7 @@ export class WeekComponent implements OnInit {
     if(this.clickedEvent != null){
       var selCard = document.getElementById("event-"+this.clickedEvent.id);
       selCard.style.fontWeight = "normal";
-      selCard.style.zIndex = zIndexArray[this.clickedEvent.id];
+      selCard.style.zIndex = this.zIndexArray[this.clickedEvent.id];
     }
     //update clicked event
     this.clickedEvent = clickedEventInfo;
@@ -314,7 +314,7 @@ export class WeekComponent implements OnInit {
     var width = 98-left-(5*(overlapped.length-1-eventIndex));
     // CALCULATE ZINDEX
     var z = eventIndex+1;
-    zIndexArray[event.id] = z;
+    this.zIndexArray[event.id] = z;
     // CREATE STYLE
     var style = {
       'top' : top+"%",
