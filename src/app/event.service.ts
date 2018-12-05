@@ -167,13 +167,13 @@ export class EventService {
       .subscribe(categs => {
         let eventMap = this.getEventMap();
         let tempHash = {};
-        // let tempHash = {
-        //   'all': {
-        //     formattedCategory: 'all',
-        //     numEvents: eventMap['all'],
-        //     selected: this._categHash ? this._categHash['all'].selected : true
-        //   }
-        // };
+        let tempHash = {
+         'all': {
+          formattedCategory: 'all',
+          numEvents: eventMap['all'],
+            selected: this._categHash ? this._categHash['all'].selected : true
+         }
+        };
         for (let categ of categs.categories) {
           let categName = categ.toLowerCase();
           tempHash[categName] = {
@@ -366,7 +366,7 @@ export class EventService {
       this.filteredMonthEventsSource.next(tempEvents);
     }
   }
-  
+
   private applyFiltersAndCategories() {
     console.log("APPLYING FILTERS & CATEGORIES");
 
@@ -407,7 +407,6 @@ export class EventService {
         }
       }
     }
-
     this.filteredCurrEventsSource.next(tempEvents2);
   }
 
@@ -499,17 +498,6 @@ export class EventService {
 
   isToday(): boolean {
     return this.dateService.isToday(this._date);
-  }
-
-  boldEvent(event: GeoJson): void{
-    var events = document.getElementsByClassName("weekview-day-event");
-      for(var i = 0; i < events.length; i++){
-        (<any>events[i]).style.fontWeight = "normal";
-      }
-    if(event != null){
-      var ev = document.getElementById("event-"+event.id);
-      ev.style.fontWeight = "bold";
-    }
   }
 
 }

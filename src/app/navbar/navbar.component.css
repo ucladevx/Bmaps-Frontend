@@ -80,6 +80,12 @@
   border-bottom: 1px solid rgb(191,191,191);
 }
 
+.navbar-text {
+  color: white;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
 @media (min-width: 768px){
     .navbar-toggler {
         display: none !important;

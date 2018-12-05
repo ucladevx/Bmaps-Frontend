@@ -49,14 +49,14 @@ export class SidebarComponent implements OnInit {
             this.filteredEvents = eventCollection.features;
         });
         this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
-            this.clickedEvent = clickedEventInfo;
-            if (this.clickedEvent != null){
-              this.hideSidebar(this.clickedEvent);
-            }
-            else {
-              this.showSidebar();
-            }
-            this.scrollToEvent(clickedEventInfo);
+          this.clickedEvent = clickedEventInfo;
+          if (this.clickedEvent != null){
+            this.hideSidebar(this.clickedEvent);
+          }
+          else {
+            this.showSidebar();
+          }
+          this.scrollToEvent(clickedEventInfo);
         });
         this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
             this.hoveredEvent = hoveredEventInfo;
@@ -81,8 +81,10 @@ export class SidebarComponent implements OnInit {
 
     hideSidebar(event: GeoJson){
       this.clickedEvent = event;
+      this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
       this.show = false;
     }
+
 
     //output function to reveal sidebar once we exit out of the event detail
     showSidebar() {

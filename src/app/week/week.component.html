@@ -1,11 +1,11 @@
 <div class="weekview-container">
   <div class="selector">
-    <i class="fa fa-caret-left" (click)="changeWeek(-1)" aria-hidden="true"></i>
-    <span>{{currentMonth.format('MMMM YYYY')}}</span>
-    <i class="fa fa-caret-right" (click)="changeWeek(1)" aria-hidden="true"></i>
-    <div class="weekNumber">
+    <div class="week-number">
       <span>{{weekNumber}}</span>
     </div>
+    <i class="fa fa-caret-left" (click)="changeWeek(-1)" aria-hidden="true"></i>
+      <span>{{currentMonth.format('MMMM YYYY')}}</span>
+    <i class="fa fa-caret-right" (click)="changeWeek(1)" aria-hidden="true"></i>
   </div>
   <div class="weekview-header">
     <div class="corner-block"></div>
@@ -25,54 +25,43 @@
     <span class="short-abbr">s</span>
   </div>
   <div id="scrollable">
-  <div class="timebar">
-    <div class="filler-block"></div>
-    <table class="time-of-day">
-      <tr><td>12am</td></tr>
-      <tr><td>1am</td></tr><tr><td>2am</td></tr><tr><td>3am</td></tr><tr><td>4am</td></tr><tr><td>5am</td></tr><tr><td>6am</td></tr>
-      <tr><td>7am</td></tr><tr><td>8am</td></tr><tr><td>9am</td></tr><tr><td>10am</td></tr><tr><td>11am</td></tr><tr><td>12pm</td></tr>
-      <tr><td>1pm</td></tr><tr><td>2pm</td></tr><tr><td>3pm</td></tr><tr><td>4pm</td></tr><tr><td>5pm</td></tr><tr><td>6pm</td></tr>
-      <tr><td>7pm</td></tr><tr><td>8pm</td></tr><tr><td>9pm</td></tr><tr><td>10pm</td></tr><tr><td>11pm</td></tr><tr><td>12am</td></tr>
-    </table>
-  </div>
-  <div class="day-blocks">
-  <div class="weekview-month">
-    <div *ngFor="let day of days"
-         class="weekview-day"
-         [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay, 'today': day === today}"
-         (click)="onSelect(day)">
-      <span class="day-of-month" [ngClass]="{'selected': day === selectedDay}">{{day.dayOfMonth}}</span>
-
+    <div class="timebar">
+      <div class="filler-block"></div>
       <table class="time-of-day">
-        <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
-        <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
-        <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
-        <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
-        <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+      <tr><td>12am</td></tr><tr><td>1am</td></tr><tr><td>2am</td></tr><tr><td>3am</td></tr><tr><td>4am</td></tr>
+      <tr><td>5am</td></tr><tr><td>6am</td></tr><tr><td>7am</td></tr><tr><td>8am</td></tr><tr><td>9am</td></tr>
+      <tr><td>10am</td></tr><tr><td>11am</td></tr><tr><td>12pm</td></tr><tr><td>1pm</td></tr><tr><td>2pm</td></tr>
+      <tr><td>3pm</td></tr><tr><td>4pm</td></tr><tr><td>5pm</td></tr><tr><td>6pm</td></tr><tr><td>7pm</td></tr>
+      <tr><td>8pm</td></tr><tr><td>9pm</td></tr><tr><td>10pm</td></tr><tr><td>11pm</td></tr><tr><td>12am</td></tr>
       </table>
-
-      <div class="currentTime" [ngClass]="{'today': day === today}" [style.top]="currentTime()"></div>
-
-      <div class="weekview-day-event"
-        [ngClass]="{'in-current-month': day.inCurrentMonth}"
-        *ngFor="let event of day.events"
-        [style.top]="positionEvent(event)"
-        [style.height]="sizeEvent(event)"
-        [style.left]="handleOverlap(event,day.events)[0]"
-        [style.width]="handleOverlap(event,day.events)[1]"
-        id="{{ 'event-' + event.id}}"
-        (click)="openEvent(event)">
-        <div class="eventDetails">
-          <div class="eventTime">
-          {{eventTime(event)}}
+    </div>
+    <div class="day-blocks">
+    <div class="weekview-month">
+      <div *ngFor="let day of days"
+      class="weekview-day" [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay, 'today': day === today}" (click)="onSelect(day)">
+        <span class="day-of-month" [ngClass]="{'selected': day === selectedDay}">{{day.dayOfMonth}}</span>
+        <table class="time-of-day">
+          <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+          <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+          <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+          <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+          <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+        </table>
+        <div class="current-time" [ngClass]="{'today': day === today}" [style.top]="currentTime()"></div>
+        <div class="weekview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{'event-' + event.id}}"
+        *ngFor="let event of day.events" (click)="openEvent(event)"
+        [ngStyle]="styleEvent(event,day.events)">
+        <div class="event-details">
+          <div class="event-time">
+            {{eventTime(event)}}
           </div>
-          <div class="eventName">
-          {{eventName(event)}}
+          <div class="event-name">
+            {{eventName(event)}}
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</div>
+  </div>
+ </div>
 </div>

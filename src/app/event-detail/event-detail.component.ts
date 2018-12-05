@@ -10,7 +10,8 @@ import { DateService } from '../shared/date.service';
     styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-  public event: GeoJson;
+  @Input() event: any;
+  @Output() showSideBarBool = new EventEmitter<boolean>();
 
   constructor(
       private route: ActivatedRoute,
@@ -25,18 +26,14 @@ export class EventDetailComponent implements OnInit {
       });
   }
 
-  // TODO: this file was changed, not sure what's relevant and should be hooked up where
   hideEvent($event) {
-      // this.showSideBarBool.emit(true);
-      this.eventService.boldEvent(null);
-    }
-
-  //behavior for back arrow
-  back() {
     //update expanded event
     this.eventService.updateExpandedEvent(null);
     //unbold the popup event title
     this.eventService.boldPopup(null);
+    //weekview
+    this.showSideBarBool.emit(true);
+    this.eventService.updateClickedEvent(null);
   }
 
 }
