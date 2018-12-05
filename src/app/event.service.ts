@@ -166,7 +166,6 @@ export class EventService {
     this.categService.getCategories()
       .subscribe(categs => {
         let eventMap = this.getEventMap();
-        let tempHash = {};
         let tempHash = {
          'all': {
           formattedCategory: 'all',
