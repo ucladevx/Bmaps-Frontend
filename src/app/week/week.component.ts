@@ -301,7 +301,7 @@ export class WeekComponent implements OnInit {
             (s.isSameOrAfter(start) && s.isBefore(end)) ||
             (e.isSameOrAfter(start) && e.isBefore(end)) ||
             (start.isSameOrAfter(s) && start.isBefore(e)) ||
-            (end.isSameOrAfter(s) && end.isBefore(e)))
+            (end.isSameOrAfter(s) && end.isBefore(e))))
         { overlapped.push(events[j]); }
     }
     // CALCULATE LEFT
