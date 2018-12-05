@@ -25,4 +25,16 @@ export class NavbarComponent implements OnInit {
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
     }
+    
+    public isFilterCollapsed: boolean = true;
+
+    toggleMenuCollapse(): void {
+      this.isCollapsed = !this.isCollapsed;
+      this.isFilterCollapsed = true;
+    }
+
+    toggleFilterCollapse(): void {
+      this.isFilterCollapsed = !this.isFilterCollapsed;
+      this.isCollapsed = true;
+    }
 }

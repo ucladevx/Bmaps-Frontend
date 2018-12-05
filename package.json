@@ -23,6 +23,8 @@
     "@angular/router": "^7.0.2",
     "ajv": "^6.1.1",
     "angular-font-awesome": "^3.1.2",
+    "clamp-js-main": "^0.11.5",
+    "clampify": "^1.2.1",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
     "jquery": "^1.9.1",
@@ -33,8 +35,8 @@
     "npm": "^5.7.1",
     "popper.js": "^1.12.9",
     "rxjs": "^6.3.3",
-    "zone.js": "^0.8.26",
-    "rxjs-compat": "^6.0.0-rc.0"
+    "rxjs-compat": "^6.0.0-rc.0",
+    "zone.js": "^0.8.19"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",
@@ -43,7 +45,7 @@
     "@angular/language-service": "^7.0.2",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
-    "@types/jquery": "^2.0.42",
+    "@types/jquery": "^2.0.51",
     "@types/node": "~6.0.60",
     "codelyzer": "^4.0.1",
     "jasmine-core": "~2.8.0",

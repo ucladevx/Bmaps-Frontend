@@ -2,25 +2,21 @@
     z-index: 100;
 }
 
-.nav-container {
-    margin-left: 14px;
-}
-
 .navbar-default{
     background: rgb(71,71,71);
     border-color: rgb(191,191,191);
 }
 
-.navbar-default .navbar-toggler-icon{
-    background:  url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(120,213,215, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+.navbar-default .navbar-toggler {
+    display: flex;
+    align-items: center;
+    padding: 0;
 }
 
-.navbar-default .navbar-toggle{
-    border-color: transparent;
-}
-
-.navbar-default .navbar-toggle .icon-bar{
-    background-color: white;
+.navbar-default .navbar-toggler i {
+    padding: 5px;
+    color: #fff;
+    font-size: 12px;
 }
 
 .navbar-default .navbar-nav > .active{
@@ -37,15 +33,14 @@
     font-weight: 600;
 }
 
-.navbar-form{
-    display: inline-block;
-    margin: 0px;
-    margin-bottom: 1%;
-    margin-top: 1%;
-}
-
 .no-display{
     display: none !important;
+}
+
+.navbar-brand {
+  padding: 0;
+  margin: 0;
+  margin-left: 5px;
 }
 
 #navbar-brand{
@@ -53,23 +48,41 @@
     font-weight: 600;
 }
 
-#navbar-brand span {
-    display: none;
+#brand-name{
+  margin-left: 9px;
 }
 
-@media only screen and (min-width: 768px) {
-    #navbar-brand span{
-        display: inline-block;
-    }
+#filter-dropdown-toggle {
+    color: #9d9d9d;
+    font-size: 30px;
+    cursor: pointer;
 }
 
-#nav-logo{
+.nav-logo{
     display: inline-block;
+}
+
+.navbar-collapse {
+  margin: .5rem -1rem;
+  width: 100%;
+}
+
+.navbar-collapse.menu {
+  padding: 0 1rem .5rem;
+  position: absolute;
+  top: var(--navbar-height);
+  margin-top: 0;
+  background: rgb(71,71,71);
+}
+
+.navbar-collapse.filter {
+  margin-bottom: -.5rem;
+  border-bottom: 1px solid rgb(191,191,191);
 }
 
 @media (min-width: 768px){
     .navbar-toggler {
-        display: none;
+        display: none !important;
     }
 
     .navbar-nav {
@@ -82,6 +95,13 @@
     .navbar-collapse {
         display: flex !important;
         width: 100%;
+        margin: 0;
+    }
+
+    .navbar-collapse.menu {
+        padding: 0;
+        position: static;
+        top: 0;
     }
 
     .navbar-toggleable-md{
@@ -95,6 +115,10 @@
         -ms-flex-align: center;
         align-items: center;
     }
+
+    .d-md-none-important {
+      display: none !important;
+    }
 }
 
 ul li {
@@ -107,10 +131,4 @@ li a {
 
 a:hover{
     text-decoration: none;
-}
-
-.navbar-text {
-    color: white;
-    cursor: pointer;
-    margin: 0 10px;
 }

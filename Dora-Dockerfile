@@ -29,7 +29,7 @@ RUN ng build --prod --build-optimizer
 
 # Copy the configuration file
 RUN mkdir -p /run/nginx
-COPY nginx/conf/nginx.conf /etc/nginx
+COPY nginx/conf/dora.conf /etc/nginx/nginx.conf
 
 ## Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
