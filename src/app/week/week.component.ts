@@ -32,6 +32,7 @@ export class WeekComponent implements OnInit {
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
   private weekNumber: string;
+  private zIndexArray: { [id: number] : [z: number] } = {};
   // retrieved from UCLA online academic calendar
   private zeroWeeks: Moment[] = [
     //2018-2019
@@ -252,7 +253,7 @@ export class WeekComponent implements OnInit {
     if(this.clickedEvent != null){
       var selCard = document.getElementById("event-"+this.clickedEvent.id);
       selCard.style.fontWeight = "normal";
-      selCard.style.zIndex = selCard.style.tabSize;
+      selCard.style.zIndex = zIndexArray[this.clickedEvent.id];
     }
     //update clicked event
     this.clickedEvent = clickedEventInfo;
@@ -313,14 +314,14 @@ export class WeekComponent implements OnInit {
     var width = 98-left-(5*(overlapped.length-1-eventIndex));
     // CALCULATE ZINDEX
     var z = eventIndex+1;
+    zIndexArray[event.id] = z;
     // CREATE STYLE
     var style = {
       'top' : top+"%",
       'height' : height+"%",
       'left' : left+"%",
       'width' : width+"%",
-      'zIndex' : z,
-      'tabSize' : z.toString()
+      'zIndex' : z
     }
     return style;
   }
