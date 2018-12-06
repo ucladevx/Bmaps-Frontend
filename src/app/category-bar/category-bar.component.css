@@ -48,8 +48,13 @@
   background-color: white;
   width: 100%;
   overflow: auto;
-  height: 200px;
+  height: 300px;
+  
   z-index: 999;
+}
+
+.dropdown-content > * {
+  /* margin: 10px; */
 }
 
 .section-header {

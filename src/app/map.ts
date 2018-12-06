@@ -4,7 +4,7 @@ export interface IGeometry {
 }
 
 export interface IGeoJson {
-    type: string;
+    type: string|number;
     geometry: IGeometry;
     properties?: any;
     $key?: string;

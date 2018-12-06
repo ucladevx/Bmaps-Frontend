@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GeoJson } from '../map';
-import { UCLA_CAMPUS_BOUNDARY } from '../map';
+import { UCLA_CAMPUS_BOUNDARY } from '../map'
 
 // Constants used as filter rules
 const NEARBY_DIST = 0.35; // sets how far away nearby is (in miles)

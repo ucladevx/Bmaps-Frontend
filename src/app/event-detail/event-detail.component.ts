@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FeatureCollection, GeoJson } from '../map';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
@@ -9,17 +10,40 @@ import { DateService } from '../shared/date.service';
     styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit {
-  @Input() event: any;
-  @Output() showSideBarBool = new EventEmitter<boolean>();
+  public event: GeoJson;
 
-  constructor(private eventService: EventService, private dateService: DateService) {
-  }
+  constructor(
+      private route: ActivatedRoute,
+      private eventService: EventService,
+      private dateService: DateService
+  ) {}
 
   ngOnInit() {
+      this.route.params.subscribe(() => {
+          const id: string = this.route.snapshot.paramMap.get('id');
+          this.event = this.eventService.getEventById(id);
+      });
   }
 
-  hideEvent($event) {
-      this.showSideBarBool.emit(true);
-      this.eventService.updateClickedEvent(null);
+  //behavior for back arrow
+  back() {
+    //update expanded event
+    this.eventService.updateExpandedEvent(null);
+    //unbold the popup event title
+    this.eventService.boldPopup(null);
+    //weekview
+    this.eventService.updateClickedEvent(null);
   }
+
+  //check whether an image source exists
+  checkImage(imageSrc) {
+      var img = new Image();
+      try {
+        img.src = imageSrc;
+        return true;
+      } catch(err) {
+        return false;
+      }
+    }
+
 }
