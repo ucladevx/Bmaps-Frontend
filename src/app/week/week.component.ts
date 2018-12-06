@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import { Router } from '@angular/router';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
 import { GeoJson } from '../map';
@@ -58,7 +59,7 @@ export class WeekComponent implements OnInit {
   ];
 
   //constructor statement
-  constructor(private eventService: EventService, private dateService: DateService) { }
+  constructor(private eventService: EventService, private dateService: DateService, private router: Router) { }
 
   ngOnInit() {
     //subscriptions
@@ -232,6 +233,8 @@ export class WeekComponent implements OnInit {
   //open event in sidebar
   openEvent(event: GeoJson): void{
     this.eventService.updateClickedEvent(event);
+    this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
+    this.eventService.updateExpandedEvent(event);
   }
   //bold event when opened
   highlightEvent(clickedEventInfo: GeoJson): void{
