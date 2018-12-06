@@ -21,19 +21,19 @@ interface CalendarDay {
 })
 
 export class WeekComponent implements OnInit {
-  private days: CalendarDay[] = [];
+  public days: CalendarDay[] = [];
   private selectedMonth: Number;
   private selectedYear: Number;
   private selectedDay: CalendarDay;
   private viewDate: Date ;
   private today: CalendarDay;
-  private currentMonth: Moment;
+  public currentMonth: Moment;
   private currentWeek: Moment;
   private filteredEvents: GeoJson[];
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
   private zIndexArray: { [id: number] : Number } = {};
-  private weekNumber: string;
+  public weekNumber: string;
   // retrieved from UCLA online academic calendar
   private zeroWeeks: Moment[] = [
     //2018-2019

@@ -16,12 +16,12 @@ interface CalendarDay {
   styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent implements OnInit {
-  private days: CalendarDay[] = [];
+  public days: CalendarDay[] = [];
   private selectedMonth: Number;
   private selectedYear: Number;
   private selectedDay: CalendarDay;
   private today: CalendarDay;
-  private currentMonth: Moment;
+  public currentMonth: Moment;
   private filteredEvents: GeoJson[];
   private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
