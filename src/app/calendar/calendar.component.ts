@@ -33,7 +33,9 @@ export class CalendarComponent implements OnInit {
   ngOnInit() {
     this.eventService.monthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
+      console.log(this.filteredMonthYearEvents);
       this.selectedMonth = moment().month();
+      console.log(this.selectedMonth + " ngoninit")
       this.selectedYear = moment().year();
       this.fillEventsByDay();
     });
@@ -61,6 +63,7 @@ export class CalendarComponent implements OnInit {
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
       // console.log(this.getEventsOnDate(d));
+      console.log('no');
       let calendarDay: CalendarDay = {
         dayOfMonth: d.date(),
         inCurrentMonth: d.isSame(dateInMonth, 'month'),
@@ -83,6 +86,7 @@ export class CalendarComponent implements OnInit {
   changeMonth(delta: number): void {
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
+    console.log("nm" +newMonth.month())
     // console.log(newMonth);
     if (newMonth.isSame(moment(), 'month')) {
       // if current month, make selected day today
@@ -150,10 +154,12 @@ export class CalendarComponent implements OnInit {
       var day = this.days.find(obj => obj.dayOfMonth == dayOfMonth);
       if(day != null){ day.events = arr; }
     });
+    console.log("events by day" );
     console.log(this.eventsByDay);
   }
 
   getEventsOnDate(date: Moment): GeoJson[] {
+    console.log('get events on date');
     let dayOfYear = date.dayOfYear();
     if (this.eventsByDay.get(dayOfYear)){
       console.log("this.days");
@@ -173,8 +179,10 @@ export class CalendarComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
-    console.log("selected day" + this.selectedDay.dayOfMonth);
-    let date = moment().date(day.dayOfMonth).month(this.selectedMonth.valueOf()).year(this.selectedYear.valueOf()).toDate();
+    console.log(this.currentMonth.month() + "selectedMonth")
+    let date = moment().date(day.dayOfMonth).month(this.currentMonth.month().valueOf()).year(this.currentMonth.year().valueOf()).toDate();
+    console.log("selected day" + date);
+
     // console.log(date.toDate());
     // this.eventService.updateDateByDays(days);
     this.eventService.updateEvents(date);

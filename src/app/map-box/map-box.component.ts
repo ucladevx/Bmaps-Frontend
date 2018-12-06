@@ -14,6 +14,7 @@ import { LocationService } from '../shared/location.service';
     providers: [ DateService ]
 })
 export class MapBoxComponent implements OnInit {
+  @Input() pressed: boolean;
   // default settings
   map: mapboxgl.Map;
   message = 'Hello World!';
@@ -63,7 +64,6 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
-
       this.selectEvent(clickedEventInfo);
     });
 
@@ -107,7 +107,6 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.addControls();
-
   }
 
   addEventLayer(data): void {
@@ -253,7 +252,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   //add popup to a mapbox pin, containing sections for every event in that location
   addPopup(popup, coords, eventList): void {
 
-    if (popup == this.popup) {
+    if (!this.router.url.startsWith('/map'))
+      return;
+
+    if (popup == this.popup ) {
       popup.setLngLat(coords).addTo(this.map);
         document.getElementById('popupBody').innerHTML = "";
         for(var eIndex in eventList){

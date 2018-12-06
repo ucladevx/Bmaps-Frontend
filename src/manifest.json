@@ -3,7 +3,7 @@
   "short_name": "Mappening",
   "description": "Find UCLA events on a map",
   "icons": [{
-      "src": "assets/favicons/icon-152x152.png",
+      "src": "assets/favicons/icon-512x512.png",
       "sizes": "192x192",
       "type": "image/png"
     }, {

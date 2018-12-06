@@ -102,7 +102,7 @@ export class EventService {
 
   constructor(private http: HttpClient, private dateService: DateService, private locationService: LocationService, private categService: CategoryService) {
     let today = new Date();
-    let monthyear = moment().month().toString() + " " + moment().year().toString();
+    let monthyear = (moment().month() + 1).toString() + " " + moment().year().toString();
 
     // Observable string sources, BehaviorSubjects have an intial state
     this.monthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
@@ -190,7 +190,9 @@ export class EventService {
 
   // Appy current _categHash
   private applyCategories(monthyear: string) {
+    console.log("APPLYING CATEGORIES");
     if (monthyear == ''){
+      console.log("monthyear is nothing");
       let tempEvents = new FeatureCollection([]);
         for (let event of this._events.features) {
           let allSelected = this._categHash['all'].selected;
@@ -204,6 +206,8 @@ export class EventService {
         }
       this.filteredCurrEventsSource.next(tempEvents);
     } else {
+      console.log("monthyear is something");
+      console.log(monthyear);
       let tempEvents = new FeatureCollection([]);
         for (let event of this._allevents.features) {
           let allSelected = this._categHash['all'].selected;
@@ -292,7 +296,8 @@ export class EventService {
     var res = monthyear.split(" ");
     const month = Number(res[0]);
     const year = Number(res[1]);
-    let dateURL = `${this.baseUrl}/search?month=${month}%20year=${year}`;
+    let dateURL = `${this.baseUrl}/search?month=${month}&year=${year}`;
+    console.log("Month Year URL " + dateURL);
     return dateURL;
   }
 
@@ -329,6 +334,7 @@ export class EventService {
 
   private getEventsURL(): string {
     let allEventsURL = `${this.baseUrl}/`;
+    console.log(allEventsURL);
     return allEventsURL; // json we are pulling from for event info
   }
 
@@ -346,8 +352,10 @@ export class EventService {
     this.http.get <FeatureCollection> (
       this.getEventsOnMonth(monthyear)
     ).subscribe(events => {
+      console.log("updateMonthEvents " + monthyear);
+      console.log(events);
       this.monthEventsSource.next(events);
-
+      console.log(this.monthEventsSource.value)
       // Update list of categories and reset filters
       // this._selectedFilterCount = 0;
       // this._selectedCategCount = 0;
