@@ -99,7 +99,7 @@ export class EventService {
 
   constructor(private http: HttpClient, private dateService: DateService, private locationService: LocationService, private categService: CategoryService) {
     let today = new Date();
-    let monthyear = moment().month().toString() + " " + moment().year().toString();
+    let monthyear = (moment().month() + 1).toString() + " " + moment().year().toString();
 
     // Observable string sources, BehaviorSubjects have an intial state
     this.monthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
@@ -292,7 +292,7 @@ export class EventService {
     var res = monthyear.split(" ");
     const month = Number(res[0]);
     const year = Number(res[1]);
-    let dateURL = `${this.baseUrl}/search?month=${month}%20year=${year}`;
+    let dateURL = `${this.baseUrl}/search?month=${month}&year=${year}`;
     console.log("Month Year URL " + dateURL);
     return dateURL;
   }
@@ -353,7 +353,7 @@ export class EventService {
       console.log("updateMonthEvents " + monthyear);
       console.log(events);
       this.monthEventsSource.next(events);
-
+      console.log(this.monthEventsSource.value)
       // Update list of categories and reset filters
       // this._selectedFilterCount = 0;
       // this._selectedCategCount = 0;

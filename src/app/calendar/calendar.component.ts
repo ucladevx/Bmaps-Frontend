@@ -35,6 +35,7 @@ export class CalendarComponent implements OnInit {
       this.filteredMonthYearEvents = monthEventCollection.features;
       console.log(this.filteredMonthYearEvents);
       this.selectedMonth = moment().month();
+      console.log(this.selectedMonth + " ngoninit")
       this.selectedYear = moment().year();
       this.fillEventsByDay();
     });
@@ -85,6 +86,7 @@ export class CalendarComponent implements OnInit {
   changeMonth(delta: number): void {
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
+    console.log("nm" +newMonth.month())
     // console.log(newMonth);
     if (newMonth.isSame(moment(), 'month')) {
       // if current month, make selected day today
@@ -146,11 +148,13 @@ export class CalendarComponent implements OnInit {
       let arr : GeoJson[] = [];
       arr.push(...this.eventsByDay.get(dayOfYear));
       arr.push(el);
+      arr.filter(el => moment(el.properties.start_time).month == this.currentMonth.month && moment(el.properties.start_time).year == this.currentMonth.year)
       this.eventsByDay.set(dayOfYear,arr);
       console.log(dayOfYear);
       console.log(this.days);
       this.days.find(obj => obj.dayOfMonth == dayOfMonth).events = arr;
     });
+    console.log("events by day" );
     console.log(this.eventsByDay);
   }
 
@@ -175,8 +179,10 @@ export class CalendarComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
-    console.log("selected day" + this.selectedDay.dayOfMonth);
-    let date = moment().date(day.dayOfMonth).month(this.selectedMonth.valueOf()).year(this.selectedYear.valueOf()).toDate();
+    console.log(this.currentMonth.month() + "selectedMonth")
+    let date = moment().date(day.dayOfMonth).month(this.currentMonth.month().valueOf()).year(this.currentMonth.year().valueOf()).toDate();
+    console.log("selected day" + date);
+
     // console.log(date.toDate());
     // this.eventService.updateDateByDays(days);
     this.eventService.updateEvents(date);
