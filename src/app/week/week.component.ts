@@ -31,6 +31,7 @@ export class WeekComponent implements OnInit {
   private filteredEvents: GeoJson[];
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
+  private zIndexArray: { [id: number] : Number } = {};
   private weekNumber: string;
   // retrieved from UCLA online academic calendar
   private zeroWeeks: Moment[] = [
@@ -74,14 +75,14 @@ export class WeekComponent implements OnInit {
     this.viewDate = new Date();
     //update view
     this.updateWeekView();
+    //set scroll bar to show view of rogughly 8am-10pm
+    document.getElementById("scrollable").scrollTop = 119;
   }
 
   //update the week view
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
     this.eventService.updateWeekEvents(this.viewDate);
-    //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = 119;
   }
 
   //determine the position of the current time bar
@@ -176,14 +177,20 @@ export class WeekComponent implements OnInit {
     if (newWeek.isSame(moment(), 'week')) {
       //update view date
       this.viewDate = new Date();
+      //set scroll bar to show view of rogughly 8am-10pm
+      document.getElementById("scrollable").scrollTop = 264;
+      //update view
+      this.updateWeekView();
     }
     // make selected day the 1st of the week
     else {
       //update view date
       this.viewDate = newWeek.startOf('week').toDate();
+      //set scroll bar to show view of rogughly 8am-10pm
+      document.getElementById("scrollable").scrollTop = 264;
+      //update view
+      this.updateWeekView();
     }
-    //update view
-    this.updateWeekView();
   }
 
   //retrieve events for the given week
@@ -249,7 +256,7 @@ export class WeekComponent implements OnInit {
     if(this.clickedEvent != null){
       var selCard = document.getElementById("event-"+this.clickedEvent.id);
       selCard.style.fontWeight = "normal";
-      selCard.style.zIndex = selCard.style.tabSize;
+      selCard.style.zIndex = this.zIndexArray[this.clickedEvent.id];
     }
     //update clicked event
     this.clickedEvent = clickedEventInfo;
@@ -270,7 +277,7 @@ export class WeekComponent implements OnInit {
   }
 
   // position and size event to match actual start time and duration
-  styleEvent(event: GeoJson, events: GeoJson[]): string{
+  styleEvent(event: GeoJson, events: GeoJson[]) {
     // CALCULATE TOP //
     var start = moment(event.properties.start_time);
     var top = 4;
@@ -278,8 +285,8 @@ export class WeekComponent implements OnInit {
     top += (parseInt(start.format("H"))%12)*3.45;
     top += (parseInt(start.format("mm"))/15)*0.8625;
     // CALCULATE HEIGHT //
-    var end = moment(event.properties.end_time);
-    var hours = moment.duration(end.diff(start)).asHours();
+    var temp = moment(event.properties.end_time);
+    var hours = moment.duration(temp.diff(start)).asHours();
     if(hours>24){ hours = (hours%24)+1; }
     let end = start.clone().add(hours,"hours");
     var height = hours*3.45;
@@ -291,10 +298,10 @@ export class WeekComponent implements OnInit {
         if(events[j] == event){ eventIndex = overlapped.length; }
         //retrieve start and end time for new event
         var s = moment(events[j].properties.start_time);
-        let e = moment(events[j].properties.end_time);
-        var h = moment.duration(e.diff(s)).asHours();
+        var t = moment(events[j].properties.end_time);
+        var h = moment.duration(t.diff(s)).asHours();
         if(h>24){ h = (h%24)+1; }
-        let e = s.clone().add(h,"hours");
+        var e = s.clone().add(h,"hours");
         //determine whether events overlap
         if(!s.isSame(end) && !e.isSame(start) &&
             ((s.isSame(start) && e.isSame(end)) ||
@@ -310,14 +317,14 @@ export class WeekComponent implements OnInit {
     var width = 98-left-(5*(overlapped.length-1-eventIndex));
     // CALCULATE ZINDEX
     var z = eventIndex+1;
+    this.zIndexArray[event.id] = z;
     // CREATE STYLE
     var style = {
       'top' : top+"%",
       'height' : height+"%",
       'left' : left+"%",
       'width' : width+"%",
-      'zIndex' : z,
-      'tabSize' : z
+      'zIndex' : z
     }
     return style;
   }
