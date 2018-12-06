@@ -75,27 +75,14 @@ export class WeekComponent implements OnInit {
     this.viewDate = new Date();
     //update view
     this.updateWeekView();
-    //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = 119;
   }
 
   //update the week view
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
     this.eventService.updateWeekEvents(this.viewDate);
-  }
-
-  //determine the position of the current time bar
-  currentTime() {
-    //retrieve current time moment
-    var now = moment();
-    //calculate top position
-    var top = 4;
-    if(moment(now).format("A") == "PM"){ top += 41.4; }
-    top += (parseInt(moment(now).format("H"))%12)*3.45;
-    top += (parseInt(moment(now).format("mm"))/15)*0.8625;
-    //return as percentage
-    return top+"%";
+    //set scroll bar to show view of rogughly 8am-10pm
+    document.getElementById("scrollable").scrollTop = 270;
   }
 
   //set the week number
@@ -177,8 +164,6 @@ export class WeekComponent implements OnInit {
     if (newWeek.isSame(moment(), 'week')) {
       //update view date
       this.viewDate = new Date();
-      //set scroll bar to show view of rogughly 8am-10pm
-      document.getElementById("scrollable").scrollTop = 264;
       //update view
       this.updateWeekView();
     }
@@ -186,8 +171,6 @@ export class WeekComponent implements OnInit {
     else {
       //update view date
       this.viewDate = newWeek.startOf('week').toDate();
-      //set scroll bar to show view of rogughly 8am-10pm
-      document.getElementById("scrollable").scrollTop = 264;
       //update view
       this.updateWeekView();
     }
@@ -276,20 +259,40 @@ export class WeekComponent implements OnInit {
     return this.dateService.formatTime(event.properties.start_time) + " - " + this.dateService.formatTime(event.properties.end_time);
   }
 
+  //determine the position of the current time bar
+  currentTime() {
+    //retrieve current time moment
+    var now = moment();
+    //calculate top position
+    return this.convertTimeToPercent(now)+"%";
+  }
+
+  //convert time to top percentage in css
+  convertTimeToPercent(time: Moment) {
+    var increment = 3.875;
+    var p = 4;
+    if(time.format("A") == "PM"){
+      p += 46.5;
+      increment = 3.83;
+    }
+    p += (parseInt(time.format("H"))%12)*increment;
+    p += (parseInt(time.format("mm"))/15)*(increment/4.2);
+    return p;
+  }
+
   // position and size event to match actual start time and duration
   styleEvent(event: GeoJson, events: GeoJson[]) {
     // CALCULATE TOP //
     var start = moment(event.properties.start_time);
-    var top = 4;
-    if(start.format("A") == "PM"){ top += 41.4; }
-    top += (parseInt(start.format("H"))%12)*3.45;
-    top += (parseInt(start.format("mm"))/15)*0.8625;
+    var top = this.convertTimeToPercent(start);
     // CALCULATE HEIGHT //
     var temp = moment(event.properties.end_time);
     var hours = moment.duration(temp.diff(start)).asHours();
     if(hours>24){ hours = (hours%24)+1; }
-    let end = start.clone().add(hours,"hours");
-    var height = hours*3.45;
+    var end = start.clone().add(hours,"hours");
+    var bottom = this.convertTimeToPercent(end)
+    var height = bottom-top;
+    if(height<0){ height = 100-top; }
     // CALCULATE WIDTH AND LEFT //
     var overlapped = [];
     var eventIndex = 0;

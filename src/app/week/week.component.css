@@ -83,7 +83,7 @@
 
 .time-of-day {
   width: 100%;
-  height: 86%;
+  height: 96%;
 }
 
 .time-of-day tr {
@@ -94,11 +94,15 @@
   font-size: 10px;
   font-weight: bold;
   color: black;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
   z-index: 1;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .time-of-day td {
