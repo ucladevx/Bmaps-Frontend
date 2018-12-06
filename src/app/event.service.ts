@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs/Subject';
 import { FeatureCollection, GeoJson } from './map';
-
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DateService } from './shared/date.service';
 import { LocationService } from './shared/location.service';
@@ -60,6 +59,7 @@ export class EventService {
   private _expandedEvent;
   private _categHash;
   private _filterHash;
+  private _weekEvents;
 
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
@@ -141,6 +141,7 @@ export class EventService {
     this.expandedEvent$.subscribe(expandedEventInfo => this._expandedEvent = expandedEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
     this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
+    this.filteredWeekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
 
     // Update events for today
     this.updateEvents(today);
@@ -189,9 +190,7 @@ export class EventService {
 
   // Appy current _categHash
   private applyCategories(monthyear: string) {
-    console.log("APPLYING CATEGORIES");
     if (monthyear == ''){
-      console.log("monthyear is nothing");
       let tempEvents = new FeatureCollection([]);
         for (let event of this._events.features) {
           let allSelected = this._categHash['all'].selected;
@@ -205,8 +204,6 @@ export class EventService {
         }
       this.filteredCurrEventsSource.next(tempEvents);
     } else {
-      console.log("monthyear is something");
-      console.log(monthyear);
       let tempEvents = new FeatureCollection([]);
         for (let event of this._allevents.features) {
           let allSelected = this._categHash['all'].selected;
@@ -296,14 +293,12 @@ export class EventService {
     const month = Number(res[0]);
     const year = Number(res[1]);
     let dateURL = `${this.baseUrl}/search?month=${month}%20year=${year}`;
-    console.log("Month Year URL " + dateURL);
     return dateURL;
   }
 
 
   // Updates events for given date while persisting the current category
   updateEvents(date: Date): void {
-    console.log("UPDATING EVENTS");
     this.currDateSource.next(date);
     this.http.get <FeatureCollection> (
       this.getEventsOnDateURL(date)
@@ -351,8 +346,6 @@ export class EventService {
     this.http.get <FeatureCollection> (
       this.getEventsOnMonth(monthyear)
     ).subscribe(events => {
-      console.log("updateMonthEvents " + monthyear);
-      console.log(events);
       this.monthEventsSource.next(events);
 
       // Update list of categories and reset filters
@@ -449,7 +442,6 @@ export class EventService {
   }
 
   private applyFiltersAndCategories() {
-    console.log("APPLYING FILTERS & CATEGORIES");
 
     let tempEvents = new FeatureCollection([]);
     if (this._selectedCategCount == 0) {
@@ -590,7 +582,9 @@ export class EventService {
   }
 
   getEventById(id: string): GeoJson {
-    return this._events.features.find((e: GeoJson) => e.id == id);
+    var event = this._events.features.find((e: GeoJson) => e.id == id);
+    if(event == null){ event = this._weekEvents.features.find((e: GeoJson) => e.id == id); }
+    return event;
   }
 
   isToday(): boolean {

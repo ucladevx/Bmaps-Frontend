@@ -11,6 +11,7 @@ import { DateService } from '../shared/date.service';
 })
 export class EventDetailComponent implements OnInit {
   public event: GeoJson;
+  public day: Date;
 
   constructor(
       private route: ActivatedRoute,
@@ -20,6 +21,7 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit() {
       this.route.params.subscribe(() => {
+          console.log("**ROUTED**");
           const id: string = this.route.snapshot.paramMap.get('id');
           this.event = this.eventService.getEventById(id);
       });
@@ -38,12 +40,13 @@ export class EventDetailComponent implements OnInit {
   //check whether an image source exists
   checkImage(imageSrc) {
       var img = new Image();
+      var valid = true;
       try {
         img.src = imageSrc;
-        return true;
       } catch(err) {
-        return false;
+        valid = false;
       }
+      return valid;
     }
 
 }

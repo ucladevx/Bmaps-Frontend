@@ -232,7 +232,9 @@ export class WeekComponent implements OnInit {
   }
   //open event in sidebar
   openEvent(event: GeoJson): void{
+    //update clicked event
     this.eventService.updateClickedEvent(event);
+    //route to new event detail component
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
     this.eventService.updateExpandedEvent(event);
   }
