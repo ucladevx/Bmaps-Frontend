@@ -23,10 +23,12 @@ import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { CalendarComponent } from './calendar/calendar.component';
+
 
 const appRoutes: Routes = [
   { path: 'map', component: MapBoxComponent },
-  //{ path: 'calendar', component: CalendarComponent },
+  { path: 'calendar', component: CalendarComponent },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
   { path: 'detail/:id', outlet: 'sidebar', component: EventDetailComponent },
   { path: '**', redirectTo: '/map(sidebar:list)', pathMatch: 'full' },
@@ -40,7 +42,8 @@ const appRoutes: Routes = [
     EventDetailComponent,
     CategoryBarComponent,
     DateSelectorComponent,
-    NavbarComponent
+    NavbarComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,
