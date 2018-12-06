@@ -235,18 +235,35 @@ export class EventService {
     this.filterHashSource.next(tempFilters);
   }
 
+  // Reset all filters to be false
+  private resetFilters() {
+    let tempFilters = {
+      'happening now': false,
+      'upcoming': false,
+      'on-campus': false,
+      'off-campus': false,
+      'nearby': false,
+      'morning': false,
+      'afternoon': false,
+      'evening': false,
+      'free food': false
+    };
+    this.filterHashSource.next(tempFilters);
+  }
+
   // Update categories
   private updateCategories() {
     this.categService.getCategories()
       .subscribe(categs => {
         let eventMap = this.getEventMap();
-        let tempHash = {
-           'all': {
-             formattedCategory: 'all',
-             numEvents: eventMap['all'],
-             selected: this._categHash ? this._categHash['all'].selected : true
-           }
-        };
+        let tempHash = {};
+        // let tempHash = {
+        //   'all': {
+        //     formattedCategory: 'all',
+        //     numEvents: eventMap['all'],
+        //     selected: this._categHash ? this._categHash['all'].selected : true
+        //   }
+        // };
         for (let categ of categs.categories) {
           let categName = categ.toLowerCase();
           tempHash[categName] = {

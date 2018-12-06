@@ -38,13 +38,12 @@ export class EventDetailComponent implements OnInit {
   //check whether an image source exists
   checkImage(imageSrc) {
       var img = new Image();
-      var valid = true;
       try {
         img.src = imageSrc;
+        return true;
       } catch(err) {
-        valid = false;
+        return false;
       }
-      return valid;
     }
 
 }

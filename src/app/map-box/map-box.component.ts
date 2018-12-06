@@ -253,10 +253,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   //add popup to a mapbox pin, containing sections for every event in that location
   addPopup(popup, coords, eventList): void {
 
-    if (!this.router.url.startsWith('/map'))
-      return;
-
-    if (popup == this.popup ) {
+    if (popup == this.popup) {
       popup.setLngLat(coords).addTo(this.map);
         document.getElementById('popupBody').innerHTML = "";
         for(var eIndex in eventList){

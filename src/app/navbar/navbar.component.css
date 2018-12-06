@@ -13,12 +13,6 @@
     padding: 0;
 }
 
-.navbar-text{
-  color: white;
-  cursor: pointer;
-  padding-right: 20px;
-}
-
 .navbar-default .navbar-toggler i {
     padding: 5px;
     color: #fff;
