@@ -14,7 +14,6 @@ import { LocationService } from '../shared/location.service';
     providers: [ DateService ]
 })
 export class MapBoxComponent implements OnInit {
-  @Input() pressed: boolean;
   // default settings
   map: mapboxgl.Map;
   message = 'Hello World!';
@@ -64,6 +63,7 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+
       this.selectEvent(clickedEventInfo);
     });
 
@@ -107,6 +107,7 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.addControls();
+
   }
 
   addEventLayer(data): void {

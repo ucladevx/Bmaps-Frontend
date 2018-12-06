@@ -11,7 +11,6 @@ import { DateService } from '../shared/date.service';
 })
 export class EventDetailComponent implements OnInit {
   public event: GeoJson;
-  public day: Date;
 
   constructor(
       private route: ActivatedRoute,

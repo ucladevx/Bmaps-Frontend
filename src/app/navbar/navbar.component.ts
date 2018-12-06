@@ -13,19 +13,6 @@ export class NavbarComponent implements OnInit {
     }
 
     isCollapsed: boolean = true;
-
-    collapsed(event: any): void {
-        console.log(event);
-    }
-
-    expanded(event: any): void {
-        console.log(event);
-    }
-
-    emitChangeView(newView: string): void {
-      this.changeView.emit(newView);
-    }
-    
     public isFilterCollapsed: boolean = true;
 
     toggleMenuCollapse(): void {
@@ -37,4 +24,9 @@ export class NavbarComponent implements OnInit {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
     }
+
+    emitChangeView(newView: string): void {
+      this.changeView.emit(newView);
+    }
+
 }

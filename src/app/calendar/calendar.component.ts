@@ -147,7 +147,8 @@ export class CalendarComponent implements OnInit {
       this.eventsByDay.set(dayOfYear,arr);
       console.log(dayOfYear);
       console.log(this.days);
-      this.days.find(obj => obj.dayOfMonth == dayOfMonth).events = arr;
+      var day = this.days.find(obj => obj.dayOfMonth == dayOfMonth);
+      if(day != null){ day.events = arr; }
     });
     console.log(this.eventsByDay);
   }

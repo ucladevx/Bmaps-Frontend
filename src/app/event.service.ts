@@ -442,6 +442,7 @@ export class EventService {
   }
 
   private applyFiltersAndCategories() {
+    console.log("APPLYING FILTERS & CATEGORIES");
 
     let tempEvents = new FeatureCollection([]);
     if (this._selectedCategCount == 0) {
