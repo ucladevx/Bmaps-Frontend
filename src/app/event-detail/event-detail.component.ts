@@ -31,6 +31,8 @@ export class EventDetailComponent implements OnInit {
     this.eventService.updateExpandedEvent(null);
     //unbold the popup event title
     this.eventService.boldPopup(null);
+    //weekview
+    this.eventService.updateClickedEvent(null);
   }
 
   //check whether an image source exists

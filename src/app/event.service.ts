@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs/Subject';
 import { FeatureCollection, GeoJson } from './map';
-
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DateService } from './shared/date.service';
 import { LocationService } from './shared/location.service';
@@ -16,6 +15,8 @@ export class EventService {
   private monthEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all filtered events
   private filteredMonthEventsSource: BehaviorSubject <FeatureCollection>;
+  // holds all filtered events for a week
+  private filteredWeekEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all events of the current date that components can see
   private currEventsSource: BehaviorSubject <FeatureCollection>;
   // holds filtered events that components can see
@@ -38,6 +39,7 @@ export class EventService {
   // Observables that components can subscribe to for realtime updates
   monthEvents$;
   filteredMonthEvents$;
+  filteredWeekEvents$;
   currEvents$;
   filteredCurrEvents$;
   currMonthYear$;
@@ -57,6 +59,7 @@ export class EventService {
   private _expandedEvent;
   private _categHash;
   private _filterHash;
+  private _weekEvents;
 
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
@@ -104,6 +107,7 @@ export class EventService {
     // Observable string sources, BehaviorSubjects have an intial state
     this.monthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredMonthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
+    this.filteredWeekEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currDateSource = new BehaviorSubject < Date > (today);
@@ -117,6 +121,7 @@ export class EventService {
     // Observable string streams
     this.monthEvents$  = this.monthEventsSource.asObservable();
     this.filteredMonthEvents$  = this.filteredMonthEventsSource.asObservable();
+    this.filteredWeekEvents$ = this.filteredWeekEventsSource.asObservable();
     this.currEvents$ = this.currEventsSource.asObservable();
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
     this.currDate$ = this.currDateSource.asObservable();
@@ -136,6 +141,7 @@ export class EventService {
     this.expandedEvent$.subscribe(expandedEventInfo => this._expandedEvent = expandedEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
     this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
+    this.filteredWeekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
 
     // Update events for today
     this.updateEvents(today);
@@ -238,14 +244,13 @@ export class EventService {
     this.categService.getCategories()
       .subscribe(categs => {
         let eventMap = this.getEventMap();
-        let tempHash = {};
-        // let tempHash = {
-        //   'all': {
-        //     formattedCategory: 'all',
-        //     numEvents: eventMap['all'],
-        //     selected: this._categHash ? this._categHash['all'].selected : true
-        //   }
-        // };
+        let tempHash = {
+           'all': {
+             formattedCategory: 'all',
+             numEvents: eventMap['all'],
+             selected: this._categHash ? this._categHash['all'].selected : true
+           }
+        };
         for (let categ of categs.categories) {
           let categName = categ.toLowerCase();
           tempHash[categName] = {
@@ -284,7 +289,6 @@ export class EventService {
     const y = date.getFullYear();
     // let dateURL = `${this.baseUrl}/event-date/${d}%20${monthName}%20${y}`;
     let dateURL = `${this.baseUrl}/search?date=${d}%20${monthName}%20${y}`;
-    console.log(dateURL);
     return dateURL; // json we are pulling from for event info
   }
 
@@ -300,12 +304,10 @@ export class EventService {
 
   // Updates events for given date while persisting the current category
   updateEvents(date: Date): void {
-    console.log("UPDATING EVENTS");
     this.currDateSource.next(date);
     this.http.get <FeatureCollection> (
       this.getEventsOnDateURL(date)
     ).subscribe(events => {
-      console.log(events);
       this.currEventsSource.next(events);
 
       // Update list of categories and reset filters
@@ -363,6 +365,33 @@ export class EventService {
     });
     // this.getEventsOnMonth(monthyear);
   }
+
+  //added for week view
+
+  updateWeekEvents(firstDay: Date): void {
+    this.http.get <FeatureCollection> (
+      this.getEventsURL()
+    ).subscribe(allEvents => {
+      this.filteredWeekEventsSource.next(this.filterByWeek(allEvents, firstDay));
+      let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
+      this.initCategories(monthyear);
+    });
+  }
+
+  filterByWeek(allEvents, firstDay){
+    let tempEvents = new FeatureCollection([]);
+    var lastDay = moment(firstDay).clone().add(6, 'days').toDate();
+    allEvents.features.forEach(el => {
+      var d = new Date(el.properties.start_time);
+      var month = d.getMonth();
+      var year = d.getFullYear();
+      if (((month == firstDay.getMonth()) && (year == firstDay.getFullYear())) || ((month == lastDay.getMonth()) && (year == lastDay.getFullYear())))
+        tempEvents.features.push(el)
+    });
+    return tempEvents;
+  }
+
+  //end of week view methods
 
   filterByMonthYear(monthyearEvents, monthyear){
     let tempEvents = new FeatureCollection([]);
@@ -516,8 +545,6 @@ export class EventService {
   updateClickedEvent(event: GeoJson): void {
     this._clickedEvent = event;
     this.clickedEventSource.next(this._clickedEvent);
-    console.log("updating clicked event");
-    console.log(this._clickedEvent);
   }
 
   // Updates the current hovered event by number
@@ -565,10 +592,13 @@ export class EventService {
   }
 
   getEventById(id: string): GeoJson {
-    return this._events.features.find((e: GeoJson) => e.id == id);
+    var event = this._events.features.find((e: GeoJson) => e.id == id);
+    if(event == null){ event = this._weekEvents.features.find((e: GeoJson) => e.id == id); }
+    return event;
   }
 
   isToday(): boolean {
     return this.dateService.isToday(this._date);
   }
+
 }

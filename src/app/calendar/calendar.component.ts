@@ -42,7 +42,7 @@ export class CalendarComponent implements OnInit {
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
-    // this.eventsByDay = 
+    // this.eventsByDay =
     this.showCalendar(new Date());
 
     // let todayDate = moment();
@@ -127,7 +127,7 @@ export class CalendarComponent implements OnInit {
       //   events: this.getEventsOnDate(todayDate),
       // };
     }
-    
+
     this.selectedMonth = newMonth.month();
     this.selectedYear = newMonth.year()
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
@@ -148,11 +148,11 @@ export class CalendarComponent implements OnInit {
       let arr : GeoJson[] = [];
       arr.push(...this.eventsByDay.get(dayOfYear));
       arr.push(el);
-      arr.filter(el => moment(el.properties.start_time).month == this.currentMonth.month && moment(el.properties.start_time).year == this.currentMonth.year)
       this.eventsByDay.set(dayOfYear,arr);
       console.log(dayOfYear);
       console.log(this.days);
-      this.days.find(obj => obj.dayOfMonth == dayOfMonth).events = arr;
+      var day = this.days.find(obj => obj.dayOfMonth == dayOfMonth);
+      if(day != null){ day.events = arr; }
     });
     console.log("events by day" );
     console.log(this.eventsByDay);
@@ -163,7 +163,7 @@ export class CalendarComponent implements OnInit {
     let dayOfYear = date.dayOfYear();
     if (this.eventsByDay.get(dayOfYear)){
       console.log("this.days");
-      
+
       console.log(this.days);
       return this.eventsByDay.get(dayOfYear);
 
