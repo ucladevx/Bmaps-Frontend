@@ -403,6 +403,7 @@ export class EventService {
       if ((month == Number(res[0])) && (year == Number(res[1])))
         tempEvents.features.push(el)
     });
+    console.log(tempEvents);
     return tempEvents;
   }
 
