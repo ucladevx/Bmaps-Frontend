@@ -68,7 +68,9 @@ export class WeekComponent implements OnInit {
       this.showCalendar(this.viewDate);
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+      if(document.getElementById("week-view-indicator") != null){
         this.highlightEvent(clickedEventInfo);
+      }
     });
     //on startup
     this.selectedMonth = moment().month();
@@ -243,16 +245,20 @@ export class WeekComponent implements OnInit {
     //restyle currently selected event card
     if(this.clickedEvent != null){
       var selCard = document.getElementById("event-"+this.clickedEvent.id);
-      selCard.style.fontWeight = "normal";
-      selCard.style.zIndex = this.zIndexArray[this.clickedEvent.id];
+      if(selCard != null){
+        selCard.style.fontWeight = "normal";
+        selCard.style.zIndex = this.zIndexArray[this.clickedEvent.id];
+      }
     }
     //update clicked event
     this.clickedEvent = clickedEventInfo;
     //style new clicked event
     if(this.clickedEvent != null){
       var eCard = document.getElementById("event-"+this.clickedEvent.id);
-      eCard.style.fontWeight = "bold";
-      eCard.style.zIndex = "100";
+      if(eCard != null){
+        eCard.style.fontWeight = "bold";
+        eCard.style.zIndex = "100";
+      }
     }
   }
 
