@@ -78,6 +78,7 @@ export class WeekComponent implements OnInit {
     this.viewDate = new Date();
     //update view
     this.updateWeekView();
+    console.log(this.days);
   }
 
   //update the week view
@@ -154,6 +155,8 @@ export class WeekComponent implements OnInit {
         this.onSelect(weekDay);
       }
     }
+
+    // console.log(this.days);
   }
 
   //increment or decrement week
@@ -215,6 +218,7 @@ export class WeekComponent implements OnInit {
         return timeA - timeB;
       });
       //return sorted list of events
+      console.log(eventList);
       return eventList;
     }
     //if no events, return empty array

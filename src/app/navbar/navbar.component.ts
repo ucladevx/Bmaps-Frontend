@@ -15,11 +15,11 @@ export class NavbarComponent implements OnInit {
     isCollapsed: boolean = true;
 
     collapsed(event: any): void {
-        console.log(event);
+        // console.log(event);
     }
 
     expanded(event: any): void {
-        console.log(event);
+        // console.log(event);
     }
 
     emitChangeView(newView: string): void {
