@@ -19,6 +19,14 @@
         <span class="navbar-text">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">feedback</a>
         </span>
+        <span class="navbar-text">
+          <div *ngIf="this.loggedIn; else elseBlock">
+            <a (click)="this.userService.logout()" style="color: white;">Sign Out</a>
+          </div>
+          <ng-template #elseBlock>
+            <a (click)="this.userService.login()" style="color: white;">Sign In</a>
+          </ng-template>
+        </span>
     </div>
     <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
       <app-category-bar [showToggleButton]="false"></app-category-bar>
