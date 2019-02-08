@@ -132,3 +132,8 @@ li a {
 a:hover{
     text-decoration: none;
 }
+
+.sign-in {
+  margin-left: 10px;
+  cursor: pointer;
+}
