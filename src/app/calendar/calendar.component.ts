@@ -34,7 +34,7 @@ export class CalendarComponent implements OnInit {
   private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
   // private eventsByDay: GeoJson[];
-  private eventsByDay = new Map<number, GeoJson[]>();
+  private eventsByDay: { [day: number] : GeoJson[] } = {};
   private viewDate: Date;
 
   constructor(private eventService: EventService) { }
@@ -112,6 +112,7 @@ export class CalendarComponent implements OnInit {
           if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
             this.today = weekDay;
           }
+          
           //add weekDay to display days array
           this.days.push(weekDay);
           // set selected day to the date provided
@@ -193,7 +194,31 @@ export class CalendarComponent implements OnInit {
 
   }
 
+    //retrieve events for the given week
+    fillEventsByDay(){
+      //clear events by day for the week
+      this.eventsByDay = [];
+      //iterate through filteredEvents for the current month
+      this.filteredMonthYearEvents.forEach(el => {
+        //determine dayOfYear
+        let eventDate = moment(el.properties.start_time);
+        let dayOfYear = eventDate.dayOfYear();
+        //if the dayOfYear is not included, add it
+        if(!this.eventsByDay.hasOwnProperty(dayOfYear)){
+          this.eventsByDay[dayOfYear] = [];
+        }
+        //add the current event to that day
+        this.eventsByDay[dayOfYear].push(el);
+      });
+    }
+
+    /*
   fillEventsByDay(){
+    //clear events by day for the week
+    // this.eventsByDay.clear;
+    this.eventsByDay = [];
+    console.log("events by day after clear" );
+    console.log(this.eventsByDay);
     // console.log('hey');
     // console.log(this.filteredMonthYearEvents);
     // console.log('yoooo');
@@ -204,18 +229,32 @@ export class CalendarComponent implements OnInit {
       let dayOfMonth = eventDate.date();
       // console.log(el);
       let arr : GeoJson[] = [];
-      arr.push(...this.eventsByDay.get(dayOfYear));
-      arr.push(el);
+      arr = this.eventsByDay.get(dayOfYear);
+
+      // arr.push(...this.eventsByDay.get(dayOfYear));
+      if(arr == undefined){
+        arr = [];
+      }
+
+      if (arr != undefined){
+        if(!arr.includes(el) ){
+          arr.push(el);
+        }
+      }
+      else{
+        arr.push(el);
+      }
       this.eventsByDay.set(dayOfYear,arr);
       // console.log(dayOfYear);
       // console.log(this.days);
       var day = this.days.find(obj => obj.dayOfMonth == dayOfMonth);
       if(day != null){ day.events = arr; }
     });
-    // console.log("events by day" );
-    // console.log(this.eventsByDay);
+    console.log("events by day" );
+    console.log(this.eventsByDay);
   }
-
+  */
+  /*
   getEventsOnDate(date: Moment): GeoJson[] {
     // console.log('get events on date');
     let dayOfYear = date.dayOfYear();
@@ -234,15 +273,42 @@ export class CalendarComponent implements OnInit {
       return [];
     }
   }
+  */
+   //retrieve events for a specific day
+   getEventsOnDate(date: Moment): GeoJson[] {
+    //determine day of year
+    let dayOfYear = date.dayOfYear();
+    //retrieve event list from eventsByDay
+    if (this.eventsByDay.hasOwnProperty(dayOfYear)){
+      //sort array by start time, then by duration
+      var eventList = this.eventsByDay[dayOfYear];
+      eventList.sort(function compare(a, b) {
+        var timeA = +new Date(a.properties.start_time);
+        var timeB = +new Date(b.properties.start_time);
+        if(timeA-timeB == 0){
+          var timeAA = +new Date(a.properties.end_time);
+          var timeBB = +new Date(b.properties.end_time);
+          return timeBB - timeAA;
+        }
+        return timeA - timeB;
+      });
+      //return sorted list of events
+      console.log(eventList);
+      return eventList;
+    }
+    //if no events, return empty array
+    else {
+      return [];
+    }
+  }
 
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
-    // console.log(this.currentMonth.month() + "selectedMonth")
-    let date = moment().date(day.dayOfMonth).month(this.currentMonth.month().valueOf()).year(this.currentMonth.year().valueOf()).toDate();
-    // console.log("selected day" + date);
+    console.log('dayOfMonth ' + day.dayOfMonth);
+    
+    let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
+    console.log('date ' + date);
 
-    // console.log(date.toDate());
-    // this.eventService.updateDateByDays(days);
     this.eventService.updateEvents(date);
   }
 }

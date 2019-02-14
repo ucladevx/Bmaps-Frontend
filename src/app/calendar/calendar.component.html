@@ -31,9 +31,9 @@
         <li *ngFor="let event of day.events">
             {{event.properties.name.length > 30 ? event.properties.name.substring(0,30) + "..." : event.properties.name}}
         </li>
-        
-        
-        </ul>
+      </ul>
+
+      <div class="dot"  *ngIf="day.events.length != 0"></div>
     </div>
   </div>
 </div>
