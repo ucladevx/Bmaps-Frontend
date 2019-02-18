@@ -6,6 +6,7 @@ import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
+import { CategoryService } from '../category.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -32,6 +33,7 @@ export class SidebarComponent implements OnInit {
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
     public mobileSidebarVisible: boolean = false;
+    public onMapView: boolean = true;
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
@@ -39,7 +41,8 @@ export class SidebarComponent implements OnInit {
     constructor(
         private router: Router,
         private eventService: EventService,
-        private _dateService: DateService
+        private _dateService: DateService,
+        private _categService: CategoryService
     ) {}
 
     ngOnInit() {

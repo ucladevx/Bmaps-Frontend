@@ -11,7 +11,8 @@ import { AppComponent } from './app.component';
 import { MapBoxComponent } from './map-box/map-box.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
-import { CategoryBarComponent } from './category-bar/category-bar.component';
+import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
+import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
 import { CategoryService } from './category.service';
 
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
@@ -42,7 +43,8 @@ const appRoutes: Routes = [
     MapBoxComponent,
     SidebarComponent,
     EventDetailComponent,
-    CategoryBarComponent,
+    CategoryBarMapComponent,
+    CategoryBarCalendarComponent,
     DateSelectorComponent,
     NavbarComponent,
     CalendarComponent,

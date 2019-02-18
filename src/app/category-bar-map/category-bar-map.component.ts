@@ -6,12 +6,12 @@ import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-category-bar-calendar',
-  templateUrl: './category-bar-calendar.component.html',
-  styleUrls: ['./category-bar-calendar.component.css']
+  selector: 'app-category-bar-map',
+  templateUrl: './category-bar-map.component.html',
+  styleUrls: ['./category-bar-map.component.css']
 })
 
-export class CategoryBarCalendarComponent implements OnInit {
+export class CategoryBarMapComponent implements OnInit {
   @Input() showToggleButton: boolean;
   private categHash = undefined;
   private filterHash = undefined;
