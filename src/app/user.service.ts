@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 })
 export class UserService {
   private currUser: GUser;
+  private baseUrl = 'http://localhost:4200/api/v2/auth';
 
   private loggedInSource: BehaviorSubject<boolean>;
   loggedIn$;
@@ -22,14 +23,23 @@ export class UserService {
     this.loggedIn$.subscribe(lg => this._loggedIn = lg);
 
     this.http.get(
-      'http://localhost:4200/api/v2/auth/current'
+      this.baseUrl + '/current'
     ).subscribe(user_data => {
       console.log("USER DATA => ");
       console.log(user_data);
       if (user_data['account'] == undefined) {
         this.loggedInSource.next(false);
+        this.currUser = undefined;
       } else {
         this.loggedInSource.next(true);
+        this.currUser = {
+          id: user_data['account']['id'],
+          first_name: user_data['personal_info']['first_name'],
+          last_name: user_data['personal_info']['last_name'],
+          full_name: user_data['personal_info']['full_name'],
+          email: user_data['personal_info']['email'],
+          favorites: user_data['app']['favorites']
+        }
       }
     });
   }
@@ -40,7 +50,7 @@ export class UserService {
     }
     console.log("Logging In");
     let redirect_url = window.location.href;
-    window.location.href = 'http://localhost:4200/api/v2/auth/login?redirect=' + encodeURI(redirect_url);
+    window.location.href = this.baseUrl + '/login?redirect=' + encodeURI(redirect_url);
   }
 
   logout() {
@@ -49,7 +59,7 @@ export class UserService {
     }
     console.log("Logging Out");
     let redirect_url = window.location.href;
-    window.location.href = 'http://localhost:4200/api/v2/auth/logout?redirect=' + encodeURI(redirect_url);
+    window.location.href = this.baseUrl + '/logout?redirect=' + encodeURI(redirect_url);
   }
 
   getFullName(): string {
@@ -70,5 +80,21 @@ export class UserService {
 
   isFavorite(event_id): boolean {
     return event_id in this.currUser.favorites;
+  }
+
+  addFavorite(event_id) {
+    console.log("Adding favorite");
+    if (!this._loggedIn) {
+      return;
+    }
+    console.log("Add favorite POST");
+    this.http.post(this.baseUrl + '/events/favorites?eid=' + event_id, {});
+  }
+
+  removeFavorite(event_id) {
+    if (!this._loggedIn) {
+      return;
+    }
+    this.http.delete(this.baseUrl + '/events/favorites?eid=' + event_id, {});
   }
 }

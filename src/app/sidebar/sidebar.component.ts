@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
+import { UserService } from '../user.service';
 import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
@@ -35,11 +36,13 @@ export class SidebarComponent implements OnInit {
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
+    private isLoggedIn: boolean;
 
     constructor(
         private router: Router,
         private eventService: EventService,
-        private _dateService: DateService
+        private _dateService: DateService,
+        private userService: UserService
     ) {}
 
     ngOnInit() {
@@ -56,6 +59,8 @@ export class SidebarComponent implements OnInit {
             this.scrollToEvent(hoveredEventInfo);
         });
         this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
+
+        this.userService.loggedIn$.subscribe(l => this.isLoggedIn = l);
     }
 
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.

@@ -68,6 +68,14 @@
     width: 100%;
 }
 
+.sidebar-event-lastrow {
+  display: flex;
+  display: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 7px;
+}
+
 @media only screen and (min-width: 768px) {
   .sidebar-event-img-container {
     width: 50%;
@@ -96,8 +104,12 @@
 }
 
 .sidebar-event-category{
-  margin-top: 7px;
   font-style: italic;
+}
+
+.sidebar-event-favbtn {
+  font-size: 30px;
+  cursor: pointer;
 }
 
 .dropdown-menu {
