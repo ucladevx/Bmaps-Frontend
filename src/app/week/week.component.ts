@@ -1,10 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, NgZone } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
 import { GeoJson } from '../map';
+
 
 interface CalendarDay {
   dayOfMonth: number;
@@ -59,13 +60,32 @@ export class WeekComponent implements OnInit {
   ];
 
   //constructor statement
-  constructor(private eventService: EventService, private dateService: DateService, private router: Router) { }
+  constructor(private eventService: EventService, private dateService: DateService, private router: Router, private ngZone: NgZone ) { 
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.ngOnInit();
+      }
+      // Instance of should be: 
+      // NavigationEnd
+      // NavigationCancel
+      // NavigationError
+      // RoutesRecognized
+    });
+  }
+
+
 
   ngOnInit() {
     //subscriptions
     this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
+      
       this.filteredEvents = weekEventCollection.features;
-      this.showCalendar(this.viewDate);
+      console.log("ngOnInit this.viewDate: " + this.viewDate);
+      // this.showCalendar(this.viewDate);
+      this.ngZone.run( () => {
+        this.showCalendar(this.viewDate);
+        
+      });
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
       if(document.getElementById("week-view-indicator") != null){
@@ -83,6 +103,8 @@ export class WeekComponent implements OnInit {
 
   //update the week view
   updateWeekView(){
+    console.log("updateWeekView");
+    console.log("this.viewDate: " + this.viewDate);
     //update month events (subscribed to by ngOnInit)
     this.eventService.updateWeekEvents(this.viewDate);
     //set scroll bar to show view of rogughly 8am-10pm
@@ -161,6 +183,8 @@ export class WeekComponent implements OnInit {
 
   //increment or decrement week
   changeWeek(delta: number): void {
+    console.log("changeWeek");
+    console.log(delta);
     // 1 means advance one week, -1 means go back one week
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
     //update selectedMonth and selectedYear
@@ -345,6 +369,12 @@ export class WeekComponent implements OnInit {
       'zIndex' : z
     }
     return style;
+  }
+
+
+  // set week when calendar container compoonent switches to week
+  setWeek(week : Date): void {
+
   }
 
 }

@@ -405,6 +405,9 @@ export class EventService {
     ).subscribe(allEvents => {
       this.filteredWeekEventsSource.next(this.filterByWeek(allEvents, firstDay));
       let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
+
+      console.log("updateWeekEvents");
+      console.log("monthyear: " + monthyear);
       this.initCategories(monthyear);
     });
   }

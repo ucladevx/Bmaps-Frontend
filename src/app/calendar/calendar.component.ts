@@ -1,14 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { EventService } from '../event.service';
 import { GeoJson } from '../map';
-
-// interface CalendarDay {
-//   dayOfMonth: number;
-//   inCurrentMonth: boolean;
-//   events: GeoJson[];
-// }
+import { Router, NavigationEnd } from '@angular/router';
 
 interface CalendarDay {
   dayOfMonth: number;
@@ -34,11 +29,30 @@ export class CalendarComponent implements OnInit {
   private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number] : GeoJson[] } = {};
-  private viewDate: Date;
+  // private viewDate: Date;
 
-  constructor(private eventService: EventService) { }
+  private _viewDate: Date;
+  set viewDate(value) {
+    console.log("view Date change:");
+    console.log(this._viewDate + " => " + value);
+    this._viewDate = value;
+  }
+
+  constructor(private eventService: EventService, private router: Router, private ngZone: NgZone) { 
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.ngOnInit();
+      }
+      // Instance of should be: 
+      // NavigationEnd
+      // NavigationCancel
+      // NavigationError
+      // RoutesRecognized
+    });
+  }
 
   ngOnInit() {
+    console.log("ngOnInit");
     this.currentMonth = moment();
 
     this.eventService.monthEvents$.subscribe(monthEventCollection => {
@@ -47,7 +61,16 @@ export class CalendarComponent implements OnInit {
       this.selectedYear = moment().year();
       
       this.fillEventsByDay();
-      this.showCalendar(this.viewDate);
+      
+      
+
+      console.log("this.showCalendar(this.viewDate);");
+      console.log(this.viewDate);
+      // this.showCalendar(this.viewDate);
+      this.ngZone.run( () => {
+        this.showCalendar(this.viewDate);
+        
+      });
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
@@ -59,6 +82,10 @@ export class CalendarComponent implements OnInit {
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
+
+    console.log("showCalendar");
+    console.log(dateInMonth);
+
     this.currentMonth = moment(dateInMonth).startOf('month');
 
     // range of days shown on calendar
@@ -94,6 +121,9 @@ export class CalendarComponent implements OnInit {
   }
 
   changeMonth(delta: number): void {
+
+    console.log("this.currentMonth");
+    console.log(this.currentMonth);
     
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
@@ -102,13 +132,17 @@ export class CalendarComponent implements OnInit {
     if (newMonth.isSame(moment(), 'month')) {
       // if current month, make selected day today
       // this.today = new Date();
+      console.log("if (newMonth.isSame(moment(), 'month')) {");
       this.viewDate = new Date();
       this.showCalendar( new Date());
 
     }
     else {
       // make selected day the 1st of the month
+      
+      console.log("this.viewDate = newMonth.startOf('month').toDate();");
       this.viewDate = newMonth.startOf('month').toDate();
+      console.log(this.viewDate);
       this.showCalendar(newMonth.startOf('month'));
 
     }
@@ -174,5 +208,11 @@ export class CalendarComponent implements OnInit {
     console.log('date ' + date);
 
     this.eventService.updateEvents(date);
+  }
+
+
+  // set month when calendar container compoonent switches to month
+  setMonth(month : Date): void {
+
   }
 }
