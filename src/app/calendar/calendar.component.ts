@@ -29,19 +29,19 @@ export class CalendarComponent implements OnInit {
   private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number] : GeoJson[] } = {};
-  // private viewDate: Date;
+  private viewDate: Date;
 
-  private _viewDate: Date;
-  set viewDate(value) {
-    console.log("view Date change:");
-    console.log(this._viewDate + " => " + value);
-    this._viewDate = value;
-  }
+  // private _viewDate: Date;
+  // set viewDate(value) {
+  //   console.log("view Date change:");
+  //   console.log(this._viewDate + " => " + value);
+  //   this._viewDate = value;
+  // }
 
   constructor(private eventService: EventService, private router: Router, private ngZone: NgZone) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.ngOnInit();
+        // this.ngOnInit();
       }
       // Instance of should be:
       // NavigationEnd
@@ -68,7 +68,7 @@ export class CalendarComponent implements OnInit {
       console.log(this.viewDate);
       // this.showCalendar(this.viewDate);
       // this.ngZone.run( () => {
-      //   this.showCalendar(this.viewDate);
+        // this.showCalendar(this.viewDate);
       //
       // });
     });
@@ -214,5 +214,10 @@ export class CalendarComponent implements OnInit {
   // set month when calendar container compoonent switches to month
   setMonth(month : Date): void {
 
+  }
+
+  public ngOnDestroy(): void {
+    console.log("unsubscribe");
+    this.eventService.monthEvents$.unsubscribe(); // or something similar
   }
 }

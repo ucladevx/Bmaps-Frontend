@@ -8,9 +8,15 @@
     padding: 10px;
 }
 
+:host {
+    flex: 1;
+}
+
 .calendar {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 router-outlet.router-flex + * {
