@@ -38,12 +38,12 @@ export class CalendarComponent implements OnInit {
     this._viewDate = value;
   }
 
-  constructor(private eventService: EventService, private router: Router, private ngZone: NgZone) { 
+  constructor(private eventService: EventService, private router: Router, private ngZone: NgZone) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.ngOnInit();
       }
-      // Instance of should be: 
+      // Instance of should be:
       // NavigationEnd
       // NavigationCancel
       // NavigationError
@@ -59,18 +59,18 @@ export class CalendarComponent implements OnInit {
       this.filteredMonthYearEvents = monthEventCollection.features;
       this.selectedMonth = moment().month();
       this.selectedYear = moment().year();
-      
+
       this.fillEventsByDay();
-      
-      
+
+
 
       console.log("this.showCalendar(this.viewDate);");
       console.log(this.viewDate);
       // this.showCalendar(this.viewDate);
-      this.ngZone.run( () => {
-        this.showCalendar(this.viewDate);
-        
-      });
+      // this.ngZone.run( () => {
+      //   this.showCalendar(this.viewDate);
+      //
+      // });
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
@@ -107,7 +107,7 @@ export class CalendarComponent implements OnInit {
       if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
         this.today = weekDay;
       }
-      
+
       //add weekDay to display days array
       this.days.push(weekDay);
       // set selected day to the date provided
@@ -124,7 +124,7 @@ export class CalendarComponent implements OnInit {
 
     console.log("this.currentMonth");
     console.log(this.currentMonth);
-    
+
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
     // console.log("nm" +newMonth.month())
@@ -139,7 +139,7 @@ export class CalendarComponent implements OnInit {
     }
     else {
       // make selected day the 1st of the month
-      
+
       console.log("this.viewDate = newMonth.startOf('month').toDate();");
       this.viewDate = newMonth.startOf('month').toDate();
       console.log(this.viewDate);
@@ -203,7 +203,7 @@ export class CalendarComponent implements OnInit {
   onSelect(day: CalendarDay): void {
     this.selectedDay = day;
     console.log('dayOfMonth ' + day.dayOfMonth);
-    
+
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     console.log('date ' + date);
 
