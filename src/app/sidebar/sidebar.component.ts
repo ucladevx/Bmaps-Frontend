@@ -8,6 +8,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
+import { GUser } from './user';
+
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
@@ -36,7 +38,9 @@ export class SidebarComponent implements OnInit {
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
+
     private isLoggedIn: boolean;
+    private user: GUser;
 
     constructor(
         private router: Router,
@@ -61,6 +65,7 @@ export class SidebarComponent implements OnInit {
         this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
 
         this.userService.loggedIn$.subscribe(l => this.isLoggedIn = l);
+        this.userService.user$.subscribe(u => {this.user = u;console.log("useruser: ");console.log(this.user)});
     }
 
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
@@ -113,5 +118,9 @@ export class SidebarComponent implements OnInit {
         return false;
       }
     }
+
+  isFavorite(eid) {
+    return (eid in this.user.favorites);
+  }
 
 }

@@ -34,7 +34,7 @@
                         <div class="sidebar-event-lastrow">
                           <div class="sidebar-event-category" [innerHTML]="formatCategory(event.properties.categories)"></div>
                           <div *ngIf="this.isLoggedIn" class="sidebar-event-favbtn">
-                            <div *ngIf="this.userService.isFavorite(event.id);else not_fav" class="favbtn-true" (click)="this.userService.removeFavorite(event.id)"><i class="fa fa-star" aria-hidden="true"></i></div>
+                            <div *ngIf="this.isFavorite(event.id);else not_fav" class="favbtn-true" (click)="this.userService.removeFavorite(event.id)"><i class="fa fa-star" aria-hidden="true"></i></div>
                             <ng-template #not_fav>
                               <div class="favbtn-false" (click)="this.userService.addFavorite(event.id)"><i class="fa fa-star-o" aria-hidden="true"></i></div>
                             </ng-template>
