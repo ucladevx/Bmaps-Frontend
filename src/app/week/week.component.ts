@@ -5,6 +5,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
 import { GeoJson } from '../map';
+import { CalendarService } from '../calendar.service';
 
 
 interface CalendarDay {
@@ -60,7 +61,8 @@ export class WeekComponent implements OnInit {
   ];
 
   //constructor statement
-  constructor(private eventService: EventService, private dateService: DateService, private router: Router, private ngZone: NgZone ) { 
+  constructor(private eventService: EventService, private dateService: DateService, private router: Router, private ngZone: NgZone,
+    private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.ngOnInit();
@@ -77,6 +79,8 @@ export class WeekComponent implements OnInit {
 
   ngOnInit() {
     //subscriptions
+    this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
+
     this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       
       this.filteredEvents = weekEventCollection.features;

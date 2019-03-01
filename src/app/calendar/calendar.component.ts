@@ -4,6 +4,7 @@ import { Moment } from 'moment';
 import { EventService } from '../event.service';
 import { GeoJson } from '../map';
 import { Router, NavigationEnd } from '@angular/router';
+import { CalendarService } from '../calendar.service';
 
 interface CalendarDay {
   dayOfMonth: number;
@@ -38,7 +39,8 @@ export class CalendarComponent implements OnInit {
   //   this._viewDate = value;
   // }
 
-  constructor(private eventService: EventService, private router: Router, private ngZone: NgZone) {
+  constructor(private eventService: EventService, private router: Router, private ngZone: NgZone,
+    private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // this.ngOnInit();
@@ -49,11 +51,15 @@ export class CalendarComponent implements OnInit {
       // NavigationError
       // RoutesRecognized
     });
+
   }
 
   ngOnInit() {
     console.log("ngOnInit");
     this.currentMonth = moment();
+    console.log(this.currentMonth);
+
+    this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
 
     this.eventService.monthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
@@ -82,6 +88,9 @@ export class CalendarComponent implements OnInit {
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
+
+    if(dateInMonth == undefined)
+      return;
 
     console.log("showCalendar");
     console.log(dateInMonth);
@@ -120,10 +129,16 @@ export class CalendarComponent implements OnInit {
     console.log(this.days);
   }
 
-  changeMonth(delta: number): void {
+
+
+  changeMonth = (delta: number) => {
 
     console.log("this.currentMonth");
+    console.log(this);
     console.log(this.currentMonth);
+    console.log(this.viewDate);
+    console.log(this.selectedMonth);
+
 
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');

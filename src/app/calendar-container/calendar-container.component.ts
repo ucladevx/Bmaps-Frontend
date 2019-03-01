@@ -3,6 +3,7 @@ import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { ContentChild } from '@angular/core';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { WeekComponent } from '../week/week.component';
+import { CalendarService } from '../calendar.service';
 
 @Component({
   selector: 'app-calendar-container',
@@ -34,7 +35,8 @@ export class CalendarContainerComponent implements OnInit {
 
 
   constructor(private router: Router,
-              route: ActivatedRoute) {
+              route: ActivatedRoute,
+              private _calendarService: CalendarService) {
     // Retrieve current path.
     this.currentPath = route.snapshot.url.join('');
   }
@@ -59,11 +61,13 @@ export class CalendarContainerComponent implements OnInit {
 
 
     if(this.router.url.startsWith("/calendar/month")){
-      this.monthComponent.changeMonth(delta);
+      // this.monthComponent.changeMonth(delta);
+      this._calendarService.changeDateSpan(delta);
     }
     else{
     // else
-      this.weekComponent.changeWeek(delta);
+      // this.weekComponent.changeWeek(delta);
+      this._calendarService.changeDateSpan(delta);
     }
 
     return;
