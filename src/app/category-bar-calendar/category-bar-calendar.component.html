@@ -15,10 +15,7 @@
       <input class="form-control" type="text" placeholder="Enter a location">
 
       <div class="section-header">Organizer</div>
-      <select name="organizer" id="organizer" class="custom-select">
-        <option value=""></option>
-        <option value="acm">acm</option>
-      </select>
+      <input class="form-control" type="text" placeholder="Enter a location">
 
       <div class="section-header">Date</div>
       <input type="date" class="form-control" id="short-input">
@@ -30,6 +27,8 @@
       to
       <input type="time" class="form-control" id="short-input">
 
+      <div class="section-header">Tags</div>
+      <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
       <div class="filter-group loc-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
@@ -41,9 +40,17 @@
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['nearby']}"
                  (click)="filterClicked('nearby')">nearby</label>
+        </div>
+      </div>
+      </div>
+      <div class="section-header"></div>
+      <div *ngIf="filterHash" class="filters-wrapper">
+        <div class="filter-group misc-filter-group">
+        <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
-                  [ngClass]="{'active': filterHash['free food']}"
-                  (click)="filterClicked('free food')">free food</label>
+               [ngClass]="{'active': filterHash['free food']}"
+               (click)="filterClicked('free food')">free food</label>
+        </div>
         </div>
       </div>
 

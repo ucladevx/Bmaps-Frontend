@@ -13,8 +13,8 @@ import { NgClass } from '@angular/common';
 
 export class CategoryBarCalendarComponent implements OnInit {
   @Input() showToggleButton: boolean;
-  private categHash = undefined;
-  private filterHash = undefined;
+  private categHash = {};
+  private filterHash = {};
   private events: GeoJson[];
   public selectedCategory = 'all categories';
   public showDropdown = false;
@@ -36,14 +36,17 @@ export class CategoryBarCalendarComponent implements OnInit {
 
   filterClicked(filter: string): void {
     this.eventService.toggleFilter(filter);
+    console.log(this.filterHash);
   }
 
   categoryClicked(category: string): void {
     this.eventService.toggleCategory(category);
+    console.log(this.categHash);
   }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
+    this.eventService.updateCategories();
   }
 
   clearCategories(): void {
