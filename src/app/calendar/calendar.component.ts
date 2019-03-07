@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { EventService } from '../event.service';
+import { CategoryService } from '../category.service';
 import { GeoJson } from '../map';
 
 interface CalendarDay {
@@ -28,7 +29,7 @@ export class CalendarComponent implements OnInit {
   // private eventsByDay: GeoJson[];
   private eventsByDay = new Map<number, GeoJson[]>();
 
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService, private categService: CategoryService) { }
 
   ngOnInit() {
     this.eventService.monthEvents$.subscribe(monthEventCollection => {
@@ -42,8 +43,10 @@ export class CalendarComponent implements OnInit {
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
+    this.categService.setCurrentView('month');
     // this.eventsByDay =
     this.showCalendar(new Date());
+
 
     // let todayDate = moment();
     // this.today = {

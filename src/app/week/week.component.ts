@@ -4,6 +4,7 @@ import { Moment } from 'moment';
 import { Router } from '@angular/router';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
+import { CategoryService } from '../category.service';
 import { GeoJson } from '../map';
 
 interface CalendarDay {
@@ -59,7 +60,7 @@ export class WeekComponent implements OnInit {
   ];
 
   //constructor statement
-  constructor(private eventService: EventService, private dateService: DateService, private router: Router) { }
+  constructor(private eventService: EventService, private dateService: DateService, private categService: CategoryService, private router: Router) { }
 
   ngOnInit() {
     //subscriptions
@@ -72,6 +73,7 @@ export class WeekComponent implements OnInit {
         this.highlightEvent(clickedEventInfo);
       }
     });
+    this.categService.setCurrentView('week');
     //on startup
     this.selectedMonth = moment().month();
     this.selectedYear = moment().year();

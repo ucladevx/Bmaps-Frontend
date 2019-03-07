@@ -5,6 +5,7 @@ import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
+import { CategoryService } from '../category.service';
 import { LocationService } from '../shared/location.service';
 
 @Component({
@@ -52,6 +53,7 @@ export class MapBoxComponent implements OnInit {
       private router: Router,
       private _dateService: DateService,
       private eventService: EventService,
+      private categService: CategoryService,
       private locationService: LocationService
   ) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
@@ -66,6 +68,7 @@ export class MapBoxComponent implements OnInit {
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
     });
+    this.categService.setCurrentView('map');
 
     this.buildMap();
     //I think you should use something like this to create all the promises once instead of calling function creating promise several times
