@@ -42,6 +42,12 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._calendarService.viewDateChange.subscribe( function(set) { this.viewDateChange(set); }.bind(this));
+
+  }
+
+  viewDateChange(set : Date) {
+    this.viewDate = set;
   }
 
 
