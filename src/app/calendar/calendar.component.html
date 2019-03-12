@@ -1,9 +1,7 @@
 <div class="calendar-container">
-  <div class="selector">
-    <i class="fa fa-caret-left" (click)="changeMonth(-1)" aria-hidden="true"></i>
-    <span>{{currentMonth.format('MMMM YYYY')}}</span>
-    <i class="fa fa-caret-right" (click)="changeMonth(1)" aria-hidden="true"></i>
-  </div>
+
+  <!-- deleted selector because it is now in calendar-container component -->
+
   <div class="calendar-header">
     <span class="long-abbr">sun</span>
     <span class="long-abbr">mon</span>
@@ -31,9 +29,9 @@
         <li *ngFor="let event of day.events">
             {{event.properties.name.length > 30 ? event.properties.name.substring(0,30) + "..." : event.properties.name}}
         </li>
-        
-        
-        </ul>
+      </ul>
+
+      <div class="dot"  *ngIf="day.events.length != 0"></div>
     </div>
   </div>
 </div>

@@ -26,12 +26,21 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { CalendarComponent } from './calendar/calendar.component';
 import { WeekComponent } from './week/week.component';
+import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 
 
 const appRoutes: Routes = [
   { path: 'map', component: MapBoxComponent },
-  { path: 'calendar', component: CalendarComponent },
-  { path: 'week', component: WeekComponent },
+  { path: 'calendar',
+    component: CalendarContainerComponent,
+    children: [
+      {path: '', pathMatch:'full', redirectTo: 'month' },
+      {path: 'month', component: CalendarComponent},
+      {path: 'week', component: WeekComponent}
+    ]
+  },
+  // { path: 'calendar', component: CalendarComponent },
+  // { path: 'week', component: WeekComponent },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
   { path: 'detail/:id', outlet: 'sidebar', component: EventDetailComponent },
   { path: '**', redirectTo: '/map(sidebar:list)', pathMatch: 'full' },
@@ -48,7 +57,8 @@ const appRoutes: Routes = [
     DateSelectorComponent,
     NavbarComponent,
     CalendarComponent,
-    WeekComponent
+    WeekComponent,
+    CalendarContainerComponent
   ],
   imports: [
     BrowserModule,

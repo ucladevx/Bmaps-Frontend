@@ -1,12 +1,7 @@
 <div class="weekview-container" id="week-view-indicator">
-  <div class="selector">
-    <div class="week-number">
-      <span>{{weekNumber}}</span>
-    </div>
-    <i class="fa fa-caret-left" (click)="changeWeek(-1)" aria-hidden="true"></i>
-      <span>{{currentMonth.format('MMMM YYYY')}}</span>
-    <i class="fa fa-caret-right" (click)="changeWeek(1)" aria-hidden="true"></i>
-  </div>
+  
+  <!-- deleted selector because it is now in calendar-container component -->
+
   <div class="weekview-header">
     <div class="corner-block"></div>
     <span class="long-abbr">sun</span>

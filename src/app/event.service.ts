@@ -189,9 +189,9 @@ export class EventService {
 
   // Appy current _categHash
   private applyCategories(monthyear: string) {
-    console.log("APPLYING CATEGORIES");
+    // console.log("APPLYING CATEGORIES");
     if (monthyear == ''){
-      console.log("monthyear is nothing");
+      // console.log("monthyear is nothing");
       let tempEvents = new FeatureCollection([]);
         for (let event of this._events.features) {
           let allSelected = this._categHash['all'].selected;
@@ -205,8 +205,8 @@ export class EventService {
         }
       this.filteredCurrEventsSource.next(tempEvents);
     } else {
-      console.log("monthyear is something");
-      console.log(monthyear);
+      // console.log("monthyear is something");
+      // console.log(monthyear);
       let tempEvents = new FeatureCollection([]);
         for (let event of this._allevents.features) {
           let allSelected = this._categHash['all'].selected;
@@ -239,7 +239,7 @@ export class EventService {
   }
 
   // Update categories
-  private updateCategories() {
+  public updateCategories() {
     this.categService.getCategories()
       .subscribe(categs => {
         let eventMap = this.getEventMap();
@@ -296,7 +296,7 @@ export class EventService {
     const month = Number(res[0]);
     const year = Number(res[1]);
     let dateURL = `${this.baseUrl}/search?month=${month}&year=${year}`;
-    console.log("Month Year URL " + dateURL);
+    // console.log("Month Year URL " + dateURL);
     return dateURL;
   }
 
@@ -333,7 +333,7 @@ export class EventService {
 
   private getEventsURL(): string {
     let allEventsURL = `${this.baseUrl}/`;
-    console.log(allEventsURL);
+    // console.log(allEventsURL);
     return allEventsURL; // json we are pulling from for event info
   }
 
@@ -349,20 +349,51 @@ export class EventService {
     //   this.initCategories(monthyear);
     // });
     this.http.get <FeatureCollection> (
-      this.getEventsOnMonth(monthyear)
+      this.getEventsURL()
     ).subscribe(events => {
-      console.log("updateMonthEvents " + monthyear);
-      console.log(events);
+      // console.log("updateMonthEvents " + monthyear);
+      // console.log(events);
+      // this.monthEventsSource.next(null);
+
       this.monthEventsSource.next(events);
-      console.log(this.monthEventsSource.value)
+      console.log("here ");
+      console.log(this.monthEventsSource.value);
+      // console.log(this.monthEventsSource.value)
       // Update list of categories and reset filters
       // this._selectedFilterCount = 0;
       // this._selectedCategCount = 0;
       // this.updateCategories();
       // this.resetFilters();
       // this.applyFiltersAndCategories();
+
+      // this.monthEventsSource.next(this.filterByMonth(events, monthyear));
+
+      // let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
+      this.initCategories(monthyear);
     });
     // this.getEventsOnMonth(monthyear);
+  }
+
+  filterByMonth(allEvents, monthYear) {
+    let tempEvents = new FeatureCollection([]);
+    // var lastDay = moment(firstDay).clone().add(6, 'days').toDate();
+    allEvents.features.forEach(el => {
+      var d = new Date(el.properties.start_time);
+      var month = d.getMonth();
+      var year = d.getFullYear();
+      // if (((month == firstDay.getMonth()) && (year == firstDay.getFullYear())) || ((month == lastDay.getMonth()) && (year == lastDay.getFullYear())))
+      //   tempEvents.features.push(el)
+
+      let res = monthYear.split(" ");
+      var currMonth = moment(new Date(Number(res[1]), Number(res[0])));
+      var prevMonth = currMonth.add(-1, 'month');
+      var nextMonth = currMonth.add(1, 'month');
+      if ((month == Number(res[0])) && (year == Number(res[1])) ||
+          (month == nextMonth.month()) && (year == nextMonth.year()) ||
+          (month == prevMonth.month()) && (year == prevMonth.year()))
+        tempEvents.features.push(el)
+    });
+    return tempEvents;
   }
 
   //added for week view
@@ -373,6 +404,9 @@ export class EventService {
     ).subscribe(allEvents => {
       this.filteredWeekEventsSource.next(this.filterByWeek(allEvents, firstDay));
       let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
+
+      console.log("updateWeekEvents");
+      console.log("monthyear: " + monthyear);
       this.initCategories(monthyear);
     });
   }
@@ -402,7 +436,7 @@ export class EventService {
       if ((month == Number(res[0])) && (year == Number(res[1])))
         tempEvents.features.push(el)
     });
-    console.log(tempEvents);
+    // console.log(tempEvents);
     return tempEvents;
   }
 
@@ -452,7 +486,7 @@ export class EventService {
   }
 
   private applyFiltersAndCategories() {
-    console.log("APPLYING FILTERS & CATEGORIES");
+    // console.log("APPLYING FILTERS & CATEGORIES");
 
     let tempEvents = new FeatureCollection([]);
     if (this._selectedCategCount == 0) {
