@@ -1,0 +1,25 @@
+<div class="calendar">
+  <div class="selector">
+      <!-- if current route is week -->
+      <div class="week-number" *ngIf="this.router.url == 'week'"> 
+        <!-- <span>{{weekNumber}}</span> -->
+      </div>
+      
+      <div id="calendar-controls">
+        <i class="fa fa-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
+        <span>{{viewDate.toLocaleDateString("en-US", {month: 'long', year: 'numeric'})}}</span>
+        <i class="fa fa-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
+      </div>
+      
+      <!-- buttons for changing between week and month view -->
+      <div id="month-week-switch">
+        <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active">Week</span>
+        <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active">Month</span>
+
+      </div>
+      
+    </div>
+    
+    <!-- where month and week view appear -->
+    <router-outlet class="router-flex"></router-outlet>      
+</div>
