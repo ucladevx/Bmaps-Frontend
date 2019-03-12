@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { EventService } from '../event.service';
+import { CategoryService } from '../category.service';
 import { GeoJson } from '../map';
 import { Router, NavigationEnd } from '@angular/router';
 import { CalendarService } from '../calendar.service';
@@ -39,7 +40,7 @@ export class CalendarComponent implements OnInit {
   //   this._viewDate = value;
   // }
 
-  constructor(private eventService: EventService, private router: Router, private ngZone: NgZone,
+  constructor(private eventService: EventService, private categService: CategoryService, private router: Router, private ngZone: NgZone,
     private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -80,7 +81,7 @@ export class CalendarComponent implements OnInit {
       // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
-      
+
       });
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -90,7 +91,7 @@ export class CalendarComponent implements OnInit {
 
     // this.viewDate = new Date();
     this._calendarService.setViewDate(new Date(), true);
-
+    this.categService.setCurrentView('calendar');
   }
 
   changeSelectedDay (day : CalendarDay) {

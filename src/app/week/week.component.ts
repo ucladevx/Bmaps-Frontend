@@ -4,6 +4,7 @@ import { Moment } from 'moment';
 import { Router, NavigationEnd } from '@angular/router';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
+import { CategoryService } from '../category.service';
 import { GeoJson } from '../map';
 import { CalendarService } from '../calendar.service';
 
@@ -61,14 +62,14 @@ export class WeekComponent implements OnInit {
   ];
 
   //constructor statement
-  constructor(private eventService: EventService, private dateService: DateService, private router: Router, private ngZone: NgZone,
+  constructor(private eventService: EventService, private categService: CategoryService, private dateService: DateService, private router: Router, private ngZone: NgZone,
     private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // this.ngOnInit();
         console.log("switched to week component");
       }
-      // Instance of should be: 
+      // Instance of should be:
       // NavigationEnd
       // NavigationCancel
       // NavigationError
@@ -86,13 +87,13 @@ export class WeekComponent implements OnInit {
 
 
     this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
-      
+
       this.filteredEvents = weekEventCollection.features;
       // console.log("ngOnInit this.viewDate: " + this.viewDate);
       // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
-        
+
       });
     });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -100,6 +101,7 @@ export class WeekComponent implements OnInit {
         this.highlightEvent(clickedEventInfo);
       }
     });
+    this.categService.setCurrentView('week');
     //on startup
     this.selectedMonth = moment().month();
     this.selectedYear = moment().year();
@@ -198,7 +200,7 @@ export class WeekComponent implements OnInit {
   }
 
   //increment or decrement week
-  changeWeek(delta: number): void { 
+  changeWeek(delta: number): void {
 
     if(!this._calendarService.isWeekView()){
       return;

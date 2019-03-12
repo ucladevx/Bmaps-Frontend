@@ -160,7 +160,6 @@ export class EventService {
     //   // this.applyFiltersAndCategories();
     // });
     this.updateMonthEvents(monthyear);
-
   }
 
     // Update categories
@@ -240,7 +239,7 @@ export class EventService {
   }
 
   // Update categories
-  private updateCategories() {
+  public updateCategories() {
     this.categService.getCategories()
       .subscribe(categs => {
         let eventMap = this.getEventMap();
@@ -451,6 +450,7 @@ export class EventService {
 
   // Toggle filter
   toggleFilter(filter: string) {
+  console.log("TOGGLE-EVENTSERVICE");
     if (this._filterHash[filter] != undefined) {
       this._filterHash[filter] = !this._filterHash[filter];
       if (this._filterHash[filter]) {
@@ -466,6 +466,7 @@ export class EventService {
           this._selectedFilterCount--;
         }
       }
+      this.filterHashSource.next(this._filterHash);
     }
     this.applyFiltersAndCategories();
   }

@@ -14,7 +14,7 @@ export class AppComponent {
 
   public mapEvents: FeatureCollection;
 
-  private currentView: string = 'map';
+  private currentView: string = 'map'; ////// current app
 
   constructor(private categService: CategoryService){}
 

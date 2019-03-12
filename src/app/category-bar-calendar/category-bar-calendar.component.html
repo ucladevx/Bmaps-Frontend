@@ -1,0 +1,52 @@
+<div id="categ-div" class="btn-group">
+  <button id="categ-btn" type="button" class="btn dropdown-toggle"
+          (click)="toggleDropdown()"
+          [disabled]="events.length == 0">
+    Filters<span class="caret"></span>
+  </button>
+  <div *ngIf="showDropdown" class="dropdown-content">
+
+      <div class="section-header">Categories</div>
+
+      <select name="categories" id="categories" class="custom-select">
+        <option value="{{categHash[categKey].formattedCategory}}" *ngFor="let categKey of objectKeys(categHash)">{{categHash[categKey].formattedCategory}}</option>
+      </select>
+
+      <div class="section-header">Location</div>
+      <input class="form-control" type="text" placeholder="Enter a location">
+
+      <div class="section-header">Organizer</div>
+      <input class="form-control" type="text" placeholder="Enter a location">
+
+      <div class="section-header">Date</div>
+      <input type="date" class="form-control" id="short-input">
+      to
+      <input type="date" class="form-control" id="short-input">
+
+      <div class="section-header">Time</div>
+      <input type="time" class="form-control" id="short-input">
+      to
+      <input type="time" class="form-control" id="short-input">
+
+      <div class="section-header">Tags</div>
+      <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
+        <div class="btn-group" id="loc-group">
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['on-campus']}"
+                 (click)="filterClicked('on-campus')">on-campus</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['off-campus']}"
+                 (click)="filterClicked('off-campus')">off-campus</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['nearby']}"
+                 (click)="filterClicked('nearby')">nearby</label>
+        </div>
+        <div class="btn-group" id="food-group">
+          <label class="btn btn-outline-secondary filter-btn"
+               [ngClass]="{'active': filterHash['free food']}"
+               (click)="filterClicked('free food')">free food</label>
+        </div>
+      </div>
+
+  </div>
+</div>
