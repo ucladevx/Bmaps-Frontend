@@ -91,7 +91,7 @@ export class CalendarComponent implements OnInit {
 
     // this.viewDate = new Date();
     this._calendarService.setViewDate(new Date(), true);
-    this.categService.setCurrentView('month');
+    this.categService.setCurrentView('calendar');
   }
 
   changeSelectedDay (day : CalendarDay) {

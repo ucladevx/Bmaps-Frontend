@@ -60,6 +60,7 @@ export class MapBoxComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
@@ -110,6 +111,8 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.addControls();
+
+    this.categService.setCurrentView('map');
   }
 
   addEventLayer(data): void {

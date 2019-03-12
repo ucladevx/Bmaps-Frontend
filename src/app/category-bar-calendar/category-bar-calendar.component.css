@@ -69,15 +69,16 @@
   width: 32.5%;
 }
 
-#loc-group{
-  margin-bottom: 0;
-}
-
 .filters-wrapper {
   text-align: left;
-  width: 74%;
+  width: 70%;
   align-items: left;
   display: inline-block;
+  margin-bottom: 2%;
+}
+
+#food-group {
+  margin-left: 3%;
 }
 
 .filters-bottom-section {
@@ -108,10 +109,6 @@ ul {
 
 a:active {
   background-color: #F0F0F0;
-}
-
-.filter-group + .filter-group {
-    margin-top: 10px;
 }
 
 .btn.filter-btn:hover {

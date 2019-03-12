@@ -1,6 +1,7 @@
 <div id="categ-div" class="btn-group">
   <button id="categ-btn" type="button" class="btn dropdown-toggle"
-          (click)="toggleDropdown()">
+          (click)="toggleDropdown()"
+          [disabled]="events.length == 0">
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
@@ -29,8 +30,7 @@
 
       <div class="section-header">Tags</div>
       <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
-      <div class="filter-group loc-filter-group">
-        <div class="btn-group">
+        <div class="btn-group" id="loc-group">
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['on-campus']}"
                  (click)="filterClicked('on-campus')">on-campus</label>
@@ -41,16 +41,10 @@
                  [ngClass]="{'active': filterHash['nearby']}"
                  (click)="filterClicked('nearby')">nearby</label>
         </div>
-      </div>
-      </div>
-      <div class="section-header"></div>
-      <div *ngIf="filterHash" class="filters-wrapper">
-        <div class="filter-group misc-filter-group">
-        <div class="btn-group">
+        <div class="btn-group" id="food-group">
           <label class="btn btn-outline-secondary filter-btn"
                [ngClass]="{'active': filterHash['free food']}"
                (click)="filterClicked('free food')">free food</label>
-        </div>
         </div>
       </div>
 
