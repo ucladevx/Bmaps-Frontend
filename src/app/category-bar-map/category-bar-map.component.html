@@ -70,7 +70,7 @@
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <a *ngIf="categHash[categKey].numEvents != undefined && categHash[categKey].numEvents > 0"
+          <a *ngIf="categHash[categKey].numEventsDay != undefined && categHash[categKey].numEventsDay > 0"
              [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
              (click)="categoryClicked(categKey)">
           <div class="checkbox-container">
@@ -84,7 +84,7 @@
               </div>
           </ng-template>
           {{categHash[categKey].formattedCategory}}
-          <span *ngIf="categHash[categKey].numEvents"
+          <span *ngIf="categHash[categKey].numEventsDay"
                 [ngClass]="{'badge': true, 'badge-secondary': true, 'categ-bubble': true, 'categ-bubble-selected': categHash[categKey].selected}">{{categHash[categKey].numEvents}}</span>
           </a>
         </li>

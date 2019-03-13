@@ -111,6 +111,7 @@ export class WeekComponent implements OnInit {
     console.log("updateWeekView");
     this.updateWeekView();
     console.log(this.days);
+    this.categService.setCurrentView('week');
   }
 
 

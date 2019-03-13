@@ -84,6 +84,16 @@ export class CalendarComponent implements OnInit {
 
       });
     });
+    this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
+      this.filteredMonthYearEvents = monthEventCollection.features;
+      this.fillEventsByDay();
+  // console.log("this.showCalendar(this.viewDate);");
+      // console.log(this.viewDate);
+      // this.showCalendar(this.viewDate);
+      this.ngZone.run( () => {
+        this.showCalendar(this._calendarService.getViewDate());
+      });
+    });
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
@@ -91,7 +101,7 @@ export class CalendarComponent implements OnInit {
 
     // this.viewDate = new Date();
     this._calendarService.setViewDate(new Date(), true);
-    this.categService.setCurrentView('calendar');
+    this.categService.setCurrentView('month');
   }
 
   changeSelectedDay (day : CalendarDay) {

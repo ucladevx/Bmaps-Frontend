@@ -89,9 +89,9 @@ ul {
   list-style-type: none;
 }
 
-.categories-list {
-  width: 100%;
-  padding: 0 0 0 0;
+.category-options {
+  height: 400px;
+  overflow:scroll;
 }
 
 .selected {

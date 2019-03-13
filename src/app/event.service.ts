@@ -166,11 +166,15 @@ export class EventService {
     private initCategories(monthyear: string) {
       this.categService.getCategories()
         .subscribe(categs => {
-          let eventMap = this.getEventMap();
+          let dayMap = this.getEventMap();
+          let monthMap = this.getMonthEventMap();
+          let weekMap = this.getWeekEventMap();
           let tempHash = {
             'all': {
               formattedCategory: 'all',
-              numEvents: eventMap['all'],
+              numEventsDay: dayMap['all'],
+              numEventsMonth: monthMap['all'],
+              numEventsWeek: weekMap['all'],
               selected: this._categHash ? this._categHash['all'].selected : true
             }
           };
@@ -178,7 +182,9 @@ export class EventService {
             let categName = categ.toLowerCase();
             tempHash[categName] = {
               formattedCategory: categName.replace('_', ' '),
-              numEvents: eventMap[categName],
+              numEventsDay: dayMap[categName],
+              numEventsMonth: monthMap[categName],
+              numEventsWeek: weekMap[categName],
               selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
             }
           }
@@ -189,6 +195,7 @@ export class EventService {
 
   // Appy current _categHash
   private applyCategories(monthyear: string) {
+    console.log(this._categHash);
     // console.log("APPLYING CATEGORIES");
     if (monthyear == ''){
       // console.log("monthyear is nothing");
@@ -218,6 +225,7 @@ export class EventService {
             }
           }
         }
+      console.log(tempEvents);
       this.filteredMonthEventsSource.next(tempEvents);
     }
   }
@@ -242,11 +250,15 @@ export class EventService {
   public updateCategories() {
     this.categService.getCategories()
       .subscribe(categs => {
-        let eventMap = this.getEventMap();
+        let dayMap = this.getEventMap();
+        let monthMap = this.getMonthEventMap();
+        let weekMap = this.getWeekEventMap();
         let tempHash = {
            'all': {
              formattedCategory: 'all',
-             numEvents: eventMap['all'],
+             numEventsDay: dayMap['all'],
+             numEventsMonth: monthMap['all'],
+             numEventsWeek: weekMap['all'],
              selected: this._categHash ? this._categHash['all'].selected : true
            }
         };
@@ -254,7 +266,9 @@ export class EventService {
           let categName = categ.toLowerCase();
           tempHash[categName] = {
             formattedCategory: categName.replace('_', ' '),
-            numEvents: eventMap[categName],
+            numEventsDay: dayMap[categName],
+            numEventsMonth: monthMap[categName],
+            numEventsWeek: weekMap[categName],
             selected: false
           }
         }
@@ -267,6 +281,46 @@ export class EventService {
     let total = 0;
 
     for (let event of this._events.features) {
+      for (let category of event.properties.categories) {
+        let eventCateg: string = category.toLowerCase();
+        if (eventMap[eventCateg] === undefined) {
+          eventMap[eventCateg] = 1;
+        } else {
+          eventMap[eventCateg]++;
+        }
+      }
+      total++;
+    }
+    eventMap['all'] = total;
+
+    return eventMap;
+  }
+
+  private getMonthEventMap(){
+    let eventMap = {};
+    let total = 0;
+
+    for (let event of this._allevents.features) {
+      for (let category of event.properties.categories) {
+        let eventCateg: string = category.toLowerCase();
+        if (eventMap[eventCateg] === undefined) {
+          eventMap[eventCateg] = 1;
+        } else {
+          eventMap[eventCateg]++;
+        }
+      }
+      total++;
+    }
+    eventMap['all'] = total;
+
+    return eventMap;
+  }
+
+  private getWeekEventMap(){
+    let eventMap = {};
+    let total = 0;
+
+    for (let event of this._weekEvents.features) {
       for (let category of event.properties.categories) {
         let eventCateg: string = category.toLowerCase();
         if (eventMap[eventCateg] === undefined) {
@@ -356,7 +410,6 @@ export class EventService {
       // this.monthEventsSource.next(null);
 
       this.monthEventsSource.next(events);
-      console.log("here ");
       console.log(this.monthEventsSource.value);
       // console.log(this.monthEventsSource.value)
       // Update list of categories and reset filters
@@ -473,7 +526,10 @@ export class EventService {
 
   // Toggle category
   toggleCategory(category: string) {
+    console.log(category);
     if (this._categHash[category] != undefined) {
+      console.log("here");
+      this._categHash["all"].selected = false;
       this._categHash[category].selected = !this._categHash[category].selected;
       if (this._categHash[category].selected) {
         this._selectedCategCount++;
@@ -482,7 +538,14 @@ export class EventService {
         this._selectedCategCount--;
       }
     }
-    this.applyFiltersAndCategories();
+
+    if(this.categService.getCurrentView() == 'map'){
+      this.applyFiltersAndCategories();
+    }
+    else{
+        let monthyear = (moment().month() + 1).toString() + " " + moment().year().toString();
+        this.applyCategories(monthyear);
+    }
   }
 
   private applyFiltersAndCategories() {
@@ -540,7 +603,6 @@ export class EventService {
         }
       }
     }
-
     this.filteredCurrEventsSource.next(tempEvents);
   }
 
