@@ -86,16 +86,23 @@ export class WeekComponent implements OnInit {
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
 
-    this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
-
+    this.eventService.weekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       // console.log("ngOnInit this.viewDate: " + this.viewDate);
       // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
-
       });
     });
+    this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
+      this.filteredEvents = weekEventCollection.features;
+      // console.log("ngOnInit this.viewDate: " + this.viewDate);
+      // this.showCalendar(this.viewDate);
+      this.ngZone.run( () => {
+        this.showCalendar(this._calendarService.getViewDate());
+      });
+    });
+
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
       if(document.getElementById("week-view-indicator") != null){
         this.highlightEvent(clickedEventInfo);

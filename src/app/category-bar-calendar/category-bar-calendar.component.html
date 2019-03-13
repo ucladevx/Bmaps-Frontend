@@ -1,7 +1,6 @@
 <div id="categ-div" class="btn-group">
   <button id="categ-btn" type="button" class="btn dropdown-toggle"
-          (click)="toggleDropdown()"
-          [disabled]="events.length == 0">
+          (click)="toggleDropdown()">
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
@@ -10,20 +9,20 @@
 
       <span *ngIf="this.categService.getCurrentView()=='month';else weekView">
       <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()">
-        <option *ngFor="let categKey of objectKeys(categHash)" value="{{categKey}}">
-          <span *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0">
+        <ng-container *ngFor="let categKey of objectKeys(categHash)">
+          <option *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0" value="{{categKey}}">
             {{categHash[categKey].formattedCategory}}
-          </span>
-        </option>
+          </option>
+        </ng-container>
       </select>
       </span>
       <ng-template #weekView>
         <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()">
-          <option *ngFor="let categKey of objectKeys(categHash)" value="{{categKey}}">
-            <span *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0">
+          <ng-container *ngFor="let categKey of objectKeys(categHash)">
+            <option *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0" value="{{categKey}}">
               {{categHash[categKey].formattedCategory}}
-            </span>
-          </option>
+            </option>
+          </ng-container>
         </select>
       </ng-template>
 

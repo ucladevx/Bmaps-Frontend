@@ -15,6 +15,8 @@ export class EventService {
   private monthEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all filtered events
   private filteredMonthEventsSource: BehaviorSubject <FeatureCollection>;
+  // holds all events for a week
+  private weekEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all filtered events for a week
   private filteredWeekEventsSource: BehaviorSubject <FeatureCollection>;
   // holds all events of the current date that components can see
@@ -39,6 +41,7 @@ export class EventService {
   // Observables that components can subscribe to for realtime updates
   monthEvents$;
   filteredMonthEvents$;
+  weekEvents$;
   filteredWeekEvents$;
   currEvents$;
   filteredCurrEvents$;
@@ -107,6 +110,7 @@ export class EventService {
     // Observable string sources, BehaviorSubjects have an intial state
     this.monthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredMonthEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
+    this.weekEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredWeekEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.currEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
     this.filteredCurrEventsSource = new BehaviorSubject < FeatureCollection > (new FeatureCollection([]));
@@ -121,6 +125,7 @@ export class EventService {
     // Observable string streams
     this.monthEvents$  = this.monthEventsSource.asObservable();
     this.filteredMonthEvents$  = this.filteredMonthEventsSource.asObservable();
+    this.weekEvents$  = this.weekEventsSource.asObservable();
     this.filteredWeekEvents$ = this.filteredWeekEventsSource.asObservable();
     this.currEvents$ = this.currEventsSource.asObservable();
     this.filteredCurrEvents$ = this.filteredCurrEventsSource.asObservable();
@@ -135,13 +140,13 @@ export class EventService {
     // Maintain a set of self-subscribed local values
     this.monthEvents$.subscribe(monthEventCollection => this._allevents = monthEventCollection);
     this.currEvents$.subscribe(eventCollection => this._events = eventCollection);
+    this.weekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
     this.currDate$.subscribe(date => this._date = date);
     this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
     this.hoveredEvent$.subscribe(hoveredEventInfo => this._hoveredEvent = hoveredEventInfo);
     this.expandedEvent$.subscribe(expandedEventInfo => this._expandedEvent = expandedEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
     this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
-    this.filteredWeekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
 
     // Update events for today
     this.updateEvents(today);
@@ -227,6 +232,19 @@ export class EventService {
         }
       console.log(tempEvents);
       this.filteredMonthEventsSource.next(tempEvents);
+      let tempEventsWeek = new FeatureCollection([]);
+        for (let event of this._weekEvents.features) {
+          let allSelected = this._categHash['all'].selected;
+          for (let category of event.properties.categories) {
+            let categObject = this._categHash[category.toLowerCase()];
+            if (allSelected || (categObject && categObject.selected)) {
+              tempEventsWeek.features.push(event);
+              break;
+            }
+          }
+        }
+      console.log(tempEventsWeek);
+      this.filteredWeekEventsSource.next(tempEventsWeek);
     }
   }
 
@@ -455,7 +473,7 @@ export class EventService {
     this.http.get <FeatureCollection> (
       this.getEventsURL()
     ).subscribe(allEvents => {
-      this.filteredWeekEventsSource.next(this.filterByWeek(allEvents, firstDay));
+      this.weekEventsSource.next(this.filterByWeek(allEvents, firstDay));
       let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
 
       console.log("updateWeekEvents");
