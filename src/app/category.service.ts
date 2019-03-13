@@ -17,11 +17,20 @@ export class CategoryService {
   private apiUrl = "https://www.mappening.io/api/v2/events/categories";
   // maintain current view
   private currentView = "map";
+  private selectedCategory = "all";
 
   constructor(private http: HttpClient) { }
 
   getCurrentView(): string {
     return this.currentView;
+  }
+
+  getSelectedCategory(){
+    return this.selectedCategory;
+  }
+
+  setSelectedCategory(category: string){
+    this.selectedCategory = category;
   }
 
   setCurrentView(view: string){

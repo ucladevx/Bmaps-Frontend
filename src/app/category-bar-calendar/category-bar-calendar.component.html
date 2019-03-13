@@ -8,7 +8,7 @@
       <div class="section-header">Categories</div>
 
       <span *ngIf="this.calendarService.isMonthView()">
-      <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()">
+      <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{this.categService.getSelectedCategory()}}">
         <ng-container *ngFor="let categKey of objectKeys(categHash)">
           <option *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0" value="{{categKey}}">
             {{categHash[categKey].formattedCategory}}
