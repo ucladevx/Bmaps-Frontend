@@ -20,13 +20,20 @@ interface CalendarDay {
 })
 export class CalendarService {
 
-  constructor(private router: Router, private eventService: EventService) { }
+  dateSpanSource: Subject <any>;
+  dateSpan$;
+
+  constructor(private router: Router, private eventService: EventService) {
+    this.dateSpanSource = new Subject < any > ();
+    this.dateSpan$ = this.dateSpanSource.asObservable();
+  }
 
   delta : Number = 0;
 
   viewDate : Date;
   selectedDay: CalendarDay;
   days: CalendarDay[] = [];
+
 
   currentView = "month";
 
@@ -36,9 +43,13 @@ export class CalendarService {
 
 
   changeDateSpan(delta : Number) {
+    let span = {};
+    this.dateSpanSource.next(span);
     this.delta = delta;
     this.change.emit(this.delta);
     this.delta = 0;
+    this.selectedDay = this.days[0];
+
   }
 
   getViewDate() {
@@ -76,10 +87,8 @@ export class CalendarService {
   increaseDay(days: number){
     var currIndex = this.days.indexOf(this.selectedDay);
     currIndex += days;
-    console.log(this.selectedDay.dayOfMonth);
-    console.log(this.eventService._date.getDate());
-    if(this.selectedDay.dayOfMonth == this.eventService._date.getDate()){
-      if(currIndex < this.days.length){
+    if(this.selectedDay.dayOfMonth == this.eventService.getSelectedDay().getDate()){
+      if(currIndex < this.days.length && currIndex > -1){
         this.setSelectedDay(this.days[currIndex]);
         console.log(this.selectedDay);
       }

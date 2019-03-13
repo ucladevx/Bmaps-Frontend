@@ -23,9 +23,9 @@ export class CalendarContainerComponent implements OnInit {
   @ContentChild(WeekComponent)
   private weekComponent: WeekComponent;
 
-  
-  /// Calendar container will have to have some state, that is, the current time 
-  
+
+  /// Calendar container will have to have some state, that is, the current time
+
   // expected behavior:
   // if you switch from month view to week view,
   //    if it is the current month, go to the week view for the current week
@@ -76,8 +76,9 @@ export class CalendarContainerComponent implements OnInit {
       this._calendarService.changeDateSpan(delta);
     }
 
+
     return;
-    
+
     // // 1 means advance one month, -1 means go back one month
     // let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
     // // console.log("nm" +newMonth.month())
@@ -101,7 +102,7 @@ export class CalendarContainerComponent implements OnInit {
     // let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
     // this.eventService.updateMonthEvents(monthyear);
 
-    
+
     // // 1 means advance one week, -1 means go back one week
     // let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
     // //update selectedMonth and selectedYear
@@ -121,7 +122,7 @@ export class CalendarContainerComponent implements OnInit {
     //   //update view
     //   this.updateWeekView();
     // }
-  
+
 
   }
 

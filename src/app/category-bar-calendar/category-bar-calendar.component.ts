@@ -33,6 +33,11 @@ export class CategoryBarCalendarComponent implements OnInit {
     this.eventService.filterHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
+    this.calendarService.dateSpan$.subscribe(clear => {
+      console.log("HERE");
+        this.clearCategories();
+        console.log(this.categHash);
+    });
   }
 
   filterClicked(filter: string): void {
@@ -58,6 +63,7 @@ export class CategoryBarCalendarComponent implements OnInit {
         this.eventService.toggleCategory(key);
       }
     }
+    this.categHash["all"].selected = true;
   }
 
   clearFilters(): void {

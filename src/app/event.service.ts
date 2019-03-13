@@ -716,4 +716,8 @@ export class EventService {
     return this.dateService.isToday(this._date);
   }
 
+  getSelectedDay() {
+    return this._date;
+  }
+
 }

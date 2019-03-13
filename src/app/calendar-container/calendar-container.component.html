@@ -13,8 +13,8 @@
 
       <!-- buttons for changing between week and month view -->
       <div id="month-week-switch">
-        <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active">Week</span>
-        <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active">Month</span>
+        <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0)">Week</span>
+        <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0)">Month</span>
 
       </div>
 
