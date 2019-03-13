@@ -3,9 +3,9 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { EventEmitter } from '@angular/core';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
+import { EventService } from './event.service';
 
 import { GeoJson } from './map';
-
 
 interface CalendarDay {
   dayOfMonth: number;
@@ -20,12 +20,13 @@ interface CalendarDay {
 })
 export class CalendarService {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private eventService: EventService) { }
 
   delta : Number = 0;
 
   viewDate : Date;
   selectedDay: CalendarDay;
+  days: CalendarDay[] = [];
 
   currentView = "month";
 
@@ -66,6 +67,23 @@ export class CalendarService {
   setSelectedDay(day: CalendarDay) {
     this.selectedDay = day;
     this.selectedDayChange.emit(day);
+  }
+
+  setDays(calendarDays: CalendarDay[]){
+    this.days = calendarDays;
+  }
+
+  increaseDay(days: number){
+    var currIndex = this.days.indexOf(this.selectedDay);
+    currIndex += days;
+    console.log(this.selectedDay.dayOfMonth);
+    console.log(this.eventService._date.getDate());
+    if(this.selectedDay.dayOfMonth == this.eventService._date.getDate()){
+      if(currIndex < this.days.length){
+        this.setSelectedDay(this.days[currIndex]);
+        console.log(this.selectedDay);
+      }
+    }
   }
 
 

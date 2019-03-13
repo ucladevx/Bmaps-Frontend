@@ -4,6 +4,7 @@ import { CategoryService } from '../category.service';
 import { EventService } from '../event.service';
 import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
+import { CalendarService } from '../calendar.service';
 
 @Component({
   selector: 'app-category-bar-calendar',
@@ -20,7 +21,7 @@ export class CategoryBarCalendarComponent implements OnInit {
   public showDropdown = false;
   private wasInside = false;
 
-  constructor(private categService: CategoryService, private eventService: EventService) {}
+  constructor(private categService: CategoryService, private eventService: EventService, private calendarService: CalendarService) {}
 
   ngOnInit() {
     this.eventService.currEvents$.subscribe(eventCollection => {

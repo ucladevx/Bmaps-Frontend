@@ -7,7 +7,7 @@
 
       <div class="section-header">Categories</div>
 
-      <span *ngIf="this.categService.getCurrentView()=='month';else weekView">
+      <span *ngIf="this.calendarService.isMonthView()">
       <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()">
         <ng-container *ngFor="let categKey of objectKeys(categHash)">
           <option *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0" value="{{categKey}}">
@@ -16,7 +16,7 @@
         </ng-container>
       </select>
       </span>
-      <ng-template #weekView>
+      <span *ngIf="this.calendarService.isWeekView()">
         <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()">
           <ng-container *ngFor="let categKey of objectKeys(categHash)">
             <option *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0" value="{{categKey}}">
@@ -24,7 +24,7 @@
             </option>
           </ng-container>
         </select>
-      </ng-template>
+      </span>
 
       <div class="section-header">Location</div>
       <input class="form-control" type="text" placeholder="Enter a location">

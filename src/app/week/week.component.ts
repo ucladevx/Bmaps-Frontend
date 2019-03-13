@@ -203,7 +203,7 @@ export class WeekComponent implements OnInit {
         this.onSelect(weekDay);
       }
     }
-
+    this._calendarService.setDays(this.days);
     // console.log(this.days);
   }
 

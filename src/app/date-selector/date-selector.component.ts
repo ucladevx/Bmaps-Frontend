@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
+import { CalendarService } from '../calendar.service';
+
 
 @Component({
     selector: 'app-date-selector',
@@ -12,7 +14,7 @@ export class DateSelectorComponent implements OnInit {
     public showLeft: boolean;
     public showRight: boolean;
 
-    constructor(private eventService: EventService, private dateService: DateService) { }
+    constructor(private eventService: EventService, private dateService: DateService, private calendarService: CalendarService) { }
 
     ngOnInit() {
         this.eventService.currDate$.subscribe(date => {
@@ -34,7 +36,7 @@ export class DateSelectorComponent implements OnInit {
     private dateToString(date: Date): string {
         let day = date.getDate();
         let month = this.dateService.getMonthName(date);
-        
+
         let description = '';
         let today = new Date();
         let tomorrow = new Date();
@@ -51,6 +53,8 @@ export class DateSelectorComponent implements OnInit {
 
     public updateDate(days: number) {
         // 1 means advance one day, -1 means go back one day
+        this.calendarService.increaseDay(days);
         this.eventService.updateDateByDays(days);
     }
+
 }
