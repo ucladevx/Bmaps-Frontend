@@ -5,13 +5,17 @@
     background-color: #fff;
     color: #484747;
     text-align: center;
-    padding: 8.7px;
+    /* padding: 8.7px; */
     border-bottom: 1px solid rgb(200, 200, 200);
     border-left: 1px solid rgb(200, 200, 200);
 
     position: relative;
 
 }
+/* 
+.selector span {
+    padding: 15px;
+} */
 
 :host {
     flex: 1;
@@ -31,7 +35,13 @@ router-outlet.router-flex + * {
   }
 
 #calendar-controls {
+    padding: 8.7px;
     margin: 0 auto;
+
+}
+
+#calendar-controls i {
+    font-size: 20px;
 }
 
 #calendar-controls span {

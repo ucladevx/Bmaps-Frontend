@@ -21,6 +21,8 @@ export class DateSelectorComponent implements OnInit {
             this.dateString = this.dateToString(date);
             this.showLeft = this.showLeftArrow(date);
             this.showRight = this.showRightArrow(date);
+            this.calendarService.setSelectedDay(date);
+
         });
     }
 
