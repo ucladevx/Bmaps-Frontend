@@ -41,7 +41,7 @@ export class SidebarComponent implements OnInit {
         private router: Router,
         private eventService: EventService,
         private _dateService: DateService,
-        private _categService: CategoryService
+        public _categService: CategoryService
     ) {}
 
     ngOnInit() {

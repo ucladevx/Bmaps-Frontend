@@ -34,7 +34,7 @@ export class CalendarContainerComponent implements OnInit {
   //    go to the month containing the week that was being viewed.
 
 
-  constructor(private router: Router,
+  constructor(public router: Router,
               route: ActivatedRoute,
               private _calendarService: CalendarService) {
     // Retrieve current path.
