@@ -9,7 +9,9 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
+
   title = 'mappening';
 
   public mapEvents: FeatureCollection;
@@ -41,4 +43,5 @@ export class AppComponent {
       component.pressed$ = this.pressed$.asObservable();
     }
   }
+  
 }

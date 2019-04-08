@@ -3,12 +3,7 @@
     <div class="row flex">
         <div class="col-sm-12 col-md-7 order-sm-first order-md-last map-container" [ngClass]="{'hide-map' : pressed}">
             <router-outlet></router-outlet>
-            <!-- <app-month [hidden]="currentView != 'calendar'" class="flex"></app-month> -->
         </div>
-        <!-- <div class="col-sm-12 col-md-7 order-sm-first order-md-last map-container" [ngClass]="{'hide-map' : pressed}">
-            <app-map-box [hidden]="currentView != 'map'" class="flex" [pressed]="pressed"></app-map-box>
-            <app-month [hidden]="currentView != 'calendar'" class="flex"></app-month>
-        </div> -->
         <div class="col-sm-12 col-md-5 order-sm-last order-md-first sidebar-container" [ngClass]="{'hide-map': pressed}">
             <router-outlet name="sidebar" (activate)="onSidebarRouterActivate($event)"></router-outlet>
         </div>

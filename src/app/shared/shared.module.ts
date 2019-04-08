@@ -2,8 +2,7 @@
 its service as SINGLETONS since its at the root making it the
 suggested place for utils and global varibles. At least that is what
 I gathered from https://angular.io/guide/singleton-services. Apparently
-will need to figure out forRoot if we have both declarations and providers
-*/
+will need to figure out forRoot if we have both declarations and providers*/
 
 //TODO: Actually check DateService is a singleton
 
@@ -19,6 +18,7 @@ import { LocationService } from './location.service'
   declarations: [],
   providers: [DateService, LocationService]
 })
+
 export class SharedModule {
 
 }

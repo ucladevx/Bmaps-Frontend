@@ -7,7 +7,6 @@ import { DateService } from '../shared/date.service';
 import { GeoJson } from '../map';
 import { CalendarService } from '../calendar.service';
 
-
 interface CalendarDay {
   dayOfMonth: number;
   inCurrentMonth: boolean;
@@ -36,30 +35,6 @@ export class WeekComponent implements OnInit {
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
   private zIndexArray: { [id: number] : Number } = {};
-  public weekNumber: string;
-  // retrieved from UCLA online academic calendar
-  private zeroWeeks: Moment[] = [
-    //2018-2019
-    moment([2018,8,23]),
-    moment([2019,0,6]),
-    moment([2019,2,30]),
-    //2019-2020
-    moment([2019,8,22]),
-    moment([2020,0,5]),
-    moment([2020,2,29]),
-    //2020-2021
-    moment([2020,8,27]),
-    moment([2021,0,4]),
-    moment([2021,2,29]),
-    //2021-2022
-    moment([2021,8,19]),
-    moment([2022,0,2]),
-    moment([2022,2,28]),
-    //2022-2023
-    moment([2022,8,19]),
-    moment([2023,0,9]),
-    moment([2023,3,2])
-  ];
 
   //constructor statement
   constructor(private eventService: EventService, private dateService: DateService, private router: Router, private ngZone: NgZone,
@@ -67,22 +42,13 @@ export class WeekComponent implements OnInit {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // this.ngOnInit();
-        console.log("switched to week component");
       }
-      // Instance of should be:
-      // NavigationEnd
-      // NavigationCancel
-      // NavigationError
-      // RoutesRecognized
     });
   }
 
-
-
   ngOnInit() {
-    //subscriptions
-    this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
 
+    this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
     this.eventService.currDate$.subscribe(date => {
@@ -97,17 +63,14 @@ export class WeekComponent implements OnInit {
     this.eventService.weekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      // console.log("ngOnInit this.viewDate: " + this.viewDate);
-      // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
       });
     });
+
     this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      // console.log("ngOnInit this.viewDate: " + this.viewDate);
-      // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
         this.showCalendar(this.eventService.getSelectedDay());
       });
@@ -118,17 +81,14 @@ export class WeekComponent implements OnInit {
         this.highlightEvent(clickedEventInfo);
       }
     });
+
     //on startup
     this.selectedMonth = moment().month();
     this.selectedYear = moment().year();
-    // this.viewDate = new Date();
     this._calendarService.setViewDate(new Date(), true);
     //update view
-    console.log("updateWeekView");
     this.updateWeekView();
-    console.log(this.days);
   }
-
 
   changeSelectedDay (day : CalendarDay) {
     this.selectedDay = day;
@@ -144,38 +104,10 @@ export class WeekComponent implements OnInit {
     document.getElementById("scrollable").scrollTop = 270;
   }
 
-  //set the week number
-  enumerateWeek(){
-    //count weeks
-    var weekCount;
-    //iterate backwards through zeroWeeks array to find the first positive week
-    for(var i = this.zeroWeeks.length-1; i>=0; i--){
-      //determine week count
-      weekCount = Math.floor(moment(this._calendarService.getViewDate()).diff(this.zeroWeeks[i],'days') / 7);
-      //handle zero week
-      if(weekCount>=0){
-        if(i%3 != 0){ weekCount++; }
-        i = -1;
-      }
-    }
-    // Week 11 -> Finals Week
-    if(weekCount == 11){
-      this.weekNumber = "Finals Week";
-    }
-    // Week 12+ or Week 0- -> Break
-    else if(weekCount > 11 || weekCount < 0 || weekCount == undefined){
-      this.weekNumber = "";
-    }
-    // Week 0-12 -> Within Quarter
-    else {
-      this.weekNumber = "Week " + weekCount;
-    }
-  }
-
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
     //update week Number
-    this.enumerateWeek();
+    this._calendarService.enumerateWeek();
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
@@ -215,13 +147,9 @@ export class WeekComponent implements OnInit {
 
   //increment or decrement week
   changeWeek(delta: number): void {
-
     if(!this._calendarService.isWeekView()){
       return;
     }
-
-    console.log("changeWeek");
-    console.log(delta);
     // 1 means advance one week, -1 means go back one week
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
     //update selectedMonth and selectedYear
@@ -232,6 +160,7 @@ export class WeekComponent implements OnInit {
       //update view date
       // this.viewDate = new Date();
       this._calendarService.setViewDate(new Date());
+      this.eventService.updateDayEvents(new Date());
       //update view
       this.updateWeekView();
     }
@@ -240,6 +169,7 @@ export class WeekComponent implements OnInit {
       //update view date
       // this.viewDate = newWeek.startOf('week').toDate();
       this._calendarService.setViewDate(newWeek.startOf('week').toDate());
+      this.eventService.updateDayEvents(newWeek.startOf('week').toDate());
       //update view
       this.updateWeekView();
     }
@@ -262,6 +192,7 @@ export class WeekComponent implements OnInit {
       this.eventsByDay[dayOfYear].push(el);
     });
   }
+
   //retrieve events for a specific day
   getEventsOnDate(date: Moment): GeoJson[] {
     //determine day of year
@@ -300,6 +231,7 @@ export class WeekComponent implements OnInit {
     //update sidebar to display events for that date
     this.eventService.updateDayEvents(date);
   }
+
   //open event in sidebar
   openEvent(event: GeoJson): void{
     //update clicked event
@@ -308,6 +240,7 @@ export class WeekComponent implements OnInit {
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
     this.eventService.updateExpandedEvent(event);
   }
+
   //bold event when opened
   highlightEvent(clickedEventInfo: GeoJson): void{
     //restyle currently selected event card

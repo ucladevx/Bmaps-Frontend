@@ -13,7 +13,6 @@ import { EventService } from '../event.service';
   providers: [WeekComponent, MonthComponent]
 })
 
-
 export class CalendarContainerComponent implements OnInit {
   public viewDate: Date = new Date();
   currentPath = '';
@@ -33,7 +32,6 @@ export class CalendarContainerComponent implements OnInit {
   //    go to the month containing the week that was being viewed.
 
   constructor(public router: Router, private eventService: EventService, route: ActivatedRoute, private _calendarService: CalendarService) {
-    // Retrieve current path.
     this.currentPath = route.snapshot.url.join('');
   }
 
@@ -42,8 +40,6 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   viewDateChange(set : Date) {
-    console.log("SETTTTTTTT");
-    console.log(set);
     this.viewDate = set;
   }
 

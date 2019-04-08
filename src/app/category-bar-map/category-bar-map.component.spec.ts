@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CategoryBarMapComponent } from './category-bar-map.component';
 
 describe('CategoryBarMapComponent', () => {
+
   let component: CategoryBarMapComponent;
   let fixture: ComponentFixture<CategoryBarMapComponent>;
 
@@ -22,4 +22,5 @@ describe('CategoryBarMapComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });

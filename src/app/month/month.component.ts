@@ -39,11 +39,6 @@ export class MonthComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         // this.ngOnInit();
       }
-      // Instance of should be:
-      // NavigationEnd
-      // NavigationCancel
-      // NavigationError
-      // RoutesRecognized
     });
   }
 
@@ -139,35 +134,20 @@ export class MonthComponent implements OnInit {
     if(!this._calendarService.isMonthView()){
       return;
     }
-    console.log("this.currentMonth");
-    console.log(this);
-    console.log(this.currentMonth);
-    // console.log(this.viewDate);
-    console.log(this.selectedMonth);
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
-    // console.log("nm" +newMonth.month())
-    // console.log(newMonth);
+    // if current month, make selected day today
     if (newMonth.isSame(moment(), 'month')) {
-      // if current month, make selected day today
-      // this.today = new Date();
-      console.log("if (newMonth.isSame(moment(), 'month')) {");
-      // this.viewDate = new Date();
       this._calendarService.setViewDate(new Date());
       this.eventService.updateDayEvents(new Date());
       this.showCalendar( new Date());
     }
+    // make selected day the 1st of the month
     else {
-      // make selected day the 1st of the month
       console.log("this.viewDate = newMonth.startOf('month').toDate();");
-      // this.viewDate = newMonth.startOf('month').toDate();
       this._calendarService.setViewDate(newMonth.startOf('month').toDate());
       this.eventService.updateDayEvents(newMonth.startOf('month').toDate());
-      // console.log(this.viewDate);
-      console.log(newMonth.startOf('month').toDate());
       this.showCalendar(newMonth.startOf('month').toDate());
-      console.log(newMonth.startOf('month').toDate());
-      console.log("HERE AT END");
     }
     this.selectedMonth = newMonth.month();
     this.selectedYear = newMonth.year();

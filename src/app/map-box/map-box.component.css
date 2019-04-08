@@ -47,7 +47,6 @@
     }
 }
 
-
 :host ::ng-deep .popupContainer, :host ::ng-deep .backupPopupContainer {
   padding: 10px 10px 10px;
 }
@@ -79,6 +78,7 @@
   color: #333333;
   outline: none !important;
 }
+
 :host ::ng-deep #resetButton:hover {
   background-color: #F5F5F5;
   cursor: pointer;

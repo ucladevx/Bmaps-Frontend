@@ -20,7 +20,6 @@
                  [ngClass]="{'active': filterHash['upcoming']}">upcoming</label>
         </div>
       </div>
-
       <div class="filter-group tod-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
@@ -34,7 +33,6 @@
                  (click)="filterClicked('evening')">evening</label>
         </div>
       </div>
-
       <div class="filter-group loc-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
@@ -48,13 +46,7 @@
                  (click)="filterClicked('nearby')">nearby</label>
         </div>
       </div>
-
       <div class="filter-group misc-filter-group">
-        <!-- <button type="button" class="btn btn-outline-secondary"
-              [(ngModel)]="singleModel" btnCheckbox
-              btnCheckboxTrue="1" btnCheckboxFalse="0">
-          popular
-        </button> -->
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
                [ngClass]="{'active': filterHash['free food']}"
@@ -62,7 +54,6 @@
         </div>
       </div>
     </div>
-
     <div *ngIf="categHash" class="section-header">
       Categories
       <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>

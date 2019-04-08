@@ -1,5 +1,4 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-
 import { CategoryService } from '../category.service';
 import { EventService } from '../event.service';
 import { FeatureCollection, GeoJson } from '../map';
@@ -78,4 +77,5 @@ export class CategoryBarMapComponent implements OnInit {
   private objectKeys(obj) {
     return Object.keys(obj);
   }
+  
 }

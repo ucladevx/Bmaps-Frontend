@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MapBoxComponent } from './map-box.component';
 
 describe('MapBoxComponent', () => {
+
   let component: MapBoxComponent;
   let fixture: ComponentFixture<MapBoxComponent>;
 
@@ -22,4 +22,5 @@ describe('MapBoxComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

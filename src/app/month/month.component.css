@@ -66,6 +66,7 @@
   float: left;
   clear: left;
 }
+
 .calendar-day-event {
   float: left;
   clear: left;
@@ -134,8 +135,7 @@
     }
 
     .dot {
-    display: block;
-
+        display: block;
     }
 
 }

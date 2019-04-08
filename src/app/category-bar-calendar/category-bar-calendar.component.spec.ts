@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CategoryBarCalendarComponent } from './category-bar-calendar.component';
 
 describe('CategoryBarCalendarComponent', () => {
+
   let component: CategoryBarCalendarComponent;
   let fixture: ComponentFixture<CategoryBarCalendarComponent>;
 
@@ -22,4 +23,5 @@ describe('CategoryBarCalendarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });

@@ -1,16 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CalendarContainerComponent } from './calendar-container.component';
 
 describe('CalendarContainerComponent', () => {
+  
   let component: CalendarContainerComponent;
   let fixture: ComponentFixture<CalendarContainerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ CalendarContainerComponent ]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,4 +21,5 @@ describe('CalendarContainerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

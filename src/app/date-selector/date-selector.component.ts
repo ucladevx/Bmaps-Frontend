@@ -10,6 +10,7 @@ import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
     templateUrl: './date-selector.component.html',
     styleUrls: ['./date-selector.component.css']
 })
+
 export class DateSelectorComponent implements OnInit {
     public dateString: string;
     public showLeft: boolean;
@@ -23,7 +24,6 @@ export class DateSelectorComponent implements OnInit {
             this.showLeft = this.showLeftArrow(date);
             this.showRight = this.showRightArrow(date);
             this.calendarService.setSelectedDay(date);
-
         });
     }
 
@@ -39,7 +39,6 @@ export class DateSelectorComponent implements OnInit {
     private dateToString(date: Date): string {
         let day = date.getDate();
         let month = this.dateService.getMonthName(date);
-
         let description = '';
         let today = new Date();
         let tomorrow = new Date();
@@ -50,7 +49,6 @@ export class DateSelectorComponent implements OnInit {
         else if (this.dateService.equalDates(date, tomorrow)) {
             description = 'Tomorrow, ';
         }
-
         return `${description} ${month} ${day}`
     }
 

@@ -28,6 +28,7 @@ import { CategoryService } from '../category.service';
         ])
     ]
 })
+
 export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
     public clickedEvent: GeoJson;

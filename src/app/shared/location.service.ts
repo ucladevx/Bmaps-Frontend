@@ -24,7 +24,6 @@ export class LocationService {
   // Returns true if given point is 'on campus'
   isOnCampus(lat, lng): boolean {
     let boundary = UCLA_CAMPUS_BOUNDARY['coordinates'][0];
-
     let isInside = false;
     for (let i = 0, j = boundary.length - 1; i < boundary.length; j = i++) {
         let lati = boundary[i][1], lngi = boundary[i][0];
@@ -55,4 +54,5 @@ export class LocationService {
   deg2rad(deg): number {
     return deg * (Math.PI/180)
   }
+
 }

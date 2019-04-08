@@ -1,7 +1,4 @@
 <div class="calendar-container">
-
-  <!-- deleted selector because it is now in calendar-container component -->
-
   <div class="calendar-header">
     <span class="long-abbr">sun</span>
     <span class="long-abbr">mon</span>
@@ -30,7 +27,6 @@
             {{event.properties.name.length > 30 ? event.properties.name.substring(0,30) + "..." : event.properties.name}}
         </li>
       </ul>
-
       <div class="dot"  *ngIf="day.events.length != 0"></div>
     </div>
   </div>

@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { WeekComponent } from './week.component';
 
 describe('WeekComponent', () => {
+
   let component: WeekComponent;
   let fixture: ComponentFixture<WeekComponent>;
 
@@ -22,4 +23,5 @@ describe('WeekComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });
