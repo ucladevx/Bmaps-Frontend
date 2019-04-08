@@ -53,19 +53,19 @@ export class MapBoxComponent implements OnInit {
   constructor(
       private router: Router,
       private _dateService: DateService,
-      private eventService: EventService,
-      private categService: CategoryService,
-      private locationService: LocationService
+      private _eventService: EventService,
+      private _categService: CategoryService,
+      private _locationService: LocationService
   ) {mapboxgl.accessToken = environment.mapbox.accessToken;}
 
   ngOnInit() {
 
-    this.eventService.filteredDayEvents$.subscribe(eventCollection => {
+    this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
     });
 
-    this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+    this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
     });
 
@@ -82,7 +82,7 @@ export class MapBoxComponent implements OnInit {
       this.hoverPopup();
       this.addArrowControls();
       this.map.resize();
-      this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+      this._eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
         this.hoverEvent(hoveredEventInfo);
       });
     });
@@ -213,8 +213,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     var openDetails = (e: MouseEvent|TouchEvent): void => {
       this.selectedEvent = event;
       this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
-      this.eventService.updateExpandedEvent(event);
-      this.eventService.boldPopup(event);
+      this._eventService.updateExpandedEvent(event);
+      this._eventService.boldPopup(event);
     };
     eventPopup.onclick = openDetails;
   }
@@ -222,10 +222,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   //add hover behavior to an eventPopup (bold and unbold)
   addHoverBehavior(eventPopup, event){
     var bold = (e: MouseEvent|TouchEvent): void => {
-      this.eventService.boldPopup(event);
+      this._eventService.boldPopup(event);
     };
     var unbold = (e: MouseEvent|TouchEvent): void => {
-      this.eventService.boldPopup(null);
+      this._eventService.boldPopup(null);
     };
     eventPopup.onmouseenter = bold;
     eventPopup.onmouseleave = unbold;
@@ -303,10 +303,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     //HOVER
     this.map.on('mouseenter', 'eventlayer', (e) => {
       // Update hovered event service.
-      this.eventService.updateHoveredEvent(e.features[0]);
+      this._eventService.updateHoveredEvent(e.features[0]);
     });
     this.map.on('mouseleave', 'eventlayer', () => {
-      this.eventService.updateHoveredEvent(null);
+      this._eventService.updateHoveredEvent(null);
     });
     //CLICK
     this.map.on('click', 'eventlayer', (e) => {
@@ -314,22 +314,22 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       this.lastClickEvent = e.originalEvent;
       //Handle if you reclick an event
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
-        this.eventService.updateClickedEvent(null);
+        this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
-        this.eventService.updateExpandedEvent(null);
-        this.eventService.boldPopup(null);
+        this._eventService.updateExpandedEvent(null);
+        this._eventService.boldPopup(null);
         return;
       }
       //the service then calls selectEvent
-      this.eventService.updateClickedEvent(e.features[0]);
+      this._eventService.updateClickedEvent(e.features[0]);
     });
     this.map.on('click', (e: mapboxgl.MapMouseEvent) => {
       // deselect event if this event was not an eventlayer click
       if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
-        this.eventService.updateClickedEvent(null);
+        this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
-        this.eventService.updateExpandedEvent(null);
-        this.eventService.boldPopup(null);
+        this._eventService.updateExpandedEvent(null);
+        this._eventService.boldPopup(null);
       }
     });
   }
@@ -542,8 +542,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         navigator.geolocation.getCurrentPosition(position => {
           this.lat = position.coords.latitude;
           this.lng = position.coords.longitude;
-          this.locationService.userLat = this.lat;
-          this.locationService.userLng = this.lng;
+          this._locationService.userLat = this.lat;
+          this._locationService.userLng = this.lng;
           resolve();
         });
       } else {

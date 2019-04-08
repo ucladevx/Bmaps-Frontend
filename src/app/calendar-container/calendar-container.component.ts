@@ -59,7 +59,7 @@ export class CalendarContainerComponent implements OnInit {
   //  if you switch from week view to month view,
   //    go to the month containing the week that was being viewed.
 
-  constructor(public router: Router, private eventService: EventService, route: ActivatedRoute, private _calendarService: CalendarService) {
+  constructor(public router: Router, private _eventService: EventService, route: ActivatedRoute, private _calendarService: CalendarService) {
     this.currentPath = route.snapshot.url.join('');
   }
 

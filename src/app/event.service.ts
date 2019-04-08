@@ -109,7 +109,7 @@ export class EventService {
   private baseUrl = "https://www.mappening.io/api/v2/events"
 
   // Constructor
-  constructor(private router: Router, private http: HttpClient, private dateService: DateService, private locationService: LocationService, private categService: CategoryService) {
+  constructor(private router: Router, private http: HttpClient, private _dateService: DateService, private _locationService: LocationService, private _categService: CategoryService) {
 
     // Initialize date
     let today = new Date();
@@ -171,7 +171,7 @@ export class EventService {
 
   // Determine whether current date is today
   isToday(): boolean {
-    return this.dateService.isToday(this._currDate);
+    return this._dateService.isToday(this._currDate);
   }
 
   // Retrieve selected day
@@ -224,7 +224,7 @@ export class EventService {
   // Retrieve events by date
   private getEventsByDate(date: Date): string {
     const d = date.getDate();
-    const monthName = this.dateService.getMonthName(date);
+    const monthName = this._dateService.getMonthName(date);
     const y = date.getFullYear();
     let dateURL = `${this.baseUrl}/search?date=${d}%20${monthName}%20${y}`;
     return dateURL;
@@ -414,7 +414,7 @@ export class EventService {
 
   // Initialize category hash
   private initCategories(monthyear: string) {
-    this.categService.getCategories().subscribe(categs => {
+    this._categService.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
       let monthMap = this.getCategoryMap(this._monthEvents.features);
@@ -448,7 +448,7 @@ export class EventService {
 
   // Update category hash
   public updateCategories() {
-    this.categService.getCategories().subscribe(categs => {
+    this._categService.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
       let monthMap = this.getCategoryMap(this._monthEvents.features);
@@ -524,28 +524,28 @@ export class EventService {
   // Returns true if event passes the given filter
   private checkFilter(filter: string, event): boolean {
     if (filter == 'happening now') {
-      return this.dateService.isHappeningNow(event.properties.start_time);
+      return this._dateService.isHappeningNow(event.properties.start_time);
     }
     else if (filter == 'upcoming') {
-      return this.dateService.isUpcoming(event.properties.start_time);
+      return this._dateService.isUpcoming(event.properties.start_time);
     }
     else if (filter == 'on-campus') {
-      return this.locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
+      return this._locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
     }
     else if (filter == 'off-campus') {
-      return !this.locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
+      return !this._locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
     }
     else if (filter == 'nearby') {
-      return this.locationService.isNearby(event.geometry.coordinates[1], event.geometry.coordinates[0]);
+      return this._locationService.isNearby(event.geometry.coordinates[1], event.geometry.coordinates[0]);
     }
     else if (filter == 'morning') {
-      return this.dateService.isMorning(event.properties.start_time);
+      return this._dateService.isMorning(event.properties.start_time);
     }
     else if (filter == 'afternoon') {
-      return this.dateService.isAfternoon(event.properties.start_time);
+      return this._dateService.isAfternoon(event.properties.start_time);
     }
     else if (filter == 'evening') {
-      return this.dateService.isEvening(event.properties.start_time);
+      return this._dateService.isEvening(event.properties.start_time);
     }
     else if (filter == 'free food') {
       return event.properties.free_food == 1;

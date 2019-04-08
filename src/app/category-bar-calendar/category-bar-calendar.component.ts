@@ -20,57 +20,57 @@ export class CategoryBarCalendarComponent implements OnInit {
   public showDropdown = false;
   private wasInside = false;
 
-  constructor(private categService: CategoryService, private eventService: EventService, private calendarService: CalendarService) {}
+  constructor(private _categService: CategoryService, private _eventService: EventService, private _calendarService: CalendarService) {}
 
   ngOnInit() {
-    this.eventService.dayEvents$.subscribe(eventCollection => {
+    this._eventService.dayEvents$.subscribe(eventCollection => {
       this.events = eventCollection.features;
     });
-    this.eventService.categHash$.subscribe(categHash => {
+    this._eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
-    this.eventService.filterHash$.subscribe(filterHash => {
+    this._eventService.filterHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
-    this.calendarService.dateSpan$.subscribe(clear => {
+    this._calendarService.dateSpan$.subscribe(clear => {
         this.clearCategories();
     });
   }
 
   filterClicked(filter: string): void {
-    this.eventService.toggleFilter(filter);
+    this._eventService.toggleFilter(filter);
     console.log(this.filterHash);
   }
 
   categoryClicked(): void {
     var category = (<HTMLInputElement>document.getElementById("categories")).value;
     console.log(category);
-    this.eventService.toggleCategory(category);
+    this._eventService.toggleCategory(category);
     console.log(this.categHash);
-    this.categService.setSelectedCategory(category);
+    this._categService.setSelectedCategory(category);
   }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
-    this.eventService.updateCategories();
+    this._eventService.updateCategories();
   }
 
   clearCategories(): void {
     for (let key in this.categHash) {
       if (this.categHash[key].selected) {
-        this.eventService.toggleCategory(key);
+        this._eventService.toggleCategory(key);
       }
     }
     if(this.categHash){
       this.categHash["all"].selected = true;
     }
-    this.categService.setSelectedCategory("all");
+    this._categService.setSelectedCategory("all");
   }
 
   clearFilters(): void {
     for (let key in this.filterHash) {
       if (this.filterHash[key]) {
-        this.eventService.toggleFilter(key);
+        this._eventService.toggleFilter(key);
       }
     }
   }

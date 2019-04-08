@@ -10,7 +10,7 @@
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div *ngIf="filterHash" class="filters-wrapper">
-      <div *ngIf="this.eventService.isToday()" class="filter-group time-filter-group">
+      <div *ngIf="this._eventService.isToday()" class="filter-group time-filter-group">
         <div class="btn-group">
           <label (click)="filterClicked('happening now')"
                  class="btn btn-outline-secondary filter-btn"

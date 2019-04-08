@@ -23,10 +23,10 @@ export class CalendarService {
   dateSpanSource: Subject <any>;
   dateSpan$;
 
-  constructor(private router: Router, private eventService: EventService) {
+  constructor(private router: Router, private _eventService: EventService) {
     this.dateSpanSource = new Subject < any > ();
     this.dateSpan$ = this.dateSpanSource.asObservable();
-    this.eventService.currDate$.subscribe( date => {
+    this._eventService.currDate$.subscribe( date => {
         this.viewDate = date;
         this.viewDateChange.emit(date);
     });
@@ -81,7 +81,7 @@ export class CalendarService {
   increaseDay(days: number){
     var currIndex = this.days.indexOf(this.selectedDay);
     currIndex += days;
-    if(this.selectedDay.dayOfMonth == this.eventService.getSelectedDay().getDate()){
+    if(this.selectedDay.dayOfMonth == this._eventService.getSelectedDay().getDate()){
       if(currIndex < this.days.length && currIndex > -1){
         this.setSelectedDay(this.days[currIndex]);
       }

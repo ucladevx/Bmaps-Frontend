@@ -37,7 +37,7 @@ export class WeekComponent implements OnInit {
   private zIndexArray: { [id: number] : Number } = {};
 
   //constructor statement
-  constructor(private eventService: EventService, private dateService: DateService, private router: Router, private ngZone: NgZone,
+  constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone,
     private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -51,7 +51,7 @@ export class WeekComponent implements OnInit {
     this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
-    this.eventService.currDate$.subscribe(date => {
+    this._eventService.currDate$.subscribe(date => {
       this.ngZone.run( () => {
         if(this.filteredEvents != null){
           this.showCalendar(date);
@@ -59,7 +59,7 @@ export class WeekComponent implements OnInit {
       });
     });
 
-    this.eventService.weekEvents$.subscribe(weekEventCollection => {
+    this._eventService.weekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => {
@@ -67,15 +67,15 @@ export class WeekComponent implements OnInit {
       });
     });
 
-    this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
+    this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => {
-        this.showCalendar(this.eventService.getSelectedDay());
+        this.showCalendar(this._eventService.getSelectedDay());
       });
     });
 
-    this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+    this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       if(document.getElementById("week-view-indicator") != null){
         this.highlightEvent(clickedEventInfo);
       }
@@ -96,7 +96,7 @@ export class WeekComponent implements OnInit {
   //update the week view
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
-    this.eventService.updateWeekEvents(this._calendarService.getViewDate());
+    this._eventService.updateWeekEvents(this._calendarService.getViewDate());
     //set scroll bar to show view of rogughly 8am-10pm
     document.getElementById("scrollable").scrollTop = 270;
   }
@@ -154,7 +154,7 @@ export class WeekComponent implements OnInit {
       //update view date
       // this.viewDate = new Date();
       this._calendarService.setViewDate(new Date());
-      this.eventService.updateDayEvents(new Date());
+      this._eventService.updateDayEvents(new Date());
       //update view
       this.updateWeekView();
     }
@@ -163,7 +163,7 @@ export class WeekComponent implements OnInit {
       //update view date
       // this.viewDate = newWeek.startOf('week').toDate();
       this._calendarService.setViewDate(newWeek.startOf('week').toDate());
-      this.eventService.updateDayEvents(newWeek.startOf('week').toDate());
+      this._eventService.updateDayEvents(newWeek.startOf('week').toDate());
       //update view
       this.updateWeekView();
     }
@@ -222,16 +222,16 @@ export class WeekComponent implements OnInit {
     //create date for that day
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     //update sidebar to display events for that date
-    this.eventService.updateDayEvents(date);
+    this._eventService.updateDayEvents(date);
   }
 
   //open event in sidebar
   openEvent(event: GeoJson): void{
     //update clicked event
-    this.eventService.updateClickedEvent(event);
+    this._eventService.updateClickedEvent(event);
     //route to new event detail component
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-    this.eventService.updateExpandedEvent(event);
+    this._eventService.updateExpandedEvent(event);
   }
 
   //bold event when opened
@@ -261,7 +261,7 @@ export class WeekComponent implements OnInit {
     return event.properties.name;
   }
   eventTime(event: GeoJson): string{
-    return this.dateService.formatTime(event.properties.start_time) + " - " + this.dateService.formatTime(event.properties.end_time);
+    return this._dateService.formatTime(event.properties.start_time) + " - " + this._dateService.formatTime(event.properties.end_time);
   }
 
   //determine the position of the current time bar

@@ -19,26 +19,26 @@ export class CategoryBarMapComponent implements OnInit {
   public showDropdown = false;
   private wasInside = false;
 
-  constructor(private categService: CategoryService, private eventService: EventService) {}
+  constructor(private _categService: CategoryService, private _eventService: EventService) {}
 
   ngOnInit() {
-    this.eventService.dayEvents$.subscribe(eventCollection => {
+    this._eventService.dayEvents$.subscribe(eventCollection => {
       this.events = eventCollection.features;
     });
-    this.eventService.categHash$.subscribe(categHash => {
+    this._eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
-    this.eventService.filterHash$.subscribe(filterHash => {
+    this._eventService.filterHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
   }
 
   filterClicked(filter: string): void {
-    this.eventService.toggleFilter(filter);
+    this._eventService.toggleFilter(filter);
   }
 
   categoryClicked(category: string): void {
-    this.eventService.toggleCategory(category);
+    this._eventService.toggleCategory(category);
   }
 
   toggleDropdown() {
@@ -48,7 +48,7 @@ export class CategoryBarMapComponent implements OnInit {
   clearCategories(): void {
     for (let key in this.categHash) {
       if (this.categHash[key].selected) {
-        this.eventService.toggleCategory(key);
+        this._eventService.toggleCategory(key);
       }
     }
   }
@@ -56,7 +56,7 @@ export class CategoryBarMapComponent implements OnInit {
   clearFilters(): void {
     for (let key in this.filterHash) {
       if (this.filterHash[key]) {
-        this.eventService.toggleFilter(key);
+        this._eventService.toggleFilter(key);
       }
     }
   }

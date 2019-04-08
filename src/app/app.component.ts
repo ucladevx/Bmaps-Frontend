@@ -16,13 +16,13 @@ export class AppComponent {
 
   public mapEvents: FeatureCollection;
 
-  constructor(private categService: CategoryService){}
+  constructor(private _categService: CategoryService){}
 
   public pressed: boolean;
   public pressed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   ngOnInit(): void {
-    // this.categService.getCategories()
+    // this._categService.getCategories()
     //   .subscribe(categs => console.log(categs));
     this.pressed$.subscribe(pressed => this.pressed = pressed);
   }

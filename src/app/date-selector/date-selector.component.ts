@@ -16,20 +16,20 @@ export class DateSelectorComponent implements OnInit {
     public showLeft: boolean;
     public showRight: boolean;
 
-    constructor(private router: Router, private eventService: EventService, private dateService: DateService, private calendarService: CalendarService) { }
+    constructor(private router: Router, private _eventService: EventService, private _dateService: DateService, private _calendarService: CalendarService) { }
 
     ngOnInit() {
-        this.eventService.currDate$.subscribe(date => {
+        this._eventService.currDate$.subscribe(date => {
             this.dateString = this.dateToString(date);
             this.showLeft = this.showLeftArrow(date);
             this.showRight = this.showRightArrow(date);
-            this.calendarService.setSelectedDay(date);
+            this._calendarService.setSelectedDay(date);
         });
     }
 
     private showLeftArrow(date: Date): boolean {
         let today = new Date();
-        return !this.dateService.equalDates(date, today);
+        return !this._dateService.equalDates(date, today);
     }
 
     private showRightArrow(date: Date): boolean {
@@ -38,15 +38,15 @@ export class DateSelectorComponent implements OnInit {
 
     private dateToString(date: Date): string {
         let day = date.getDate();
-        let month = this.dateService.getMonthName(date);
+        let month = this._dateService.getMonthName(date);
         let description = '';
         let today = new Date();
         let tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        if (this.dateService.equalDates(date, today)) {
+        if (this._dateService.equalDates(date, today)) {
             description = 'Today, ';
         }
-        else if (this.dateService.equalDates(date, tomorrow)) {
+        else if (this._dateService.equalDates(date, tomorrow)) {
             description = 'Tomorrow, ';
         }
         return `${description} ${month} ${day}`
@@ -54,8 +54,8 @@ export class DateSelectorComponent implements OnInit {
 
     public updateDate(days: number) {
         // 1 means advance one day, -1 means go back one day
-        this.calendarService.increaseDay(days);
-        this.eventService.updateDateByDays(days);
+        this._calendarService.increaseDay(days);
+        this._eventService.updateDateByDays(days);
         if(this.router.url.startsWith('/map')){
           document.getElementById("resetButton").click();
         }

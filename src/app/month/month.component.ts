@@ -34,7 +34,7 @@ export class MonthComponent implements OnInit {
   private eventsByDay: { [day: number] : GeoJson[] } = {};
   private viewDate: Date;
 
-  constructor(private eventService: EventService, private router: Router, private ngZone: NgZone, private _calendarService: CalendarService) {
+  constructor(private _eventService: EventService, private router: Router, private ngZone: NgZone, private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // this.ngOnInit();
@@ -49,13 +49,13 @@ export class MonthComponent implements OnInit {
     this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
-    this.eventService.currDate$.subscribe(date => {
+    this._eventService.currDate$.subscribe(date => {
       this.ngZone.run( () => {
         this.showCalendar(date);
       });
     });
 
-    this.eventService.monthEvents$.subscribe(monthEventCollection => {
+    this._eventService.monthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
       this.selectedMonth = moment().month();
       this.selectedYear = moment().year();
@@ -65,15 +65,15 @@ export class MonthComponent implements OnInit {
       });
     });
 
-    this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
+    this._eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => {
-        this.showCalendar(this.eventService.getSelectedDay());
+        this.showCalendar(this._eventService.getSelectedDay());
       });
     });
 
-    this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+    this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
 
@@ -130,19 +130,19 @@ export class MonthComponent implements OnInit {
     // if current month, make selected day today
     if (newMonth.isSame(moment(), 'month')) {
       this._calendarService.setViewDate(new Date());
-      this.eventService.updateDayEvents(new Date());
+      this._eventService.updateDayEvents(new Date());
       this.showCalendar( new Date());
     }
     // make selected day the 1st of the month
     else {
       this._calendarService.setViewDate(newMonth.startOf('month').toDate());
-      this.eventService.updateDayEvents(newMonth.startOf('month').toDate());
+      this._eventService.updateDayEvents(newMonth.startOf('month').toDate());
       this.showCalendar(newMonth.startOf('month').toDate());
     }
     this.selectedMonth = newMonth.month();
     this.selectedYear = newMonth.year();
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
-    this.eventService.updateMonthEvents(monthyear);
+    this._eventService.updateMonthEvents(monthyear);
   }
 
     //retrieve events for the given month
@@ -194,12 +194,12 @@ export class MonthComponent implements OnInit {
     // this.selectedDay = day;
     this._calendarService.setSelectedDay(day);
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
-    this.eventService.updateDayEvents(date);
+    this._eventService.updateDayEvents(date);
   }
 
   public ngOnDestroy(): void {
     ("unsubscribe");
-    this.eventService.monthEvents$.unsubscribe(); // or something similar
+    this._eventService.monthEvents$.unsubscribe(); // or something similar
   }
 
 }
