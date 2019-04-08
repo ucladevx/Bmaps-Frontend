@@ -46,7 +46,7 @@ export class SidebarComponent implements OnInit {
 
     ngOnInit() {
         // TODO: unsubscribe on destroy
-        this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+        this.eventService.filteredDayEvents$.subscribe(eventCollection => {
             this.filteredEvents = eventCollection.features;
         });
         this.eventService.clickedEvent$.subscribe(clickedEventInfo => {

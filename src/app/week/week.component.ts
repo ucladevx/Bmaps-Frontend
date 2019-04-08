@@ -292,7 +292,7 @@ export class WeekComponent implements OnInit {
     //create date for that day
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     //update sidebar to display events for that date
-    this.eventService.updateEvents(date);
+    this.eventService.updateDayEvents(date);
   }
   //open event in sidebar
   openEvent(event: GeoJson): void{

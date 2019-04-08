@@ -29,7 +29,6 @@ export class EventDetailComponent implements OnInit {
   back() {
     //update expanded event
     this.eventService.updateExpandedEvent(null);
-    //unbold the popup event title
     this.eventService.boldPopup(null);
     //weekview
     this.eventService.updateClickedEvent(null);

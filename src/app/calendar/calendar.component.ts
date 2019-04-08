@@ -252,7 +252,7 @@ export class CalendarComponent implements OnInit {
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     console.log('date ' + date);
 
-    this.eventService.updateEvents(date);
+    this.eventService.updateDayEvents(date);
   }
 
 

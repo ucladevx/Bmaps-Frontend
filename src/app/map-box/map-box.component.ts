@@ -61,7 +61,7 @@ export class MapBoxComponent implements OnInit {
 
   ngOnInit() {
 
-    this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+    this.eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
     });
@@ -69,6 +69,8 @@ export class MapBoxComponent implements OnInit {
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
     });
+
+
     this.categService.setCurrentView('map');
 
     this.buildMap();
@@ -590,4 +592,3 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     });
 
   }
-}

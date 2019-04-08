@@ -23,7 +23,7 @@ export class CategoryBarMapComponent implements OnInit {
   constructor(private categService: CategoryService, private eventService: EventService) {}
 
   ngOnInit() {
-    this.eventService.currEvents$.subscribe(eventCollection => {
+    this.eventService.dayEvents$.subscribe(eventCollection => {
       this.events = eventCollection.features;
     });
     this.eventService.categHash$.subscribe(categHash => {
