@@ -91,5 +91,5 @@ export class CategoryBarCalendarComponent implements OnInit {
   private objectKeys(obj) {
     return Object.keys(obj);
   }
-  
+
 }

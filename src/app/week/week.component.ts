@@ -52,7 +52,6 @@ export class WeekComponent implements OnInit {
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
     this.eventService.currDate$.subscribe(date => {
-      console.log(date);
       this.ngZone.run( () => {
         if(this.filteredEvents != null){
           this.showCalendar(date);
@@ -96,8 +95,6 @@ export class WeekComponent implements OnInit {
 
   //update the week view
   updateWeekView(){
-    console.log("updateWeekView");
-    // console.log("this.viewDate: " + this.viewDate);
     //update month events (subscribed to by ngOnInit)
     this.eventService.updateWeekEvents(this._calendarService.getViewDate());
     //set scroll bar to show view of rogughly 8am-10pm
@@ -106,8 +103,6 @@ export class WeekComponent implements OnInit {
 
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
-    //update week Number
-    this._calendarService.enumerateWeek();
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
@@ -142,7 +137,6 @@ export class WeekComponent implements OnInit {
       }
     }
     this._calendarService.setDays(this.days);
-    // console.log(this.days);
   }
 
   //increment or decrement week
@@ -212,7 +206,6 @@ export class WeekComponent implements OnInit {
         return timeA - timeB;
       });
       //return sorted list of events
-      console.log(eventList);
       return eventList;
     }
     //if no events, return empty array

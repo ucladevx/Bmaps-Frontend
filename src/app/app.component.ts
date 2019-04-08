@@ -16,8 +16,6 @@ export class AppComponent {
 
   public mapEvents: FeatureCollection;
 
-  private currentView: string = 'map'; ////// current app
-
   constructor(private categService: CategoryService){}
 
   public pressed: boolean;
@@ -33,15 +31,11 @@ export class AppComponent {
       this.pressed$.next(!this.pressed);
   }
 
-  onChangeView(newView: string): void {
-    this.currentView = newView;
-  }
-
   onSidebarRouterActivate(component: any): void {
     if (component instanceof SidebarComponent) {
       component.onPress = () => this.onPress();
       component.pressed$ = this.pressed$.asObservable();
     }
   }
-  
+
 }

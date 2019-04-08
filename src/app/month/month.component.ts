@@ -44,17 +44,12 @@ export class MonthComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log("ngOnInit");
-    console.log("this");
-    console.log(this);
     this.currentMonth = moment();
-    console.log(this.currentMonth);
 
     this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
     this.eventService.currDate$.subscribe(date => {
-      console.log(date);
       this.ngZone.run( () => {
         this.showCalendar(date);
       });
@@ -95,13 +90,10 @@ export class MonthComponent implements OnInit {
   showCalendar(dateInMonth: Moment | Date | string): void {
     if(dateInMonth == undefined)
       return;
-    console.log("showCalendar");
-    console.log(dateInMonth);
     this.currentMonth = moment(dateInMonth).startOf('month');
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('month').endOf('week');
-    console.log(firstDay);
     //fill days
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
@@ -126,7 +118,6 @@ export class MonthComponent implements OnInit {
         this._calendarService.setSelectedDay(weekDay);
       }
     }
-    console.log(this.days);
     this._calendarService.setDays(this.days);
   }
 
@@ -144,7 +135,6 @@ export class MonthComponent implements OnInit {
     }
     // make selected day the 1st of the month
     else {
-      console.log("this.viewDate = newMonth.startOf('month').toDate();");
       this._calendarService.setViewDate(newMonth.startOf('month').toDate());
       this.eventService.updateDayEvents(newMonth.startOf('month').toDate());
       this.showCalendar(newMonth.startOf('month').toDate());
@@ -192,7 +182,6 @@ export class MonthComponent implements OnInit {
         return timeA - timeB;
       });
       //return sorted list of events
-      console.log(eventList);
       return eventList;
     }
     //if no events, return empty array
@@ -204,14 +193,12 @@ export class MonthComponent implements OnInit {
   onSelect(day: CalendarDay): void {
     // this.selectedDay = day;
     this._calendarService.setSelectedDay(day);
-    console.log('dayOfMonth ' + day.dayOfMonth);
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
-    console.log('date ' + date);
     this.eventService.updateDayEvents(date);
   }
 
   public ngOnDestroy(): void {
-    console.log("unsubscribe");
+    ("unsubscribe");
     this.eventService.monthEvents$.unsubscribe(); // or something similar
   }
 

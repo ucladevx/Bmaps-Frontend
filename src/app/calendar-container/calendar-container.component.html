@@ -2,7 +2,7 @@
   <div class="selector">
       <!-- if current route is week -->
       <div id="week-number" *ngIf="this.router.url.startsWith('/calendar/week')">
-        <span>{{this._calendarService.getWeekNumber()}}</span>
+        <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
       </div>
       <!-- month and year label -->
       <div id="calendar-controls">

@@ -237,7 +237,6 @@ export class EventService {
   // Updates events for given day while persisting the current category
   updateDayEvents(date: Date): void {
     this.currDateSource.next(date);
-    console.log(date);
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(events => {
       this.dayEventsSource.next(events);
       // Update list of categories and reset filters
