@@ -4,7 +4,6 @@ import { Subject } from 'rxjs/Subject';
 import { EventEmitter } from '@angular/core';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { EventService } from './event.service';
-
 import { GeoJson } from './map';
 
 interface CalendarDay {
@@ -13,11 +12,10 @@ interface CalendarDay {
   month: number;
   year: number;
   events: GeoJson[];
+  selected: boolean;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class CalendarService {
 
   dateSpanSource: Subject <any>;
@@ -34,13 +32,11 @@ export class CalendarService {
   selectedDay: CalendarDay;
   days: CalendarDay[] = [];
 
-
   currentView = "month";
 
   @Output() change: EventEmitter<Number> = new EventEmitter();
   @Output() selectedDayChange: EventEmitter<CalendarDay> = new EventEmitter();
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
-
 
   changeDateSpan(delta : Number) {
     let span = {};
@@ -49,7 +45,6 @@ export class CalendarService {
     this.change.emit(this.delta);
     this.delta = 0;
     this.selectedDay = this.days[0];
-
   }
 
   getViewDate() {
@@ -57,18 +52,13 @@ export class CalendarService {
   }
 
   setViewDate(set : Date, fromNgOnInit : boolean = false) {
-
     if (this.viewDate == undefined && fromNgOnInit) {
       this.viewDate = set;
     }
-
     if (!fromNgOnInit) {
       this.viewDate = set;
     }
-
     this.viewDateChange.emit(set);
-
-    // doesn't work for ngOnInit's after the first one
   }
 
   getSelectedDay() {
@@ -95,13 +85,12 @@ export class CalendarService {
     }
   }
 
-
   isMonthView() {
     return this.router.url.startsWith("/calendar/month");
-
   }
 
   isWeekView() {
     return this.router.url.startsWith("/calendar/week");
   }
+
 }

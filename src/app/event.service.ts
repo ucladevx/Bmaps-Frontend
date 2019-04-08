@@ -7,6 +7,7 @@ import { DateService } from './shared/date.service';
 import { LocationService } from './shared/location.service';
 import { CategoryService } from './category.service';
 import { CategoryList } from './category';
+import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
 @Injectable()
@@ -108,7 +109,7 @@ export class EventService {
   private baseUrl = "https://www.mappening.io/api/v2/events"
 
   // Constructor
-  constructor(private http: HttpClient, private dateService: DateService, private locationService: LocationService, private categService: CategoryService) {
+  constructor(private router: Router, private http: HttpClient, private dateService: DateService, private locationService: LocationService, private categService: CategoryService) {
 
     // Initialize date
     let today = new Date();
@@ -159,7 +160,8 @@ export class EventService {
     // Populate event containers
     this.updateDayEvents(today);
     this.updateMonthEvents(monthyear);
-    this.updateWeekEvents(today)
+    this.updateWeekEvents(today);
+    this.applyFiltersAndCategories();
 
   }
 
@@ -235,14 +237,22 @@ export class EventService {
   // Updates events for given day while persisting the current category
   updateDayEvents(date: Date): void {
     this.currDateSource.next(date);
+    console.log(date);
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(events => {
       this.dayEventsSource.next(events);
       // Update list of categories and reset filters
-      this._selectedFilterCount = 0;
-      this._selectedCategCount = 0;
-      this.updateCategories();
-      this.resetFilters();
-      this.applyFiltersAndCategories();
+      if(this.router.url.startsWith('/map')){
+        this._selectedFilterCount = 0;
+        this._selectedCategCount = 0;
+        this.updateCategories();
+        this.resetFilters();
+        this.applyFiltersAndCategories();
+      }
+      else {
+        this._selectedCategCount = 1;
+        this.applyFiltersAndCategories();
+        this._selectedCategCount = 0;
+      }
     });
   }
 
@@ -264,7 +274,7 @@ export class EventService {
   }
 
   // Filter events by week
-  private filterByWeek(allEvents: GeoJson[], firstDay: Date){
+  private filterByWeek(allEvents: FeatureCollection, firstDay: Date){
     let tempEvents = new FeatureCollection([]);
     var lastDay = moment(firstDay).clone().add(6, 'days').toDate();
     allEvents.features.forEach(el => {
@@ -317,23 +327,36 @@ export class EventService {
       else
         this._selectedCategCount--;
     }
+    if(this.router.url.startsWith('/calendar')){
+      this.updateCategories();
+    }
     // apply filters and categories
     this.applyFiltersAndCategories();
   }
 
   // Apply filters and categories together
   private applyFiltersAndCategories() {
-    // If categories are selected, apply categories
-    if (this._selectedCategCount != 0){
+    // Map
+    if(this.router.url.startsWith('/map')){
+      if(this._selectedCategCount > -1) {
+        this.applyCategoriesToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+      }
+      if(this._selectedFilterCount != 0) {
+        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+      }
+    }
+    // Calendar
+    else{
+      if(this._selectedCategCount > 0) {
         this.applyCategoriesToSelection(this._dayEvents.features,this.filteredDayEventsSource);
         this.applyCategoriesToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
         this.applyCategoriesToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
-    }
-    // If fiters are selected, apply filters
-    if (this._selectedFilterCount != 0){
-        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+      }
+      if(this._selectedFilterCount != 0){
         this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
         this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
+        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+      }
     }
   }
 
@@ -341,9 +364,15 @@ export class EventService {
   private applyCategoriesToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
     let tempEvents = new FeatureCollection([]);
     for (let event of inputFeatures) {
-      let allSelected = this._categHash['all'].selected;
+      let allSelected = false;
+      if(this._categHash && this._categHash['all'].selected){
+        allSelected = true;
+      }
       for (let category of event.properties.categories) {
-        let categObject = this._categHash[category.toLowerCase()];
+        let categObject = null;
+        if(this._categHash){
+          categObject = this._categHash[category.toLowerCase()];
+        }
         if (allSelected || (categObject && categObject.selected)) {
           tempEvents.features.push(event);
           break;

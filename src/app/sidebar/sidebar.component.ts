@@ -5,7 +5,7 @@ import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/cor
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
-import { Router } from '@angular/router';
+import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { CategoryService } from '../category.service';
 
 @Component({

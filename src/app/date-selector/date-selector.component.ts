@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
 import { CalendarService } from '../calendar.service';
+import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class DateSelectorComponent implements OnInit {
     public showLeft: boolean;
     public showRight: boolean;
 
-    constructor(private eventService: EventService, private dateService: DateService, private calendarService: CalendarService) { }
+    constructor(private router: Router, private eventService: EventService, private dateService: DateService, private calendarService: CalendarService) { }
 
     ngOnInit() {
         this.eventService.currDate$.subscribe(date => {
@@ -57,6 +58,9 @@ export class DateSelectorComponent implements OnInit {
         // 1 means advance one day, -1 means go back one day
         this.calendarService.increaseDay(days);
         this.eventService.updateDateByDays(days);
+        if(this.router.url.startsWith('/map')){
+          document.getElementById("resetButton").click();
+        }
     }
 
 }

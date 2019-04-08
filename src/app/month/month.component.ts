@@ -2,7 +2,6 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { EventService } from '../event.service';
-import { CategoryService } from '../category.service';
 import { GeoJson } from '../map';
 import { Router, NavigationEnd } from '@angular/router';
 import { CalendarService } from '../calendar.service';
@@ -13,14 +12,16 @@ interface CalendarDay {
   month: number;
   year: number;
   events: GeoJson[];
+  selected: boolean;
 }
 
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css']
+  selector: 'app-month',
+  templateUrl: './month.component.html',
+  styleUrls: ['./month.component.css']
 })
-export class CalendarComponent implements OnInit {
+
+export class MonthComponent implements OnInit {
   public days: CalendarDay[] = [];
   private selectedMonth: Number;
   private selectedYear: Number;
@@ -33,15 +34,7 @@ export class CalendarComponent implements OnInit {
   private eventsByDay: { [day: number] : GeoJson[] } = {};
   private viewDate: Date;
 
-  // private _viewDate: Date;
-  // set viewDate(value) {
-  //   console.log("view Date change:");
-  //   console.log(this._viewDate + " => " + value);
-  //   this._viewDate = value;
-  // }
-
-  constructor(private eventService: EventService, private categService: CategoryService, private router: Router, private ngZone: NgZone,
-    private _calendarService: CalendarService) {
+  constructor(private eventService: EventService, private router: Router, private ngZone: NgZone, private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // this.ngOnInit();
@@ -52,10 +45,10 @@ export class CalendarComponent implements OnInit {
       // NavigationError
       // RoutesRecognized
     });
-
   }
 
   ngOnInit() {
+
     console.log("ngOnInit");
     console.log("this");
     console.log(this);
@@ -63,45 +56,41 @@ export class CalendarComponent implements OnInit {
     console.log(this.currentMonth);
 
     this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
-
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
+    this.eventService.currDate$.subscribe(date => {
+      console.log(date);
+      this.ngZone.run( () => {
+        this.showCalendar(date);
+      });
+    });
 
     this.eventService.monthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
       this.selectedMonth = moment().month();
       this.selectedYear = moment().year();
-
       this.fillEventsByDay();
-
-
-
-      // console.log("this.showCalendar(this.viewDate);");
-      // console.log(this.viewDate);
-      // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
-
       });
     });
+
     this.eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
       this.filteredMonthYearEvents = monthEventCollection.features;
       this.fillEventsByDay();
-  // console.log("this.showCalendar(this.viewDate);");
-      // console.log(this.viewDate);
-      // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
-        this.showCalendar(this._calendarService.getViewDate());
+        this.showCalendar(this.eventService.getSelectedDay());
       });
     });
+
     this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
-    this.showCalendar(new Date());
 
-    // this.viewDate = new Date();
+    this.fillEventsByDay();
+    this.showCalendar(new Date());
     this._calendarService.setViewDate(new Date(), true);
-    this.categService.setCurrentView('month');
+
   }
 
   changeSelectedDay (day : CalendarDay) {
@@ -109,19 +98,14 @@ export class CalendarComponent implements OnInit {
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
-
     if(dateInMonth == undefined)
       return;
-
     console.log("showCalendar");
     console.log(dateInMonth);
-
     this.currentMonth = moment(dateInMonth).startOf('month');
-
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('month').endOf('week');
-
     //fill days
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
@@ -131,42 +115,34 @@ export class CalendarComponent implements OnInit {
         inCurrentMonth: d.isSame(this.currentMonth, 'month'),
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
-        events: this.getEventsOnDate(d)
+        events: this.getEventsOnDate(d),
+        selected: d.isSame(dateInMonth, 'day')
       };
       //determine whether it is the current day
       if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
         this.today = weekDay;
       }
-
       //add weekDay to display days array
       this.days.push(weekDay);
       // set selected day to the date provided
       if (d.isSame(dateInMonth, 'day')) {
         // this.selectedDay = weekDay;
         this._calendarService.setSelectedDay(weekDay);
-
-        this.onSelect(weekDay);
       }
     }
-    this._calendarService.setDays(this.days);
     console.log(this.days);
+    this._calendarService.setDays(this.days);
   }
 
-
-
   changeMonth = (delta: number) => {
-
     if(!this._calendarService.isMonthView()){
       return;
     }
-
     console.log("this.currentMonth");
     console.log(this);
     console.log(this.currentMonth);
     // console.log(this.viewDate);
     console.log(this.selectedMonth);
-
-
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
     // console.log("nm" +newMonth.month())
@@ -178,29 +154,24 @@ export class CalendarComponent implements OnInit {
       // this.viewDate = new Date();
       this._calendarService.setViewDate(new Date());
       this.showCalendar( new Date());
-
     }
     else {
       // make selected day the 1st of the month
-
       console.log("this.viewDate = newMonth.startOf('month').toDate();");
       // this.viewDate = newMonth.startOf('month').toDate();
       this._calendarService.setViewDate(newMonth.startOf('month').toDate());
       // console.log(this.viewDate);
       this.showCalendar(newMonth.startOf('month'));
-
     }
-
     this.selectedMonth = newMonth.month();
     this.selectedYear = newMonth.year()
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
     this.eventService.updateMonthEvents(monthyear);
-
   }
 
-    //retrieve events for the given week
+    //retrieve events for the given month
     fillEventsByDay(){
-      //clear events by day for the week
+      //clear events by day for the month
       this.eventsByDay = [];
       //iterate through filteredEvents for the current month
       this.filteredMonthYearEvents.forEach(el => {
@@ -248,21 +219,14 @@ export class CalendarComponent implements OnInit {
     // this.selectedDay = day;
     this._calendarService.setSelectedDay(day);
     console.log('dayOfMonth ' + day.dayOfMonth);
-
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     console.log('date ' + date);
-
     this.eventService.updateDayEvents(date);
-  }
-
-
-  // set month when calendar container compoonent switches to month
-  setMonth(month : Date): void {
-
   }
 
   public ngOnDestroy(): void {
     console.log("unsubscribe");
     this.eventService.monthEvents$.unsubscribe(); // or something similar
   }
+
 }

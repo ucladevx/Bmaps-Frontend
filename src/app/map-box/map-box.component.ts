@@ -71,8 +71,6 @@ export class MapBoxComponent implements OnInit {
     });
 
 
-    this.categService.setCurrentView('map');
-
     this.buildMap();
     //I think you should use something like this to create all the promises once instead of calling function creating promise several times
     let _promiseMapLoad = this.promiseMapLoad();
@@ -113,8 +111,8 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.addControls();
-
-    this.categService.setCurrentView('map');
+    console.log(new Date());
+    this.eventService.updateDayEvents(new Date());
   }
 
   addEventLayer(data): void {
@@ -592,3 +590,4 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     });
 
   }
+}

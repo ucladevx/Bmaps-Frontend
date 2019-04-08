@@ -33,7 +33,7 @@
     <div class="day-blocks">
     <div class="weekview-month">
       <div *ngFor="let day of days"
-      class="weekview-day" [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay, 'today': day === today}" (click)="onSelect(day)">
+      class="weekview-day" [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.selected, 'today': day === today}" (click)="onSelect(day)">
         <span class="day-of-month" [ngClass]="{'selected': day === selectedDay}">{{day.dayOfMonth}}</span>
         <table class="time-of-day">
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>

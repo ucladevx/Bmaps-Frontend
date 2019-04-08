@@ -4,7 +4,6 @@ import { Moment } from 'moment';
 import { Router, NavigationEnd } from '@angular/router';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
-import { CategoryService } from '../category.service';
 import { GeoJson } from '../map';
 import { CalendarService } from '../calendar.service';
 
@@ -15,6 +14,7 @@ interface CalendarDay {
   month: number;
   year: number;
   events: GeoJson[];
+  selected: boolean;
 }
 
 @Component({
@@ -62,7 +62,7 @@ export class WeekComponent implements OnInit {
   ];
 
   //constructor statement
-  constructor(private eventService: EventService, private categService: CategoryService, private dateService: DateService, private router: Router, private ngZone: NgZone,
+  constructor(private eventService: EventService, private dateService: DateService, private router: Router, private ngZone: NgZone,
     private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -85,9 +85,18 @@ export class WeekComponent implements OnInit {
 
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
+    this.eventService.currDate$.subscribe(date => {
+      console.log(date);
+      this.ngZone.run( () => {
+        if(this.filteredEvents != null){
+          this.showCalendar(date);
+        }
+      });
+    });
 
     this.eventService.weekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
+      this.fillEventsByDay();
       // console.log("ngOnInit this.viewDate: " + this.viewDate);
       // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
@@ -96,10 +105,11 @@ export class WeekComponent implements OnInit {
     });
     this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
+      this.fillEventsByDay();
       // console.log("ngOnInit this.viewDate: " + this.viewDate);
       // this.showCalendar(this.viewDate);
       this.ngZone.run( () => {
-        this.showCalendar(this._calendarService.getViewDate());
+        this.showCalendar(this.eventService.getSelectedDay());
       });
     });
 
@@ -108,7 +118,6 @@ export class WeekComponent implements OnInit {
         this.highlightEvent(clickedEventInfo);
       }
     });
-    this.categService.setCurrentView('week');
     //on startup
     this.selectedMonth = moment().month();
     this.selectedYear = moment().year();
@@ -118,7 +127,6 @@ export class WeekComponent implements OnInit {
     console.log("updateWeekView");
     this.updateWeekView();
     console.log(this.days);
-    this.categService.setCurrentView('week');
   }
 
 
@@ -166,8 +174,6 @@ export class WeekComponent implements OnInit {
 
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
-    //fill events by day for the week
-    this.fillEventsByDay();
     //update week Number
     this.enumerateWeek();
     //set currentMonth and currentWeek
@@ -188,7 +194,8 @@ export class WeekComponent implements OnInit {
         inCurrentMonth: d.isSame(this.currentMonth, 'month'),
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
-        events: this.getEventsOnDate(d)
+        events: this.getEventsOnDate(d),
+        selected: d.isSame(dateInMonth, 'day')
       };
       //determine whether it is the current day
       if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
@@ -200,7 +207,6 @@ export class WeekComponent implements OnInit {
       if (d.isSame(dateInMonth, 'day')) {
         // this.selectedDay = weekDay;
         this._calendarService.setSelectedDay(weekDay);
-        this.onSelect(weekDay);
       }
     }
     this._calendarService.setDays(this.days);
@@ -403,12 +409,6 @@ export class WeekComponent implements OnInit {
       'zIndex' : z
     }
     return style;
-  }
-
-
-  // set week when calendar container compoonent switches to week
-  setWeek(week : Date): void {
-
   }
 
 }
