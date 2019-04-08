@@ -62,7 +62,9 @@ export class CategoryBarCalendarComponent implements OnInit {
         this.eventService.toggleCategory(key);
       }
     }
-    this.categHash["all"].selected = true;
+    if(this.categHash){
+      this.categHash["all"].selected = true;
+    }
     this.categService.setSelectedCategory("all");
   }
 

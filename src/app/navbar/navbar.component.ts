@@ -27,7 +27,10 @@ export class NavbarComponent implements OnInit {
 
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
-      this.eventService.updateDayEvents(new Date());
+      let d = new Date();
+      this.eventService.updateDayEvents(d);
+      let monthyear = d.getMonth() + " " + d.getFullYear();
+      this.eventService.updateMonthEvents(monthyear);
     }
 
     public isFilterCollapsed: boolean = true;

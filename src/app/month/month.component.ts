@@ -106,6 +106,7 @@ export class MonthComponent implements OnInit {
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('month').endOf('week');
+    console.log(firstDay);
     //fill days
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
@@ -153,6 +154,7 @@ export class MonthComponent implements OnInit {
       console.log("if (newMonth.isSame(moment(), 'month')) {");
       // this.viewDate = new Date();
       this._calendarService.setViewDate(new Date());
+      this.eventService.updateDayEvents(new Date());
       this.showCalendar( new Date());
     }
     else {
@@ -160,11 +162,15 @@ export class MonthComponent implements OnInit {
       console.log("this.viewDate = newMonth.startOf('month').toDate();");
       // this.viewDate = newMonth.startOf('month').toDate();
       this._calendarService.setViewDate(newMonth.startOf('month').toDate());
+      this.eventService.updateDayEvents(newMonth.startOf('month').toDate());
       // console.log(this.viewDate);
-      this.showCalendar(newMonth.startOf('month'));
+      console.log(newMonth.startOf('month').toDate());
+      this.showCalendar(newMonth.startOf('month').toDate());
+      console.log(newMonth.startOf('month').toDate());
+      console.log("HERE AT END");
     }
     this.selectedMonth = newMonth.month();
-    this.selectedYear = newMonth.year()
+    this.selectedYear = newMonth.year();
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
     this.eventService.updateMonthEvents(monthyear);
   }

@@ -24,6 +24,12 @@ export class CalendarService {
   constructor(private router: Router, private eventService: EventService) {
     this.dateSpanSource = new Subject < any > ();
     this.dateSpan$ = this.dateSpanSource.asObservable();
+
+    this.eventService.currDate$.subscribe( date => {
+        this.viewDate = date;
+        this.viewDateChange.emit(date);
+    });
+
   }
 
   delta : Number = 0;

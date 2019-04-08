@@ -111,8 +111,6 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.addControls();
-    console.log(new Date());
-    this.eventService.updateDayEvents(new Date());
   }
 
   addEventLayer(data): void {

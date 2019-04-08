@@ -4,6 +4,7 @@ import { ContentChild } from '@angular/core';
 import { MonthComponent } from '../month/month.component';
 import { WeekComponent } from '../week/week.component';
 import { CalendarService } from '../calendar.service';
+import { EventService } from '../event.service';
 
 @Component({
   selector: 'app-calendar-container',
@@ -31,7 +32,7 @@ export class CalendarContainerComponent implements OnInit {
   //  if you switch from week view to month view,
   //    go to the month containing the week that was being viewed.
 
-  constructor(public router: Router, route: ActivatedRoute, private _calendarService: CalendarService) {
+  constructor(public router: Router, private eventService: EventService, route: ActivatedRoute, private _calendarService: CalendarService) {
     // Retrieve current path.
     this.currentPath = route.snapshot.url.join('');
   }
@@ -41,6 +42,8 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   viewDateChange(set : Date) {
+    console.log("SETTTTTTTT");
+    console.log(set);
     this.viewDate = set;
   }
 
@@ -49,12 +52,7 @@ export class CalendarContainerComponent implements OnInit {
     console.log(this.currentPath);
     console.log("this.router.url");
     console.log(this.router.url);
-    if(this.router.url.startsWith("/calendar/month")){
-      this._calendarService.changeDateSpan(delta);
-    }
-    else{
-      this._calendarService.changeDateSpan(delta);
-    }
+    this._calendarService.changeDateSpan(delta);
     return;
   }
 
