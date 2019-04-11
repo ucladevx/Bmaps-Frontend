@@ -47,7 +47,9 @@ export class WeekComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    if(this._eventService.getExpandedEvent() == null){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
     this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
@@ -81,12 +83,23 @@ export class WeekComponent implements OnInit {
       }
     });
 
-    //on startup
-    this.selectedMonth = moment().month();
-    this.selectedYear = moment().year();
-    this._calendarService.setViewDate(new Date(), true);
-    //update view
-    this.updateWeekView();
+
+    if (this._eventService.getSelectedDay() != null) {
+      //on startup
+      this.selectedMonth = moment(this._eventService.getSelectedDay()).month();
+      this.selectedYear = moment(this._eventService.getSelectedDay()).year();
+      this._calendarService.setViewDate(this._eventService.getSelectedDay(), true);
+      //update view
+      this.updateWeekView();
+    }
+    else{
+      //on startup
+      this.selectedMonth = moment().month();
+      this.selectedYear = moment().year();
+      this._calendarService.setViewDate(new Date(), true);
+      //update view
+      this.updateWeekView();
+    }
   }
 
   changeSelectedDay (day : CalendarDay) {
@@ -149,8 +162,14 @@ export class WeekComponent implements OnInit {
     //update selectedMonth and selectedYear
     this.selectedMonth = newWeek.month();
     this.selectedYear = newWeek.year();
+    // if selected day is in month, that is first option
+    if (this._eventService.getSelectedDay() && newWeek.isSame(moment(this._eventService.getSelectedDay()), 'week')) {
+      this._calendarService.setViewDate(this._eventService.getSelectedDay());
+      this._eventService.updateDayEvents(this._eventService.getSelectedDay());
+      this.updateWeekView();
+    }
     // if current week, make selected day today
-    if (newWeek.isSame(moment(), 'week')) {
+    else if (newWeek.isSame(moment(), 'week')) {
       //update view date
       // this.viewDate = new Date();
       this._calendarService.setViewDate(new Date());

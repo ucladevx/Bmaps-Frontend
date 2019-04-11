@@ -25,6 +25,7 @@ export class DateSelectorComponent implements OnInit {
             this.showRight = this.showRightArrow(date);
             this._calendarService.setSelectedDay(date);
         });
+
     }
 
     private showLeftArrow(date: Date): boolean {

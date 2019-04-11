@@ -162,7 +162,7 @@ export class EventService {
     this.updateMonthEvents(monthyear);
     this.updateWeekEvents(today);
     this.applyFiltersAndCategories();
-    this.initCategories();
+    this.initCategories(monthyear);
 
   }
 
@@ -203,6 +203,10 @@ export class EventService {
   updateExpandedEvent(event: GeoJson): void {
     this._expandedEvent = event;
     this.expandedEventSource.next(this._expandedEvent);
+  }
+
+  getExpandedEvent(){
+    return this._expandedEvent;
   }
 
 

@@ -27,6 +27,9 @@ export class NavbarComponent implements OnInit {
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
       let d = new Date();
+      if(this._eventService.getSelectedDay() != null){
+        d = this._eventService.getSelectedDay();
+      }
       this._eventService.updateDayEvents(d);
       let monthyear = d.getMonth() + " " + d.getFullYear();
       this._eventService.updateMonthEvents(monthyear);
