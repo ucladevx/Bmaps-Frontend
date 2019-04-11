@@ -159,8 +159,9 @@
   top: 0;
 }
 
-.day-of-month.selected {
+.today span {
   color: #59dbd6;
+
 }
 
 .weekview-day-event {

@@ -31,6 +31,7 @@
 }
 
 .dropdown-content {
+  padding-top: 2%;
   position: absolute;
   top: 42px;
   background-color: white;
@@ -89,9 +90,9 @@ ul {
   list-style-type: none;
 }
 
-.categories-list {
-  width: 100%;
-  padding: 0 0 0 0;
+.category-options {
+  height: 400px;
+  overflow:scroll;
 }
 
 .selected {

@@ -9,20 +9,20 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
+
   title = 'mappening';
 
   public mapEvents: FeatureCollection;
 
-  private currentView: string = 'map'; ////// current app
-
-  constructor(private categService: CategoryService){}
+  constructor(private _categService: CategoryService){}
 
   public pressed: boolean;
   public pressed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   ngOnInit(): void {
-    // this.categService.getCategories()
+    // this._categService.getCategories()
     //   .subscribe(categs => console.log(categs));
     this.pressed$.subscribe(pressed => this.pressed = pressed);
   }
@@ -31,14 +31,11 @@ export class AppComponent {
       this.pressed$.next(!this.pressed);
   }
 
-  onChangeView(newView: string): void {
-    this.currentView = newView;
-  }
-
   onSidebarRouterActivate(component: any): void {
     if (component instanceof SidebarComponent) {
       component.onPress = () => this.onPress();
       component.pressed$ = this.pressed$.asObservable();
     }
   }
+
 }

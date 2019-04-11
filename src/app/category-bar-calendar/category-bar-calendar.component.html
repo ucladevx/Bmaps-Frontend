@@ -1,33 +1,40 @@
 <div id="categ-div" class="btn-group">
   <button id="categ-btn" type="button" class="btn dropdown-toggle"
-          (click)="toggleDropdown()"
-          [disabled]="events.length == 0">
+          (click)="toggleDropdown()">
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
-
       <div class="section-header">Categories</div>
-
-      <select name="categories" id="categories" class="custom-select">
-        <option value="{{categHash[categKey].formattedCategory}}" *ngFor="let categKey of objectKeys(categHash)">{{categHash[categKey].formattedCategory}}</option>
+      <span *ngIf="this._calendarService.isMonthView()">
+      <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{this._categService.getSelectedCategory()}}">
+        <ng-container *ngFor="let categKey of objectKeys(categHash)">
+          <option *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0" value="{{categKey}}">
+            {{categHash[categKey].formattedCategory}}
+          </option>
+        </ng-container>
       </select>
-
+      </span>
+      <span *ngIf="this._calendarService.isWeekView()">
+        <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()">
+          <ng-container *ngFor="let categKey of objectKeys(categHash)">
+            <option *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0" value="{{categKey}}">
+              {{categHash[categKey].formattedCategory}}
+            </option>
+          </ng-container>
+        </select>
+      </span>
       <div class="section-header">Location</div>
       <input class="form-control" type="text" placeholder="Enter a location">
-
       <div class="section-header">Organizer</div>
       <input class="form-control" type="text" placeholder="Enter a location">
-
       <div class="section-header">Date</div>
       <input type="date" class="form-control" id="short-input">
       to
       <input type="date" class="form-control" id="short-input">
-
       <div class="section-header">Time</div>
       <input type="time" class="form-control" id="short-input">
       to
       <input type="time" class="form-control" id="short-input">
-
       <div class="section-header">Tags</div>
       <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
         <div class="btn-group" id="loc-group">
@@ -47,6 +54,5 @@
                (click)="filterClicked('free food')">free food</label>
         </div>
       </div>
-
   </div>
 </div>

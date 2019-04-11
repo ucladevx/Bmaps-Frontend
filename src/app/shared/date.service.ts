@@ -22,8 +22,6 @@ export class DateService {
     return moment(date).format('MMM');
   }
 
-
-
   formatTime(date: Date | string): string {
     return moment(date).format("h:mmA");
   }
@@ -35,7 +33,6 @@ export class DateService {
   formatEventDate(event: GeoJson): string {
       let start: string = event.properties.start_time;
       let end: string = event.properties.end_time;
-
       // end might be undefined
       if (end){
         return `${this.formatDate(start)} \u2022 ${this.formatTime(start)} - ${this.formatTime(end)}`;
@@ -101,27 +98,5 @@ export class DateService {
   isToday(date: string): boolean {
     return moment(date).isSame(moment(), 'day');
   }
-
-  //MOVE THIS SOMEWHERE WITHIN THE APP
-  // nextDay() {
-  // 	currDay.setDate(currDay.getDate() + 1);
-  // 	d = currDay.getDate();
-  // 	m = currDay.getMonth();
-  // 	updateDate();
-  // }
-  //
-  // previousDay() {
-  // 	currDay.setDate(currDay.getDate() - 1);
-  // 	d = currDay.getDate();
-  // 	m = currDay.getMonth();
-  // 	updateDate();
-  // }
-  //
-  // goToday() {
-  //   currDay.setFullYear(todayY, todayM, todayD);
-  //   d = currDay.getDate();
-  //   m = currDay.getMonth();
-  //   updateDate();
-  // }
 
 }

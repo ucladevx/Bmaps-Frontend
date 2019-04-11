@@ -10,7 +10,7 @@
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div *ngIf="filterHash" class="filters-wrapper">
-      <div *ngIf="this.eventService.isToday()" class="filter-group time-filter-group">
+      <div *ngIf="this._eventService.isToday()" class="filter-group time-filter-group">
         <div class="btn-group">
           <label (click)="filterClicked('happening now')"
                  class="btn btn-outline-secondary filter-btn"
@@ -20,7 +20,6 @@
                  [ngClass]="{'active': filterHash['upcoming']}">upcoming</label>
         </div>
       </div>
-
       <div class="filter-group tod-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
@@ -34,7 +33,6 @@
                  (click)="filterClicked('evening')">evening</label>
         </div>
       </div>
-
       <div class="filter-group loc-filter-group">
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
@@ -48,13 +46,7 @@
                  (click)="filterClicked('nearby')">nearby</label>
         </div>
       </div>
-
       <div class="filter-group misc-filter-group">
-        <!-- <button type="button" class="btn btn-outline-secondary"
-              [(ngModel)]="singleModel" btnCheckbox
-              btnCheckboxTrue="1" btnCheckboxFalse="0">
-          popular
-        </button> -->
         <div class="btn-group">
           <label class="btn btn-outline-secondary filter-btn"
                [ngClass]="{'active': filterHash['free food']}"
@@ -62,7 +54,6 @@
         </div>
       </div>
     </div>
-
     <div *ngIf="categHash" class="section-header">
       Categories
       <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
@@ -70,7 +61,7 @@
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <a *ngIf="categHash[categKey].numEvents != undefined && categHash[categKey].numEvents > 0"
+          <a *ngIf="categHash[categKey].numEventsDay != undefined && categHash[categKey].numEventsDay > 0"
              [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
              (click)="categoryClicked(categKey)">
           <div class="checkbox-container">
@@ -84,7 +75,7 @@
               </div>
           </ng-template>
           {{categHash[categKey].formattedCategory}}
-          <span *ngIf="categHash[categKey].numEvents"
+          <span *ngIf="categHash[categKey].numEventsDay"
                 [ngClass]="{'badge': true, 'badge-secondary': true, 'categ-bubble': true, 'categ-bubble-selected': categHash[categKey].selected}">{{categHash[categKey].numEvents}}</span>
           </a>
         </li>

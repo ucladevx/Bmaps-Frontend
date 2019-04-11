@@ -1,9 +1,9 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-
 import { CategoryService } from '../category.service';
 import { EventService } from '../event.service';
 import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
+import { CalendarService } from '../calendar.service';
 
 @Component({
   selector: 'app-category-bar-calendar',
@@ -20,47 +20,57 @@ export class CategoryBarCalendarComponent implements OnInit {
   public showDropdown = false;
   private wasInside = false;
 
-  constructor(private categService: CategoryService, private eventService: EventService) {}
+  constructor(private _categService: CategoryService, private _eventService: EventService, private _calendarService: CalendarService) {}
 
   ngOnInit() {
-    this.eventService.currEvents$.subscribe(eventCollection => {
+    this._eventService.dayEvents$.subscribe(eventCollection => {
       this.events = eventCollection.features;
     });
-    this.eventService.categHash$.subscribe(categHash => {
+    this._eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
-    this.eventService.filterHash$.subscribe(filterHash => {
+    this._eventService.filterHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
+    });
+    this._calendarService.dateSpan$.subscribe(clear => {
+        this.clearCategories();
     });
   }
 
   filterClicked(filter: string): void {
-    this.eventService.toggleFilter(filter);
+    this._eventService.toggleFilter(filter);
     console.log(this.filterHash);
   }
 
-  categoryClicked(category: string): void {
-    this.eventService.toggleCategory(category);
+  categoryClicked(): void {
+    var category = (<HTMLInputElement>document.getElementById("categories")).value;
+    console.log(category);
+    this._eventService.toggleCategory(category);
     console.log(this.categHash);
+    this._categService.setSelectedCategory(category);
   }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
-    this.eventService.updateCategories();
+    this._eventService.updateCategories();
   }
 
   clearCategories(): void {
     for (let key in this.categHash) {
       if (this.categHash[key].selected) {
-        this.eventService.toggleCategory(key);
+        this._eventService.toggleCategory(key);
       }
     }
+    if(this.categHash){
+      this.categHash["all"].selected = true;
+    }
+    this._categService.setSelectedCategory("all");
   }
 
   clearFilters(): void {
     for (let key in this.filterHash) {
       if (this.filterHash[key]) {
-        this.eventService.toggleFilter(key);
+        this._eventService.toggleFilter(key);
       }
     }
   }
@@ -81,4 +91,5 @@ export class CategoryBarCalendarComponent implements OnInit {
   private objectKeys(obj) {
     return Object.keys(obj);
   }
+
 }

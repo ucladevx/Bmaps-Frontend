@@ -15,7 +15,7 @@
     }}" class="event-image">
 		<div class="event-title" id="event-title">{{event.properties.name}}</div>
 		<div class="event-info" id="event-info">
-      {{dateService.formatEventDate(event) +' \u2022 '}} {{event.properties.hoster}}
+      {{_dateService.formatEventDate(event) +' \u2022 '}} {{event.properties.hoster}}
       <span class="sidebar-event-location" *ngIf="event.properties.place.name;else venue_street">
         {{event.properties.place.name}}
       </span>

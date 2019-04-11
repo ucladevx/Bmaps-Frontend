@@ -14,12 +14,14 @@ import { LocationService } from '../shared/location.service';
     styleUrls: ['./map-box.component.css'],
     providers: [ DateService ]
 })
+
 export class MapBoxComponent implements OnInit {
   @Input() pressed: boolean;
+
   // default settings
   map: mapboxgl.Map;
   message = 'Hello World!';
-  lat = 34.066915; //default center of map, variables used for user location/naviagation center
+  lat = 34.066915;
   lng = -118.445320;
 
   // data
@@ -40,7 +42,6 @@ export class MapBoxComponent implements OnInit {
     closeOnClick: false,
     offset: 20 // offset upward from pin
   }).setHTML('<div id="popupBody"></div>');
-
   backupPopup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
@@ -52,27 +53,24 @@ export class MapBoxComponent implements OnInit {
   constructor(
       private router: Router,
       private _dateService: DateService,
-      private eventService: EventService,
-      private categService: CategoryService,
-      private locationService: LocationService
-  ) {
-    mapboxgl.accessToken = environment.mapbox.accessToken;
-  }
+      private _eventService: EventService,
+      private _categService: CategoryService,
+      private _locationService: LocationService
+  ) {mapboxgl.accessToken = environment.mapbox.accessToken;}
 
   ngOnInit() {
 
-    this.eventService.filteredCurrEvents$.subscribe(eventCollection => {
+    this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
     });
 
-    this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+    this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
     });
-    this.categService.setCurrentView('map');
 
     this.buildMap();
-    //I think you should use something like this to create all the promises once instead of calling function creating promise several times
+
     let _promiseMapLoad = this.promiseMapLoad();
     let _promiseGetUserLocation = this.promiseGetUserLocation();
     let _promisePinLoad = this.promiseImageLoad(this.pinUrl);
@@ -84,7 +82,7 @@ export class MapBoxComponent implements OnInit {
       this.hoverPopup();
       this.addArrowControls();
       this.map.resize();
-      this.eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+      this._eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
         this.hoverEvent(hoveredEventInfo);
       });
     });
@@ -97,7 +95,6 @@ export class MapBoxComponent implements OnInit {
       //add events with the new pin
       this.addEventLayer(this.events);
     });
-
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
       let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
@@ -110,19 +107,16 @@ export class MapBoxComponent implements OnInit {
       // this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
     });
 
+    // add extra controls
     this.addControls();
 
-    this.categService.setCurrentView('map');
   }
 
   addEventLayer(data): void {
-    //TODO: Add Removal of previous event layer
-    //can change the url to a static geojson object from the service
     this.map.addSource('events', {
       type: 'geojson',
       data: data
     });
-
     this.map.addLayer({
       "id": "eventlayer",
       "type": "symbol",
@@ -133,34 +127,17 @@ export class MapBoxComponent implements OnInit {
         "icon-allow-overlap": true
       }
     });
-
     //Add a larger pin to later use for on hover
     this.addPinToLocation('hoveredPin', this.lat, this.lng, "bluePin", .07, false);
     this.addPinToLocation('redBackupHoveredPin', this.lat, this.lng, 'redPin', .09, false);
-    //TEST FOR GOOD SQUARE size
-    // this.addPinToLocation('hp1', this.lat+.0001, this.lng, 'redPin', .08, true);
-    // this.addPinToLocation('hp2', this.lat, this.lng, 'redPin', .08, true);
-    // this.addPinToLocation('hp3', this.lat+.0001, this.lng+.0001, 'redPin', .08, true);
-    // this.addPinToLocation('hp4', this.lat, this.lng+.0001, 'redPin', .08, true);
-
   }
 
   updateSource(): void {
     if (this.map == undefined || this.map.getSource('events') == undefined) return;
-
     this.map.getSource('events').setData(this.events);
     this.removePinsAndPopups();
     this.selectedEvent = null;
   }
-
-  // updateSourceWithoutEvent(eventIdToRemove: number): void {
-  //   if (this.map == undefined || this.map.getSource('events') == undefined) return;
-  //   let subsetOfEvents: FeatureCollection = {
-  //     type: 'FeatureCollection',
-  //     features: this.events.features.filter(curGeoJson => curGeoJson.id != eventIdToRemove)
-  //   };
-  //   this.map.getSource('events').setData(subsetOfEvents);
-  // }
 
   buildMap() {
     this.map = new mapboxgl.Map({
@@ -185,9 +162,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           new GeoJson(id, {latitude, longitude})
         ]
     };
-
     this.map.addSource(id, { type: 'geojson', data: point });
-
     this.map.addLayer({
       "id": id,
       "type": "symbol",
@@ -238,18 +213,19 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     var openDetails = (e: MouseEvent|TouchEvent): void => {
       this.selectedEvent = event;
       this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
-      this.eventService.updateExpandedEvent(event);
-      this.eventService.boldPopup(event);
+      this._eventService.updateExpandedEvent(event);
+      this._eventService.boldPopup(event);
     };
     eventPopup.onclick = openDetails;
   }
+
   //add hover behavior to an eventPopup (bold and unbold)
   addHoverBehavior(eventPopup, event){
     var bold = (e: MouseEvent|TouchEvent): void => {
-      this.eventService.boldPopup(event);
+      this._eventService.boldPopup(event);
     };
     var unbold = (e: MouseEvent|TouchEvent): void => {
-      this.eventService.boldPopup(null);
+      this._eventService.boldPopup(null);
     };
     eventPopup.onmouseenter = bold;
     eventPopup.onmouseleave = unbold;
@@ -257,10 +233,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
   //add popup to a mapbox pin, containing sections for every event in that location
   addPopup(popup, coords, eventList): void {
-
     if (!this.router.url.startsWith('/map'))
       return;
-
     if (popup == this.popup ) {
       popup.setLngLat(coords).addTo(this.map);
         document.getElementById('popupBody').innerHTML = "";
@@ -324,47 +298,38 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     }
   }
 
-    //Not done through promises becauses no callbacks need to build off this anyway
-    hoverPopup(): void {
-      //HOVER
-      this.map.on('mouseenter', 'eventlayer', (e) => {
-        // Update hovered event service.
-        this.eventService.updateHoveredEvent(e.features[0]);
-      });
-
-    this.map.on('mouseleave', 'eventlayer', () => {
-      this.eventService.updateHoveredEvent(null);
-
+  //Not done through promises becauses no callbacks need to build off this anyway
+  hoverPopup(): void {
+    //HOVER
+    this.map.on('mouseenter', 'eventlayer', (e) => {
+      // Update hovered event service.
+      this._eventService.updateHoveredEvent(e.features[0]);
     });
-
+    this.map.on('mouseleave', 'eventlayer', () => {
+      this._eventService.updateHoveredEvent(null);
+    });
     //CLICK
     this.map.on('click', 'eventlayer', (e) => {
       // save this event
       this.lastClickEvent = e.originalEvent;
-
-      // Populate the popup and set its coordinates
-      // based on the feature found.
-
       //Handle if you reclick an event
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
-        this.eventService.updateClickedEvent(null);
+        this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
-        this.eventService.updateExpandedEvent(null);
-        this.eventService.boldPopup(null);
+        this._eventService.updateExpandedEvent(null);
+        this._eventService.boldPopup(null);
         return;
       }
-
       //the service then calls selectEvent
-      this.eventService.updateClickedEvent(e.features[0]);
+      this._eventService.updateClickedEvent(e.features[0]);
     });
-
     this.map.on('click', (e: mapboxgl.MapMouseEvent) => {
       // deselect event if this event was not an eventlayer click
       if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
-        this.eventService.updateClickedEvent(null);
+        this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
-        this.eventService.updateExpandedEvent(null);
-        this.eventService.boldPopup(null);
+        this._eventService.updateExpandedEvent(null);
+        this._eventService.boldPopup(null);
       }
     });
   }
@@ -425,6 +390,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     this.addPopup(this.popup, coords, eventList);
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
+
+  // hover over event
   hoverEvent(event: GeoJson): void {
     if (event == null){
         if (this.selectedEvent !== null) {
@@ -467,7 +434,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         this.addPopup(this.popup, coords, eventList);
       }
     }
-
   }
 
   threeDDisplay(): void {
@@ -476,7 +442,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     let labelLayerIdx = layers.findIndex(function(layer) {
       return layer.type !== 'symbol';
     });
-
     this.map.addLayer({
       'id': 'ucla-buildings',
       'source': 'composite',
@@ -495,8 +460,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           'property': 'min_height',
           'type': 'identity',
         },
-        // 'fill-extrusion-height': 20,
-        // 'fill-extrusion-base': 0,
         'fill-extrusion-opacity': 0.5
       }
     }, "eventstest");
@@ -508,11 +471,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     // degrees the map rotates when the left or right arrow is clicked
     const deltaDegrees = 25;
     const deltaZoom = .5;
-
     function easing(t) {
       return t * (2 - t);
     }
-
     this.map.getCanvas().focus();
     this.map.getCanvas().addEventListener('keydown', (e) => {
       e.preventDefault();
@@ -551,6 +512,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   ///////////////////////////////////////
   // MAP CALLBACKS AS PROMISES
   //////////////////////////////////////
+
   promiseMapLoad() {
     return new Promise((resolve, reject) => {
       this.map.on('load', () => {
@@ -580,8 +542,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         navigator.geolocation.getCurrentPosition(position => {
           this.lat = position.coords.latitude;
           this.lng = position.coords.longitude;
-          this.locationService.userLat = this.lat;
-          this.locationService.userLng = this.lng;
+          this._locationService.userLat = this.lat;
+          this._locationService.userLng = this.lng;
           resolve();
         });
       } else {

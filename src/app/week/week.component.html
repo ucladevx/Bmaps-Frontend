@@ -1,7 +1,4 @@
 <div class="weekview-container" id="week-view-indicator">
-  
-  <!-- deleted selector because it is now in calendar-container component -->
-
   <div class="weekview-header">
     <div class="corner-block"></div>
     <span class="long-abbr">sun</span>
@@ -33,8 +30,8 @@
     <div class="day-blocks">
     <div class="weekview-month">
       <div *ngFor="let day of days"
-      class="weekview-day" [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay, 'today': day === today}" (click)="onSelect(day)">
-        <span class="day-of-month" [ngClass]="{'selected': day === selectedDay}">{{day.dayOfMonth}}</span>
+      class="weekview-day" [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.selected, 'today': day === today}" (click)="onSelect(day)">
+        <span class="day-of-month" [ngClass]="{'selected': day.selected }">{{day.dayOfMonth}}</span>
         <table class="time-of-day">
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>

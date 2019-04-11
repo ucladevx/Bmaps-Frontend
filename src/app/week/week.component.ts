@@ -4,10 +4,8 @@ import { Moment } from 'moment';
 import { Router, NavigationEnd } from '@angular/router';
 import { EventService } from '../event.service';
 import { DateService } from '../shared/date.service';
-import { CategoryService } from '../category.service';
 import { GeoJson } from '../map';
 import { CalendarService } from '../calendar.service';
-
 
 interface CalendarDay {
   dayOfMonth: number;
@@ -15,6 +13,7 @@ interface CalendarDay {
   month: number;
   year: number;
   events: GeoJson[];
+  selected: boolean;
 }
 
 @Component({
@@ -36,83 +35,59 @@ export class WeekComponent implements OnInit {
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
   private zIndexArray: { [id: number] : Number } = {};
-  public weekNumber: string;
-  // retrieved from UCLA online academic calendar
-  private zeroWeeks: Moment[] = [
-    //2018-2019
-    moment([2018,8,23]),
-    moment([2019,0,6]),
-    moment([2019,2,30]),
-    //2019-2020
-    moment([2019,8,22]),
-    moment([2020,0,5]),
-    moment([2020,2,29]),
-    //2020-2021
-    moment([2020,8,27]),
-    moment([2021,0,4]),
-    moment([2021,2,29]),
-    //2021-2022
-    moment([2021,8,19]),
-    moment([2022,0,2]),
-    moment([2022,2,28]),
-    //2022-2023
-    moment([2022,8,19]),
-    moment([2023,0,9]),
-    moment([2023,3,2])
-  ];
 
   //constructor statement
-  constructor(private eventService: EventService, private categService: CategoryService, private dateService: DateService, private router: Router, private ngZone: NgZone,
+  constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone,
     private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // this.ngOnInit();
-        console.log("switched to week component");
       }
-      // Instance of should be:
-      // NavigationEnd
-      // NavigationCancel
-      // NavigationError
-      // RoutesRecognized
     });
   }
 
-
-
   ngOnInit() {
-    //subscriptions
-    this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
 
+    this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
-
-    this.eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
-
-      this.filteredEvents = weekEventCollection.features;
-      // console.log("ngOnInit this.viewDate: " + this.viewDate);
-      // this.showCalendar(this.viewDate);
+    this._eventService.currDate$.subscribe(date => {
       this.ngZone.run( () => {
-        this.showCalendar(this._calendarService.getViewDate());
-
+        if(this.filteredEvents != null){
+          this.showCalendar(date);
+        }
       });
     });
-    this.eventService.clickedEvent$.subscribe(clickedEventInfo => {
+
+    this._eventService.weekEvents$.subscribe(weekEventCollection => {
+      this.filteredEvents = weekEventCollection.features;
+      this.fillEventsByDay();
+      this.ngZone.run( () => {
+        this.showCalendar(this._calendarService.getViewDate());
+      });
+    });
+
+    this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
+      this.filteredEvents = weekEventCollection.features;
+      this.fillEventsByDay();
+      this.ngZone.run( () => {
+        this.showCalendar(this._eventService.getSelectedDay());
+      });
+    });
+
+    this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       if(document.getElementById("week-view-indicator") != null){
         this.highlightEvent(clickedEventInfo);
       }
     });
-    this.categService.setCurrentView('week');
+
     //on startup
     this.selectedMonth = moment().month();
     this.selectedYear = moment().year();
-    // this.viewDate = new Date();
     this._calendarService.setViewDate(new Date(), true);
     //update view
-    console.log("updateWeekView");
     this.updateWeekView();
-    console.log(this.days);
   }
-
 
   changeSelectedDay (day : CalendarDay) {
     this.selectedDay = day;
@@ -120,48 +95,14 @@ export class WeekComponent implements OnInit {
 
   //update the week view
   updateWeekView(){
-    console.log("updateWeekView");
-    // console.log("this.viewDate: " + this.viewDate);
     //update month events (subscribed to by ngOnInit)
-    this.eventService.updateWeekEvents(this._calendarService.getViewDate());
+    this._eventService.updateWeekEvents(this._calendarService.getViewDate());
     //set scroll bar to show view of rogughly 8am-10pm
     document.getElementById("scrollable").scrollTop = 270;
   }
 
-  //set the week number
-  enumerateWeek(){
-    //count weeks
-    var weekCount;
-    //iterate backwards through zeroWeeks array to find the first positive week
-    for(var i = this.zeroWeeks.length-1; i>=0; i--){
-      //determine week count
-      weekCount = Math.floor(moment(this._calendarService.getViewDate()).diff(this.zeroWeeks[i],'days') / 7);
-      //handle zero week
-      if(weekCount>=0){
-        if(i%3 != 0){ weekCount++; }
-        i = -1;
-      }
-    }
-    // Week 11 -> Finals Week
-    if(weekCount == 11){
-      this.weekNumber = "Finals Week";
-    }
-    // Week 12+ or Week 0- -> Break
-    else if(weekCount > 11 || weekCount < 0 || weekCount == undefined){
-      this.weekNumber = "";
-    }
-    // Week 0-12 -> Within Quarter
-    else {
-      this.weekNumber = "Week " + weekCount;
-    }
-  }
-
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
-    //fill events by day for the week
-    this.fillEventsByDay();
-    //update week Number
-    this.enumerateWeek();
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
@@ -180,7 +121,8 @@ export class WeekComponent implements OnInit {
         inCurrentMonth: d.isSame(this.currentMonth, 'month'),
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
-        events: this.getEventsOnDate(d)
+        events: this.getEventsOnDate(d),
+        selected: d.isSame(dateInMonth, 'day')
       };
       //determine whether it is the current day
       if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
@@ -192,22 +134,16 @@ export class WeekComponent implements OnInit {
       if (d.isSame(dateInMonth, 'day')) {
         // this.selectedDay = weekDay;
         this._calendarService.setSelectedDay(weekDay);
-        this.onSelect(weekDay);
       }
     }
-
-    // console.log(this.days);
+    this._calendarService.setDays(this.days);
   }
 
   //increment or decrement week
   changeWeek(delta: number): void {
-
     if(!this._calendarService.isWeekView()){
       return;
     }
-
-    console.log("changeWeek");
-    console.log(delta);
     // 1 means advance one week, -1 means go back one week
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
     //update selectedMonth and selectedYear
@@ -218,6 +154,7 @@ export class WeekComponent implements OnInit {
       //update view date
       // this.viewDate = new Date();
       this._calendarService.setViewDate(new Date());
+      this._eventService.updateDayEvents(new Date());
       //update view
       this.updateWeekView();
     }
@@ -226,6 +163,7 @@ export class WeekComponent implements OnInit {
       //update view date
       // this.viewDate = newWeek.startOf('week').toDate();
       this._calendarService.setViewDate(newWeek.startOf('week').toDate());
+      this._eventService.updateDayEvents(newWeek.startOf('week').toDate());
       //update view
       this.updateWeekView();
     }
@@ -248,6 +186,7 @@ export class WeekComponent implements OnInit {
       this.eventsByDay[dayOfYear].push(el);
     });
   }
+
   //retrieve events for a specific day
   getEventsOnDate(date: Moment): GeoJson[] {
     //determine day of year
@@ -267,7 +206,6 @@ export class WeekComponent implements OnInit {
         return timeA - timeB;
       });
       //return sorted list of events
-      console.log(eventList);
       return eventList;
     }
     //if no events, return empty array
@@ -284,16 +222,18 @@ export class WeekComponent implements OnInit {
     //create date for that day
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     //update sidebar to display events for that date
-    this.eventService.updateEvents(date);
+    this._eventService.updateDayEvents(date);
   }
+
   //open event in sidebar
   openEvent(event: GeoJson): void{
     //update clicked event
-    this.eventService.updateClickedEvent(event);
+    this._eventService.updateClickedEvent(event);
     //route to new event detail component
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-    this.eventService.updateExpandedEvent(event);
+    this._eventService.updateExpandedEvent(event);
   }
+
   //bold event when opened
   highlightEvent(clickedEventInfo: GeoJson): void{
     //restyle currently selected event card
@@ -321,7 +261,7 @@ export class WeekComponent implements OnInit {
     return event.properties.name;
   }
   eventTime(event: GeoJson): string{
-    return this.dateService.formatTime(event.properties.start_time) + " - " + this.dateService.formatTime(event.properties.end_time);
+    return this._dateService.formatTime(event.properties.start_time) + " - " + this._dateService.formatTime(event.properties.end_time);
   }
 
   //determine the position of the current time bar
@@ -395,12 +335,6 @@ export class WeekComponent implements OnInit {
       'zIndex' : z
     }
     return style;
-  }
-
-
-  // set week when calendar container compoonent switches to week
-  setWeek(week : Date): void {
-
   }
 
 }

@@ -1,7 +1,4 @@
 <div class="calendar-container">
-
-  <!-- deleted selector because it is now in calendar-container component -->
-
   <div class="calendar-header">
     <span class="long-abbr">sun</span>
     <span class="long-abbr">mon</span>
@@ -21,16 +18,15 @@
   <div class="calendar-month">
     <div *ngFor="let day of days"
          class="calendar-day"
-         [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day === selectedDay, 'today': day === today}"
+         [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.selected, 'today': day === today}"
          (click)="onSelect(day)">
       <span [ngClass]="{'today': day === today}">{{day.dayOfMonth}}</span>
-      
+
       <ul class="calendar-day-event" >
         <li *ngFor="let event of day.events">
             {{event.properties.name.length > 30 ? event.properties.name.substring(0,30) + "..." : event.properties.name}}
         </li>
       </ul>
-
       <div class="dot"  *ngIf="day.events.length != 0"></div>
     </div>
   </div>

@@ -1,18 +1,18 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CategoryService } from '../category.service';
+import { EventService } from '../event.service';
 
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.css']
 })
+
 export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
-    constructor(private categService: CategoryService) { }
-    ngOnInit() {
-
-    }
+    constructor(private _eventService: EventService, private _categService: CategoryService) { }
+    ngOnInit() { }
 
     isCollapsed: boolean = true;
 
@@ -26,7 +26,10 @@ export class NavbarComponent implements OnInit {
 
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
-      this.categService.setCurrentView(newView);
+      let d = new Date();
+      this._eventService.updateDayEvents(d);
+      let monthyear = d.getMonth() + " " + d.getFullYear();
+      this._eventService.updateMonthEvents(monthyear);
     }
 
     public isFilterCollapsed: boolean = true;

@@ -1,5 +1,4 @@
 import { TestBed, inject } from '@angular/core/testing';
-
 import { CategoryService } from './category.service';
 
 describe('CategoryService', () => {
@@ -8,7 +7,6 @@ describe('CategoryService', () => {
       providers: [CategoryService]
     });
   });
-
   it('should be created', inject([CategoryService], (service: CategoryService) => {
     expect(service).toBeTruthy();
   }));

@@ -24,7 +24,7 @@ import { EventService } from './event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { CalendarComponent } from './calendar/calendar.component';
+import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 
@@ -35,12 +35,10 @@ const appRoutes: Routes = [
     component: CalendarContainerComponent,
     children: [
       {path: '', pathMatch:'full', redirectTo: 'month' },
-      {path: 'month', component: CalendarComponent},
+      {path: 'month', component: MonthComponent},
       {path: 'week', component: WeekComponent}
     ]
   },
-  // { path: 'calendar', component: CalendarComponent },
-  // { path: 'week', component: WeekComponent },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
   { path: 'detail/:id', outlet: 'sidebar', component: EventDetailComponent },
   { path: '**', redirectTo: '/map(sidebar:list)', pathMatch: 'full' },
@@ -56,7 +54,7 @@ const appRoutes: Routes = [
     CategoryBarCalendarComponent,
     DateSelectorComponent,
     NavbarComponent,
-    CalendarComponent,
+    MonthComponent,
     WeekComponent,
     CalendarContainerComponent
   ],

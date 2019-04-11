@@ -4,14 +4,12 @@
     </div>
     <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
         <app-date-selector class="d-none d-md-block"></app-date-selector>
-
-        <span *ngIf="this._categService.getCurrentView()=='map';else calendarView">
+        <span *ngIf="this.router.url.startsWith('/map'); else calendarView">
           <app-category-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-map>
         </span>
         <ng-template #calendarView>
           <app-category-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-calendar>
         </ng-template>
-
         <div *ngIf="filteredEvents.length == 0" id="no-events-section">
           <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
           <div id="no-events-label">No Events</div>
