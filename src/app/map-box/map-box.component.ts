@@ -60,11 +60,10 @@ export class MapBoxComponent implements OnInit {
 
   ngOnInit() {
 
-
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
-    
+
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
@@ -72,6 +71,11 @@ export class MapBoxComponent implements OnInit {
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
+    });
+
+    this._eventService.expandedEvent$.subscribe(expandedEventInfo => {
+      console.log(expandedEventInfo);
+      this.selectEvent(expandedEventInfo);
     });
 
     this.buildMap();
@@ -141,6 +145,10 @@ export class MapBoxComponent implements OnInit {
     if (this.map == undefined || this.map.getSource('events') == undefined) return;
     this.map.getSource('events').setData(this.events);
     this.removePinsAndPopups();
+    if(this._eventService.getExpandedEvent()){
+        this.selectEvent(this._eventService.getExpandedEvent());
+        this._eventService.boldPopup(this._eventService.getExpandedEvent());
+    }
     this.selectedEvent = null;
   }
 
@@ -392,6 +400,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       "type": "Feature"
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
+    console.log(eventList);
     this.addPopup(this.popup, coords, eventList);
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
