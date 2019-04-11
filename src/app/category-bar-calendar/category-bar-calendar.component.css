@@ -7,6 +7,7 @@
 
 #categ-div {
   width: 100%;
+  flex-direction: column;
 }
 
 .categ-bubble {
@@ -32,12 +33,9 @@
 
 .dropdown-content {
   padding-top: 2%;
-  position: absolute;
   top: 42px;
   background-color: white;
   width: 100%;
-  overflow: auto;
-  flex-direction: column;
   border-bottom: 1px solid rgb(151, 151, 151);
   z-index: 999;
 }
