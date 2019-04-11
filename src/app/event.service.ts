@@ -162,7 +162,7 @@ export class EventService {
     this.updateMonthEvents(monthyear);
     this.updateWeekEvents(today);
     this.applyFiltersAndCategories();
-    this.initCategories();
+    this.initCategories(monthyear);
 
   }
 

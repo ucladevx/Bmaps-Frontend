@@ -78,9 +78,14 @@ export class MonthComponent implements OnInit {
     });
 
     this.fillEventsByDay();
-    this.showCalendar(new Date());
-    this._calendarService.setViewDate(new Date(), true);
-
+    if (this._eventService.getSelectedDay() != null) {
+      this.showCalendar(this._eventService.getSelectedDay());
+      this._calendarService.setViewDate(this._eventService.getSelectedDay());
+    }
+    else{
+      this.showCalendar(new Date());
+      this._calendarService.setViewDate(new Date(), true);
+    }
   }
 
   changeSelectedDay (day : CalendarDay) {
@@ -127,8 +132,14 @@ export class MonthComponent implements OnInit {
     }
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
+    // if selected day is in month, that is first option
+    if (this._eventService.getSelectedDay() && newMonth.isSame(moment(this._eventService.getSelectedDay()), 'month')) {
+      this._calendarService.setViewDate(this._eventService.getSelectedDay());
+      this._eventService.updateDayEvents(this._eventService.getSelectedDay());
+      this.showCalendar(this._eventService.getSelectedDay());
+    }
     // if current month, make selected day today
-    if (newMonth.isSame(moment(), 'month')) {
+    else if (newMonth.isSame(moment(), 'month')) {
       this._calendarService.setViewDate(new Date());
       this._eventService.updateDayEvents(new Date());
       this.showCalendar( new Date());
