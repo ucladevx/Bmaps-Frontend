@@ -47,7 +47,7 @@ export class MonthComponent implements OnInit {
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
-    
+
     this.currentMonth = moment();
 
     this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
@@ -207,6 +207,9 @@ export class MonthComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     // this.selectedDay = day;
+      if(this._calendarService.getSelectedDay() != day){
+        this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+      }
     this._calendarService.setSelectedDay(day);
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     this._eventService.updateDayEvents(date);

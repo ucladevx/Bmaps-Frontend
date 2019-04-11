@@ -236,6 +236,9 @@ export class WeekComponent implements OnInit {
   //highlight selected day
   onSelect(day: CalendarDay): void {
     //update selectedDay
+    if(this._calendarService.getSelectedDay() != day){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
     // this.selectedDay = day;
     this._calendarService.setSelectedDay(day);
     //create date for that day
