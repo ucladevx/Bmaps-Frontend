@@ -162,6 +162,7 @@ export class EventService {
     this.updateMonthEvents(monthyear);
     this.updateWeekEvents(today);
     this.applyFiltersAndCategories();
+    this.initCategories();
 
   }
 
@@ -426,7 +427,7 @@ export class EventService {
           numEventsDay: dayMap['all'],
           numEventsMonth: monthMap['all'],
           numEventsWeek: weekMap['all'],
-          selected: this._categHash ? this._categHash['all'].selected : true
+          selected: true;
         }
       };
       // initialize all other category containers iteratively

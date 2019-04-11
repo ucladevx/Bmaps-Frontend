@@ -63,6 +63,7 @@ export class CalendarService {
     if (!fromNgOnInit)
       this.viewDate = set;
     this.viewDateChange.emit(set);
+    this._eventService.updateDayEvents(set);
   }
 
   getSelectedDay() {
