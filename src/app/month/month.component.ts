@@ -44,6 +44,10 @@ export class MonthComponent implements OnInit {
 
   ngOnInit() {
 
+    if(this._eventService.getExpandedEvent() == null){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
+    
     this.currentMonth = moment();
 
     this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));

@@ -60,6 +60,11 @@ export class MapBoxComponent implements OnInit {
 
   ngOnInit() {
 
+
+    if(this._eventService.getExpandedEvent() == null){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
+    
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();

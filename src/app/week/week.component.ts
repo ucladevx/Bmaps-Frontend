@@ -47,7 +47,9 @@ export class WeekComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    if(this._eventService.getExpandedEvent() == null){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
     this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
@@ -161,7 +163,7 @@ export class WeekComponent implements OnInit {
     this.selectedMonth = newWeek.month();
     this.selectedYear = newWeek.year();
     // if selected day is in month, that is first option
-    if (this._eventService.getSelectedDay() && newWeek.isSame(moment(this._eventService.getSelectedDay()), 'month')) {
+    if (this._eventService.getSelectedDay() && newWeek.isSame(moment(this._eventService.getSelectedDay()), 'week')) {
       this._calendarService.setViewDate(this._eventService.getSelectedDay());
       this._eventService.updateDayEvents(this._eventService.getSelectedDay());
       this.updateWeekView();

@@ -205,6 +205,10 @@ export class EventService {
     this.expandedEventSource.next(this._expandedEvent);
   }
 
+  getExpandedEvent(){
+    return this._expandedEvent;
+  }
+
 
 
   // EVENT RETRIEVAL //
