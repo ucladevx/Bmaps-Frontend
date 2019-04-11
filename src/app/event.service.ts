@@ -427,7 +427,7 @@ export class EventService {
           numEventsDay: dayMap['all'],
           numEventsMonth: monthMap['all'],
           numEventsWeek: weekMap['all'],
-          selected: true;
+          selected: true
         }
       };
       // initialize all other category containers iteratively
