@@ -23,6 +23,10 @@
   color: #c6c6c6 !important;
 }
 
+.dropdown-toggle {
+  border-bottom: 1px solid rgb(151, 151, 151);
+}
+
 .dropdown-item {
   cursor: pointer;
   color: #747473;

@@ -33,16 +33,19 @@
 .weekview-header {
     width: 100%;
     display: flex;
-    background-color: #59dbd6;
-    color: #fff;
-    padding: 10px 0;
+    background-color: #fff;
+    color: #484747;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .weekview-header span {
     display: flex;
-    flex-basis: 13.428%;
+    flex-basis: 14.428%;
     justify-content: center;
     align-items: center;
+    padding: 10px 0;
+    border-right: 1px solid #aaa;
 }
 
 .corner-block {
@@ -150,7 +153,7 @@
   clear: left;
   text-align: center;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 28px;
   border-bottom: 1px solid #979797;
   position: -webkit-sticky;
   position: sticky;
