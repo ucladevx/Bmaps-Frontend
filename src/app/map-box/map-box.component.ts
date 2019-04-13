@@ -74,7 +74,6 @@ export class MapBoxComponent implements OnInit {
     });
 
     this._eventService.expandedEvent$.subscribe(expandedEventInfo => {
-      console.log(expandedEventInfo);
       this.selectEvent(expandedEventInfo);
     });
 
@@ -400,7 +399,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       "type": "Feature"
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
-    console.log(eventList);
     this.addPopup(this.popup, coords, eventList);
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
