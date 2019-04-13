@@ -199,6 +199,10 @@ export class EventService {
     this.clickedEventSource.next(this._clickedEvent);
   }
 
+  getClickedEvent(){
+    return this._clickedEvent;
+  }
+
   // Update the current expanded event
   updateExpandedEvent(event: GeoJson): void {
     this._expandedEvent = event;

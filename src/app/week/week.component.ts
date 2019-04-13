@@ -54,6 +54,7 @@ export class WeekComponent implements OnInit {
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
     this._eventService.currDate$.subscribe(date => {
+      console.log(1);
       this.ngZone.run( () => {
         if(this.filteredEvents != null){
           this.showCalendar(date);
@@ -70,6 +71,7 @@ export class WeekComponent implements OnInit {
     });
 
     this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
+      console.log(3);
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => {
@@ -79,6 +81,7 @@ export class WeekComponent implements OnInit {
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       if(document.getElementById("week-view-indicator") != null){
+        console.log("here111");
         this.highlightEvent(clickedEventInfo);
       }
     });
@@ -100,6 +103,13 @@ export class WeekComponent implements OnInit {
       //update view
       this.updateWeekView();
     }
+
+    if(this._eventService.getExpandedEvent()){
+      this.clickedEvent = this._eventService.getExpandedEvent();
+      console.log("here222");
+      this.highlightEvent(this.clickedEvent);
+    }
+
   }
 
   changeSelectedDay (day : CalendarDay) {
@@ -110,12 +120,15 @@ export class WeekComponent implements OnInit {
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
+    console.log("here333");
+    this.highlightEvent(this._eventService.getExpandedEvent());
     //set scroll bar to show view of rogughly 8am-10pm
     document.getElementById("scrollable").scrollTop = 270;
   }
 
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
+    console.log("XXXXXXXXXXXXXXX");
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
@@ -234,9 +247,10 @@ export class WeekComponent implements OnInit {
   }
 
   //highlight selected day
-  onSelect(day: CalendarDay): void {
-    //update selectedDay
-    if(this._calendarService.getSelectedDay() != day){
+  onSelect(day: CalendarDay): void{
+    //update selectedDayChange
+    if(moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
+      && this._calendarService.getSelectedDay() != day){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
     // this.selectedDay = day;
@@ -245,19 +259,22 @@ export class WeekComponent implements OnInit {
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     //update sidebar to display events for that date
     this._eventService.updateDayEvents(date);
+    //this.highlightEvent(this.clickedEvent);
   }
 
   //open event in sidebar
   openEvent(event: GeoJson): void{
+    console.log("OPEN EVENT")
     //update clicked event
+    this._eventService.updateExpandedEvent(event);
     this._eventService.updateClickedEvent(event);
     //route to new event detail component
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-    this._eventService.updateExpandedEvent(event);
   }
 
   //bold event when opened
-  highlightEvent(clickedEventInfo: GeoJson): void{
+  highlightEvent(clickedEventInfo: GeoJson) {
+    console.log("HIGHLIGHT EVENT");
     //restyle currently selected event card
     if(this.clickedEvent != null){
       var selCard = document.getElementById("event-"+this.clickedEvent.id);
@@ -275,6 +292,7 @@ export class WeekComponent implements OnInit {
         eCard.style.fontWeight = "bold";
         eCard.style.zIndex = "100";
       }
+      console.log(eCard);
     }
   }
 
@@ -348,13 +366,20 @@ export class WeekComponent implements OnInit {
     // CALCULATE ZINDEX
     var z = eventIndex+1;
     this.zIndexArray[event.id] = z;
+    // account for clicked event
+    var font = "normal";
+    if(this.clickedEvent && this.clickedEvent == event){
+      font = "bold";
+      z = 100;
+    }
     // CREATE STYLE
     var style = {
       'top' : top+"%",
       'height' : height+"%",
       'left' : left+"%",
       'width' : width+"%",
-      'zIndex' : z
+      'zIndex' : z,
+      'fontWeight' : font
     }
     return style;
   }
