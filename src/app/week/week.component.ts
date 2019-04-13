@@ -47,6 +47,7 @@ export class WeekComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._calendarService.storeView('week');
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
@@ -157,6 +158,9 @@ export class WeekComponent implements OnInit {
       }
     }
     this._calendarService.setDays(this.days);
+    if(this._eventService.getClickedEvent()){
+      this.clickedEvent = this._eventService.getClickedEvent();
+    }
   }
 
   //increment or decrement week

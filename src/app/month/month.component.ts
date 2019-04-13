@@ -37,12 +37,14 @@ export class MonthComponent implements OnInit {
   constructor(private _eventService: EventService, private router: Router, private ngZone: NgZone, private _calendarService: CalendarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        // this.ngOnInit();
+        //this.ngOnInit();
       }
     });
   }
 
   ngOnInit() {
+
+    this._calendarService.storeView('month');
 
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);

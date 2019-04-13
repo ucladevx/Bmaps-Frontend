@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
@@ -56,7 +56,14 @@ export class MapBoxComponent implements OnInit {
       private _eventService: EventService,
       private _categService: CategoryService,
       private _locationService: LocationService
-  ) {mapboxgl.accessToken = environment.mapbox.accessToken;}
+  ) {
+    mapboxgl.accessToken = environment.mapbox.accessToken;
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        //this.ngOnInit();
+      }
+    });
+  }
 
   ngOnInit() {
 
@@ -75,6 +82,14 @@ export class MapBoxComponent implements OnInit {
 
     this._eventService.expandedEvent$.subscribe(expandedEventInfo => {
       this.selectEvent(expandedEventInfo);
+      if(expandedEventInfo == null){
+        this.map.easeTo({
+          center: [-118.445320, 34.066915],
+          zoom: 15,
+          pitch: 60,
+          bearing: 0
+        });
+      }
     });
 
     this.buildMap();
@@ -105,6 +120,7 @@ export class MapBoxComponent implements OnInit {
     });
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
+      this.updateSource();
       let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
       this.map.addImage('bluePin', image);
     });
@@ -117,7 +133,6 @@ export class MapBoxComponent implements OnInit {
 
     // add extra controls
     this.addControls();
-
   }
 
   addEventLayer(data): void {
@@ -147,6 +162,13 @@ export class MapBoxComponent implements OnInit {
     if(this._eventService.getExpandedEvent()){
         this.selectEvent(this._eventService.getExpandedEvent());
         this._eventService.boldPopup(this._eventService.getExpandedEvent());
+    } else {
+      this.map.easeTo({
+        center: [-118.445320, 34.066915],
+        zoom: 15,
+        pitch: 60,
+        bearing: 0
+      });
     }
     this.selectedEvent = null;
   }
