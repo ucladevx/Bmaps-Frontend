@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CategoryService } from '../category.service';
+import { CalendarService } from '../calendar.service';
 import { EventService } from '../event.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { EventService } from '../event.service';
 export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
-    constructor(private _eventService: EventService, private _categService: CategoryService) { }
+    constructor(private _eventService: EventService, private _categService: CategoryService, private _calendarService: CalendarService) { }
     ngOnInit() { }
 
     isCollapsed: boolean = true;

@@ -39,14 +39,11 @@ export class CategoryBarCalendarComponent implements OnInit {
 
   filterClicked(filter: string): void {
     this._eventService.toggleFilter(filter);
-    console.log(this.filterHash);
   }
 
   categoryClicked(): void {
     var category = (<HTMLInputElement>document.getElementById("categories")).value;
-    console.log(category);
     this._eventService.toggleCategory(category);
-    console.log(this.categHash);
     this._categService.setSelectedCategory(category);
   }
 

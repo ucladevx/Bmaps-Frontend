@@ -47,6 +47,7 @@ export class WeekComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._calendarService.storeView('week');
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
@@ -100,6 +101,12 @@ export class WeekComponent implements OnInit {
       //update view
       this.updateWeekView();
     }
+
+    if(this._eventService.getExpandedEvent()){
+      this.clickedEvent = this._eventService.getExpandedEvent();
+      this.highlightEvent(this.clickedEvent);
+    }
+
   }
 
   changeSelectedDay (day : CalendarDay) {
@@ -110,6 +117,7 @@ export class WeekComponent implements OnInit {
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
+    this.highlightEvent(this._eventService.getExpandedEvent());
     //set scroll bar to show view of rogughly 8am-10pm
     document.getElementById("scrollable").scrollTop = 270;
   }
@@ -150,6 +158,9 @@ export class WeekComponent implements OnInit {
       }
     }
     this._calendarService.setDays(this.days);
+    if(this._eventService.getClickedEvent()){
+      this.clickedEvent = this._eventService.getClickedEvent();
+    }
   }
 
   //increment or decrement week
@@ -234,27 +245,32 @@ export class WeekComponent implements OnInit {
   }
 
   //highlight selected day
-  onSelect(day: CalendarDay): void {
-    //update selectedDay
+  onSelect(day: CalendarDay): void{
+    //update selectedDayChange
+    if(moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
+      && this._calendarService.getSelectedDay() != day){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
     // this.selectedDay = day;
     this._calendarService.setSelectedDay(day);
     //create date for that day
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     //update sidebar to display events for that date
     this._eventService.updateDayEvents(date);
+    //this.highlightEvent(this.clickedEvent);
   }
 
   //open event in sidebar
   openEvent(event: GeoJson): void{
     //update clicked event
+    this._eventService.updateExpandedEvent(event);
     this._eventService.updateClickedEvent(event);
     //route to new event detail component
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-    this._eventService.updateExpandedEvent(event);
   }
 
   //bold event when opened
-  highlightEvent(clickedEventInfo: GeoJson): void{
+  highlightEvent(clickedEventInfo: GeoJson) {
     //restyle currently selected event card
     if(this.clickedEvent != null){
       var selCard = document.getElementById("event-"+this.clickedEvent.id);
@@ -345,13 +361,20 @@ export class WeekComponent implements OnInit {
     // CALCULATE ZINDEX
     var z = eventIndex+1;
     this.zIndexArray[event.id] = z;
+    // account for clicked event
+    var font = "normal";
+    if(this.clickedEvent && this.clickedEvent.id == event.id){
+      font = "bold";
+      z = 100;
+    }
     // CREATE STYLE
     var style = {
       'top' : top+"%",
       'height' : height+"%",
       'left' : left+"%",
       'width' : width+"%",
-      'zIndex' : z
+      'zIndex' : z,
+      'fontWeight' : font
     }
     return style;
   }
