@@ -59,12 +59,15 @@ export class EventService {
   private _monthEvents;
   private _weekEvents;
   private _dayEvents;
+  private _filteredMonthEvents;
+  private _filteredWeekEvents;
+  private _filteredDayEvents;
   private _currDate;
   private _currMonthYear;
   private _clickedEvent;
   private _hoveredEvent;
   private _expandedEvent;
-  private _categHash;
+  _categHash;
   private _filterHash;
 
   private _selectedFilterCount = 0;
@@ -149,6 +152,9 @@ export class EventService {
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
     this.weekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
     this.dayEvents$.subscribe(dayEvents => this._dayEvents = dayEvents);
+    this.filteredMonthEvents$.subscribe(filteredMonthEvents => this._filteredMonthEvents = filteredMonthEvents);
+    this.filteredWeekEvents$.subscribe(filteredWeekEvents => this._filteredWeekEvents = filteredWeekEvents);
+    this.filteredDayEvents$.subscribe(filteredDayEvents => this._filteredDayEvents = filteredDayEvents);
     this.currDate$.subscribe(date => this._currDate = date);
     this.currMonthYear$.subscribe(monthyear => this._currMonthYear = monthyear);
     this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
@@ -163,6 +169,7 @@ export class EventService {
     this.updateWeekEvents(today);
     this.applyFiltersAndCategories();
     this.initCategories(monthyear);
+    this.resetFilters();
 
   }
 
@@ -346,32 +353,27 @@ export class EventService {
   private applyFiltersAndCategories() {
     // Map
     if(this.router.url.startsWith('/map')){
-      if(this._selectedCategCount > -1) {
-        this.applyCategoriesToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-      }
-      if(this._selectedFilterCount != 0) {
+      if(this._selectedCategCount > -1 || this._selectedFilterCount != 0) {
         this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
       }
     }
     // Calendar
     else{
-      if(this._selectedCategCount > 0) {
-        this.applyCategoriesToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-        this.applyCategoriesToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
-        this.applyCategoriesToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
-      }
-      if(this._selectedFilterCount != 0){
+      if(this._selectedCategCount > 0 || this._selectedFilterCount != 0) {
         this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
         this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
         this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
       }
     }
+    console.log(this._categHash);
   }
 
-  // Apply categories to the input features list of events
-  private applyCategoriesToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
+  // Apply categories and filters to day
+  private applyFiltersToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
     let tempEvents = new FeatureCollection([]);
     for (let event of inputFeatures) {
+      // categories
+      let categoryCheck = false;
       let allSelected = false;
       if(this._categHash && this._categHash['all'].selected){
         allSelected = true;
@@ -382,16 +384,11 @@ export class EventService {
           categObject = this._categHash[category.toLowerCase()];
         }
         if (allSelected || (categObject && categObject.selected)) {
-          tempEvents.features.push(event);
+          categoryCheck = true;
           break;
-    }}}
-    outputSource.next(tempEvents);
-  }
-
-  // Apply filters to day
-  private applyFiltersToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
-    let tempEvents = new FeatureCollection([]);
-    for (let event of inputFeatures) {
+        }
+      }
+      // filters
       let passesAllFilters = true;
       for (let filterList of this._filterLists) {
         let passesThisFilter = false;
@@ -410,10 +407,12 @@ export class EventService {
           break;
         }
       }
-      if (passesAllFilters) {
+      // combine
+      if (passesAllFilters && categoryCheck) {
         tempEvents.features.push(event);
       }
     }
+    // output source
     outputSource.next(tempEvents);
   }
 
@@ -423,6 +422,7 @@ export class EventService {
 
   // Initialize category hash
   private initCategories(monthyear: string) {
+    console.log("HEREEEEEEEEEEEEEEE");
     this._categService.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
@@ -446,7 +446,7 @@ export class EventService {
           numEventsDay: dayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
-          selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
+          selected: false
         }
       }
       // update the category hash and apply the categories
@@ -480,10 +480,11 @@ export class EventService {
           numEventsDay: dayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
-          selected: false
+          selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
         }
       }
       // update the category hash
+      console.log("XXXXXXXx");
       this.categHashSource.next(tempHash);
     });
   }
@@ -515,7 +516,7 @@ export class EventService {
   // FILTER BACKGROUND FUNCTIONS //
 
   // Reset all filters to be false
-  private resetFilters() {
+  resetFilters() {
     let tempFilters = {
       'happening now': false,
       'upcoming': false,

@@ -26,6 +26,7 @@ export class CategoryBarMapComponent implements OnInit {
       this.events = eventCollection.features;
     });
     this._eventService.categHash$.subscribe(categHash => {
+      console.log(categHash);
       this.categHash = categHash;
     });
     this._eventService.filterHash$.subscribe(filterHash => {
@@ -77,5 +78,5 @@ export class CategoryBarMapComponent implements OnInit {
   private objectKeys(obj) {
     return Object.keys(obj);
   }
-  
+
 }
