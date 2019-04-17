@@ -40,6 +40,9 @@
     justify-content: center;
     align-items: center;
     padding: 10px 0;
+}
+
+.calendar-header span:not(.last-child) {
     border-right: 1px solid #aaa;
 }
 
@@ -56,10 +59,13 @@
     position: relative;
     flex-basis: 14.2857%; /* 100/7 */
     display: block;
-    border-right: 1px solid #aaa;
     border-bottom: 1px solid #aaa;
     color: #bebebe;
     background-color: #fff;
+}
+
+.calendar-day:not(:nth-child(7n)) {
+    border-right: 1px solid #aaa;
 }
 
 .calendar-day span {

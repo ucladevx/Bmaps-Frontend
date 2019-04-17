@@ -3,6 +3,7 @@
   height: 40px;
   margin: 0 auto;
   border-radius: 0px;
+  font-size: 20px;
 }
 
 #categ-div {
@@ -25,6 +26,7 @@
 
 .dropdown-toggle {
   border-bottom: 1px solid rgb(151, 151, 151);
+  color: #656565;
 }
 
 .dropdown-item {
@@ -73,7 +75,7 @@
   padding-bottom: 8px;
   padding-left: 10px;
   background-color: #E8E8E8;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .filters-wrapper {
@@ -152,8 +154,8 @@ a.clear-all-btn:active {
 }
 
 .btn.filter-btn:hover {
-  background-color: #F5F5F5;
-  color: #6d747c;
+  background-color: #59dbd6;
+  color: #fff;
 }
 
 .btn.filter-btn.active:hover {

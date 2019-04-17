@@ -39,17 +39,17 @@
     font-size: 18px;
 }
 
-.weekview-header span {
+.weekview-header span{
     display: flex;
     flex-basis: 14.428%;
     justify-content: center;
     align-items: center;
     padding: 10px 0;
-    border-right: 1px solid #aaa;
+    border-left: 1px solid #aaa;
 }
 
 .corner-block {
-  width: 4%;
+  width: 8.8%;
 }
 
 .weekview-header > .short-abbr {
@@ -65,14 +65,11 @@
 }
 
 .timebar {
-  width: 4%;
+  width: 8%;
   height: 150%;
   background-color: white;
   align-items: flex-start;
   float: left;
-  border-right: 2px solid #aaa;
-  border-left: 1px solid #aaa;
-  border-top: 1px solid #aaa;
 }
 
 .filler-block {
@@ -94,14 +91,16 @@
   height: 4%;
   margin: 0;
   text-align: center;
-  font-size: 10px;
+  font-size: 16px;
   font-weight: bold;
   color: black;
-  border-top: 1px solid #aaa;
-  border-bottom: 1px solid #aaa;
   z-index: 1;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.weekview-day .time-of-day tr:not(:last-child) {
+  border-bottom: 1px solid #aaa;
 }
 
 .hidden {
@@ -113,7 +112,7 @@
 }
 
 .day-blocks {
-  width: 96%;
+  width: 92%;
   height: 150%;
   display: flex;
   flex-direction: column;
@@ -124,7 +123,7 @@
     display: flex;
     flex-wrap: wrap;
     flex: 1;
-    border-top: 1px solid #979797;
+    /* border-top: 1px solid #979797; */
 }
 
 .weekview-day {
@@ -132,10 +131,11 @@
     width: 14.2857%;
     display: block;
     align-items: flex-start;
-    border-right: 1px solid #979797;
     color: #bebebe;
     background-color: #fff;
+    border-left: 1px solid #979797;
 }
+
 
 .weekview-day.in-current-month {
     color: inherit;
@@ -154,12 +154,14 @@
   text-align: center;
   font-weight: bold;
   font-size: 28px;
-  border-bottom: 1px solid #979797;
   position: -webkit-sticky;
   position: sticky;
   background-color: inherit;
   z-index: 150;
   top: 0;
+  border-top: 1px solid rgb(200, 200, 200);
+  border-bottom: 1px solid rgb(200, 200, 200);
+  background-clip: padding-box; /* Temporary solution to border not being visible on some cells */
 }
 
 .today span {
