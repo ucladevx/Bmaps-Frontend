@@ -39,6 +39,10 @@ export class EventService {
   private categHashSource: Subject <any>;
   // holds object of filters
   private filterHashSource: Subject <any>;
+  // holds object of Locations
+  private locationHashSource: Subject <any>;
+  // holds object for filter date span
+  private dateHashSource: Subject <any>;
 
   // Observables that components can subscribe to for realtime updates
   monthEvents$;
@@ -54,6 +58,8 @@ export class EventService {
   expandedEvent$;
   categHash$;
   filterHash$;
+  locationHash$;
+  dateHash$;
 
   // Used internally to keep a realtime, subscribed set of values
   private _monthEvents;
@@ -67,8 +73,10 @@ export class EventService {
   private _clickedEvent;
   private _hoveredEvent;
   private _expandedEvent;
-  _categHash;
+  private _categHash;
   private _filterHash;
+  private _locationHash;
+  private _dateHash;
 
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
@@ -132,6 +140,8 @@ export class EventService {
     this.expandedEventSource = new Subject < GeoJson > ();
     this.categHashSource = new Subject < any > ();
     this.filterHashSource = new Subject <any>();
+    this.locationHashSource = new Subject <any>();
+    this.dateHashSource = new Subject <any>();
 
     // Observable string streams
     this.monthEvents$  = this.monthEventsSource.asObservable();
@@ -147,6 +157,8 @@ export class EventService {
     this.expandedEvent$ = this.expandedEventSource.asObservable();
     this.categHash$ = this.categHashSource.asObservable();
     this.filterHash$ = this.filterHashSource.asObservable();
+    this.locationHash$ = this.locationHashSource.asObservable();
+    this.dateHash$ = this.locationHashSource.asObservable();
 
     // Maintain a set of self-subscribed local values
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
@@ -162,13 +174,15 @@ export class EventService {
     this.expandedEvent$.subscribe(expandedEventInfo => this._expandedEvent = expandedEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
     this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
+    this.locationHash$.subscribe(locationHash => this._locationHash = locationHash);
+    this.dateHash$.subscribe(dateHash => this._dateHash = dateHash);
 
     // Populate event containers
     this.updateDayEvents(today);
     this.updateMonthEvents(monthyear);
     this.updateWeekEvents(today);
     this.applyFiltersAndCategories();
-    this.initCategories(monthyear);
+    this.initCategories();
     this.resetFilters();
 
   }
@@ -275,7 +289,8 @@ export class EventService {
   updateMonthEvents(monthyear: string): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(events => {
       this.monthEventsSource.next(events);
-      this.initCategories(monthyear);
+      this.initLocations(events);
+      this.initCategories();
     });
   }
 
@@ -284,7 +299,7 @@ export class EventService {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
       this.weekEventsSource.next(this.filterByWeek(allEvents, firstDay));
       let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
-      this.initCategories(monthyear);
+      this.initCategories();
     });
   }
 
@@ -305,6 +320,38 @@ export class EventService {
 
 
   // CATEGORIES AND FILTERS APPLICATION //
+
+  initDateHash(){
+
+  }
+
+  applyDateFilter(){
+
+  }
+
+  initLocations(events: FeatureCollection){
+    let tempHash = {
+      'all': {
+        formattedCategory: 'all',
+        selected: true
+      }
+    };
+    // initialize all other category containers iteratively
+    for (let event of events.features) {
+      let locationName = event.properties.place.name;
+      if(tempHash[locationName]) {
+        tempHash[locationName].events.push(event);
+      }
+      else {
+        tempHash[locationName] = {
+          events: [],
+          selected: false
+        }
+        tempHash[locationName].events.push(event);
+      }
+    }
+    this.locationHashSource.next(tempHash);
+  }
 
   // Toggle filter
   toggleFilter(filter: string) {
@@ -335,12 +382,26 @@ export class EventService {
     // if a category is being applied
     if (this._categHash[category] != undefined) {
       // apply the current category
-      this._categHash["all"].selected = false;
-      this._categHash[category].selected = !this._categHash[category].selected;
-      if (this._categHash[category].selected)
-        this._selectedCategCount++;
-      else
-        this._selectedCategCount--;
+      if(this.router.url.startsWith('/calendar')){
+          this.resetCategories();
+      }
+      if(this.router.url.startsWith('/map') && category == 'all'){
+        console.log(category);
+          if(this._categHash['all'].selected){
+            this.resetCategories();
+          } else {
+            this.allCategories();
+          }
+      } else{
+        console.log(this._categHash);
+        this._categHash['all'].selected = false;
+        this._categHash[category].selected = !this._categHash[category].selected;
+        console.log(this._categHash);
+        if (this._categHash[category].selected)
+          this._selectedCategCount++;
+        else
+          this._selectedCategCount--;
+      }
     }
     if(this.router.url.startsWith('/calendar')){
       this.updateCategories();
@@ -353,7 +414,8 @@ export class EventService {
   private applyFiltersAndCategories() {
     // Map
     if(this.router.url.startsWith('/map')){
-      if(this._selectedCategCount > -1 || this._selectedFilterCount != 0) {
+      console.log(this._selectedCategCount);
+      if(this._selectedCategCount > -2 || this._selectedFilterCount != 0) {
         this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
       }
     }
@@ -365,7 +427,6 @@ export class EventService {
         this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
       }
     }
-    console.log(this._categHash);
   }
 
   // Apply categories and filters to day
@@ -390,6 +451,7 @@ export class EventService {
       }
       // filters
       let passesAllFilters = true;
+      if(this._selectedFilterCount > 0){
       for (let filterList of this._filterLists) {
         let passesThisFilter = false;
         let filterUsed = false;
@@ -407,6 +469,7 @@ export class EventService {
           break;
         }
       }
+      }
       // combine
       if (passesAllFilters && categoryCheck) {
         tempEvents.features.push(event);
@@ -421,8 +484,7 @@ export class EventService {
   // CATEGORY BACKGROUND FUNCTIONS //
 
   // Initialize category hash
-  private initCategories(monthyear: string) {
-    console.log("HEREEEEEEEEEEEEEEE");
+  private initCategories() {
     this._categService.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
@@ -484,7 +546,6 @@ export class EventService {
         }
       }
       // update the category hash
-      console.log("XXXXXXXx");
       this.categHashSource.next(tempHash);
     });
   }
@@ -529,6 +590,27 @@ export class EventService {
       'free food': false
     };
     this.filterHashSource.next(tempFilters);
+  }
+
+  resetCategories() {
+    for (var categ in this._categHash) {
+      if (this._categHash.hasOwnProperty(categ)) {
+        this._categHash[categ.toLowerCase()].selected = false;
+      }
+    }
+    this._selectedCategCount = 0;
+  }
+
+  allCategories() {
+    var count = 0;
+    let dayMap = this.getCategoryMap(this._dayEvents.features);
+    for (var categ in this._categHash) {
+      if (this._categHash.hasOwnProperty(categ.toLowerCase()) && dayMap[categ.toLowerCase()] > 0) {
+        this._categHash[categ.toLowerCase()].selected = true;
+        count++;
+      }
+    }
+    this._selectedCategCount = count;
   }
 
   // Returns true if event passes the given filter

@@ -121,6 +121,7 @@ export class MapBoxComponent implements OnInit {
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
       this.updateSource();
+      this._eventService.allCategories();
       let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
       this.map.addImage('bluePin', image);
     });
@@ -133,6 +134,7 @@ export class MapBoxComponent implements OnInit {
 
     // add extra controls
     this.addControls();
+
   }
 
   addEventLayer(data): void {

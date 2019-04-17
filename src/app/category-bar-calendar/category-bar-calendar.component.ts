@@ -27,32 +27,28 @@ export class CategoryBarCalendarComponent implements OnInit {
       this.events = eventCollection.features;
     });
     this._eventService.categHash$.subscribe(categHash => {
-      console.log(categHash);
       this.categHash = categHash;
     });
     this._eventService.filterHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
     this._calendarService.dateSpan$.subscribe(clear => {
-      console.log("here");
         this.clearCategories();
     });
   }
 
   filterClicked(filter: string): void {
-    console.log(this._eventService._categHash);
     this._eventService.toggleFilter(filter);
   }
 
   categoryClicked(): void {
     var category = (<HTMLInputElement>document.getElementById("categories")).value;
     this._eventService.toggleCategory(category);
-    console.log(this._eventService._categHash);
+    this._categService.setSelectedCategory(category);
   }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
-    console.log("here");
     this._eventService.updateCategories();
   }
 

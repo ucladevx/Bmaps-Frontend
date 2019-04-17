@@ -31,6 +31,9 @@ export class NavbarComponent implements OnInit {
       if(this._eventService.getSelectedDay() != null){
         d = this._eventService.getSelectedDay();
       }
+      if(newView == 'map'){
+          this._eventService.allCategories();
+      }
       this._eventService.updateDayEvents(d);
       let monthyear = d.getMonth() + " " + d.getFullYear();
       this._eventService.updateMonthEvents(monthyear);
