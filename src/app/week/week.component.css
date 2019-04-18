@@ -150,6 +150,7 @@
 }
 
 .day-of-month {
+  background-color: #fff;
   height: 6%;
   width: 100%;
   padding: 0 5% 5% 5%;
@@ -163,7 +164,6 @@
   font-size: 25px;
   position: -webkit-sticky;
   position: sticky;
-  background-color: inherit;
   z-index: 150;
   top: 0;
   background-clip: padding-box; /* Temporary solution to border not being visible on some cells */

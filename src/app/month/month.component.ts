@@ -68,6 +68,7 @@ export class MonthComponent implements OnInit {
       this.fillEventsByDay();
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
+        document.getElementById("scrollable").scrollTop = 210;
       });
     });
 
