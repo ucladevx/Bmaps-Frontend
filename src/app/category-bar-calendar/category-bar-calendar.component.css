@@ -9,6 +9,8 @@
 #categ-div {
   width: 100%;
   flex-direction: column;
+  border-bottom: 1px solid rgb(151, 151, 151);
+  margin: 0 auto;
 }
 
 .categ-bubble {
