@@ -38,6 +38,15 @@ export class CategoryBarCalendarComponent implements OnInit {
     });
   }
 
+  setDateFilter(){
+    let firstInput = (<HTMLInputElement>document.getElementById('start-date')).value;
+    let first = moment(firstInput).toDate();
+    console.log(first);
+    let lastInput = (<HTMLInputElement>document.getElementById('end-date')).value;
+    let last = moment(lastInput).toDate();
+    this._eventService.initDateHash(first,last);
+  }
+
   getStartDate(){
     return moment(this._eventService.getDateHash()[0]).format('YYYY-MM-DD');
   }

@@ -79,6 +79,7 @@ export class CalendarService {
   }
 
   setViewDate(set : Date, fromNgOnInit : boolean = false) {
+    console.log("here");
     if (this.viewDate == undefined && fromNgOnInit)
       this.viewDate = set;
     if (!fromNgOnInit)
@@ -98,9 +99,7 @@ export class CalendarService {
 
   setDays(calendarDays: CalendarDay[]){
     this.days = calendarDays;
-    let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
-    let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
-    this._eventService.initDateHash(first,last);
+    console.log(this._eventService.getDateHash());
   }
 
   increaseDay(days: number){

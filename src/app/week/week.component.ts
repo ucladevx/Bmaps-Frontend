@@ -51,7 +51,9 @@ export class WeekComponent implements OnInit {
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
-    this._calendarService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
+    this._calendarService.change.subscribe( function(delta) {
+        this.changeWeek(delta);
+    }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
     this._eventService.currDate$.subscribe(date => {
@@ -67,6 +69,7 @@ export class WeekComponent implements OnInit {
       this.fillEventsByDay();
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
+        console.log("YYYYYYYYYYYYYYYYYYYYYYYY");
       });
     });
 
@@ -116,6 +119,7 @@ export class WeekComponent implements OnInit {
   //update the week view
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
+    console.log("guilty");
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
     this.highlightEvent(this._eventService.getExpandedEvent());
     //set scroll bar to show view of rogughly 8am-10pm
@@ -157,6 +161,9 @@ export class WeekComponent implements OnInit {
         this._calendarService.setSelectedDay(weekDay);
       }
     }
+    let first = moment([this.days[0].year, this.days[0].month, this.days[0].dayOfMonth]).toDate();
+    let last = moment([this.days[this.days.length-1].year, this.days[this.days.length-1].month, this.days[this.days.length-1].dayOfMonth]).toDate();
+    this._eventService.initDateHash(first,last);
     this._calendarService.setDays(this.days);
     if(this._eventService.getClickedEvent()){
       this.clickedEvent = this._eventService.getClickedEvent();
@@ -165,6 +172,7 @@ export class WeekComponent implements OnInit {
 
   //increment or decrement week
   changeWeek(delta: number): void {
+    console.log("weeeeeek");
     if(!this._calendarService.isWeekView()){
       return;
     }
@@ -197,6 +205,7 @@ export class WeekComponent implements OnInit {
       //update view
       this.updateWeekView();
     }
+    this._eventService.applyFiltersAndCategories();
   }
 
   //retrieve events for the given week
@@ -247,7 +256,7 @@ export class WeekComponent implements OnInit {
   //highlight selected day
   onSelect(day: CalendarDay): void{
     //update selectedDayChange
-    if(moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
+    if(this._eventService.getClickedEvent() && moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
       && this._calendarService.getSelectedDay() != day){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }

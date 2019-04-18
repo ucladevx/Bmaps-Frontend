@@ -275,6 +275,7 @@ export class EventService {
         this._selectedCategCount = 0;
         this.updateCategories();
         this.resetFilters();
+        this.allCategories();
         this.applyFiltersAndCategories();
       }
       else {
@@ -326,7 +327,6 @@ export class EventService {
     // initialize all other date containers iteratively
     tempHash.push(first);
     tempHash.push(last);
-    console.log(tempHash);
     this.dateHashSource.next(tempHash);
   }
 
@@ -410,7 +410,7 @@ export class EventService {
   }
 
   // Apply filters and categories together
-  private applyFiltersAndCategories() {
+  applyFiltersAndCategories() {
     // Map
     if(this.router.url.startsWith('/map')){
       if(this._selectedCategCount > -2 || this._selectedFilterCount != 0) {
@@ -468,9 +468,12 @@ export class EventService {
         }
       }
       }
-      // date filters
-      var eventDate = moment(event.properties.start_time).toDate();
-      let properDate = (eventDate >= this._dateHash[0] && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
+      let properDate = true;
+      if(this.router.url.startsWith('/calendar') && this._dateHash){
+        // date filters
+        var eventDate = moment(event.properties.start_time).toDate();
+        properDate = (eventDate >= moment(this._dateHash[0]).toDate() && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
+      }
       // combine
       if (passesAllFilters && categoryCheck && properDate) {
         tempEvents.features.push(event);
@@ -605,6 +608,7 @@ export class EventService {
   allCategories() {
     var count = 0;
     let dayMap = this.getCategoryMap(this._dayEvents.features);
+    console.log(dayMap);
     for (var categ in this._categHash) {
       if (this._categHash.hasOwnProperty(categ.toLowerCase()) && dayMap[categ.toLowerCase()] > 0) {
         this._categHash[categ.toLowerCase()].selected = true;

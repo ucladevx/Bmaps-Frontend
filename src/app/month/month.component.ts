@@ -52,7 +52,9 @@ export class MonthComponent implements OnInit {
 
     this.currentMonth = moment();
 
-    this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
+    this._calendarService.change.subscribe( function(delta) {
+      this.changeMonth(delta);
+    }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
     this._eventService.currDate$.subscribe(date => {
@@ -68,6 +70,7 @@ export class MonthComponent implements OnInit {
       this.fillEventsByDay();
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
+        console.log("XXXXXXXXXXXXXXXXXXXXX");
       });
     });
 
@@ -129,7 +132,6 @@ export class MonthComponent implements OnInit {
         this._calendarService.setSelectedDay(weekDay);
       }
     }
-    this._calendarService.setDays(this.days);
   }
 
   changeMonth = (delta: number) => {
@@ -160,6 +162,7 @@ export class MonthComponent implements OnInit {
     this.selectedYear = newMonth.year();
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
     this._eventService.updateMonthEvents(monthyear);
+    this._eventService.applyFiltersAndCategories();
   }
 
     //retrieve events for the given month

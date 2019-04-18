@@ -28,9 +28,9 @@
       <div class="section-header">Organizer</div>
       <input class="form-control" type="text" placeholder="Enter a location">
       <div class="section-header">Date</div>
-      <input type="date" class="form-control" id="short-input" value="{{getStartDate()}}">
+      <input type="date" class="form-control" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter()">
       to
-      <input type="date" class="form-control" id="short-input" value="{{getEndDate()}}">
+      <input type="date" class="form-control" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter()">
       <div class="section-header">Time</div>
       <input type="time" class="form-control" id="short-input">
       to
