@@ -55,6 +55,41 @@ export class CategoryBarCalendarComponent implements OnInit {
     return moment(this._eventService.getDateHash()[1]).format('YYYY-MM-DD');
   }
 
+  setTimeFilter(){
+    let firstInput = (<HTMLInputElement>document.getElementById('start-time')).value;
+    var starttime = firstInput.split(":");
+    var start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
+    let lastInput = (<HTMLInputElement>document.getElementById('end-time')).value;
+    var endtime = lastInput.split(":");
+    var end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
+    this._eventService.initTimeHash(start,end);
+    console.log(this._eventService.getTimeHash());
+    this._eventService.applyFiltersAndCategories();
+  }
+
+  getStartTime(){
+    return this.convertNumToTime(this._eventService.getTimeHash()[0]);
+  }
+
+  getEndTime(){
+    return this.convertNumToTime(this._eventService.getTimeHash()[1]);
+  }
+
+  convertNumToTime(minutes: number){
+    let hours = (Math.floor(minutes / 60))%24;
+    minutes = (minutes-(hours*60))%60;
+    let minString = minutes.toString();
+    if(minString.length == 1){
+      minString = "0"+minString;
+    }
+    let hourString = hours.toString();
+    if(hourString.length == 1){
+      hourString = "0"+hourString;
+    }
+    let time = hourString+":"+minString;
+    return time;
+  }
+
   filterClicked(filter: string): void {
     this._eventService.toggleFilter(filter);
   }

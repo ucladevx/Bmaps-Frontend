@@ -76,7 +76,13 @@
   width: 32.5%;
 }
 
-#short-input{
+#start-time{
+  background-color: #E8E8E8;
+  display: inline-block;
+  width: 32.5%;
+}
+
+#end-time{
   background-color: #E8E8E8;
   display: inline-block;
   width: 32.5%;

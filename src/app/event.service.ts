@@ -43,6 +43,8 @@ export class EventService {
   private locationHashSource: Subject <any>;
   // holds object for filter date span
   private dateHashSource: Subject <any>;
+  // holds object for filter time span
+  private timeHashSource: Subject <any>;
 
   // Observables that components can subscribe to for realtime updates
   monthEvents$;
@@ -60,6 +62,7 @@ export class EventService {
   filterHash$;
   locationHash$;
   dateHash$;
+  timeHash$;
 
   // Used internally to keep a realtime, subscribed set of values
   private _monthEvents;
@@ -77,6 +80,7 @@ export class EventService {
   private _filterHash;
   private _locationHash;
   private _dateHash;
+  private _timeHash;
 
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
@@ -142,6 +146,7 @@ export class EventService {
     this.filterHashSource = new Subject <any>();
     this.locationHashSource = new Subject <any>();
     this.dateHashSource = new Subject <any>();
+    this.timeHashSource = new Subject <any>();
 
     // Observable string streams
     this.monthEvents$  = this.monthEventsSource.asObservable();
@@ -159,6 +164,7 @@ export class EventService {
     this.filterHash$ = this.filterHashSource.asObservable();
     this.locationHash$ = this.locationHashSource.asObservable();
     this.dateHash$ = this.dateHashSource.asObservable();
+    this.timeHash$ = this.timeHashSource.asObservable();
 
     // Maintain a set of self-subscribed local values
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
@@ -176,6 +182,7 @@ export class EventService {
     this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
     this.locationHash$.subscribe(locationHash => this._locationHash = locationHash);
     this.dateHash$.subscribe(dateHash => this._dateHash = dateHash);
+    this.timeHash$.subscribe(timeHash => this._timeHash = timeHash);
 
     // Populate event containers
     this.updateDayEvents(today);
@@ -184,6 +191,7 @@ export class EventService {
     this.applyFiltersAndCategories();
     this.initCategories();
     this.resetFilters();
+    this.initTimeHash(0,1439);
 
   }
 
@@ -340,6 +348,18 @@ export class EventService {
     return this._dateHash;
   }
 
+  initTimeHash(early: number, late: number) {
+    let tempHash = [];
+    // initialize all other date containers iteratively
+    tempHash.push(early);
+    tempHash.push(late);
+    this.timeHashSource.next(tempHash);
+  }
+
+  getTimeHash(){
+    return this._timeHash;
+  }
+
   initLocations(events: FeatureCollection){
     let tempHash = {
       'all': {
@@ -476,13 +496,17 @@ export class EventService {
       }
       }
       let properDate = true;
+      let properTime = true;
       if(this.router.url.startsWith('/calendar') && this._dateHash){
         // date filters
         var eventDate = moment(event.properties.start_time).toDate();
         properDate = (eventDate >= moment(this._dateHash[0]).toDate() && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
+        var eventTime = moment(event.properties.start_time);
+        var minCount = eventTime.hour()*60 + eventTime.minutes();
+        properTime = (minCount >= this._timeHash[0] && minCount <= this._timeHash[1]);
       }
       // combine
-      if (passesAllFilters && categoryCheck && properDate) {
+      if (passesAllFilters && categoryCheck && properDate && properTime) {
         tempEvents.features.push(event);
       }
     }
