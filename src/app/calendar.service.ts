@@ -40,6 +40,8 @@ export class CalendarService {
   selectedDay: CalendarDay;
   days: CalendarDay[] = [];
 
+  storedView: string;
+
   @Output() change: EventEmitter<Number> = new EventEmitter();
   @Output() selectedDayChange: EventEmitter<CalendarDay> = new EventEmitter();
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
@@ -51,6 +53,25 @@ export class CalendarService {
     this.change.emit(this.delta);
     this.delta = 0;
     this.selectedDay = this.days[0];
+    if(delta == 0){
+      if(this.router.url.startsWith('/calendar/week')){
+        this.storeView('month');
+      } else {
+        this.storeView('week');
+      }
+    }
+  }
+
+  storeView(view: string){
+    this.storedView = view;
+  }
+
+  retrieveLastView(){
+    return this.storedView;
+  }
+
+  getLink(){
+    return "/calendar";
   }
 
   getViewDate() {

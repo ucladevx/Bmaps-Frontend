@@ -65,6 +65,7 @@ export class SidebarComponent implements OnInit {
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
     // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
+      this._eventService.updateExpandedEvent(event);
         this._eventService.updateClickedEvent(event);
         this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
         this._eventService.updateExpandedEvent(event);
