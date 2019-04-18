@@ -292,6 +292,9 @@ export class EventService {
       this.monthEventsSource.next(events);
       this.initLocations(events);
       this.initCategories();
+      this.resetFilters();
+      this.resetCategories();
+      this.toggleCategory('all');
     });
   }
 
@@ -301,6 +304,9 @@ export class EventService {
       this.weekEventsSource.next(this.filterByWeek(allEvents, firstDay));
       let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
       this.initCategories();
+      this.resetFilters();
+      this.resetCategories();
+      this.toggleCategory('all');
     });
   }
 
@@ -403,6 +409,7 @@ export class EventService {
       }
     }
     if(this.router.url.startsWith('/calendar')){
+      this._categService.setSelectedCategory(category);
       this.updateCategories();
     }
     // apply filters and categories
@@ -608,7 +615,6 @@ export class EventService {
   allCategories() {
     var count = 0;
     let dayMap = this.getCategoryMap(this._dayEvents.features);
-    console.log(dayMap);
     for (var categ in this._categHash) {
       if (this._categHash.hasOwnProperty(categ.toLowerCase()) && dayMap[categ.toLowerCase()] > 0) {
         this._categHash[categ.toLowerCase()].selected = true;

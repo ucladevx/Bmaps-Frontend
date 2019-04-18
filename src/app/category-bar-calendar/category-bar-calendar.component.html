@@ -6,7 +6,7 @@
   <div *ngIf="showDropdown" class="dropdown-content">
       <div class="section-header">Categories</div>
       <span *ngIf="this._calendarService.isMonthView()">
-      <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{this._categService.getSelectedCategory()}}">
+      <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{selectedCategory}}">
         <ng-container *ngFor="let categKey of objectKeys(categHash)">
           <option *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0" value="{{categKey}}">
             {{categHash[categKey].formattedCategory}}
@@ -15,7 +15,7 @@
       </select>
       </span>
       <span *ngIf="this._calendarService.isWeekView()">
-        <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()">
+        <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{selectedCategory}}">
           <ng-container *ngFor="let categKey of objectKeys(categHash)">
             <option *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0" value="{{categKey}}">
               {{categHash[categKey].formattedCategory}}

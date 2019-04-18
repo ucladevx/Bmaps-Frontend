@@ -79,7 +79,6 @@ export class CalendarService {
   }
 
   setViewDate(set : Date, fromNgOnInit : boolean = false) {
-    console.log("here");
     if (this.viewDate == undefined && fromNgOnInit)
       this.viewDate = set;
     if (!fromNgOnInit)
@@ -99,7 +98,6 @@ export class CalendarService {
 
   setDays(calendarDays: CalendarDay[]){
     this.days = calendarDays;
-    console.log(this._eventService.getDateHash());
   }
 
   increaseDay(days: number){

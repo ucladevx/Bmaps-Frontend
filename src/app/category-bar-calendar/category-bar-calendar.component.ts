@@ -17,7 +17,7 @@ export class CategoryBarCalendarComponent implements OnInit {
   private categHash = {};
   private filterHash = {};
   private events: GeoJson[];
-  public selectedCategory = 'all categories';
+  public selectedCategory = 'all';
   public showDropdown = false;
   private wasInside = false;
 
@@ -41,10 +41,10 @@ export class CategoryBarCalendarComponent implements OnInit {
   setDateFilter(){
     let firstInput = (<HTMLInputElement>document.getElementById('start-date')).value;
     let first = moment(firstInput).toDate();
-    console.log(first);
     let lastInput = (<HTMLInputElement>document.getElementById('end-date')).value;
     let last = moment(lastInput).toDate();
     this._eventService.initDateHash(first,last);
+    this._eventService.applyFiltersAndCategories();
   }
 
   getStartDate(){
@@ -63,6 +63,7 @@ export class CategoryBarCalendarComponent implements OnInit {
     var category = (<HTMLInputElement>document.getElementById("categories")).value;
     this._eventService.toggleCategory(category);
     this._categService.setSelectedCategory(category);
+    this.selectedCategory = category;
   }
 
   toggleDropdown() {
@@ -80,6 +81,7 @@ export class CategoryBarCalendarComponent implements OnInit {
       this.categHash["all"].selected = true;
     }
     this._categService.setSelectedCategory("all");
+    this.selectedCategory = "all";
   }
 
   clearFilters(): void {

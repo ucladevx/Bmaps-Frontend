@@ -52,9 +52,7 @@ export class MonthComponent implements OnInit {
 
     this.currentMonth = moment();
 
-    this._calendarService.change.subscribe( function(delta) {
-      this.changeMonth(delta);
-    }.bind(this));
+    this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
     this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
 
     this._eventService.currDate$.subscribe(date => {
@@ -70,8 +68,13 @@ export class MonthComponent implements OnInit {
       this.fillEventsByDay();
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
-        console.log("XXXXXXXXXXXXXXXXXXXXX");
       });
+      if(this._calendarService.isWeekView){
+            let calendarDays = this._calendarService.days;
+            let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
+            let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
+            this._eventService.initDateHash(first,last);
+      }
     });
 
     this._eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
@@ -95,6 +98,12 @@ export class MonthComponent implements OnInit {
       this.showCalendar(new Date());
       this._calendarService.setViewDate(new Date(), true);
     }
+
+    let calendarDays = this._calendarService.days;
+    let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
+    let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
+    this._eventService.initDateHash(first,last);
+
   }
 
   changeSelectedDay (day : CalendarDay) {
@@ -102,6 +111,7 @@ export class MonthComponent implements OnInit {
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
+    if(this._calendarService.isMonthView()){
     if(dateInMonth == undefined)
       return;
     this.currentMonth = moment(dateInMonth).startOf('month');
@@ -132,6 +142,8 @@ export class MonthComponent implements OnInit {
         this._calendarService.setSelectedDay(weekDay);
       }
     }
+    this._calendarService.setDays(this.days);
+  }
   }
 
   changeMonth = (delta: number) => {
@@ -162,7 +174,6 @@ export class MonthComponent implements OnInit {
     this.selectedYear = newMonth.year();
     let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
     this._eventService.updateMonthEvents(monthyear);
-    this._eventService.applyFiltersAndCategories();
   }
 
     //retrieve events for the given month
