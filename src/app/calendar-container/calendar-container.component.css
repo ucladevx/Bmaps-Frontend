@@ -36,13 +36,13 @@ router-outlet.router-flex + * {
 }
 
 #calendar-controls {
-    padding: 8.7px;
+    padding: 9.7px;
     margin: 0 auto;
-    font-size: 24px;
+    font-size: 26px;
 }
 
 #calendar-controls i {
-    font-size: 28px;
+    font-size: 30px;
 }
 
 #calendar-controls span {
@@ -52,14 +52,14 @@ router-outlet.router-flex + * {
 #month-week-switch {
     font-size: 0.8rem;
     position: absolute;
-    right: 10px;
-    top: 7px;
+    right: 30px;
+    top: 8px;
 }
 
 #week-number {
   position: absolute;
-  left: 10px;
-  top: 8px;
+  left: 30px;
+  top: 10px;
   font-size: 20px;
 }
 
