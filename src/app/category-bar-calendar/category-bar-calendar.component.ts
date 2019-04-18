@@ -63,7 +63,6 @@ export class CategoryBarCalendarComponent implements OnInit {
     var endtime = lastInput.split(":");
     var end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
     this._eventService.initTimeHash(start,end);
-    console.log(this._eventService.getTimeHash());
     this._eventService.applyFiltersAndCategories();
   }
 
@@ -73,6 +72,15 @@ export class CategoryBarCalendarComponent implements OnInit {
 
   getEndTime(){
     return this.convertNumToTime(this._eventService.getTimeHash()[1]);
+  }
+
+  setLocationFilter(){
+    let locInput = (<HTMLInputElement>document.getElementById('location')).value;
+    this._eventService.setLocationSearch(locInput);
+  }
+
+  getLoc(){
+    return this._eventService.getLocationSearch();
   }
 
   convertNumToTime(minutes: number){

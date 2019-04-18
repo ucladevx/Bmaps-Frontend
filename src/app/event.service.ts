@@ -39,8 +39,8 @@ export class EventService {
   private categHashSource: Subject <any>;
   // holds object of filters
   private filterHashSource: Subject <any>;
-  // holds object of Locations
-  private locationHashSource: Subject <any>;
+  // holds object for filter location
+  private locationSearchSource: Subject <string>;
   // holds object for filter date span
   private dateHashSource: Subject <any>;
   // holds object for filter time span
@@ -60,7 +60,7 @@ export class EventService {
   expandedEvent$;
   categHash$;
   filterHash$;
-  locationHash$;
+  locationSearch$;
   dateHash$;
   timeHash$;
 
@@ -78,7 +78,7 @@ export class EventService {
   private _expandedEvent;
   private _categHash;
   private _filterHash;
-  private _locationHash;
+  private _locationSearch;
   private _dateHash;
   private _timeHash;
 
@@ -119,6 +119,13 @@ export class EventService {
     ['free food']
   ];
 
+  // Words excluded from location search matching
+  private _excludedSearchWords = [
+        'a','all','an','and','any','area','areas','at','here',
+        'in','it','its','place','places','room','rooms','that',
+        'the','hall','building','ucla'
+  ];
+
   // private baseUrl = "https://www.mappening.io/api/v1/events";
   // private baseUrl = "http://0.0.0.0:5000/api/v2/events"
   private baseUrl = "https://www.mappening.io/api/v2/events"
@@ -144,7 +151,7 @@ export class EventService {
     this.expandedEventSource = new Subject < GeoJson > ();
     this.categHashSource = new Subject < any > ();
     this.filterHashSource = new Subject <any>();
-    this.locationHashSource = new Subject <any>();
+    this.locationSearchSource = new Subject <string>();
     this.dateHashSource = new Subject <any>();
     this.timeHashSource = new Subject <any>();
 
@@ -162,7 +169,7 @@ export class EventService {
     this.expandedEvent$ = this.expandedEventSource.asObservable();
     this.categHash$ = this.categHashSource.asObservable();
     this.filterHash$ = this.filterHashSource.asObservable();
-    this.locationHash$ = this.locationHashSource.asObservable();
+    this.locationSearch$ = this.locationSearchSource.asObservable();
     this.dateHash$ = this.dateHashSource.asObservable();
     this.timeHash$ = this.timeHashSource.asObservable();
 
@@ -180,7 +187,7 @@ export class EventService {
     this.expandedEvent$.subscribe(expandedEventInfo => this._expandedEvent = expandedEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
     this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
-    this.locationHash$.subscribe(locationHash => this._locationHash = locationHash);
+    this.locationSearch$.subscribe(locationSearch => this._locationSearch = locationSearch);
     this.dateHash$.subscribe(dateHash => this._dateHash = dateHash);
     this.timeHash$.subscribe(timeHash => this._timeHash = timeHash);
 
@@ -192,12 +199,13 @@ export class EventService {
     this.initCategories();
     this.resetFilters();
     this.initTimeHash(0,1439);
+    this.setLocationSearch("");
 
   }
 
 
 
-  // QUICK FUNCTIONS //
+  // DAY RELATED FUNCTIONS //
 
   // Determine whether current date is today
   isToday(): boolean {
@@ -215,6 +223,8 @@ export class EventService {
     newDate.setDate(newDate.getDate() + days);
     this.updateDayEvents(newDate);
   }
+
+  // SELECTED EVENT FUNCTIONS //
 
   // Update the current hovered event
   updateHoveredEvent(event: GeoJson): void {
@@ -242,8 +252,6 @@ export class EventService {
     return this._expandedEvent;
   }
 
-
-
   // EVENT RETRIEVAL //
 
   // Retrieve eventsURL
@@ -267,8 +275,6 @@ export class EventService {
     let dateURL = `${this.baseUrl}/search?date=${d}%20${monthName}%20${y}`;
     return dateURL;
   }
-
-
 
   // EVENT UPDATES //
 
@@ -298,7 +304,6 @@ export class EventService {
   updateMonthEvents(monthyear: string): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(events => {
       this.monthEventsSource.next(events);
-      this.initLocations(events);
       this.initCategories();
       this.resetFilters();
       this.resetCategories();
@@ -332,9 +337,7 @@ export class EventService {
     return tempEvents;
   }
 
-
-
-  // CATEGORIES AND FILTERS APPLICATION //
+  // FILTER HASH FUNCTIONS //
 
   initDateHash(first: Date, last: Date){
     let tempHash = [];
@@ -360,25 +363,13 @@ export class EventService {
     return this._timeHash;
   }
 
-  initLocations(events: FeatureCollection){
-    let tempHash = {
-      'all': {
-        formattedCategory: 'all',
-        selected: true
-      }
-    };
-    // initialize all other location containers iteratively
-    for (let event of events.features) {
-      let locationName = event.properties.place.name;
-      if(!tempHash[locationName]) {
-        tempHash[locationName] = {
-          events: [],
-          selected: false
-        }
-      }
-      tempHash[locationName].events.push(event);
-    }
-    this.locationHashSource.next(tempHash);
+  setLocationSearch(search: string){
+    this._locationSearch = search;
+    this.applyFiltersAndCategories();
+  }
+
+  getLocationSearch(){
+    return this._locationSearch;
   }
 
   // Toggle filter
@@ -435,88 +426,6 @@ export class EventService {
     // apply filters and categories
     this.applyFiltersAndCategories();
   }
-
-  // Apply filters and categories together
-  applyFiltersAndCategories() {
-    // Map
-    if(this.router.url.startsWith('/map')){
-      if(this._selectedCategCount > -2 || this._selectedFilterCount != 0) {
-        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-      }
-    }
-    // Calendar
-    else{
-      if(this._selectedCategCount > 0 || this._selectedFilterCount > -1) {
-        this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
-        this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
-        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-      }
-    }
-  }
-
-  // Apply categories and filters to day
-  private applyFiltersToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
-    let tempEvents = new FeatureCollection([]);
-    for (let event of inputFeatures) {
-      // categories
-      let categoryCheck = false;
-      let allSelected = false;
-      if(this._categHash && this._categHash['all'].selected){
-        allSelected = true;
-      }
-      for (let category of event.properties.categories) {
-        let categObject = null;
-        if(this._categHash){
-          categObject = this._categHash[category.toLowerCase()];
-        }
-        if (allSelected || (categObject && categObject.selected)) {
-          categoryCheck = true;
-          break;
-        }
-      }
-      // filters
-      let passesAllFilters = true;
-      if(this._selectedFilterCount > 0){
-      for (let filterList of this._filterLists) {
-        let passesThisFilter = false;
-        let filterUsed = false;
-        for (let filter of filterList) {
-          if (this._filterHash[filter]) {
-            filterUsed = true;
-          }
-          if (this._filterHash[filter] && this.checkFilter(filter, event)) {
-            passesThisFilter = true;
-            break;
-          }
-        }
-        if (filterUsed && !passesThisFilter) {
-          passesAllFilters = false;
-          break;
-        }
-      }
-      }
-      let properDate = true;
-      let properTime = true;
-      if(this.router.url.startsWith('/calendar') && this._dateHash){
-        // date filters
-        var eventDate = moment(event.properties.start_time).toDate();
-        properDate = (eventDate >= moment(this._dateHash[0]).toDate() && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
-        var eventTime = moment(event.properties.start_time);
-        var minCount = eventTime.hour()*60 + eventTime.minutes();
-        properTime = (minCount >= this._timeHash[0] && minCount <= this._timeHash[1]);
-      }
-      // combine
-      if (passesAllFilters && categoryCheck && properDate && properTime) {
-        tempEvents.features.push(event);
-      }
-    }
-    // output source
-    outputSource.next(tempEvents);
-  }
-
-
-
-  // CATEGORY BACKGROUND FUNCTIONS //
 
   // Initialize category hash
   private initCategories() {
@@ -607,10 +516,6 @@ export class EventService {
     return eventMap;
   }
 
-
-
-  // FILTER BACKGROUND FUNCTIONS //
-
   // Reset all filters to be false
   resetFilters() {
     let tempFilters = {
@@ -648,6 +553,108 @@ export class EventService {
     this._selectedCategCount = count;
   }
 
+  // FILTER APPLICATIONS //
+
+  // Apply filters and categories together
+  applyFiltersAndCategories() {
+    // Map
+    if(this.router.url.startsWith('/map')){
+      if(this._selectedCategCount > -2 || this._selectedFilterCount != 0) {
+        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+      }
+    }
+    // Calendar
+    else{
+      if(this._selectedCategCount > 0 || this._selectedFilterCount > -1) {
+        this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
+        this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
+        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+      }
+    }
+  }
+
+  // Apply categories and filters to day
+  private applyFiltersToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
+    // start filtered events collection
+    let tempEvents = new FeatureCollection([]);
+    // iterate through events
+    for (let event of inputFeatures) {
+      // check for matching categories
+      let categoryCheck = false;
+      let allSelected = false;
+      if(this._categHash && this._categHash['all'].selected){
+        allSelected = true;
+      }
+      for (let category of event.properties.categories) {
+        let categObject = null;
+        if(this._categHash){
+          categObject = this._categHash[category.toLowerCase()];
+        }
+        if (allSelected || (categObject && categObject.selected)) {
+          categoryCheck = true;
+          break;
+        }
+      }
+      // check for matching filters
+      let passesAllFilters = true;
+      if(this._selectedFilterCount > 0){
+      for (let filterList of this._filterLists) {
+        let passesThisFilter = false;
+        let filterUsed = false;
+        for (let filter of filterList) {
+          if (this._filterHash[filter]) {
+            filterUsed = true;
+          }
+          if (this._filterHash[filter] && this.checkFilter(filter, event)) {
+            passesThisFilter = true;
+            break;
+          }
+        }
+        if (filterUsed && !passesThisFilter) {
+          passesAllFilters = false;
+          break;
+        }
+      }
+      }
+      // check for date/time/location if calendar view
+      let properDate = true;
+      let properTime = true;
+      let properLocation = true;
+      if(this.router.url.startsWith('/calendar') && this._dateHash){
+        // date filters
+        var eventDate = moment(event.properties.start_time).toDate();
+        properDate = (eventDate >= moment(this._dateHash[0]).toDate() && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
+        // time filters
+        var eventTime = moment(event.properties.start_time);
+        var minCount = eventTime.hour()*60 + eventTime.minutes();
+        properTime = (minCount >= this._timeHash[0] && minCount <= this._timeHash[1]);
+        // location filters
+        if(this._locationSearch != ""){
+          var eventLocation = event.properties.place.name;
+          properLocation = false;
+          if(eventLocation){
+            var targetWords = eventLocation.toLowerCase().split(" ");
+            var searchWords = this._locationSearch.toLowerCase().split(" ");
+            for(let searchString of searchWords){
+              for(let matchString of targetWords){
+                if(searchString == matchString && !this._excludedSearchWords.includes(searchString)){
+                  properLocation = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+      // combine all filter checks
+      if (passesAllFilters && categoryCheck && properDate && properTime && properLocation) {
+        tempEvents.features.push(event);
+      }
+    }
+    // output source
+    outputSource.next(tempEvents);
+  }
+
   // Returns true if event passes the given filter
   private checkFilter(filter: string, event): boolean {
     if (filter == 'happening now') {
@@ -679,8 +686,6 @@ export class EventService {
     }
     return true;
   }
-
-
 
   // MAPBOX POPUP HACK //
 

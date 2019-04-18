@@ -73,6 +73,7 @@ export class WeekComponent implements OnInit {
             let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
             this._eventService.initDateHash(first,last);
             this._eventService.initTimeHash(0,1439);
+            this._eventService.setLocationSearch("");
         }
       });
     });

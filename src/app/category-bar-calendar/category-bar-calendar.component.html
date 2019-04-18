@@ -24,15 +24,15 @@
         </select>
       </span>
       <div class="section-header">Location</div>
-      <input class="form-control" type="text" placeholder="Enter a location">
+      <input class="form-control" type="text" id="location" placeholder="Enter a Location..." value="{{getLoc()}}" (change)="setLocationFilter()">
       <div class="section-header">Date</div>
-      <input type="date" class="form-control" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter()">
+      <input type="date" class="form-control short-input" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter()">
       to
-      <input type="date" class="form-control" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter()">
+      <input type="date" class="form-control short-input" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter()">
       <div class="section-header">Time</div>
-      <input type="time" class="form-control" id="start-time" value="{{getStartTime()}}" (change)="setTimeFilter()">
+      <input type="time" class="form-control short-input" id="start-time" value="{{getStartTime()}}" (change)="setTimeFilter()">
       to
-      <input type="time" class="form-control" id="end-time" value="{{getEndTime()}}" (change)="setTimeFilter()">
+      <input type="time" class="form-control short-input" id="end-time" value="{{getEndTime()}}" (change)="setTimeFilter()">
       <div class="section-header">Tags</div>
       <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
         <div class="btn-group" id="loc-group">

@@ -64,25 +64,7 @@
   width: 74%;
 }
 
-#start-date{
-  background-color: #E8E8E8;
-  display: inline-block;
-  width: 32.5%;
-}
-
-#end-date{
-  background-color: #E8E8E8;
-  display: inline-block;
-  width: 32.5%;
-}
-
-#start-time{
-  background-color: #E8E8E8;
-  display: inline-block;
-  width: 32.5%;
-}
-
-#end-time{
+.short-input{
   background-color: #E8E8E8;
   display: inline-block;
   width: 32.5%;
