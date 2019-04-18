@@ -39,17 +39,22 @@
     font-size: 18px;
 }
 
-.weekview-header span{
-    display: flex;
-    flex-basis: 14.428%;
+.weekview-header span {
     justify-content: center;
     align-items: center;
     padding-top: 10px;
+    display: flex;
+    flex-basis: 14.428%;
     border-left: 1px solid #aaa;
 }
 
 .corner-block {
-  width: 8.8%;
+  width: 8.6%;
+}
+
+.corner-block-2{
+  width: 20px;
+  border-left: 1px solid #aaa;
 }
 
 .weekview-header > .short-abbr {
@@ -70,10 +75,11 @@
   background-color: white;
   align-items: flex-start;
   float: left;
+  border-right: 1px solid #aaa;
 }
 
 .filler-block {
-  height: 4%;
+  height: 6%;
   background-color: inherit;
   position: -webkit-sticky;
   position: sticky;
@@ -83,7 +89,7 @@
 
 .time-of-day {
   width: 100%;
-  height: 96%;
+  height: 94%;
 }
 
 .time-of-day tr {
@@ -91,7 +97,7 @@
   height: 4%;
   margin: 0;
   text-align: center;
-  font-size: 16px;
+  font-size: 10px;
   font-weight: bold;
   color: black;
   z-index: 1;
@@ -123,7 +129,6 @@
     display: flex;
     flex-wrap: wrap;
     flex: 1;
-    /* border-top: 1px solid #979797; */
 }
 
 .weekview-day {
@@ -131,11 +136,10 @@
     width: 14.2857%;
     display: block;
     align-items: flex-start;
+    border-right: 1px solid #979797;
     color: #bebebe;
     background-color: #fff;
-    border-left: 1px solid #979797;
 }
-
 
 .weekview-day.in-current-month {
     color: inherit;
@@ -146,20 +150,22 @@
 }
 
 .day-of-month {
-  height: 4%;
+  height: 6%;
   width: 100%;
   padding: 0 5% 5% 5%;
+  display: block;
+  border-top: 0px solid #aaa;
+  border-bottom: 1px solid #aaa;
   float: left;
   clear: left;
   text-align: center;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 25px;
   position: -webkit-sticky;
   position: sticky;
   background-color: inherit;
   z-index: 150;
   top: 0;
-  border-bottom: 1px solid rgb(200, 200, 200);
   background-clip: padding-box; /* Temporary solution to border not being visible on some cells */
 }
 
