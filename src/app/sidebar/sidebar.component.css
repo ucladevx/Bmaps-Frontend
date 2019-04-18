@@ -56,8 +56,9 @@
 
 .sidebar-event-img-container{
     display: inline-block;
-    width: 80%;
+    width: 70%;
     padding: 5px;
+    margin-right: 20px;
 }
 
 .sidebar-event-details {
