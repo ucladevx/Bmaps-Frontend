@@ -24,7 +24,6 @@ export class CategoryService {
 
   setSelectedCategory(category: string){
     this.selectedCategory = category;
-    console.log(this.selectedCategory);
   }
 
   /** GET categories from the server */

@@ -158,7 +158,7 @@ export class EventService {
     this.categHash$ = this.categHashSource.asObservable();
     this.filterHash$ = this.filterHashSource.asObservable();
     this.locationHash$ = this.locationHashSource.asObservable();
-    this.dateHash$ = this.locationHashSource.asObservable();
+    this.dateHash$ = this.dateHashSource.asObservable();
 
     // Maintain a set of self-subscribed local values
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
@@ -321,12 +321,17 @@ export class EventService {
 
   // CATEGORIES AND FILTERS APPLICATION //
 
-  initDateHash(){
-
+  initDateHash(first: Date, last: Date){
+    let tempHash = [];
+    // initialize all other date containers iteratively
+    tempHash.push(first);
+    tempHash.push(last);
+    console.log(tempHash);
+    this.dateHashSource.next(tempHash);
   }
 
-  applyDateFilter(){
-
+  getDateHash(){
+    return this._dateHash;
   }
 
   initLocations(events: FeatureCollection){
@@ -336,19 +341,16 @@ export class EventService {
         selected: true
       }
     };
-    // initialize all other category containers iteratively
+    // initialize all other location containers iteratively
     for (let event of events.features) {
       let locationName = event.properties.place.name;
-      if(tempHash[locationName]) {
-        tempHash[locationName].events.push(event);
-      }
-      else {
+      if(!tempHash[locationName]) {
         tempHash[locationName] = {
           events: [],
           selected: false
         }
-        tempHash[locationName].events.push(event);
       }
+      tempHash[locationName].events.push(event);
     }
     this.locationHashSource.next(tempHash);
   }
@@ -386,17 +388,14 @@ export class EventService {
           this.resetCategories();
       }
       if(this.router.url.startsWith('/map') && category == 'all'){
-        console.log(category);
           if(this._categHash['all'].selected){
             this.resetCategories();
           } else {
             this.allCategories();
           }
       } else{
-        console.log(this._categHash);
         this._categHash['all'].selected = false;
         this._categHash[category].selected = !this._categHash[category].selected;
-        console.log(this._categHash);
         if (this._categHash[category].selected)
           this._selectedCategCount++;
         else
@@ -414,14 +413,13 @@ export class EventService {
   private applyFiltersAndCategories() {
     // Map
     if(this.router.url.startsWith('/map')){
-      console.log(this._selectedCategCount);
       if(this._selectedCategCount > -2 || this._selectedFilterCount != 0) {
         this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
       }
     }
     // Calendar
     else{
-      if(this._selectedCategCount > 0 || this._selectedFilterCount != 0) {
+      if(this._selectedCategCount > 0 || this._selectedFilterCount > -1) {
         this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
         this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
         this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
@@ -470,8 +468,11 @@ export class EventService {
         }
       }
       }
+      // date filters
+      var eventDate = moment(event.properties.start_time).toDate();
+      let properDate = (eventDate >= this._dateHash[0] && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
       // combine
-      if (passesAllFilters && categoryCheck) {
+      if (passesAllFilters && categoryCheck && properDate) {
         tempEvents.features.push(event);
       }
     }

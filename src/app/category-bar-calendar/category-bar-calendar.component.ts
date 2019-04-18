@@ -4,6 +4,7 @@ import { EventService } from '../event.service';
 import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
 import { CalendarService } from '../calendar.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-category-bar-calendar',
@@ -35,6 +36,14 @@ export class CategoryBarCalendarComponent implements OnInit {
     this._calendarService.dateSpan$.subscribe(clear => {
         this.clearCategories();
     });
+  }
+
+  getStartDate(){
+    return moment(this._eventService.getDateHash()[0]).format('YYYY-MM-DD');
+  }
+
+  getEndDate(){
+    return moment(this._eventService.getDateHash()[1]).format('YYYY-MM-DD');
   }
 
   filterClicked(filter: string): void {
