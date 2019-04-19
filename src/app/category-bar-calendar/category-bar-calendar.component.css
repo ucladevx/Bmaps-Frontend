@@ -33,6 +33,12 @@
 .dropdown-item {
   cursor: pointer;
   color: #747473;
+  line-height: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .dropdown-menu {
@@ -128,6 +134,22 @@ a:active {
   background-color: #F0F0F0;
 }
 
+.btn.filter-btn {
+  border-color: #d3d3d3;
+  border-width: 1px;
+  /* background-color: #E8E8E8; */
+  height: 40px;
+  pointer-events: auto;
+  transition: unset;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.filter-group + .filter-group {
+  margin-top: 10px;
+}
+
 .btn.filter-btn:hover {
   background-color: #59dbd6;
   color: #fff;
@@ -149,16 +171,4 @@ a:active {
 .btn.filter-btn.disabled {
   pointer-events: none;
   opacity: .5;
-}
-
-.btn.filter-btn {
-  border-color: #d3d3d3;
-  border-width: 1px;
-  /* background-color: #E8E8E8; */
-  height: 40px;
-  pointer-events: auto;
-  transition: unset;
-  display: flex;
-  align-items: center;
-  margin-bottom: 0px;
 }

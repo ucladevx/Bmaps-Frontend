@@ -61,6 +61,7 @@
   background-color: white;
   width: 100%;
   z-index: 999;
+  border-bottom: 1px solid rgb(151, 151, 151);
   overflow-y: scroll;
   display: block;
   flex: 1;
