@@ -10,11 +10,11 @@
         <ng-template #calendarView>
           <app-category-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-calendar>
         </ng-template>
-        <div *ngIf="filteredEvents.length == 0" id="no-events-section">
-          <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
-          <div id="no-events-label">No Events</div>
-        </div>
         <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
+          <div *ngIf="filteredEvents.length == 0" id="no-events-section">
+            <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
+            <div id="no-events-label">No Events</div>
+          </div>
             <div *ngFor="let event of filteredEvents" #eventList>
                 <div class="sidebar-event"
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"

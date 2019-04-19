@@ -28,9 +28,10 @@
 .calendar-header {
     width: 100%;
     display: flex;
-    background-color: #59dbd6;
-    color: #fff;
-    padding: 10px 0;
+    background-color: #fff;
+    color: #3c3c3c;
+    font-size: 30px;
+    font-weight: bold;
 }
 
 .calendar-header span {
@@ -38,6 +39,11 @@
     flex-basis: 14.2857%; /* 100/7 */
     justify-content: center;
     align-items: center;
+    padding: 10px 0;
+}
+
+.calendar-header span:not(.last-child) {
+    border-right: 1px solid #aaa;
 }
 
 .calendar-month {
@@ -46,7 +52,6 @@
     flex-wrap: wrap;
     flex: 1;
     flex-shrink: 0;
-    border-left: 1px solid #aaa;
     border-top: 1px solid #aaa;
 }
 
@@ -54,10 +59,13 @@
     position: relative;
     flex-basis: 14.2857%; /* 100/7 */
     display: block;
-    border-right: 1px solid #aaa;
     border-bottom: 1px solid #aaa;
     color: #bebebe;
     background-color: #fff;
+}
+
+.calendar-day:not(:nth-child(7n)) {
+    border-right: 1px solid #aaa;
 }
 
 .calendar-day span {

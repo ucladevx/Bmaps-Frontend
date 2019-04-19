@@ -67,7 +67,7 @@ export class WeekComponent implements OnInit {
       this.fillEventsByDay();
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
-        if(this._calendarService.isMonthView){
+        if(this._calendarService.isMonthView()){
             let calendarDays = this._calendarService.days;
             let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
             let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
@@ -132,7 +132,7 @@ export class WeekComponent implements OnInit {
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
     this.highlightEvent(this._eventService.getExpandedEvent());
     //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = 270;
+    document.getElementById("scrollable").scrollTop = 210;
   }
 
   //display the calendar

@@ -6,9 +6,13 @@
       </div>
       <!-- month and year label -->
       <div id="calendar-controls">
-        <i class="fa fa-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
+        <button class="custom-btn">
+          <i class="fa fa-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
+        </button>
         <span>{{viewDate.toLocaleDateString("en-US", {month: 'long', year: 'numeric'})}}</span>
-        <i class="fa fa-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
+        <button class="custom-btn">
+          <i class="fa fa-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
+        </button>
       </div>
       <!-- buttons for changing between week and month view -->
       <div id="month-week-switch">

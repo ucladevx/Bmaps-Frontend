@@ -38,6 +38,7 @@ export class NavbarComponent implements OnInit {
       if(newView == 'map'){
           this._eventService.allCategories();
       }
+      console.log(newView);
     }
 
     public isFilterCollapsed: boolean = true;
