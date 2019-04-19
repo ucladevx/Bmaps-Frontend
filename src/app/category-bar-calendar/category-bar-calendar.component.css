@@ -46,6 +46,10 @@
   width: 100%;
   border-bottom: 1px solid rgb(151, 151, 151);
   z-index: 999;
+  overflow-y: scroll;
+  display: block;
+  flex: 1;
+  flex-basis: 300px;
 }
 
 .dropdown-content > * {
