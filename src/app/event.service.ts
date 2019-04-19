@@ -340,11 +340,13 @@ export class EventService {
   // FILTER HASH FUNCTIONS //
 
   initDateHash(first: Date, last: Date){
+    console.log("here");
     let tempHash = [];
     // initialize all other date containers iteratively
     tempHash.push(first);
     tempHash.push(last);
     this.dateHashSource.next(tempHash);
+    this.applyFiltersAndCategories();
   }
 
   getDateHash(){
@@ -357,6 +359,7 @@ export class EventService {
     tempHash.push(early);
     tempHash.push(late);
     this.timeHashSource.next(tempHash);
+    this.applyFiltersAndCategories();
   }
 
   getTimeHash(){
