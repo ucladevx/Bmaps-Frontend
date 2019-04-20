@@ -97,20 +97,15 @@
   width: 70%;
   align-items: left;
   display: inline-block;
-  margin-bottom: 2%;
 }
 
 .btn-group{
-  margin-bottom: 3%;
 }
 
 #loc-group {
   margin-right: 3%;
 }
 
-.filters-bottom-section {
-  margin-bottom: 15px;
-}
 
 ul {
   list-style-type: none;

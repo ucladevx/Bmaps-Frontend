@@ -6,7 +6,7 @@
 #event-list{
     flex: 1;
     overflow-y: scroll;
-    flex-basis: 100px; /* Prevents event list from growing too large for the window size */
+    flex-basis: 50px; /* Prevents event list from growing too large for the window size */
 }
 
 .search-header{
