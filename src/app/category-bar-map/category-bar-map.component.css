@@ -170,10 +170,6 @@ a.clear-all-btn:active {
   opacity: .5;
 }
 
-.btn-group:focus {
-  outline: 0;
-}
-
 .checkbox-container {
   width: 16px;
   height: 16px;
