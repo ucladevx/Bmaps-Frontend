@@ -30,6 +30,23 @@ body {
     color: #3c3c3c;
 }
 
+button, button:focus{
+  outline: 0;
+  cursor: pointer;
+}
+
+.btn:focus, .btn.focus {
+  outline: 0 !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+
+.clickable {
+  outline: 0;
+  cursor: pointer;
+}
+
 .custom-btn {
   background: none;
   /* color: inherit; */
