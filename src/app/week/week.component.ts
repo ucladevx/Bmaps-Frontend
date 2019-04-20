@@ -74,6 +74,9 @@ export class WeekComponent implements OnInit {
             this._eventService.initDateHash(first,last);
             this._eventService.initTimeHash(0,1439);
             this._eventService.setLocationSearch("");
+            if(this._calendarService.isWeekView()){
+              document.getElementById("scrollable").scrollTop = 200;
+            }
       });
     });
 
@@ -212,6 +215,7 @@ export class WeekComponent implements OnInit {
       //update view
       this.updateWeekView();
     }
+      document.getElementById("scrollable").scrollTop = 200;
   }
 
   //retrieve events for the given week
@@ -368,8 +372,6 @@ export class WeekComponent implements OnInit {
       'zIndex' : z,
       'fontWeight' : font
     }
-    console.log(event.properties.name);
-    console.log(style);
     return style;
   }
 

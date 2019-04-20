@@ -34,11 +34,11 @@ export class NavbarComponent implements OnInit {
       this._eventService.updateDayEvents(d);
       let monthyear = d.getMonth() + " " + d.getFullYear();
       this._eventService.updateMonthEvents(monthyear);
+      this._eventService.updateWeekEvents(d);
       this._eventService.resetFilters();
       if(newView == 'map'){
           this._eventService.allCategories();
       }
-      console.log(newView);
     }
 
     public isFilterCollapsed: boolean = true;
