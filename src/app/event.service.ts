@@ -326,13 +326,13 @@ export class EventService {
   // Filter events by week
   private filterByWeek(allEvents: FeatureCollection, firstDay: Date){
     let tempEvents = new FeatureCollection([]);
-    var lastDay = moment(firstDay).clone().add(6, 'days').toDate();
+    var daysLeftInWekk = 7-parseInt(moment(firstDay).format('d'));
+    var lastDay = moment(firstDay).clone().add(daysLeftInWekk, 'days').toDate();
     allEvents.features.forEach(el => {
       var d = new Date(el.properties.start_time);
-      var month = d.getMonth();
-      var year = d.getFullYear();
-      if (((month == firstDay.getMonth()) && (year == firstDay.getFullYear())) || ((month == lastDay.getMonth()) && (year == lastDay.getFullYear())))
+      if (d >= firstDay && d <= lastDay){
         tempEvents.features.push(el)
+      }
     });
     return tempEvents;
   }
@@ -503,15 +503,18 @@ export class EventService {
     let total = 0;
     // iterate through events
     for (let event of featuresList) {
-      // iterate through cartegories and increment count
-      for (let category of event.properties.categories) {
-        let eventCateg: string = category.toLowerCase();
-        if (eventMap[eventCateg] === undefined)
-          eventMap[eventCateg] = 1;
-        else
-          eventMap[eventCateg]++;
+      let d = new Date(event.properties.start_time);
+      if(d >= moment().toDate()){
+        // iterate through cartegories and increment count
+        for (let category of event.properties.categories) {
+          let eventCateg: string = category.toLowerCase();
+          if (eventMap[eventCateg] === undefined)
+            eventMap[eventCateg] = 1;
+          else
+            eventMap[eventCateg]++;
+        }
+        total++;
       }
-      total++;
     }
     // store total event count
     eventMap['all'] = total;
