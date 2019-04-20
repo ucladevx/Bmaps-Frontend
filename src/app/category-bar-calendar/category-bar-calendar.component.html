@@ -24,7 +24,7 @@
         </select>
       </span>
       <div class="section-header">Location</div>
-      <input class="form-control" type="text" id="location" placeholder="Enter a Location..." value="{{getLoc()}}" (change)="setLocationFilter()">
+      <input class="form-control" type="text" id="location" placeholder="Enter a Location" value="{{getLoc()}}" (change)="setLocationFilter()">
       <div class="section-header">Date</div>
       <input type="date" class="form-control short-input" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter()">
       to
@@ -38,18 +38,18 @@
         <div class="btn-group" id="loc-group">
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['on-campus']}"
-                 (click)="filterClicked('on-campus')">on-campus</label>
+                 (click)="filterClicked('on-campus')">On-campus</label>
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['off-campus']}"
-                 (click)="filterClicked('off-campus')">off-campus</label>
+                 (click)="filterClicked('off-campus')">Off-campus</label>
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['nearby']}"
-                 (click)="filterClicked('nearby')">nearby</label>
+                 (click)="filterClicked('nearby')">Nearby</label>
         </div>
         <div class="btn-group" id="food-group">
           <label class="btn btn-outline-secondary filter-btn"
                [ngClass]="{'active': filterHash['free food']}"
-               (click)="filterClicked('free food')">free food</label>
+               (click)="filterClicked('free food')">Free food</label>
         </div>
       </div>
   </div>
