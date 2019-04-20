@@ -28,6 +28,16 @@ body {
     overflow: hidden;
 }
 
+button {
+  outline: 0;
+  cursor: pointer;
+}
+
+.clickable {
+  outline: 0;
+  cursor: pointer;
+}
+
 .custom-btn {
   background: none;
   /* color: inherit; */
