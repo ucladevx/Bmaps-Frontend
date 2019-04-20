@@ -54,6 +54,7 @@ router-outlet.router-flex + * {
     position: absolute;
     right: 30px;
     top: 8px;
+    cursor: pointer;
 }
 
 #week-number {

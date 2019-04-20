@@ -87,7 +87,7 @@ export class WeekComponent implements OnInit {
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       if(document.getElementById("week-view-indicator") != null){
-        this.highlightEvent(clickedEventInfo);
+        this.clickedEvent = clickedEventInfo;
       }
     });
 
@@ -111,13 +111,14 @@ export class WeekComponent implements OnInit {
 
     if(this._eventService.getExpandedEvent()){
       this.clickedEvent = this._eventService.getExpandedEvent();
-      this.highlightEvent(this.clickedEvent);
     }
 
     let calendarDays = this._calendarService.days;
     let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
     let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
     this._eventService.initDateHash(first,last);
+
+    document.getElementById("scrollable").scrollTop = 200;
 
   }
 
@@ -129,7 +130,6 @@ export class WeekComponent implements OnInit {
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
-    this.highlightEvent(this._eventService.getExpandedEvent());
     //set scroll bar to show view of rogughly 8am-10pm
     document.getElementById("scrollable").scrollTop = 200;
   }
@@ -264,7 +264,6 @@ export class WeekComponent implements OnInit {
     //update selectedDayChange
     if(this._eventService.getClickedEvent() && moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
       && this._calendarService.getSelectedDay() != day){
-      this.highlightEvent(null);
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
     // this.selectedDay = day;
@@ -282,28 +281,6 @@ export class WeekComponent implements OnInit {
     this._eventService.updateClickedEvent(event);
     //route to new event detail component
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-  }
-
-  //bold event when opened
-  highlightEvent(clickedEventInfo: GeoJson) {
-    //restyle currently selected event card
-    if(this.clickedEvent != null){
-      var selCard = document.getElementById("event-"+this.clickedEvent.id);
-      if(selCard != null){
-        selCard.style.fontWeight = "normal";
-        selCard.style.zIndex = this.zIndexArray[this.clickedEvent.id];
-      }
-    }
-    //update clicked event
-    this.clickedEvent = clickedEventInfo;
-    //style new clicked event
-    if(this.clickedEvent != null){
-      var eCard = document.getElementById("event-"+this.clickedEvent.id);
-      if(eCard != null){
-        eCard.style.fontWeight = "bold";
-        eCard.style.zIndex = "100";
-      }
-    }
   }
 
   //retrieve and format event title and event time
@@ -378,7 +355,7 @@ export class WeekComponent implements OnInit {
     this.zIndexArray[event.id] = z;
     // account for clicked event
     var font = "normal";
-    if(this.clickedEvent && this.clickedEvent.id == event.id){
+    if(this.clickedEvent && this.clickedEvent.id == event.id && this.selectedDay.dayOfMonth == moment(this.clickedEvent.properties.start_time).date()){
       font = "bold";
       z = 100;
     }
@@ -391,6 +368,8 @@ export class WeekComponent implements OnInit {
       'zIndex' : z,
       'fontWeight' : font
     }
+    console.log(event.properties.name);
+    console.log(style);
     return style;
   }
 
