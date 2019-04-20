@@ -14,6 +14,7 @@ interface CalendarDay {
   year: number;
   events: GeoJson[];
   selected: boolean;
+  dayOfWeek: string;
 }
 
 @Component({
@@ -130,7 +131,7 @@ export class WeekComponent implements OnInit {
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
     this.highlightEvent(this._eventService.getExpandedEvent());
     //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = 210;
+    document.getElementById("scrollable").scrollTop = 200;
   }
 
   //display the calendar
@@ -155,7 +156,8 @@ export class WeekComponent implements OnInit {
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
         events: this.getEventsOnDate(d),
-        selected: d.isSame(dateInMonth, 'day')
+        selected: d.isSame(dateInMonth, 'day'),
+        dayOfWeek: d.format('ddd')
       };
       //determine whether it is the current day
       if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
@@ -262,6 +264,7 @@ export class WeekComponent implements OnInit {
     //update selectedDayChange
     if(this._eventService.getClickedEvent() && moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
       && this._calendarService.getSelectedDay() != day){
+      this.highlightEvent(null);
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
     // this.selectedDay = day;
@@ -270,7 +273,6 @@ export class WeekComponent implements OnInit {
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     //update sidebar to display events for that date
     this._eventService.updateDayEvents(date);
-    //this.highlightEvent(this.clickedEvent);
   }
 
   //open event in sidebar
@@ -322,14 +324,14 @@ export class WeekComponent implements OnInit {
 
   //convert time to top percentage in css
   convertTimeToPercent(time: Moment) {
-    var increment = 3.875;
-    var p = 4;
+    var increment = 3.55;
+    var p = 11;
     if(time.format("A") == "PM"){
-      p += 46.5;
-      increment = 3.83;
+      p += 42.8;
+      increment = 3.58;
     }
     p += (parseInt(time.format("H"))%12)*increment;
-    p += (parseInt(time.format("mm"))/15)*(increment/4.2);
+    p += (parseInt(time.format("mm"))/15)*(increment/4);
     return p;
   }
 

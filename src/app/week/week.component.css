@@ -10,42 +10,29 @@
     flex-direction: column;
 }
 
-.selector {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    background-color: #7a7a7a;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-}
-
-.selector i {
-    font-size: 34px;
-    cursor: pointer;
-}
-
 .week-number {
     position: absolute;
     left: 5%;
 }
 
-.weekview-header {
-    width: 100%;
-    display: flex;
-    background-color: #fff;
-    color: #484747;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.weekview-header span {
-    justify-content: center;
-    align-items: center;
-    padding-top: 10px;
-    display: flex;
-    flex-basis: 14.428%;
-    border-left: 1px solid #aaa;
+.day-header {
+  background-color: #fff;
+  height: 11%;
+  width: 100%;
+  padding: 5% 0% 5% 0%;
+  display: block;
+  border-top: 0px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  float: left;
+  clear: left;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 150;
+  top: 0;
+  background-clip: padding-box; /* Temporary solution to border not being visible on some cells */
 }
 
 .corner-block {
@@ -57,7 +44,7 @@
   border-left: 1px solid #aaa;
 }
 
-.weekview-header > .short-abbr {
+.short-abbr {
     display: none;
 }
 
@@ -78,7 +65,7 @@
 }
 
 .filler-block {
-  height: 6%;
+  height: 11%;
   background-color: inherit;
   position: -webkit-sticky;
   position: sticky;
@@ -88,7 +75,7 @@
 
 .time-of-day {
   width: 100%;
-  height: 94%;
+  height: 89%;
 }
 
 .time-of-day tr {
@@ -149,23 +136,10 @@
 }
 
 .day-of-month {
-  background-color: #fff;
-  height: 6%;
   width: 100%;
-  padding: 0 5% 5% 5%;
-  display: block;
-  border-top: 0px solid #aaa;
-  border-bottom: 1px solid #aaa;
-  float: left;
-  clear: left;
   text-align: center;
-  font-weight: bold;
-  font-size: 25px;
-  position: -webkit-sticky;
-  position: sticky;
-  z-index: 150;
-  top: 0;
-  background-clip: padding-box; /* Temporary solution to border not being visible on some cells */
+  font-size: 30px;
+  display: block;
 }
 
 .today span {

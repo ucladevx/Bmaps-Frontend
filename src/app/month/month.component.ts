@@ -75,7 +75,7 @@ export class MonthComponent implements OnInit {
             this._eventService.initDateHash(first,last);
             this._eventService.setLocationSearch("");
             if(this._calendarService.isWeekView()){
-              document.getElementById("scrollable").scrollTop = 210;
+              document.getElementById("scrollable").scrollTop = 200;
             }
     });
 
