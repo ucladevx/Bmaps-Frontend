@@ -163,7 +163,6 @@ export class EventService {
     this.updateWeekEvents(today);
     this.applyFiltersAndCategories();
     this.initCategories(monthyear);
-
   }
 
 
