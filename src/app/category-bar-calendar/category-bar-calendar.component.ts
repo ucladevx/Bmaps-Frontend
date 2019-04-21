@@ -33,9 +33,6 @@ export class CategoryBarCalendarComponent implements OnInit {
     this._eventService.filterHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
-    this._calendarService.dateSpan$.subscribe(clear => {
-        this.clearCategories();
-    });
   }
 
   setDateFilter(){

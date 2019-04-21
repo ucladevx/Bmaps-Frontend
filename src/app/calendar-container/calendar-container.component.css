@@ -1,11 +1,7 @@
 .selector {
-    /* display: flex;
-    align-items: center;
-    justify-content: space-evenly; */
     background-color: #fff;
     color: #484747;
     text-align: center;
-    /* padding: 8.7px; */
     border-bottom: 1px solid rgb(200, 200, 200);
     position: relative;
 }

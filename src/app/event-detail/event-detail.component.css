@@ -4,6 +4,7 @@
 	width: 100%;
 	z-index: 200;
 	top: 0;
+	border-right: 1px solid #aaa;
 }
 
 .event-header {

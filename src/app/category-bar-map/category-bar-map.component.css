@@ -40,14 +40,6 @@
   justify-content: flex-start;
 }
 
-.btn:hover {
-  /* color: #5dbacd; */
-}
-
-.btn-light:hover {
-  /* color: #5dbacd; */
-}
-
 #categ-btn {
   z-index: 999;
 }
@@ -67,13 +59,6 @@
   flex: 1;
   flex-basis: 300px;
 }
-
-/*
-.dropdown-content.show-toggle-btn {
-  position: absolute;
-  top: 40px;
-}
-*/
 
 .section-header {
   padding-top: 8px;
@@ -140,7 +125,6 @@ a.clear-all-btn:active {
 .btn.filter-btn {
   border-color: #d3d3d3;
   border-width: 1px;
-  /* background-color: #E8E8E8; */
   height: 40px;
   pointer-events: auto;
   transition: unset;
