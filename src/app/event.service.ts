@@ -305,7 +305,6 @@ export class EventService {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(events => {
       this.monthEventsSource.next(events);
       this.initCategories();
-      this.resetFilters();
       this.resetCategories();
       this.toggleCategory('all');
     });
@@ -317,7 +316,6 @@ export class EventService {
       this.weekEventsSource.next(this.filterByWeek(allEvents, firstDay));
       let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
       this.initCategories();
-      this.resetFilters();
       this.resetCategories();
       this.toggleCategory('all');
     });
