@@ -77,5 +77,5 @@ export class CategoryBarMapComponent implements OnInit {
   private objectKeys(obj) {
     return Object.keys(obj);
   }
-  
+
 }

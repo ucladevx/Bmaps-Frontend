@@ -39,6 +39,12 @@ export class EventService {
   private categHashSource: Subject <any>;
   // holds object of filters
   private filterHashSource: Subject <any>;
+  // holds object for filter location
+  private locationSearchSource: Subject <string>;
+  // holds object for filter date span
+  private dateHashSource: Subject <any>;
+  // holds object for filter time span
+  private timeHashSource: Subject <any>;
 
   // Observables that components can subscribe to for realtime updates
   monthEvents$;
@@ -54,11 +60,17 @@ export class EventService {
   expandedEvent$;
   categHash$;
   filterHash$;
+  locationSearch$;
+  dateHash$;
+  timeHash$;
 
   // Used internally to keep a realtime, subscribed set of values
   private _monthEvents;
   private _weekEvents;
   private _dayEvents;
+  private _filteredMonthEvents;
+  private _filteredWeekEvents;
+  private _filteredDayEvents;
   private _currDate;
   private _currMonthYear;
   private _clickedEvent;
@@ -66,6 +78,9 @@ export class EventService {
   private _expandedEvent;
   private _categHash;
   private _filterHash;
+  private _locationSearch;
+  private _dateHash;
+  private _timeHash;
 
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
@@ -104,6 +119,13 @@ export class EventService {
     ['free food']
   ];
 
+  // Words excluded from location search matching
+  private _excludedSearchWords = [
+        'a','all','an','and','any','area','areas','at','here',
+        'in','it','its','place','places','room','rooms','that',
+        'the','hall','building','ucla'
+  ];
+
   // private baseUrl = "https://www.mappening.io/api/v1/events";
   // private baseUrl = "http://0.0.0.0:5000/api/v2/events"
   private baseUrl = "https://www.mappening.io/api/v2/events"
@@ -129,6 +151,9 @@ export class EventService {
     this.expandedEventSource = new Subject < GeoJson > ();
     this.categHashSource = new Subject < any > ();
     this.filterHashSource = new Subject <any>();
+    this.locationSearchSource = new Subject <string>();
+    this.dateHashSource = new Subject <any>();
+    this.timeHashSource = new Subject <any>();
 
     // Observable string streams
     this.monthEvents$  = this.monthEventsSource.asObservable();
@@ -144,11 +169,17 @@ export class EventService {
     this.expandedEvent$ = this.expandedEventSource.asObservable();
     this.categHash$ = this.categHashSource.asObservable();
     this.filterHash$ = this.filterHashSource.asObservable();
+    this.locationSearch$ = this.locationSearchSource.asObservable();
+    this.dateHash$ = this.dateHashSource.asObservable();
+    this.timeHash$ = this.timeHashSource.asObservable();
 
     // Maintain a set of self-subscribed local values
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
     this.weekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
     this.dayEvents$.subscribe(dayEvents => this._dayEvents = dayEvents);
+    this.filteredMonthEvents$.subscribe(filteredMonthEvents => this._filteredMonthEvents = filteredMonthEvents);
+    this.filteredWeekEvents$.subscribe(filteredWeekEvents => this._filteredWeekEvents = filteredWeekEvents);
+    this.filteredDayEvents$.subscribe(filteredDayEvents => this._filteredDayEvents = filteredDayEvents);
     this.currDate$.subscribe(date => this._currDate = date);
     this.currMonthYear$.subscribe(monthyear => this._currMonthYear = monthyear);
     this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
@@ -156,19 +187,25 @@ export class EventService {
     this.expandedEvent$.subscribe(expandedEventInfo => this._expandedEvent = expandedEventInfo);
     this.categHash$.subscribe(categHash => this._categHash = categHash);
     this.filterHash$.subscribe(filterHash => this._filterHash = filterHash);
+    this.locationSearch$.subscribe(locationSearch => this._locationSearch = locationSearch);
+    this.dateHash$.subscribe(dateHash => this._dateHash = dateHash);
+    this.timeHash$.subscribe(timeHash => this._timeHash = timeHash);
 
     // Populate event containers
     this.updateDayEvents(today);
     this.updateMonthEvents(monthyear);
     this.updateWeekEvents(today);
     this.applyFiltersAndCategories();
-    this.initCategories(monthyear);
+    this.initCategories();
+    this.resetFilters();
+    this.initTimeHash(0,1439);
+    this.setLocationSearch("");
 
   }
 
 
 
-  // QUICK FUNCTIONS //
+  // DAY RELATED FUNCTIONS //
 
   // Determine whether current date is today
   isToday(): boolean {
@@ -186,6 +223,8 @@ export class EventService {
     newDate.setDate(newDate.getDate() + days);
     this.updateDayEvents(newDate);
   }
+
+  // SELECTED EVENT FUNCTIONS //
 
   // Update the current hovered event
   updateHoveredEvent(event: GeoJson): void {
@@ -213,8 +252,6 @@ export class EventService {
     return this._expandedEvent;
   }
 
-
-
   // EVENT RETRIEVAL //
 
   // Retrieve eventsURL
@@ -239,8 +276,6 @@ export class EventService {
     return dateURL;
   }
 
-
-
   // EVENT UPDATES //
 
   // Updates events for given day while persisting the current category
@@ -254,6 +289,7 @@ export class EventService {
         this._selectedCategCount = 0;
         this.updateCategories();
         this.resetFilters();
+        this.allCategories();
         this.applyFiltersAndCategories();
       }
       else {
@@ -268,7 +304,10 @@ export class EventService {
   updateMonthEvents(monthyear: string): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(events => {
       this.monthEventsSource.next(events);
-      this.initCategories(monthyear);
+      this.initCategories();
+      this.resetFilters();
+      this.resetCategories();
+      this.toggleCategory('all');
     });
   }
 
@@ -277,27 +316,63 @@ export class EventService {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
       this.weekEventsSource.next(this.filterByWeek(allEvents, firstDay));
       let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
-      this.initCategories(monthyear);
+      this.initCategories();
+      this.resetFilters();
+      this.resetCategories();
+      this.toggleCategory('all');
     });
   }
 
   // Filter events by week
   private filterByWeek(allEvents: FeatureCollection, firstDay: Date){
     let tempEvents = new FeatureCollection([]);
-    var lastDay = moment(firstDay).clone().add(6, 'days').toDate();
+    var daysLeftInWekk = 7-parseInt(moment(firstDay).format('d'));
+    var lastDay = moment(firstDay).clone().add(daysLeftInWekk, 'days').toDate();
     allEvents.features.forEach(el => {
       var d = new Date(el.properties.start_time);
-      var month = d.getMonth();
-      var year = d.getFullYear();
-      if (((month == firstDay.getMonth()) && (year == firstDay.getFullYear())) || ((month == lastDay.getMonth()) && (year == lastDay.getFullYear())))
+      if (d >= firstDay && d <= lastDay){
         tempEvents.features.push(el)
+      }
     });
     return tempEvents;
   }
 
+  // FILTER HASH FUNCTIONS //
 
+  initDateHash(first: Date, last: Date){
+    let tempHash = [];
+    // initialize all other date containers iteratively
+    tempHash.push(first);
+    tempHash.push(last);
+    this.dateHashSource.next(tempHash);
+    this.applyFiltersAndCategories();
+  }
 
-  // CATEGORIES AND FILTERS APPLICATION //
+  getDateHash(){
+    return this._dateHash;
+  }
+
+  initTimeHash(early: number, late: number) {
+    let tempHash = [];
+    // initialize all other date containers iteratively
+    tempHash.push(early);
+    tempHash.push(late);
+    this.timeHashSource.next(tempHash);
+    this.applyFiltersAndCategories();
+  }
+
+  getTimeHash(){
+    return this._timeHash;
+  }
+
+  setLocationSearch(search: string){
+    this._locationSearch = search;
+    this.applyFiltersAndCategories();
+  }
+
+  getLocationSearch(){
+    return this._locationSearch;
+  }
 
   // Toggle filter
   toggleFilter(filter: string) {
@@ -328,101 +403,34 @@ export class EventService {
     // if a category is being applied
     if (this._categHash[category] != undefined) {
       // apply the current category
-      this._categHash["all"].selected = false;
-      this._categHash[category].selected = !this._categHash[category].selected;
-      if (this._categHash[category].selected)
-        this._selectedCategCount++;
-      else
-        this._selectedCategCount--;
+      if(this.router.url.startsWith('/calendar')){
+          this.resetCategories();
+      }
+      if(this.router.url.startsWith('/map') && category == 'all'){
+          if(this._categHash['all'].selected){
+            this.resetCategories();
+          } else {
+            this.allCategories();
+          }
+      } else{
+        this._categHash['all'].selected = false;
+        this._categHash[category].selected = !this._categHash[category].selected;
+        if (this._categHash[category].selected)
+          this._selectedCategCount++;
+        else
+          this._selectedCategCount--;
+      }
     }
     if(this.router.url.startsWith('/calendar')){
+      this._categService.setSelectedCategory(category);
       this.updateCategories();
     }
     // apply filters and categories
     this.applyFiltersAndCategories();
   }
 
-  // Apply filters and categories together
-  private applyFiltersAndCategories() {
-    // Map
-    if(this.router.url.startsWith('/map')){
-      if(this._selectedCategCount > -1) {
-        this.applyCategoriesToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-      }
-      if(this._selectedFilterCount != 0) {
-        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-      }
-    }
-    // Calendar
-    else{
-      if(this._selectedCategCount > 0) {
-        this.applyCategoriesToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-        this.applyCategoriesToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
-        this.applyCategoriesToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
-      }
-      if(this._selectedFilterCount != 0){
-        this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
-        this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
-        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-      }
-    }
-  }
-
-  // Apply categories to the input features list of events
-  private applyCategoriesToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
-    let tempEvents = new FeatureCollection([]);
-    for (let event of inputFeatures) {
-      let allSelected = false;
-      if(this._categHash && this._categHash['all'].selected){
-        allSelected = true;
-      }
-      for (let category of event.properties.categories) {
-        let categObject = null;
-        if(this._categHash){
-          categObject = this._categHash[category.toLowerCase()];
-        }
-        if (allSelected || (categObject && categObject.selected)) {
-          tempEvents.features.push(event);
-          break;
-    }}}
-    outputSource.next(tempEvents);
-  }
-
-  // Apply filters to day
-  private applyFiltersToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
-    let tempEvents = new FeatureCollection([]);
-    for (let event of inputFeatures) {
-      let passesAllFilters = true;
-      for (let filterList of this._filterLists) {
-        let passesThisFilter = false;
-        let filterUsed = false;
-        for (let filter of filterList) {
-          if (this._filterHash[filter]) {
-            filterUsed = true;
-          }
-          if (this._filterHash[filter] && this.checkFilter(filter, event)) {
-            passesThisFilter = true;
-            break;
-          }
-        }
-        if (filterUsed && !passesThisFilter) {
-          passesAllFilters = false;
-          break;
-        }
-      }
-      if (passesAllFilters) {
-        tempEvents.features.push(event);
-      }
-    }
-    outputSource.next(tempEvents);
-  }
-
-
-
-  // CATEGORY BACKGROUND FUNCTIONS //
-
   // Initialize category hash
-  private initCategories(monthyear: string) {
+  private initCategories() {
     this._categService.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
@@ -446,7 +454,7 @@ export class EventService {
           numEventsDay: dayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
-          selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
+          selected: false
         }
       }
       // update the category hash and apply the categories
@@ -480,7 +488,7 @@ export class EventService {
           numEventsDay: dayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
-          selected: false
+          selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
         }
       }
       // update the category hash
@@ -495,27 +503,26 @@ export class EventService {
     let total = 0;
     // iterate through events
     for (let event of featuresList) {
-      // iterate through cartegories and increment count
-      for (let category of event.properties.categories) {
-        let eventCateg: string = category.toLowerCase();
-        if (eventMap[eventCateg] === undefined)
-          eventMap[eventCateg] = 1;
-        else
-          eventMap[eventCateg]++;
+      let d = new Date(event.properties.start_time);
+      if(d >= moment().toDate()){
+        // iterate through cartegories and increment count
+        for (let category of event.properties.categories) {
+          let eventCateg: string = category.toLowerCase();
+          if (eventMap[eventCateg] === undefined)
+            eventMap[eventCateg] = 1;
+          else
+            eventMap[eventCateg]++;
+        }
+        total++;
       }
-      total++;
     }
     // store total event count
     eventMap['all'] = total;
     return eventMap;
   }
 
-
-
-  // FILTER BACKGROUND FUNCTIONS //
-
   // Reset all filters to be false
-  private resetFilters() {
+  resetFilters() {
     let tempFilters = {
       'happening now': false,
       'upcoming': false,
@@ -528,6 +535,129 @@ export class EventService {
       'free food': false
     };
     this.filterHashSource.next(tempFilters);
+  }
+
+  resetCategories() {
+    for (var categ in this._categHash) {
+      if (this._categHash.hasOwnProperty(categ)) {
+        this._categHash[categ.toLowerCase()].selected = false;
+      }
+    }
+    this._selectedCategCount = 0;
+  }
+
+  allCategories() {
+    var count = 0;
+    let dayMap = this.getCategoryMap(this._dayEvents.features);
+    for (var categ in this._categHash) {
+      if (this._categHash.hasOwnProperty(categ.toLowerCase()) && dayMap[categ.toLowerCase()] > 0) {
+        this._categHash[categ.toLowerCase()].selected = true;
+        count++;
+      }
+    }
+    this._selectedCategCount = count;
+  }
+
+  // FILTER APPLICATIONS //
+
+  // Apply filters and categories together
+  applyFiltersAndCategories() {
+    // Map
+    if(this.router.url.startsWith('/map')){
+      if(this._selectedCategCount > -2 || this._selectedFilterCount != 0) {
+        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+      }
+    }
+    // Calendar
+    else{
+      if(this._selectedCategCount > 0 || this._selectedFilterCount > -1) {
+        this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
+        this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
+        this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+      }
+    }
+  }
+
+  // Apply categories and filters to day
+  private applyFiltersToSelection(inputFeatures: GeoJson[], outputSource: BehaviorSubject <FeatureCollection>){
+    // start filtered events collection
+    let tempEvents = new FeatureCollection([]);
+    // iterate through events
+    for (let event of inputFeatures) {
+      // check for matching categories
+      let categoryCheck = false;
+      let allSelected = false;
+      if(this._categHash && this._categHash['all'].selected){
+        allSelected = true;
+      }
+      for (let category of event.properties.categories) {
+        let categObject = null;
+        if(this._categHash){
+          categObject = this._categHash[category.toLowerCase()];
+        }
+        if (allSelected || (categObject && categObject.selected)) {
+          categoryCheck = true;
+          break;
+        }
+      }
+      // check for matching filters
+      let passesAllFilters = true;
+      if(this._selectedFilterCount > 0){
+      for (let filterList of this._filterLists) {
+        let passesThisFilter = false;
+        let filterUsed = false;
+        for (let filter of filterList) {
+          if (this._filterHash[filter]) {
+            filterUsed = true;
+          }
+          if (this._filterHash[filter] && this.checkFilter(filter, event)) {
+            passesThisFilter = true;
+            break;
+          }
+        }
+        if (filterUsed && !passesThisFilter) {
+          passesAllFilters = false;
+          break;
+        }
+      }
+      }
+      // check for date/time/location if calendar view
+      let properDate = true;
+      let properTime = true;
+      let properLocation = true;
+      if(this.router.url.startsWith('/calendar') && this._dateHash){
+        // date filters
+        var eventDate = moment(event.properties.start_time).toDate();
+        properDate = (eventDate >= moment(this._dateHash[0]).toDate() && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
+        // time filters
+        var eventTime = moment(event.properties.start_time);
+        var minCount = eventTime.hour()*60 + eventTime.minutes();
+        properTime = (minCount >= this._timeHash[0] && minCount <= this._timeHash[1]);
+        // location filters
+        if(this._locationSearch != ""){
+          var eventLocation = event.properties.place.name;
+          properLocation = false;
+          if(eventLocation){
+            var targetWords = eventLocation.toLowerCase().split(" ");
+            var searchWords = this._locationSearch.toLowerCase().split(" ");
+            for(let searchString of searchWords){
+              for(let matchString of targetWords){
+                if(searchString == matchString && !this._excludedSearchWords.includes(searchString)){
+                  properLocation = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+      // combine all filter checks
+      if (passesAllFilters && categoryCheck && properDate && properTime && properLocation) {
+        tempEvents.features.push(event);
+      }
+    }
+    // output source
+    outputSource.next(tempEvents);
   }
 
   // Returns true if event passes the given filter
@@ -561,8 +691,6 @@ export class EventService {
     }
     return true;
   }
-
-
 
   // MAPBOX POPUP HACK //
 

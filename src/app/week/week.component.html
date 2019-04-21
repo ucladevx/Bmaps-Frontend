@@ -1,26 +1,9 @@
 <div class="weekview-container" id="week-view-indicator">
-  <div class="weekview-header">
-    <div class="corner-block"></div>
-    <span class="long-abbr">sun</span>
-    <span class="long-abbr">mon</span>
-    <span class="long-abbr">tue</span>
-    <span class="long-abbr">wed</span>
-    <span class="long-abbr">thu</span>
-    <span class="long-abbr">fri</span>
-    <span class="long-abbr">sat</span>
-    <span class="short-abbr">s</span>
-    <span class="short-abbr">m</span>
-    <span class="short-abbr">t</span>
-    <span class="short-abbr">w</span>
-    <span class="short-abbr">t</span>
-    <span class="short-abbr">f</span>
-    <span class="short-abbr">s</span>
-  </div>
   <div id="scrollable">
     <div class="timebar">
       <div class="filler-block"></div>
-      <table class="time-of-day">
-      <tr><td>12am</td></tr><tr><td>1am</td></tr><tr><td>2am</td></tr><tr><td>3am</td></tr><tr><td>4am</td></tr>
+      <table class="time-of-day" id="far-left">
+      <tr><td>all day</td></tr><tr><td>1am</td></tr><tr><td>2am</td></tr><tr><td>3am</td></tr><tr><td>4am</td></tr>
       <tr><td>5am</td></tr><tr><td>6am</td></tr><tr><td>7am</td></tr><tr><td>8am</td></tr><tr><td>9am</td></tr>
       <tr><td>10am</td></tr><tr><td>11am</td></tr><tr><td>12pm</td></tr><tr><td>1pm</td></tr><tr><td>2pm</td></tr>
       <tr><td>3pm</td></tr><tr><td>4pm</td></tr><tr><td>5pm</td></tr><tr><td>6pm</td></tr><tr><td>7pm</td></tr>
@@ -31,7 +14,11 @@
     <div class="weekview-month">
       <div *ngFor="let day of days"
       class="weekview-day" [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.selected, 'today': day === today}" (click)="onSelect(day)">
+        <div class="day-header">
+        <span class="long-abbr">{{day.dayOfWeek}}</span>
+        <span class="short-abbr">S</span>
         <span class="day-of-month" [ngClass]="{'selected': day.selected }">{{day.dayOfMonth}}</span>
+        </div>
         <table class="time-of-day">
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>

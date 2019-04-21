@@ -14,6 +14,7 @@ interface CalendarDay {
   year: number;
   events: GeoJson[];
   selected: boolean;
+  dayOfWeek: string;
 }
 
 @Component({
@@ -67,6 +68,15 @@ export class WeekComponent implements OnInit {
       this.fillEventsByDay();
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
+            let calendarDays = this._calendarService.days;
+            let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
+            let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
+            this._eventService.initDateHash(first,last);
+            this._eventService.initTimeHash(0,1439);
+            this._eventService.setLocationSearch("");
+            if(this._calendarService.isWeekView()){
+              document.getElementById("scrollable").scrollTop = 200;
+            }
       });
     });
 
@@ -80,7 +90,7 @@ export class WeekComponent implements OnInit {
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       if(document.getElementById("week-view-indicator") != null){
-        this.highlightEvent(clickedEventInfo);
+        this.clickedEvent = clickedEventInfo;
       }
     });
 
@@ -104,8 +114,14 @@ export class WeekComponent implements OnInit {
 
     if(this._eventService.getExpandedEvent()){
       this.clickedEvent = this._eventService.getExpandedEvent();
-      this.highlightEvent(this.clickedEvent);
     }
+
+    let calendarDays = this._calendarService.days;
+    let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
+    let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
+    this._eventService.initDateHash(first,last);
+
+    document.getElementById("scrollable").scrollTop = 200;
 
   }
 
@@ -117,13 +133,13 @@ export class WeekComponent implements OnInit {
   updateWeekView(){
     //update month events (subscribed to by ngOnInit)
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
-    this.highlightEvent(this._eventService.getExpandedEvent());
     //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = 270;
+    document.getElementById("scrollable").scrollTop = 200;
   }
 
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
+    if(this._calendarService.isWeekView()){
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
@@ -143,7 +159,8 @@ export class WeekComponent implements OnInit {
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
         events: this.getEventsOnDate(d),
-        selected: d.isSame(dateInMonth, 'day')
+        selected: d.isSame(dateInMonth, 'day'),
+        dayOfWeek: d.format('ddd')
       };
       //determine whether it is the current day
       if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
@@ -161,6 +178,7 @@ export class WeekComponent implements OnInit {
     if(this._eventService.getClickedEvent()){
       this.clickedEvent = this._eventService.getClickedEvent();
     }
+  }
   }
 
   //increment or decrement week
@@ -197,6 +215,7 @@ export class WeekComponent implements OnInit {
       //update view
       this.updateWeekView();
     }
+      document.getElementById("scrollable").scrollTop = 200;
   }
 
   //retrieve events for the given week
@@ -247,7 +266,7 @@ export class WeekComponent implements OnInit {
   //highlight selected day
   onSelect(day: CalendarDay): void{
     //update selectedDayChange
-    if(moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
+    if(this._eventService.getClickedEvent() && moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
       && this._calendarService.getSelectedDay() != day){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
@@ -257,7 +276,6 @@ export class WeekComponent implements OnInit {
     let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
     //update sidebar to display events for that date
     this._eventService.updateDayEvents(date);
-    //this.highlightEvent(this.clickedEvent);
   }
 
   //open event in sidebar
@@ -267,28 +285,6 @@ export class WeekComponent implements OnInit {
     this._eventService.updateClickedEvent(event);
     //route to new event detail component
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-  }
-
-  //bold event when opened
-  highlightEvent(clickedEventInfo: GeoJson) {
-    //restyle currently selected event card
-    if(this.clickedEvent != null){
-      var selCard = document.getElementById("event-"+this.clickedEvent.id);
-      if(selCard != null){
-        selCard.style.fontWeight = "normal";
-        selCard.style.zIndex = this.zIndexArray[this.clickedEvent.id];
-      }
-    }
-    //update clicked event
-    this.clickedEvent = clickedEventInfo;
-    //style new clicked event
-    if(this.clickedEvent != null){
-      var eCard = document.getElementById("event-"+this.clickedEvent.id);
-      if(eCard != null){
-        eCard.style.fontWeight = "bold";
-        eCard.style.zIndex = "100";
-      }
-    }
   }
 
   //retrieve and format event title and event time
@@ -309,14 +305,14 @@ export class WeekComponent implements OnInit {
 
   //convert time to top percentage in css
   convertTimeToPercent(time: Moment) {
-    var increment = 3.875;
-    var p = 4;
+    var increment = 3.55;
+    var p = 11;
     if(time.format("A") == "PM"){
-      p += 46.5;
-      increment = 3.83;
+      p += 42.8;
+      increment = 3.58;
     }
     p += (parseInt(time.format("H"))%12)*increment;
-    p += (parseInt(time.format("mm"))/15)*(increment/4.2);
+    p += (parseInt(time.format("mm"))/15)*(increment/4);
     return p;
   }
 
@@ -363,7 +359,7 @@ export class WeekComponent implements OnInit {
     this.zIndexArray[event.id] = z;
     // account for clicked event
     var font = "normal";
-    if(this.clickedEvent && this.clickedEvent.id == event.id){
+    if(this.clickedEvent && this.clickedEvent.id == event.id && this.selectedDay.dayOfMonth == moment(this.clickedEvent.properties.start_time).date()){
       font = "bold";
       z = 100;
     }

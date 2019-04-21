@@ -4,11 +4,10 @@
 	width: 100%;
 	z-index: 200;
 	top: 0;
-	background-color: #ececec;
 }
 
 .event-header {
-	height: 50px;
+	height: 40px;
 	background-color: #494949;
 	border-bottom: 1px solid #afafaf;
 	z-index: 600;

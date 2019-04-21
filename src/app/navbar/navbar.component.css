@@ -5,6 +5,15 @@
 .navbar-text {
   color: white;
   margin-right: 10px;
+  outline: 0;
+}
+
+.navbar-text.active {
+  color: rgb(120,213,215);
+}
+
+.navbar-text:hover {
+  cursor: pointer;
 }
 
 .navbar-default{
@@ -49,7 +58,7 @@
 }
 
 #navbar-brand{
-    color: rgb(120,213,215);
+    color: #59dbd6;
     font-weight: 600;
 }
 
@@ -65,6 +74,11 @@
 
 .nav-logo{
     display: inline-block;
+    outline: 0;
+}
+
+button {
+  outline: 0;
 }
 
 .navbar-collapse {

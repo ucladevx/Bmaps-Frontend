@@ -6,7 +6,7 @@
 #event-list{
     flex: 1;
     overflow-y: scroll;
-    flex-basis: 100px; /* Prevents event list from growing too large for the window size */
+    flex-basis: 50px; /* Prevents event list from growing too large for the window size */
 }
 
 .search-header{
@@ -14,7 +14,7 @@
 }
 
 .sidebar-outer{
-
+    border-right: 1px solid #aaa;
 }
 
 .sidebar-header{
@@ -56,8 +56,9 @@
 
 .sidebar-event-img-container{
     display: inline-block;
-    width: 80%;
+    width: 70%;
     padding: 5px;
+    margin-right: 20px;
 }
 
 .sidebar-event-details {
