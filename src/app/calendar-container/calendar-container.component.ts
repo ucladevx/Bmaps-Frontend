@@ -73,7 +73,6 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   changeDateSpan(delta: number) : void{
-  this._eventService.initTimeHash(0,1439);
     this._calendarService.changeDateSpan(delta);
     this.enumerateWeek();
     //this._calendarService.storeView('week');
