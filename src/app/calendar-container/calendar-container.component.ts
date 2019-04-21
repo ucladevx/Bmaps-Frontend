@@ -51,14 +51,6 @@ export class CalendarContainerComponent implements OnInit {
     moment([2023,3,2])
   ];
 
-  /// Calendar container will have to have some state, that is, the current time
-  //  expected behavior:
-  //  if you switch from month view to week view,
-  //    if it is the current month, go to the week view for the current week
-  //    if it is a different month, go to the week view for the first week in the month
-  //  if you switch from week view to month view,
-  //    go to the month containing the week that was being viewed.
-
   constructor(public router: Router, private _eventService: EventService, route: ActivatedRoute, private _calendarService: CalendarService) {
     this.currentPath = route.snapshot.url.join('');
   }
