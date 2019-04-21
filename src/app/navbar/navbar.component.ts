@@ -40,6 +40,7 @@ export class NavbarComponent implements OnInit {
           this._eventService.allCategories();
       } else {
         this._eventService.initTimeHash(0,1439);
+        this._eventService.setLocationSearch("");
       }
     }
 
