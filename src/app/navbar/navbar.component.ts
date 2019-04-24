@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { CategoryService } from '../category.service';
 import { CalendarService } from '../calendar.service';
 import { EventService } from '../event.service';
@@ -12,10 +13,11 @@ import { EventService } from '../event.service';
 export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
-    constructor(private _eventService: EventService, private _categService: CategoryService, private _calendarService: CalendarService) { }
+    constructor(private _eventService: EventService, private _categService: CategoryService, private _calendarService: CalendarService, private _router: Router) { }
     ngOnInit() { }
 
     isCollapsed: boolean = true;
+    isMapSelected: boolean = true; 
 
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
@@ -48,4 +50,25 @@ export class NavbarComponent implements OnInit {
       this.isCollapsed = true;
     }
 
+    toggleViews(): void {
+        this.isMapSelected = !this.isMapSelected;
+        if (this.isMapSelected) {
+            this.emitChangeView('map')
+            this._router.navigateByUrl('/map');
+        }
+        else {
+            if (this._calendarService.retrieveLastView() == 'week'){
+                this.emitChangeView('week')
+                this._router.navigateByUrl('/calendar/week');
+            }
+            else {
+                this.emitChangeView('month')
+                this._router.navigateByUrl('/calendar/month');
+            }
+        }
+        console.log('toggleView()');
+    }
+
+    // mark .views-switch as ng-not-empty ng-valid
+    // mark .views-switch-text as ng-pristine ng-untouched ng-valid ng-not-empty
 }

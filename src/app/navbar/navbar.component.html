@@ -16,14 +16,27 @@
     <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">
         <ul class="navbar-nav mr-auto">
         </ul>
-        <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
-        <span *ngIf="this._calendarService.retrieveLastView() == 'week'; else monthButton">
-          <span class="navbar-text"  routerLink="/calendar/week" routerLinkActive="active" (click)="emitChangeView('week')">Calendar View</span>
+
+        <span class="views-switch" (click)="toggleViews()" [ngClass]="isMapSelected ? 'checked' : ''">
+          <small></small>
+          <input type="checkbox" style="display:none">
+          <span class="views-switch-text">
+            <span routerLink="/map" routerLinkActive="active" class="map-switch" (click)="toggleViews()" >
+              <img src="/assets/images/switch-map-icon.png">
+            </span>
+            <span *ngIf="this._calendarService.retrieveLastView() == 'week'; else monthButton">
+              <span routerLink="/calendar/week" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
+                <img src="/assets/images/switch-calendar-icon.png">
+              </span>
+            </span>
+            <ng-template #monthButton> 
+              <span routerLink="/calendar/month" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
+                <img src="/assets/images/switch-calendar-icon.png">
+              </span>
+            </ng-template>
+          </span>
         </span>
-        <ng-template #monthButton>
-          <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="emitChangeView('month')">Calendar View</span>
-        </ng-template>
-        <!-- <span class="navbar-text"  routerLink="/week" routerLinkActive="active">Week View</span> -->
+        
         <span class="navbar-text">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">Feedback</a>
         </span>

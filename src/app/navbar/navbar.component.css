@@ -151,3 +151,70 @@ li a {
 a:hover{
     text-decoration: none;
 }
+
+.views-switch {
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    position: relative;
+    display: inline-block;
+    box-sizing: content-box;
+    overflow: visible;
+    width: 80px;
+    height: 30px;
+    padding: 0px;
+    margin: 0px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
+    transition: 0.3s ease-out all;
+    -webkit-transition: 0.3s ease-out all;
+    top: -1px;
+  }
+
+  .views-switch small {
+    background: rgb(71,71,71);
+    border-radius: 45px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    width: 45px;
+    height: 27px;
+    position: absolute;
+    top: 1px;
+    left: 0px;
+    transition: 0.3s ease-out all;
+    -webkit-transition: 0.3s ease-out all;
+    z-index: 1000;
+  }
+  .views-switch.checked {
+    background: white; 
+    border-color: white;
+  }
+  .views-switch.checked small {
+    left: 35px;
+  }
+  
+  .views-switch .calendar-switch {
+    display:block;
+    position: absolute;
+    right: 10%;
+    top: 10%;
+    z-index: 0;
+    color:#A9A9A9;
+  }
+  
+  .views-switch .map-switch {
+    display:none;
+     z-index: 0;
+    color:#fff;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+  }
+  
+  .views-switch.checked .calendar-switch {
+    display:none;
+  }
+  
+  .views-switch.checked .map-switch {
+    display:block;
+  
+  }
