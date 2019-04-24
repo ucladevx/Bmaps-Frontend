@@ -28,6 +28,7 @@ import { environment } from '../environments/environment';
 import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 
 
 const appRoutes: Routes = [
@@ -56,7 +57,8 @@ const appRoutes: Routes = [
     NavbarComponent,
     MonthComponent,
     WeekComponent,
-    CalendarContainerComponent
+    CalendarContainerComponent,
+    SearchBarComponent
   ],
   imports: [
     BrowserModule,
