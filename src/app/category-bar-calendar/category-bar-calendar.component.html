@@ -4,6 +4,10 @@
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
+    <div *ngIf="filterHash" class="filters-header">
+      Filters
+      <a class="clear-all-btn" (click)="clearAllFilters()">CLEAR ALL</a>
+    </div>
       <div class="section-header">Categories</div>
       <span *ngIf="this._calendarService.isMonthView()">
       <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{selectedCategory}}">
