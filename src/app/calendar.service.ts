@@ -118,4 +118,8 @@ export class CalendarService {
     return this.router.url.startsWith("/calendar/week");
   }
 
+  isMapView() {
+    return this.router.url.startsWith("/map");
+  }
+
 }

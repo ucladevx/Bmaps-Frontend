@@ -17,7 +17,6 @@ export class NavbarComponent implements OnInit {
     ngOnInit() { }
 
     isCollapsed: boolean = true;
-    isMapSelected: boolean = true; 
 
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
@@ -51,19 +50,18 @@ export class NavbarComponent implements OnInit {
     }
 
     toggleViews(): void {
-        this.isMapSelected = !this.isMapSelected;
-        if (this.isMapSelected) {
+        if (!this._calendarService.isMapView()) {
             this.emitChangeView('map')
-            this._router.navigateByUrl('/map');
+            this._router.navigateByUrl('/map(sidebar:list)');
         }
         else {
             if (this._calendarService.retrieveLastView() == 'week'){
                 this.emitChangeView('week')
-                this._router.navigateByUrl('/calendar/week');
+                this._router.navigateByUrl('/calendar/week(sidebar:list)');
             }
             else {
                 this.emitChangeView('month')
-                this._router.navigateByUrl('/calendar/month');
+                this._router.navigateByUrl('/calendar/month(sidebar:list)');
             }
         }
         console.log('toggleView()');
