@@ -11,7 +11,7 @@ import { CategoryService } from '../category.service';
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.css'],
+    styleUrls: ['./sidebar.component.scss'],
     providers: [ DateService ],
     animations: [
         trigger('myAwesomeAnimation', [
