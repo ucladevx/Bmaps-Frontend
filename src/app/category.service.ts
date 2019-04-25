@@ -23,7 +23,6 @@ export class CategoryService {
   }
 
   setSelectedCategory(category: string){
-    console.log(category);
     this.selectedCategory = category;
   }
 

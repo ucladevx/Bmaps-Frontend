@@ -22,21 +22,21 @@
           <input type="checkbox" style="display:none">
           <span class="views-switch-text">
             <span routerLink="/map" routerLinkActive="active" class="map-switch" (click)="toggleViews()" >
-              <img src="/assets/images/switch-map-icon.png">
+              <img src="/assets/images/switch-map-icon.png" (click)="toggleViews()">
             </span>
             <span *ngIf="this._calendarService.retrieveLastView() == 'week'; else monthButton">
               <span routerLink="/calendar/week" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
-                <img src="/assets/images/switch-calendar-icon.png">
+                <img src="/assets/images/switch-calendar-icon.png" (click)="toggleViews()">
               </span>
             </span>
-            <ng-template #monthButton> 
+            <ng-template #monthButton>
               <span routerLink="/calendar/month" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
-                <img src="/assets/images/switch-calendar-icon.png">
+                <img src="/assets/images/switch-calendar-icon.png" (click)="toggleViews()">
               </span>
             </ng-template>
           </span>
         </span>
-        
+
         <span class="navbar-text">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">Feedback</a>
         </span>

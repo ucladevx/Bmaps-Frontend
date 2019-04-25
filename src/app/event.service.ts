@@ -424,7 +424,6 @@ export class EventService {
 
   // Initialize category hash
   private initCategories() {
-    console.log("here");
     this._categService.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
@@ -485,8 +484,6 @@ export class EventService {
         }
       }
       // update the category hash
-      console.log(this._categHash);
-      console.log(tempHash);
       this.categHashSource.next(tempHash);
     });
   }

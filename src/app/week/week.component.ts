@@ -121,7 +121,7 @@ export class WeekComponent implements OnInit {
     this._eventService.initDateHash(first,last);
 
     document.getElementById("scrollable").scrollTop = 200;
-
+    this._calendarService.isWeekView();
   }
 
   changeSelectedDay (day : CalendarDay) {
