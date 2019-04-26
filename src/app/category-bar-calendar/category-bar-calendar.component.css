@@ -63,7 +63,6 @@ a.clear-all-btn:active {
 }
 
 .dropdown-content {
-  padding: 20px;
   top: 42px;
   background-color: white;
   width: 100%;
@@ -73,11 +72,6 @@ a.clear-all-btn:active {
   display: block;
   flex: 1;
   flex-basis: 300px;
-}
-
-.dropdown-content > * {
-  margin: 2%;
-  border: none;
 }
 
 .section-header {
@@ -93,6 +87,15 @@ a.clear-all-btn:active {
   padding-left: 10px;
   background-color: #E8E8E8;
   font-size: 16px;
+}
+
+.filters-content {
+  padding: 20px;
+}
+
+.filters-content > * {
+  margin: 2%;
+  border: none;
 }
 
 .custom-select{
