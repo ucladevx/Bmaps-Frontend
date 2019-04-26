@@ -12,7 +12,7 @@ import { EventService } from '../event.service';
 export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
-    constructor(private _eventService: EventService, private _categService: CategoryService, private _calendarService: CalendarService) { }
+    constructor(private _eventService: EventService, private _categService: CategoryService, public _calendarService: CalendarService) { }
     ngOnInit() { }
 
     isCollapsed: boolean = true;

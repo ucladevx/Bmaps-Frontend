@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build --prod",
-    "sw-build": "ng build --prod && node build/fix-sw",
+    "start": "ng serve --aot",
+    "build": "ng build --prod --aot",
+    "sw-build": "ng build --prod --aot && node build/fix-sw",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -62,6 +62,7 @@
     "sass-loader": "^7.1.0",
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
-    "typescript": "3.1.5"
+    "typescript": "3.1.5",
+    "webpack-bundle-analyzer": "^3.3.2"
   }
 }
