@@ -12,3 +12,7 @@ input[type=text] {
     background: url("/assets/images/search-icon.png") left no-repeat;
     padding-left: 25px; 
 }
+
+input:focus { 
+    outline: none; 
+}
