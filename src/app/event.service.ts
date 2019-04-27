@@ -9,7 +9,6 @@ import { CategoryService } from './category.service';
 import { CategoryList } from './category';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { all } from 'q';
 
 @Injectable()
 export class EventService {
@@ -595,7 +594,6 @@ export class EventService {
     for (let event of inputFeatures) {
       // check for matching categories
       let categoryCheck = false;
-      let eventCategories = [];
       let allSelected = false;
       if(this._categHash && this._categHash['all'].selected){
         allSelected = true;
@@ -604,7 +602,6 @@ export class EventService {
         let categObject = null;
         if(this._categHash){
           categObject = this._categHash[category.toLowerCase()];
-          eventCategories.push(categObject);
         }
         if (allSelected || (categObject && categObject.selected)) {
           categoryCheck = true;
@@ -632,25 +629,26 @@ export class EventService {
           }
         }
       }
-      // check for date/time/location if calendar view
+      // check for date/time/location and search term if calendar view
       let properDate = true;
       let properTime = true;
       let properLocation = true;
+      let properSearchTerm = true;
       if(this.router.url.startsWith('/calendar') && this._dateHash){
         // date filters
-        var eventDate = moment(event.properties.start_time).toDate();
+        let eventDate = moment(event.properties.start_time).toDate();
         properDate = (eventDate >= moment(this._dateHash[0]).toDate() && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
         // time filters
-        var eventTime = moment(event.properties.start_time);
-        var minCount = eventTime.hour()*60 + eventTime.minutes();
+        let eventTime = moment(event.properties.start_time);
+        let minCount = eventTime.hour()*60 + eventTime.minutes();
         properTime = (minCount >= this._timeHash[0] && minCount <= this._timeHash[1]);
         // location filters
         if(this._locationSearch != ""){
-          var eventLocation = event.properties.place.name;
+          let eventLocation = event.properties.place.name;
           properLocation = false;
           if(eventLocation){
-            var targetWords = eventLocation.toLowerCase().split(" ");
-            var searchWords = this._locationSearch.toLowerCase().split(" ");
+            let targetWords = eventLocation.toLowerCase().split(" ");
+            let searchWords = this._locationSearch.toLowerCase().split(" ");
             for(let searchString of searchWords){
               for(let matchString of targetWords){
                 if(searchString == matchString && !this._excludedSearchWords.includes(searchString)){
@@ -660,33 +658,40 @@ export class EventService {
               }
             }
           }
-        }
-        var properTerm = true; 
+        } 
         if (this._universalSearch != ""){
-          // Search using eventName, eventLocation, eventDate, eventCategory
-          properTerm = false; 
+          // Search using name, categories, description, date, location
+          properSearchTerm = false; 
+          // name
           let eventName = event.properties.name;
           let targetWords = eventName.toLowerCase().split(" ");
-          for (let category of event.properties.categories){
-            targetWords.push(category.toLowerCase());
+          // categories
+          for (let category of event.properties.categories) {
+            if (this._categHash) {
+              targetWords.push(this._categHash[category.toLowerCase()].formattedCategory)
+            }
           }
-          let description = event.properties.description;
-          if (description) {
-            description = description.toLowerCase().split(" ");
-            targetWords = targetWords.concat(description);
+          // description
+          let eventDescription = event.properties.description;
+          if (eventDescription) {
+            eventDescription = eventDescription.toLowerCase().split(" ");
+            targetWords = targetWords.concat(eventDescription);
           }
-          let splitDate = this._dateService.formatEventDate(event).toLowerCase().split(" ")
-          targetWords = targetWords.concat(splitDate);
-          let universalLocation = event.properties.place.name;
-          if (universalLocation) {
-            universalLocation = universalLocation.toLowerCase().split(" ");
-            targetWords = targetWords.concat(universalLocation);
+          //date
+          let eventDate = this._dateService.formatEventDate(event).toLowerCase().split(" ")
+          targetWords = targetWords.concat(eventDate);
+          //location
+          let eventLocation = event.properties.place.name;
+          if (eventLocation) {
+            eventLocation = eventLocation.toLowerCase().split(" ");
+            targetWords = targetWords.concat(eventLocation);
           }
+          //matching
           let searchWords = this._universalSearch.toLowerCase().split(" ");
           for(let searchString of searchWords){
             for (let matchString of targetWords) {
               if(searchString == matchString && !this._excludedSearchWords.includes(searchString)){
-                properTerm = true;
+                properSearchTerm = true;
                 break;
               }
             }
@@ -694,7 +699,7 @@ export class EventService {
         }
       }
       // combine all filter checks
-      if (passesAllFilters && categoryCheck && properDate && properTime && properLocation && properTerm) {
+      if (passesAllFilters && categoryCheck && properDate && properTime && properLocation && properSearchTerm) {
         tempEvents.features.push(event);
       }
     }

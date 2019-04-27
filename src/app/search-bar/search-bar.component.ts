@@ -14,7 +14,6 @@ export class SearchBarComponent implements OnInit {
   }
 
   setUniversalFilter(){
-    console.log('setUniversalFilter()')
     let uniInput = (<HTMLInputElement>document.getElementById('universal-search')).value;
     this._eventService.setUniversalSearch(uniInput);
   }
