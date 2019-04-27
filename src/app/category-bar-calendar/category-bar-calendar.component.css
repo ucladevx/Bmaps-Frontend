@@ -164,7 +164,6 @@ a:active {
 .btn.filter-btn {
   border-color: #d3d3d3;
   border-width: 1px;
-  /* background-color: #E8E8E8; */
   height: 40px;
   pointer-events: auto;
   transition: unset;

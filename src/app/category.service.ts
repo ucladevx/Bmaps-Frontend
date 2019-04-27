@@ -30,6 +30,7 @@ export class CategoryService {
   }
 
   setSelectedCategory(category: string){
+    console.log(category);
     this.selectedCategory = category;
     this.selectedCategorySource.next(category);
   }

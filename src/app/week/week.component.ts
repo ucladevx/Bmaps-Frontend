@@ -48,6 +48,7 @@ export class WeekComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this._calendarService.storeView('week');
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
@@ -68,15 +69,13 @@ export class WeekComponent implements OnInit {
       this.fillEventsByDay();
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
-            let calendarDays = this._calendarService.days;
-            let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
-            let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
-            this._eventService.initDateHash(first,last);
-            this._eventService.initTimeHash(0,1439);
-            this._eventService.setLocationSearch("");
-            if(this._calendarService.isWeekView()){
-              document.getElementById("scrollable").scrollTop = 200;
-            }
+        let calendarDays = this._calendarService.days;
+        let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
+        let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
+        this._eventService.initDateHash(first,last);
+        if(this._calendarService.isWeekView()){
+            document.getElementById("scrollable").scrollTop = 200;
+        }
       });
     });
 

@@ -17,14 +17,6 @@ export class NavbarComponent implements OnInit {
 
     isCollapsed: boolean = true;
 
-    collapsed(event: any): void {
-        // console.log(event);
-    }
-
-    expanded(event: any): void {
-        // console.log(event);
-    }
-
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
       let d = new Date();
@@ -38,6 +30,9 @@ export class NavbarComponent implements OnInit {
       this._eventService.resetFilters();
       if(newView == 'map'){
           this._eventService.allCategories();
+      } else {
+        this._eventService.initTimeHash(0,1439);
+        this._eventService.setLocationSearch("");
       }
     }
 

@@ -69,14 +69,13 @@ export class MonthComponent implements OnInit {
       this.ngZone.run( () => {
         this.showCalendar(this._calendarService.getViewDate());
       });
-            let calendarDays = this._calendarService.days;
-            let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
-            let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
-            this._eventService.initDateHash(first,last);
-            this._eventService.setLocationSearch("");
-            if(this._calendarService.isWeekView()){
-              document.getElementById("scrollable").scrollTop = 200;
-            }
+      let calendarDays = this._calendarService.days;
+      let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
+      let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
+      this._eventService.initDateHash(first,last);
+      if(this._calendarService.isWeekView()){
+          document.getElementById("scrollable").scrollTop = 200;
+      }
     });
 
     this._eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
@@ -105,7 +104,6 @@ export class MonthComponent implements OnInit {
     let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
     let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
     this._eventService.initDateHash(first,last);
-    this._eventService.initTimeHash(0,1439);
   }
 
   changeSelectedDay (day : CalendarDay) {

@@ -306,10 +306,7 @@ export class EventService {
   updateMonthEvents(monthyear: string): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(events => {
       this.monthEventsSource.next(events);
-      this.initCategories();
-      this.resetFilters();
-      this.resetCategories();
-      this.toggleCategory('all');
+      this.toggleCategory(this._categService.getSelectedCategory());
     });
   }
 
@@ -317,11 +314,7 @@ export class EventService {
   updateWeekEvents(firstDay: Date): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
       this.weekEventsSource.next(this.filterByWeek(allEvents, firstDay));
-      let monthyear = firstDay.getMonth() + " " + firstDay.getFullYear();
-      this.initCategories();
-      this.resetFilters();
-      this.resetCategories();
-      this.toggleCategory('all');
+      this.toggleCategory(this._categService.getSelectedCategory());
     });
   }
 
@@ -445,6 +438,7 @@ export class EventService {
 
   // Initialize category hash
   private initCategories() {
+    console.log("here");
     this._categService.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
@@ -494,7 +488,6 @@ export class EventService {
            selected: this._categHash ? this._categHash['all'].selected : true
          }
       };
-      // initialize all other category containers iteratively
       for (let categ of categs.categories) {
         let categName = categ.toLowerCase();
         tempHash[categName] = {
@@ -506,6 +499,8 @@ export class EventService {
         }
       }
       // update the category hash
+      console.log(this._categHash);
+      console.log(tempHash);
       this.categHashSource.next(tempHash);
     });
   }
