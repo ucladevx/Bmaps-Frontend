@@ -27,6 +27,8 @@ import { environment } from '../environments/environment';
 import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 
 const appRoutes: Routes = [
@@ -63,6 +65,8 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     SharedModule,
+    AngularFontAwesomeModule,
+    FontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
