@@ -137,9 +137,7 @@ export class MapBoxComponent implements OnInit {
     // add extra controls
     this.addControls();
 
-
     this._calendarService.isMapView();
-
   }
 
   addEventLayer(data): void {
