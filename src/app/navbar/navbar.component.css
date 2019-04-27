@@ -151,3 +151,69 @@ li a {
 a:hover{
     text-decoration: none;
 }
+
+.views-switch {
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    position: relative;
+    display: inline-block;
+    box-sizing: content-box;
+    overflow: visible;
+    width: 92px;
+    height: 30px;
+    padding: 0px;
+    margin: 0px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
+    transition: 0.3s ease-out all;
+    -webkit-transition: 0.3s ease-out all;
+    top: -1px;
+  }
+
+  .views-switch small {
+    background: rgb(71,71,71);
+    border-radius: 45px;
+    width: 48px;
+    height: 24px;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: 0.3s ease-out all;
+    -webkit-transition: 0.3s ease-out all;
+    z-index: 1000;
+  }
+  .views-switch.checked {
+    background: white; 
+    border-color: white;
+  }
+  .views-switch.checked small {
+    left: 41px;
+  }
+  
+  .views-switch .calendar-switch {
+    display:block;
+    position: absolute;
+    right: 10%;
+    top: 4%;
+    z-index: 0;
+    color:#A9A9A9;
+  }
+  
+  .views-switch .map-switch {
+    display:none;
+     z-index: 0;
+    color:#fff;
+    position: absolute;
+    top: 4%;
+    left: 10%;
+  }
+  
+  .views-switch.checked .calendar-switch {
+    display:none;
+  }
+  
+  .views-switch.checked .map-switch {
+    display:block;
+  
+  }

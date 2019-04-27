@@ -22,10 +22,14 @@ export class CalendarService {
 
   dateSpanSource: Subject <any>;
   dateSpan$;
+  viewSource: Subject <any>;
+  view$;
 
   constructor(private router: Router, private _eventService: EventService) {
     this.dateSpanSource = new Subject < any > ();
     this.dateSpan$ = this.dateSpanSource.asObservable();
+    this.viewSource = new Subject < any > ();
+    this.view$ = this.viewSource.asObservable();
     this._eventService.currDate$.subscribe( date => {
         this.viewDate = date;
         this.viewDateChange.emit(date);
@@ -111,11 +115,21 @@ export class CalendarService {
   }
 
   isMonthView() {
+    if(this.router.url.startsWith("/calendar/month"))
+      this.viewSource.next('month');
     return this.router.url.startsWith("/calendar/month");
   }
 
   isWeekView() {
+    if(this.router.url.startsWith("/calendar/week"))
+      this.viewSource.next('week');
     return this.router.url.startsWith("/calendar/week");
+  }
+
+  isMapView() {
+    if(this.router.url.startsWith("/map"))
+      this.viewSource.next('map');
+    return this.router.url.startsWith("/map");
   }
 
 }
