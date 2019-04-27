@@ -33,13 +33,11 @@ export class CategoryBarCalendarComponent implements OnInit {
     this._eventService.filterHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
-<<<<<<< Updated upstream
     this._calendarService.dateSpan$.subscribe(clear => {
         this.clearCategories();
-=======
+    });
     this._categService.selectedCategory$.subscribe(category => {
       this.selectedCategory = category;
->>>>>>> Stashed changes
     });
   }
 
