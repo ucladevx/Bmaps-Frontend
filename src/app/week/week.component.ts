@@ -119,7 +119,7 @@ export class WeekComponent implements OnInit {
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
     this.highlightEvent(this._eventService.getExpandedEvent());
     //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = 270;
+    document.getElementById("scrollable").scrollTop = (window.pageYOffset) + (window.innerHeight - 185)*0.438;
   }
 
   //display the calendar

@@ -32,7 +32,7 @@
       <div *ngFor="let day of days"
       class="weekview-day" [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.selected, 'today': day === today}" (click)="onSelect(day)">
         <span class="day-of-month" [ngClass]="{'selected': day.selected }">{{day.dayOfMonth}}</span>
-        <table class="time-of-day">
+        <table class="time-of-day" onLoad="window.scroll(0, 0)">
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
           <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>

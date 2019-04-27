@@ -22,6 +22,18 @@
     flex-direction: column;
 }
 
+.fix-pos-left {
+    position: absolute;
+    right: 65%;
+    top: 25%; 
+}
+
+.fix-pos-right {
+    position: absolute;
+    right: 34%;
+    top: 25%;
+}
+
 router-outlet.router-flex + * {
     display: flex;
     flex: 1 1 auto;
