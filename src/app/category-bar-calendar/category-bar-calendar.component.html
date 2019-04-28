@@ -1,10 +1,11 @@
 <div id="categ-div" class="btn-group">
   <button id="categ-btn" type="button" class="btn dropdown-toggle"
-          (click)="toggleDropdown()">
+          (click)="toggleDropdown()"
+          [disabled]="events.length == 0">
     Filters<span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
-      <div class="section-header">Categories</div>
+      <!-- <div class="section-header">Categories</div>
       <span *ngIf="this._calendarService.isMonthView()">
       <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{this._categService.getSelectedCategory()}}">
         <ng-container *ngFor="let categKey of objectKeys(categHash)">
@@ -22,7 +23,34 @@
             </option>
           </ng-container>
         </select>
-      </span>
+      </span> -->
+      <div *ngIf="categHash" class="categ-section-header">
+        Categories
+        <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
+      </div>
+      <div *ngIf="categHash" class="categories-wrapper">
+        <ul class="categories-list" role="menu">
+          <li *ngFor="let categKey of objectKeys(categHash)">
+            <a *ngIf="categHash[categKey].numEventsDay != undefined && categHash[categKey].numEventsDay > 0"
+               [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+               (click)="categoryClicked(categKey)">
+            <div class="checkbox-container">
+              <div *ngIf="categHash[categKey].selected; else unchecked">
+                <img class="checkbox" width="16px" src="assets/images/check.svg"/>
+              </div>
+            </div>
+            <ng-template #unchecked>
+                <div>
+                  <img class="checkbox" width="16px" src="assets/images/box.svg" />
+                </div>
+            </ng-template>
+            {{categHash[categKey].formattedCategory}}
+            <span *ngIf="categHash[categKey].numEventsDay"
+                  [ngClass]="{'badge': true, 'badge-secondary': true, 'categ-bubble': true, 'categ-bubble-selected': categHash[categKey].selected}">{{categHash[categKey].numEvents}}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <div class="section-header">Location</div>
       <input class="form-control" type="text" placeholder="Enter a location">
       <div class="section-header">Organizer</div>

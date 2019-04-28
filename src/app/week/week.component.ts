@@ -118,8 +118,17 @@ export class WeekComponent implements OnInit {
     //update month events (subscribed to by ngOnInit)
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
     this.highlightEvent(this._eventService.getExpandedEvent());
-    //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = (window.pageYOffset) + (window.innerHeight - 185)*0.438;
+    //set scroll bar to start at 7:00 AM
+    var scrollRatio = 0;
+    var hourSlot;
+    if ((hourSlot = document.getElementById('hour-slot')) != null) {
+      var hourHeight = hourSlot.getBoundingClientRect().height;
+      var numHours = document.querySelectorAll("#scrollable .time-of-day tr").length;
+      var scrollableHeight = numHours*hourHeight;
+      var scrollRatio = scrollableHeight * 7/numHours;
+    } 
+
+    document.getElementById("scrollable").scrollTop = scrollRatio + 2;
   }
 
   //display the calendar

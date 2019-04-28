@@ -70,12 +70,25 @@
   width: 32.5%;
 }
 
+.categ-section-header {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 10px;
+  background-color: #E8E8E8;
+  font-size: 14px;
+}
+
 .filters-wrapper {
   text-align: left;
   width: 70%;
   align-items: left;
   display: inline-block;
   margin-bottom: 2%;
+}
+
+.categories-wrapper {
+  max-height: 176px;
+  overflow-y: scroll;
 }
 
 #food-group {
@@ -95,6 +108,12 @@ ul {
   overflow:scroll;
 }
 
+.categories-list {
+  width: 100%;
+  padding: 0 0 0 0;
+  margin-bottom: 0px;
+}
+
 .selected {
   /* background-color: #ff0000; */
   color: #77d5d7 !important;
@@ -110,6 +129,23 @@ ul {
 
 a:active {
   background-color: #F0F0F0;
+}
+
+a.clear-all-btn {
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  color: #808080;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+a.clear-all-btn:hover {
+  color: #BEBEBE;
+}
+
+a.clear-all-btn:active {
+  background-color: inherit;
 }
 
 .btn.filter-btn:hover {

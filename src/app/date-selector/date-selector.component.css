@@ -7,6 +7,7 @@
     text-align: center;
     padding: 0px 15px;
     border-radius: 20px;
+    position: relative;
 }
 
 @media only screen and (min-width: 768px) {
@@ -33,7 +34,6 @@
     cursor: pointer;
     outline: inherit;
     transition: color 0.2s ease;
-    position: relative;
     font-size: 28px;
     color: #656565;
 }
@@ -50,6 +50,18 @@
     vertical-align: middle;
     font-size: 18px;
     line-height: 1.1;
+}
+
+.fix-pos-left {
+    position: absolute;
+    right: 90%;
+    top: 12%; 
+}
+
+.fix-pos-right {
+    position: absolute;
+    right: 7%;
+    top: 12%;
 }
 
 .small-font {

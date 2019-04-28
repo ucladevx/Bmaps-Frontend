@@ -32,19 +32,14 @@ export class CategoryBarCalendarComponent implements OnInit {
     this._eventService.filterHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
-    this._calendarService.dateSpan$.subscribe(clear => {
-        this.clearCategories();
-    });
   }
 
   filterClicked(filter: string): void {
     this._eventService.toggleFilter(filter);
   }
 
-  categoryClicked(): void {
-    var category = (<HTMLInputElement>document.getElementById("categories")).value;
+  categoryClicked(category: string): void {
     this._eventService.toggleCategory(category);
-    this._categService.setSelectedCategory(category);
   }
 
   toggleDropdown() {
@@ -58,10 +53,6 @@ export class CategoryBarCalendarComponent implements OnInit {
         this._eventService.toggleCategory(key);
       }
     }
-    if(this.categHash){
-      this.categHash["all"].selected = true;
-    }
-    this._categService.setSelectedCategory("all");
   }
 
   clearFilters(): void {

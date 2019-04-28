@@ -335,9 +335,9 @@ export class EventService {
       else
         this._selectedCategCount--;
     }
-    if(this.router.url.startsWith('/calendar')){
-      this.updateCategories();
-    }
+    // if(this.router.url.startsWith('/calendar')){
+    //   this.updateCategories();
+    // }
     // apply filters and categories
     this.applyFiltersAndCategories();
   }
