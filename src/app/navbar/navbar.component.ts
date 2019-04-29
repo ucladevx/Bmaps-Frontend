@@ -12,13 +12,18 @@ export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
     constructor(private _eventService: EventService, private _categService: CategoryService) { }
-    ngOnInit() { 
-      this.temperature = this.getTemperature();
-    }
-
-    isCollapsed: boolean = true;
     temperature: string;
     icon: string;
+    isCollapsed: boolean = true;
+    ngOnInit() { 
+      // our call back function 
+      var tempCallback = function callback(temperature, icon) : void{
+        this.temperature = temperature;
+        this.icon = icon;
+      }
+      tempCallback = tempCallback.bind(this);
+      this.getTemperature(tempCallback);
+    }
 
     collapsed(event: any): void {
         // console.log(event);
@@ -51,32 +56,24 @@ export class NavbarComponent implements OnInit {
       this.isCollapsed = true;
     }
 
-    getTemperature(): string {
+    getTemperature(callback): void{
       var request = new XMLHttpRequest();
       var data;
-      var jsondata;
-      var temp;
+      var temperature;
       var icon;
 
-      request.onreadystatechange = function() {
-          if (request.readyState == XMLHttpRequest.DONE) {
-              data = this.responseText;
-              jsondata = JSON.parse(data);
-              console.log(jsondata['main']['temp']);
-              temp = String(jsondata['main']['temp']);
-
-              icon = jsondata.weather[0].icon;
-              console.log(icon);
-
-              return temp;
-          }
-      }
-
-      this.icon = "04d";
-
       request.open('GET', 'http://api.openweathermap.org/data/2.5/weather?units=imperial&zip=90024,us&APPID=bc6a73dfabbd4e6c9006a835d00589f2', true);
+      request.onreadystatechange = function(){
+        // check for the state if it is done
+        if(request.readyState === XMLHttpRequest.DONE && request.status === 200){
+          //parse API data
+          data = JSON.parse(this.responseText);
+          temperature = String(data['main']['temp']);
+          icon = data.weather[0].icon;
+          // use the callback to send the data.
+          callback(temperature, icon);
+        }
+      }
       request.send();
-
-      return "59.5";
   }
 }
