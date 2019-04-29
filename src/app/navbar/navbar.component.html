@@ -1,4 +1,4 @@
-<nav class="navbar navbar-toggleable-md  navbar-default">
+k<nav class="navbar navbar-toggleable-md  navbar-default">
     <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="d-inline-block align-top" alt="">
         <i class="fa fa-chevron-down" aria-hidden="true"></i>
@@ -16,6 +16,10 @@
     <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">
         <ul class="navbar-nav mr-auto">
         </ul>
+        <span class="navbar-text">
+            <img src='http://openweathermap.org/img/w/{{icon}}.png' alt='Icon depicting current weather.'>
+        </span>
+        <span class="navbar-text">{{temperature}}°F</span>
         <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
         <span class="navbar-text"  routerLink="/calendar" routerLinkActive="active" (click)="emitChangeView('month')">Calendar View</span>
         <!-- <span class="navbar-text"  routerLink="/week" routerLinkActive="active">Week View</span> -->
