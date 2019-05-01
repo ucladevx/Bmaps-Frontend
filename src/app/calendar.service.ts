@@ -102,6 +102,7 @@ export class CalendarService {
 
   setDays(calendarDays: CalendarDay[]){
     this.days = calendarDays;
+    this._eventService.calendarServiceDays = calendarDays;
   }
 
   increaseDay(days: number){
