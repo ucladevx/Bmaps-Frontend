@@ -698,7 +698,7 @@ export class EventService {
           let searchWords = this._universalSearch.toLowerCase().split(" ");
           for(let searchString of searchWords){
             for (let matchString of targetWords) {
-              if(matchString.indexOf(searchString) != -1 && !this._excludedSearchWords.includes(searchString)){
+              if(matchString.indexOf(searchString) != -1){
                 properSearchTerm = true;
                 break;
               }
