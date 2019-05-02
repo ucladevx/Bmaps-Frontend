@@ -11,7 +11,7 @@
 #categ-div {
   width: 100%;
   flex-direction: column;
-  border-bottom: $default_border_width solid rgb(151, 151, 151);
+  border-bottom: $default_border_width solid $default_border_color;
   margin: 0 auto;
 }
 
@@ -45,7 +45,7 @@ a.clear-all-btn:active {
 }
 
 .dropdown-toggle {
-  border-bottom: $default_border_width solid rgb(151, 151, 151);
+  border-bottom: $default_border_width solid $default_border_color;
   color: #656565;
 }
 
@@ -68,7 +68,7 @@ a.clear-all-btn:active {
   top: 42px;
   background-color: white;
   width: 100%;
-  border-bottom: $default_border_width solid rgb(151, 151, 151);
+  border-bottom: $default_border_width solid $default_border_color;
   z-index: 999;
   overflow-y: scroll;
   display: block;
@@ -164,7 +164,7 @@ a:active {
 }
 
 .btn.filter-btn {
-  border-color: #d3d3d3;
+  border-color: $default_border_color;
   border-width: $default_border_width;
   height: 40px;
   pointer-events: auto;
@@ -188,12 +188,12 @@ a:active {
 }
 
 .btn.filter-btn:active {
-  border-color: #d3d3d3;
+  border-color: $default_border_color;
 }
 
 .btn.filter-btn.active {
   background-color: #4ad3d3;
-  border-color: #d3d3d3;
+  border-color: $default_border_color;
 }
 
 .btn.filter-btn.disabled {

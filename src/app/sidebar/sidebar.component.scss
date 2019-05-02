@@ -12,11 +12,11 @@
 }
 
 .search-header{
-    border-bottom: 1px solid rgb(167,167,167);
+    border-bottom: 1px solid $default_border_color;
 }
 
 .sidebar-outer{
-    border-right: 1px solid #aaa;
+    border-right: 1px solid $default_border_color;
 }
 
 .sidebar-header{

@@ -45,7 +45,7 @@
 }
 
 .calendar-header span:not(.last-child) {
-    border-right: $default_border_width solid #aaa;
+    border-right: $default_border_width solid $default_border_color;
 }
 
 .calendar-month {
@@ -54,20 +54,20 @@
     flex-wrap: wrap;
     flex: 1;
     flex-shrink: 0;
-    border-top: $default_border_width solid #aaa;
+    border-top: $default_border_width solid $default_border_color;
 }
 
 .calendar-day {
     position: relative;
     flex-basis: 14.2857%; /* 100/7 */
     display: block;
-    border-bottom: $default_border_width solid #aaa;
+    border-bottom: $default_border_width solid $default_border_color;
     color: #bebebe;
     background-color: #fff;
 }
 
 .calendar-day:not(:nth-child(7n)) {
-    border-right: $default_border_width solid #aaa;
+    border-right: $default_border_width solid $default_border_color;
 }
 
 .calendar-day span {

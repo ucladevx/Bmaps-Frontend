@@ -23,8 +23,8 @@
   width: 100%;
   padding: 5% 0% 5% 0%;
   display: block;
-  border-top: 0px solid #aaa;
-  border-bottom: 1px solid #aaa;
+  border-top: 0px solid $default_border_color;
+  border-bottom: 1px solid $default_border_color;
   float: left;
   clear: left;
   text-align: center;
@@ -43,7 +43,7 @@
 
 .corner-block-2{
   width: 20px;
-  border-left: 1px solid #aaa;
+  border-left: 1px solid $default_border_color;
 }
 
 .short-abbr {
@@ -63,7 +63,7 @@
   background-color: white;
   align-items: flex-start;
   float: left;
-  border-right: 1px solid #aaa;
+  border-right: 1px solid $default_border_color;
 }
 
 .filler-block {
@@ -94,7 +94,7 @@
 }
 
 .weekview-day .time-of-day tr:not(:last-child) {
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid $default_border_color;
 }
 
 .hidden {
@@ -124,7 +124,7 @@
     width: 14.2857%;
     display: block;
     align-items: flex-start;
-    border-right: 1px solid #979797;
+    border-right: 1px solid $default_border_color;
     color: #bebebe;
     background-color: #fff;
 }
