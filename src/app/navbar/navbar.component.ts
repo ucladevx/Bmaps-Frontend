@@ -17,8 +17,9 @@ const defaultTemperatureUnits = "imperial";
 export class NavbarComponent implements OnInit {
     public temperature: string;
     public weatherIcon: string;
-    public celsius: number;
-    public fahrenheit: number;
+    public celsius: string;
+    public fahrenheit: string;
+    isFahrenheit: boolean = true;
 
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
@@ -29,7 +30,7 @@ export class NavbarComponent implements OnInit {
     ngOnInit() { 
       // our call back function 
       this.getTemperature();
-      setInterval(this.getTemperature, 900000);
+      setInterval(() => this.getTemperature(), 900000);
     }
 
     collapsed(event: any): void {
@@ -64,29 +65,33 @@ export class NavbarComponent implements OnInit {
     }
 
     getTemperature(): void { 
-
       var weatherQuery = `${baseWeatherUrl}?units=${defaultTemperatureUnits}&zip=${zipcode},us&APPID=${API_KEY}`;
 
       this.http.get(weatherQuery).subscribe(weatherData => {
-        //set default temperature to Fahrenheit
-        this.temperature = String(Math.round((weatherData['main']['temp']))) + "°F";
-        this.weatherIcon = weatherData['weather'][0]['icon'];
+        let temp = weatherData['main']['temp'];
 
-        this.fahrenheit = Math.round(weatherData['main']['temp']);
-        this.celsius = Math.round((weatherData['main']['temp'] - 32)/1.8);
+        this.fahrenheit = String(Math.round(temp)) + "°F";
+        this.celsius = String(Math.round((temp - 32)/1.8) + "°C");
+
+        //set default temperature to Fahrenheit
+        if (this.isFahrenheit)
+          this.temperature = String(this.fahrenheit);
+        else
+          this.temperature = String(this.celsius);
+
+        this.weatherIcon = weatherData['weather'][0]['icon'];
       });
 
+      console.log("updating temperature");
     }
-
-    isFahrenheit: boolean = true;
 
     switchTemperature(): void {
       
       this.isFahrenheit = !this.isFahrenheit;
 
       if (this.isFahrenheit)
-        this.temperature = String(this.fahrenheit) + "°F";
+        this.temperature = this.fahrenheit;
       else
-        this.temperature = String(this.celsius) + "°C";
+        this.temperature = this.celsius;
     }
 }
