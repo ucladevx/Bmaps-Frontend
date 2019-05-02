@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { catchError, map, tap } from 'rxjs/operators';
 import { CategoryList } from './category';
 
@@ -11,7 +12,13 @@ export class CategoryService {
 
   // CONSTRUCTOR
 
-  constructor(private http: HttpClient) { }
+  selectedCategorySource: Subject <any>;
+  selectedCategory$;
+
+  constructor(private http: HttpClient) {
+    this.selectedCategorySource = new Subject < any > ();
+    this.selectedCategory$ = this.selectedCategorySource.asObservable();
+  }
 
   // private apiUrl = "https://www.mappening.io/api/v1/events/event-categories";
   // private apiUrl = "http://0.0.0.0:5000/api/v2/events/categories";
@@ -23,8 +30,8 @@ export class CategoryService {
   }
 
   setSelectedCategory(category: string){
-    console.log(category);
     this.selectedCategory = category;
+    this.selectedCategorySource.next(category);
   }
 
   /** GET categories from the server */

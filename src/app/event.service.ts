@@ -134,6 +134,8 @@ export class EventService {
   // private baseUrl = "http://0.0.0.0:5000/api/v2/events"
   private baseUrl = "https://www.mappening.io/api/v2/events"
 
+  public calendarServiceDays;
+
   // Constructor
   constructor(private router: Router, private http: HttpClient, private _dateService: DateService, private _locationService: LocationService, private _categService: CategoryService) {
 
@@ -339,6 +341,17 @@ export class EventService {
 
   // FILTER HASH FUNCTIONS //
 
+  resetAllFilters(){
+    this.toggleCategory('all');
+    this.resetFilters();
+    this.initTimeHash(0,1439);
+    this.setLocationSearch("");
+    let calendarDays = this.calendarServiceDays;
+    let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
+    let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
+    this.initDateHash(first,last);
+  }
+
   initDateHash(first: Date, last: Date){
     let tempHash = [];
     // initialize all other date containers iteratively
@@ -431,6 +444,7 @@ export class EventService {
       }
     }
     if(this.router.url.startsWith('/calendar')){
+      console.log(category);
       this._categService.setSelectedCategory(category);
       this.updateCategories();
     }

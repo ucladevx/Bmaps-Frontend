@@ -7,6 +7,7 @@ import { DateService } from '../shared/date.service';
 import { EventService } from '../event.service';
 import { CategoryService } from '../category.service';
 import { LocationService } from '../shared/location.service';
+import { CalendarService } from '../calendar.service';
 
 @Component({
     selector: 'app-map-box',
@@ -55,6 +56,7 @@ export class MapBoxComponent implements OnInit {
       private _dateService: DateService,
       private _eventService: EventService,
       private _categService: CategoryService,
+      private _calendarService: CalendarService,
       private _locationService: LocationService
   ) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
@@ -135,6 +137,7 @@ export class MapBoxComponent implements OnInit {
     // add extra controls
     this.addControls();
 
+    this._calendarService.isMapView();
   }
 
   addEventLayer(data): void {
