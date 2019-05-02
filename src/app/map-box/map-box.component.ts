@@ -12,7 +12,7 @@ import { CalendarService } from '../calendar.service';
 @Component({
     selector: 'app-map-box',
     templateUrl: './map-box.component.html',
-    styleUrls: ['./map-box.component.css'],
+    styleUrls: ['./map-box.component.scss'],
     providers: [ DateService ]
 })
 

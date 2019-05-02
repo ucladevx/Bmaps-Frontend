@@ -1,3 +1,5 @@
+@import "../../gvars.scss";
+
 .navbar {
     z-index: 100;
 }
@@ -96,7 +98,7 @@ button {
 
 .navbar-collapse.filter {
   margin-bottom: -.5rem;
-  border-bottom: 1px solid rgb(191,191,191);
+  border-bottom: $default_border_width solid rgb(191,191,191);
 }
 
 @media (min-width: 768px){

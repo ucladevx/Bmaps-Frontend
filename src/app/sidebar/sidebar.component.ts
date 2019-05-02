@@ -11,7 +11,7 @@ import { CategoryService } from '../category.service';
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.css'],
+    styleUrls: ['./sidebar.component.scss'],
     providers: [ DateService ],
     animations: [
         trigger('myAwesomeAnimation', [
@@ -39,7 +39,7 @@ export class SidebarComponent implements OnInit {
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
     constructor(
-        private router: Router,
+        public router: Router,
         private _eventService: EventService,
         private _dateService: DateService,
         public _categService: CategoryService

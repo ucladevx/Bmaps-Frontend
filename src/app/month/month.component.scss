@@ -1,3 +1,5 @@
+@import "../../gvars.scss";
+
 :host {
     display: flex;
     flex: 1;
@@ -43,7 +45,7 @@
 }
 
 .calendar-header span:not(.last-child) {
-    border-right: 1px solid #aaa;
+    border-right: $default_border_width solid #aaa;
 }
 
 .calendar-month {
@@ -52,20 +54,20 @@
     flex-wrap: wrap;
     flex: 1;
     flex-shrink: 0;
-    border-top: 1px solid #aaa;
+    border-top: $default_border_width solid #aaa;
 }
 
 .calendar-day {
     position: relative;
     flex-basis: 14.2857%; /* 100/7 */
     display: block;
-    border-bottom: 1px solid #aaa;
+    border-bottom: $default_border_width solid #aaa;
     color: #bebebe;
     background-color: #fff;
 }
 
 .calendar-day:not(:nth-child(7n)) {
-    border-right: 1px solid #aaa;
+    border-right: $default_border_width solid #aaa;
 }
 
 .calendar-day span {
