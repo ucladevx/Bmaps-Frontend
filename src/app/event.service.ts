@@ -679,21 +679,6 @@ export class EventService {
           // name
           let eventName = event.properties.name;
           let targetWords = eventName.toLowerCase().split(" ");
-          // categories
-          for (let category of event.properties.categories) {
-            if (this._categHash) {
-              targetWords.push(this._categHash[category.toLowerCase()].formattedCategory)
-            }
-          }
-          //date
-          let eventDate = this._dateService.formatEventDate(event).toLowerCase().split(" ")
-          targetWords = targetWords.concat(eventDate);
-          //location
-          let eventLocation = event.properties.place.name;
-          if (eventLocation) {
-            eventLocation = eventLocation.toLowerCase().split(" ");
-            targetWords = targetWords.concat(eventLocation);
-          }
           //matching
           let searchWords = this._universalSearch.toLowerCase().split(" ");
           for(let searchString of searchWords){
