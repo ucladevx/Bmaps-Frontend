@@ -3,11 +3,12 @@
         <i aria-hidden="true" class="fa fa-lg" [ngClass]="mobileSidebarVisible ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
     </div>
     <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
-        <app-date-selector class="d-none d-md-block"></app-date-selector>
         <span *ngIf="this.router.url.startsWith('/map'); else calendarView">
+          <app-date-selector class="d-none d-md-block"></app-date-selector>
           <app-category-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-map>
         </span>
         <ng-template #calendarView>
+          <app-search-bar></app-search-bar>
           <app-category-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-calendar>
         </ng-template>
         <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
