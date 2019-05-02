@@ -29,6 +29,7 @@ export class NavbarComponent implements OnInit {
     ngOnInit() { 
       // our call back function 
       this.getTemperature();
+      setInterval(this.getTemperature, 900000);
     }
 
     collapsed(event: any): void {
@@ -63,6 +64,7 @@ export class NavbarComponent implements OnInit {
     }
 
     getTemperature(): void { 
+
       var weatherQuery = `${baseWeatherUrl}?units=${defaultTemperatureUnits}&zip=${zipcode},us&APPID=${API_KEY}`;
 
       this.http.get(weatherQuery).subscribe(weatherData => {
