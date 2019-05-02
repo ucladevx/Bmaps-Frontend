@@ -1,5 +1,5 @@
 .input-container {
-    padding-left: 10px; 
+    padding-left: 10px;
     border-bottom: 1px solid gray;
 }
 
@@ -10,9 +10,9 @@ input[type=text] {
     width: 100%;
     height: 40px;
     background: url("/assets/images/search-icon.svg") left no-repeat;
-    padding-left: 25px; 
+    padding-left: 25px;
 }
 
-input:focus { 
-    outline: none; 
+input:focus {
+    outline: none;
 }

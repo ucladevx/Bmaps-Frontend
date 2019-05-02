@@ -685,12 +685,6 @@ export class EventService {
               targetWords.push(this._categHash[category.toLowerCase()].formattedCategory)
             }
           }
-          // description
-          let eventDescription = event.properties.description;
-          if (eventDescription) {
-            eventDescription = eventDescription.toLowerCase().split(" ");
-            targetWords = targetWords.concat(eventDescription);
-          }
           //date
           let eventDate = this._dateService.formatEventDate(event).toLowerCase().split(" ")
           targetWords = targetWords.concat(eventDate);
