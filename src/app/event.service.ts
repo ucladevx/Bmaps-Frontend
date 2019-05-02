@@ -651,17 +651,17 @@ export class EventService {
             let searchWords = this._locationSearch.toLowerCase().split(" ");
             for(let searchString of searchWords){
               for(let matchString of targetWords){
-                if(searchString == matchString && !this._excludedSearchWords.includes(searchString)){
+                if(matchString.indexOf(searchString) != -1 && !this._excludedSearchWords.includes(searchString)){
                   properLocation = true;
                   break;
                 }
               }
             }
           }
-        } 
+        }
         if (this._universalSearch != ""){
           // Search using name, categories, description, date, location
-          properSearchTerm = false; 
+          properSearchTerm = false;
           // name
           let eventName = event.properties.name;
           let targetWords = eventName.toLowerCase().split(" ");
@@ -690,7 +690,7 @@ export class EventService {
           let searchWords = this._universalSearch.toLowerCase().split(" ");
           for(let searchString of searchWords){
             for (let matchString of targetWords) {
-              if(searchString == matchString && !this._excludedSearchWords.includes(searchString)){
+              if(matchString.indexOf(searchString) != -1 && !this._excludedSearchWords.includes(searchString)){
                 properSearchTerm = true;
                 break;
               }
