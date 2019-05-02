@@ -45,6 +45,8 @@ export class EventService {
   private dateHashSource: Subject <any>;
   // holds object for filter time span
   private timeHashSource: Subject <any>;
+  // holds string typed into search
+  private universalSearchSource: Subject <string>;
 
   // Observables that components can subscribe to for realtime updates
   monthEvents$;
@@ -63,6 +65,7 @@ export class EventService {
   locationSearch$;
   dateHash$;
   timeHash$;
+  universalSearch$;
 
   // Used internally to keep a realtime, subscribed set of values
   private _monthEvents;
@@ -81,6 +84,7 @@ export class EventService {
   private _locationSearch;
   private _dateHash;
   private _timeHash;
+  private _universalSearch;
 
   private _selectedFilterCount = 0;
   private _selectedCategCount = 0;
@@ -123,7 +127,7 @@ export class EventService {
   private _excludedSearchWords = [
         'a','all','an','and','any','area','areas','at','here',
         'in','it','its','place','places','room','rooms','that',
-        'the','hall','building','ucla'
+        'the','hall','building','ucla', '•', '-'
   ];
 
   // private baseUrl = "https://www.mappening.io/api/v1/events";
@@ -156,6 +160,7 @@ export class EventService {
     this.locationSearchSource = new Subject <string>();
     this.dateHashSource = new Subject <any>();
     this.timeHashSource = new Subject <any>();
+    this.universalSearchSource = new Subject <string>();
 
     // Observable string streams
     this.monthEvents$  = this.monthEventsSource.asObservable();
@@ -174,6 +179,7 @@ export class EventService {
     this.locationSearch$ = this.locationSearchSource.asObservable();
     this.dateHash$ = this.dateHashSource.asObservable();
     this.timeHash$ = this.timeHashSource.asObservable();
+    this.universalSearch$ = this.universalSearchSource.asObservable();
 
     // Maintain a set of self-subscribed local values
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
@@ -192,6 +198,7 @@ export class EventService {
     this.locationSearch$.subscribe(locationSearch => this._locationSearch = locationSearch);
     this.dateHash$.subscribe(dateHash => this._dateHash = dateHash);
     this.timeHash$.subscribe(timeHash => this._timeHash = timeHash);
+    this.universalSearch$.subscribe(universalSearch => this._universalSearch = universalSearch)
 
     // Populate event containers
     this.updateDayEvents(today);
@@ -202,7 +209,7 @@ export class EventService {
     this.resetFilters();
     this.initTimeHash(0,1439);
     this.setLocationSearch("");
-
+    this.setUniversalSearch("");
   }
 
 
@@ -378,6 +385,15 @@ export class EventService {
 
   getLocationSearch(){
     return this._locationSearch;
+  }
+
+  setUniversalSearch(search: string){
+    this._universalSearch = search;
+    this.applyFiltersAndCategories();
+  }
+
+  getUniversalSearch(){
+    return this._universalSearch;
   }
 
   // Toggle filter
@@ -609,46 +625,47 @@ export class EventService {
       // check for matching filters
       let passesAllFilters = true;
       if(this._selectedFilterCount > 0){
-      for (let filterList of this._filterLists) {
-        let passesThisFilter = false;
-        let filterUsed = false;
-        for (let filter of filterList) {
-          if (this._filterHash[filter]) {
-            filterUsed = true;
+        for (let filterList of this._filterLists) {
+          let passesThisFilter = false;
+          let filterUsed = false;
+          for (let filter of filterList) {
+            if (this._filterHash[filter]) {
+              filterUsed = true;
+            }
+            if (this._filterHash[filter] && this.checkFilter(filter, event)) {
+              passesThisFilter = true;
+              break;
+            }
           }
-          if (this._filterHash[filter] && this.checkFilter(filter, event)) {
-            passesThisFilter = true;
+          if (filterUsed && !passesThisFilter) {
+            passesAllFilters = false;
             break;
           }
         }
-        if (filterUsed && !passesThisFilter) {
-          passesAllFilters = false;
-          break;
-        }
       }
-      }
-      // check for date/time/location if calendar view
+      // check for date/time/location and search term if calendar view
       let properDate = true;
       let properTime = true;
       let properLocation = true;
+      let properSearchTerm = true;
       if(this.router.url.startsWith('/calendar') && this._dateHash){
         // date filters
-        var eventDate = moment(event.properties.start_time).toDate();
+        let eventDate = moment(event.properties.start_time).toDate();
         properDate = (eventDate >= moment(this._dateHash[0]).toDate() && eventDate <= moment(this._dateHash[1]).add('1','days').toDate());
         // time filters
-        var eventTime = moment(event.properties.start_time);
-        var minCount = eventTime.hour()*60 + eventTime.minutes();
+        let eventTime = moment(event.properties.start_time);
+        let minCount = eventTime.hour()*60 + eventTime.minutes();
         properTime = (minCount >= this._timeHash[0] && minCount <= this._timeHash[1]);
         // location filters
         if(this._locationSearch != ""){
-          var eventLocation = event.properties.place.name;
+          let eventLocation = event.properties.place.name;
           properLocation = false;
           if(eventLocation){
-            var targetWords = eventLocation.toLowerCase().split(" ");
-            var searchWords = this._locationSearch.toLowerCase().split(" ");
+            let targetWords = eventLocation.toLowerCase().split(" ");
+            let searchWords = this._locationSearch.toLowerCase().split(" ");
             for(let searchString of searchWords){
               for(let matchString of targetWords){
-                if(searchString == matchString && !this._excludedSearchWords.includes(searchString)){
+                if(matchString.indexOf(searchString) != -1 && !this._excludedSearchWords.includes(searchString)){
                   properLocation = true;
                   break;
                 }
@@ -656,9 +673,26 @@ export class EventService {
             }
           }
         }
+        if (this._universalSearch != ""){
+          // Search using name, categories, description, date, location
+          properSearchTerm = false;
+          // name
+          let eventName = event.properties.name;
+          let targetWords = eventName.toLowerCase().split(" ");
+          //matching
+          let searchWords = this._universalSearch.toLowerCase().split(" ");
+          for(let searchString of searchWords){
+            for (let matchString of targetWords) {
+              if(matchString.indexOf(searchString) != -1){
+                properSearchTerm = true;
+                break;
+              }
+            }
+          }
+        }
       }
       // combine all filter checks
-      if (passesAllFilters && categoryCheck && properDate && properTime && properLocation) {
+      if (passesAllFilters && categoryCheck && properDate && properTime && properLocation && properSearchTerm) {
         tempEvents.features.push(event);
       }
     }

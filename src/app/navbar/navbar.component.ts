@@ -44,6 +44,7 @@ export class NavbarComponent implements OnInit {
       } else {
         this._eventService.initTimeHash(0,1439);
         this._eventService.setLocationSearch("");
+        this._eventService.setUniversalSearch("");
       }
     }
 
