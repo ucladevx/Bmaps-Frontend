@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
 
     isMapSelected: boolean;
 
-    constructor(private _eventService: EventService, private _categService: CategoryService, private _calendarService: CalendarService, private _router: Router) {
+    constructor(public _eventService: EventService, private _categService: CategoryService, public _calendarService: CalendarService, private _router: Router) {
       this._calendarService.view$.subscribe( view => {
         if(view == 'map'){
           this.isMapSelected = true;
