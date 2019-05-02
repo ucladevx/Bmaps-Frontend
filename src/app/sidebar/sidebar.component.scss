@@ -117,7 +117,7 @@
 
 .separator {
     height: 1px;
-    background: rgb(151,151,151);
+    background: $default_border_color;
     background-position: 0, 100%, 0, 100%;
 }
 

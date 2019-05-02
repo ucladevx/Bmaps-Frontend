@@ -1,6 +1,8 @@
+@import "../../gvars.scss";
+
 .input-container {
     padding-left: 10px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid $default_border_color;
 }
 
 input[type=text] {
