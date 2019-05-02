@@ -39,7 +39,7 @@ export class SidebarComponent implements OnInit {
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
     constructor(
-        private router: Router,
+        public router: Router,
         private _eventService: EventService,
         private _dateService: DateService,
         public _categService: CategoryService
