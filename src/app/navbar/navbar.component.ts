@@ -60,36 +60,27 @@ export class NavbarComponent implements OnInit {
     }
 
     getTemperature(): void { 
-
       const API_KEY = "bc6a73dfabbd4e6c9006a835d00589f2";
       const zipcode = "90024";
       const baseWeatherUrl = "http://api.openweathermap.org/data/2.5/weather";
       const defaultTemperatureUnits = "imperial";
 
-      var weatherQuery = `${baseWeatherUrl}?units=${defaultTemperatureUnits}&zip=${zipcode},us&APPID=${API_KEY}`;
-
+      let weatherQuery = `${baseWeatherUrl}?units=${defaultTemperatureUnits}&zip=${zipcode},us&APPID=${API_KEY}`;
       this.http.get(weatherQuery).subscribe(weatherData => {
         let temp = weatherData['main']['temp'];
-
         this.fahrenheit = String(Math.round(temp)) + "°F";
         this.celsius = String(Math.round((temp - 32)/1.8) + "°C");
-
         //set default temperature to Fahrenheit
         if (this.isFahrenheit)
           this.temperature = String(this.fahrenheit);
         else
           this.temperature = String(this.celsius);
-
         this.weatherIcon = weatherData['weather'][0]['icon'];
       });
-
-      console.log("updating temperature");
     }
 
-    switchTemperature(): void {
-      
+    switchTemperature(): void {     
       this.isFahrenheit = !this.isFahrenheit;
-
       if (this.isFahrenheit)
         this.temperature = this.fahrenheit;
       else
