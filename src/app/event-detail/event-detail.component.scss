@@ -1,16 +1,18 @@
+@import "../../gvars.scss";
+
 .event-details {
 	position: fixed;
 	height: 100%;
 	width: 100%;
 	z-index: 200;
 	top: 0;
-	border-right: 1px solid #aaa;
+	border-right: $default_border_width solid $default_border_color;
 }
 
 .event-header {
 	height: 40px;
 	background-color: #494949;
-	border-bottom: 1px solid #afafaf;
+	border-bottom: $default_border_width solid $default_border_color;
 	z-index: 600;
 	display: flex;
 	align-items: center;

@@ -1,3 +1,5 @@
+@import "../../gvars.scss";
+
 .navbar {
     z-index: 100;
 }
@@ -18,7 +20,7 @@
 
 .navbar-default{
     background: rgb(71,71,71);
-    border-color: rgb(191,191,191);
+    border-color: $default_border_color;
 }
 
 .navbar-default .navbar-toggler {
@@ -96,7 +98,7 @@ button {
 
 .navbar-collapse.filter {
   margin-bottom: -.5rem;
-  border-bottom: 1px solid rgb(191,191,191);
+  border-bottom: $default_border_width solid $default_border_color;
 }
 
 @media (min-width: 768px){
@@ -154,7 +156,7 @@ a:hover{
 
 .views-switch {
     background: #fff;
-    border: 1px solid #dfdfdf;
+    border: 1px solid $default_border_color;
     position: relative;
     display: inline-block;
     box-sizing: content-box;
@@ -184,13 +186,13 @@ a:hover{
     z-index: 1000;
   }
   .views-switch.checked {
-    background: white; 
+    background: white;
     border-color: white;
   }
   .views-switch.checked small {
     left: 41px;
   }
-  
+
   .views-switch .calendar-switch {
     display:block;
     position: absolute;
@@ -199,7 +201,7 @@ a:hover{
     z-index: 0;
     color:#A9A9A9;
   }
-  
+
   .views-switch .map-switch {
     display:none;
      z-index: 0;
@@ -208,12 +210,12 @@ a:hover{
     top: 4%;
     left: 10%;
   }
-  
+
   .views-switch.checked .calendar-switch {
     display:none;
   }
-  
+
   .views-switch.checked .map-switch {
     display:block;
-  
+
   }

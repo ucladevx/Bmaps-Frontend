@@ -15,7 +15,6 @@ import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.com
 import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
 import { CategoryService } from './category.service';
 
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
@@ -28,6 +27,8 @@ import { environment } from '../environments/environment';
 import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 
 
@@ -67,6 +68,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     SharedModule,
     AngularFontAwesomeModule,
+    FontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),

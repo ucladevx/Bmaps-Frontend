@@ -7,7 +7,7 @@ import { NgClass } from '@angular/common';
 @Component({
   selector: 'app-category-bar-map',
   templateUrl: './category-bar-map.component.html',
-  styleUrls: ['./category-bar-map.component.css']
+  styleUrls: ['./category-bar-map.component.scss']
 })
 
 export class CategoryBarMapComponent implements OnInit {
