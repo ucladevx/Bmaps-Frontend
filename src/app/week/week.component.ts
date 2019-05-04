@@ -74,7 +74,20 @@ export class WeekComponent implements OnInit {
         let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
         this._eventService.initDateHash(first,last);
         if(this._calendarService.isWeekView()){
-            document.getElementById("scrollable").scrollTop = 200;
+            var scrollRatio = 0;
+            var hourSlot;
+            if ((hourSlot = document.getElementById('hour-slot')) != null) {
+              var hourHeight = hourSlot.getBoundingClientRect().height;
+              console.log(hourHeight);
+              var numHours = document.querySelectorAll("#scrollable .time-of-day tr").length;
+              console.log(numHours);
+              var scrollableHeight = numHours*hourHeight;
+              var scrollRatio = scrollableHeight * 7/numHours;
+            } 
+            console.log(hourSlot);
+
+            document.getElementById("scrollable").scrollTop = scrollRatio + 2;
+            this._calendarService.isWeekView();
         }
       });
     });
@@ -120,7 +133,20 @@ export class WeekComponent implements OnInit {
     let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
     this._eventService.initDateHash(first,last);
 
-    document.getElementById("scrollable").scrollTop = 200;
+        //set scroll bar to start at 7:00 AM
+    var scrollRatio = 0;
+    var hourSlot;
+    if ((hourSlot = document.getElementById('hour-slot')) != null) {
+      var hourHeight = hourSlot.getBoundingClientRect().height;
+      console.log(hourHeight);
+      var numHours = document.querySelectorAll("#scrollable .time-of-day tr").length;
+      console.log(numHours);
+      var scrollableHeight = numHours*hourHeight;
+      var scrollRatio = scrollableHeight * 7/numHours;
+    } 
+    console.log(hourSlot);
+
+    document.getElementById("scrollable").scrollTop = scrollRatio + 2;
     this._calendarService.isWeekView();
   }
 
@@ -133,7 +159,18 @@ export class WeekComponent implements OnInit {
     //update month events (subscribed to by ngOnInit)
     this._eventService.updateWeekEvents(this._calendarService.getViewDate());
     //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = 200;
+    var scrollRatio = 0;
+    var hourSlot;
+    if ((hourSlot = document.getElementById('hour-slot')) != null) {
+      var hourHeight = hourSlot.getBoundingClientRect().height;
+      var numHours = document.querySelectorAll("#scrollable .time-of-day tr").length;
+      var scrollableHeight = numHours*hourHeight;
+      var scrollRatio = scrollableHeight * 7/numHours;
+    } 
+    console.log(hourSlot);
+
+    document.getElementById("scrollable").scrollTop = scrollRatio + 2;
+    this._calendarService.isWeekView();
   }
 
   //display the calendar
@@ -214,7 +251,18 @@ export class WeekComponent implements OnInit {
       //update view
       this.updateWeekView();
     }
-      document.getElementById("scrollable").scrollTop = 200;
+    var scrollRatio = 0;
+    var hourSlot;
+    if ((hourSlot = document.getElementById('hour-slot')) != null) {
+      var hourHeight = hourSlot.getBoundingClientRect().height;
+      var numHours = document.querySelectorAll("#scrollable .time-of-day tr").length;
+      var scrollableHeight = numHours*hourHeight;
+      var scrollRatio = scrollableHeight * 7/numHours;
+    } 
+    console.log(hourSlot);
+
+    document.getElementById("scrollable").scrollTop = scrollRatio + 2;
+    this._calendarService.isWeekView();
   }
 
   //retrieve events for the given week

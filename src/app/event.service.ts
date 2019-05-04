@@ -425,10 +425,7 @@ export class EventService {
     // if a category is being applied
     if (this._categHash[category] != undefined) {
       // apply the current category
-      if(this.router.url.startsWith('/calendar')){
-          this.resetCategories();
-      }
-      if(this.router.url.startsWith('/map') && category == 'all'){
+      if(category == 'all'){
           if(this._categHash['all'].selected){
             this.resetCategories();
           } else {
@@ -442,11 +439,6 @@ export class EventService {
         else
           this._selectedCategCount--;
       }
-    }
-    if(this.router.url.startsWith('/calendar')){
-      console.log(category);
-      this._categService.setSelectedCategory(category);
-      this.updateCategories();
     }
     // apply filters and categories
     this.applyFiltersAndCategories();
