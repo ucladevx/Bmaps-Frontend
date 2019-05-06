@@ -1,43 +1,30 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-import { CategoryService } from '../category.service';
-import { EventService } from '../event.service';
+import { DisplayService } from '../services/display.service';
 import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
-import { CalendarService } from '../calendar.service';
 import * as moment from 'moment';
 
 @Component({
   selector: 'app-category-bar-calendar',
   templateUrl: './category-bar-calendar.component.html',
-  styleUrls: ['./category-bar-calendar.component.scss']
+  styleUrls: ['./category-bar-calendar.component.css']
 })
 
 export class CategoryBarCalendarComponent implements OnInit {
   @Input() showToggleButton: boolean;
   private categHash = {};
   private filterHash = {};
-  private events: GeoJson[];
-  public selectedCategory = 'all';
   public showDropdown = false;
   private wasInside = false;
 
-  constructor(private _categService: CategoryService, private _eventService: EventService, private _calendarService: CalendarService) {}
+  constructor(private _displayService: DisplayService) {}
 
   ngOnInit() {
-    this._eventService.dayEvents$.subscribe(eventCollection => {
-      this.events = eventCollection.features;
-    });
-    this._eventService.categHash$.subscribe(categHash => {
+    this._displayService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
-    this._eventService.filterHash$.subscribe(filterHash => {
+    this._displayService.buttonHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
-    });
-    this._calendarService.dateSpan$.subscribe(clear => {
-        this.clearCategories();
-    });
-    this._categService.selectedCategory$.subscribe(category => {
-      this.selectedCategory = category;
     });
   }
 
@@ -46,16 +33,15 @@ export class CategoryBarCalendarComponent implements OnInit {
     let first = moment(firstInput).toDate();
     let lastInput = (<HTMLInputElement>document.getElementById('end-date')).value;
     let last = moment(lastInput).toDate();
-    this._eventService.initDateHash(first,last);
-    this._eventService.applyFiltersAndCategories();
+    this._displayService.setDateFilter(first,last);
   }
 
   getStartDate(){
-    return moment(this._eventService.getDateHash()[0]).format('YYYY-MM-DD');
+    return moment(this._displayService.getDateFilter()[0]).format('YYYY-MM-DD');
   }
 
   getEndDate(){
-    return moment(this._eventService.getDateHash()[1]).format('YYYY-MM-DD');
+    return moment(this._displayService.getDateFilter()[1]).format('YYYY-MM-DD');
   }
 
   setTimeFilter(){
@@ -65,25 +51,24 @@ export class CategoryBarCalendarComponent implements OnInit {
     let lastInput = (<HTMLInputElement>document.getElementById('end-time')).value;
     var endtime = lastInput.split(":");
     var end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
-    this._eventService.initTimeHash(start,end);
-    this._eventService.applyFiltersAndCategories();
+    this._displayService.setTimeFilter(start,end);
   }
 
   getStartTime(){
-    return this.convertNumToTime(this._eventService.getTimeHash()[0]);
+    return this.convertNumToTime(this._displayService.getTimeFilter()[0]);
   }
 
   getEndTime(){
-    return this.convertNumToTime(this._eventService.getTimeHash()[1]);
+    return this.convertNumToTime(this._displayService.getTimeFilter()[1]);
   }
 
   setLocationFilter(){
     let locInput = (<HTMLInputElement>document.getElementById('location')).value;
-    this._eventService.setLocationSearch(locInput);
+    this._displayService.setLocationFilter(locInput);
   }
 
   getLoc(){
-    return this._eventService.getLocationSearch();
+    return this._displayService.getLocationFilter();
   }
 
   convertNumToTime(minutes: number){
@@ -102,38 +87,33 @@ export class CategoryBarCalendarComponent implements OnInit {
   }
 
   filterClicked(filter: string): void {
-    this._eventService.toggleFilter(filter);
+    this._displayService.toggleFilterButton(filter);
   }
 
   categoryClicked(): void {
     var category = (<HTMLInputElement>document.getElementById("categories")).value;
-    this._eventService.toggleCategory(category);
-    this._categService.setSelectedCategory(category);
-    this.selectedCategory = category;
+    this._displayService.toggleCategory(category);
   }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
-    this._eventService.updateCategories();
   }
 
   clearCategories(): void {
     for (let key in this.categHash) {
       if (this.categHash[key].selected) {
-        this._eventService.toggleCategory(key);
+        this._displayService.toggleCategory(key);
       }
     }
     if(this.categHash){
       this.categHash["all"].selected = true;
     }
-    this._categService.setSelectedCategory("all");
-    this.selectedCategory = "all";
   }
 
   clearFilters(): void {
     for (let key in this.filterHash) {
       if (this.filterHash[key]) {
-        this._eventService.toggleFilter(key);
+        this._displayService.toggleFilterButton(key);
       }
     }
   }
@@ -141,7 +121,7 @@ export class CategoryBarCalendarComponent implements OnInit {
 
 
   clearAllFilters(){
-    this._eventService.resetAllFilters();
+    this._displayService.resetFilters();
   }
 
   @HostListener('click')

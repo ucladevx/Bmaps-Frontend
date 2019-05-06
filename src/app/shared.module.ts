@@ -8,8 +8,8 @@ will need to figure out forRoot if we have both declarations and providers*/
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DateService } from './date.service';
-import { LocationService } from './location.service'
+import { DateService } from './services/date.service';
+import { LocationService } from './services/location.service'
 
 @NgModule({
   imports: [

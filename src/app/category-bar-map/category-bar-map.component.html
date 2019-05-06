@@ -10,7 +10,7 @@
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div *ngIf="filterHash" class="filters-wrapper">
-      <div *ngIf="this._eventService.isToday()" class="filter-group time-filter-group">
+      <div *ngIf="this._dateService.isToday()" class="filter-group time-filter-group">
         <div class="btn-group">
           <label (click)="filterClicked('happening now')"
                  class="btn btn-outline-secondary filter-btn"
@@ -46,13 +46,6 @@
                  (click)="filterClicked('nearby')">nearby</label>
         </div>
       </div>
-      <div class="filter-group misc-filter-group">
-        <div class="btn-group">
-          <label class="btn btn-outline-secondary filter-btn"
-               [ngClass]="{'active': filterHash['free food']}"
-               (click)="filterClicked('free food')">free food</label>
-        </div>
-      </div>
     </div>
     <div *ngIf="categHash" class="section-header">
       Categories
@@ -61,7 +54,7 @@
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <a *ngIf="categHash[categKey].numEventsDay != undefined && categHash[categKey].numEventsDay > 0"
+          <a *ngIf="categKey == 'all' || (categHash[categKey].numEventsDay && categHash[categKey].numEventsDay > 0)"
              [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
              (click)="categoryClicked(categKey)">
           <div class="checkbox-container">

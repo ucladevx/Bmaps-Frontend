@@ -10,7 +10,7 @@
     </div>
     <div class="filters-content">
       <div class="section-header">Categories</div>
-      <span *ngIf="this._calendarService.isMonthView()">
+      <span *ngIf="this._displayService.isMonthView()">
       <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{selectedCategory}}">
         <ng-container *ngFor="let categKey of objectKeys(categHash)">
           <option *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0" value="{{categKey}}">
@@ -19,7 +19,7 @@
         </ng-container>
       </select>
       </span>
-      <span *ngIf="this._calendarService.isWeekView()">
+      <span *ngIf="this._displayService.isWeekView()">
         <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{selectedCategory}}">
           <ng-container *ngFor="let categKey of objectKeys(categHash)">
             <option *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0" value="{{categKey}}">
@@ -42,17 +42,14 @@
       <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
         <div class="btn-group" id="loc-group">
           <label class="btn btn-outline-secondary filter-btn"
-                 [ngClass]="{'active': filterHash['free food']}"
-                 (click)="filterClicked('free food')">Free Food</label>
-          <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['on-campus']}"
-                 (click)="filterClicked('on-campus')">On-campus</label>
+                 (click)="filterClicked('on-campus')">on-campus</label>
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['off-campus']}"
-                 (click)="filterClicked('off-campus')">Off-campus</label>
+                 (click)="filterClicked('off-campus')">off-campus</label>
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['nearby']}"
-                 (click)="filterClicked('nearby')">Nearby</label>
+                 (click)="filterClicked('nearby')">nearby</label>
         </div>
       </div>
     </div>

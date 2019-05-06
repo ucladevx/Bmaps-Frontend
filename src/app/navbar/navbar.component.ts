@@ -1,28 +1,26 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { CategoryService } from '../category.service';
-import { CalendarService } from '../calendar.service';
-import { EventService } from '../event.service';
+import { DisplayService } from '../services/display.service';
 
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.scss']
+    styleUrls: ['./navbar.component.css']
 })
 
 export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
-    isMapSelected: boolean;
+    isMapSelected: boolean = true;
 
-    constructor(public _eventService: EventService, private _categService: CategoryService, public _calendarService: CalendarService, private _router: Router) {
-      this._calendarService.view$.subscribe( view => {
-        if(view == 'map'){
+    constructor(private _displayService: DisplayService, private _router: Router) {
+      this._displayService.currentView$.subscribe( view => {
+        if(view == 'map')
           this.isMapSelected = true;
-        } else {
+        else
           this.isMapSelected = false;
-        }
       });
+      this._displayService.isMapView();
     }
     ngOnInit() { }
 
@@ -31,20 +29,15 @@ export class NavbarComponent implements OnInit {
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
       let d = new Date();
-      if(this._eventService.getSelectedDay() != null){
-        d = this._eventService.getSelectedDay();
+      if(this._displayService.getSelectedDay() != null){
+        d = this._displayService.getSelectedDay();
       }
-      this._eventService.updateDayEvents(d);
-      let monthyear = d.getMonth() + " " + d.getFullYear();
-      this._eventService.updateMonthEvents(monthyear);
-      this._eventService.updateWeekEvents(d);
-      this._eventService.resetFilters();
+      this._displayService.updateDayEvents(d);
+      this._displayService.updateMonthEvents(d);
+      this._displayService.updateWeekEvents(d);
+      this._displayService.resetFilters();
       if(newView == 'map'){
-          this._eventService.allCategories();
-      } else {
-        this._eventService.initTimeHash(0,1439);
-        this._eventService.setLocationSearch("");
-        this._eventService.setUniversalSearch("");
+          this._displayService.allCategories();
       }
     }
 
@@ -55,20 +48,20 @@ export class NavbarComponent implements OnInit {
       this.isFilterCollapsed = true;
     }
 
-    toggleFilterCollapse(): void {
+    toggleFilterButtonCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
     }
 
     toggleViews(): void {
-        if (!this._calendarService.isMapView()) {
+        if (this._displayService.isCalendarView()) {
             this.emitChangeView('map');
             this.isMapSelected = true;
             this._router.navigateByUrl('/map(sidebar:list)');
         }
         else {
             this.isMapSelected = false;
-            if (this._calendarService.retrieveLastView() == 'week'){
+            if (this._displayService.retrieveLastView() == 'week'){
                 this.emitChangeView('week')
                 this._router.navigateByUrl('/calendar/week(sidebar:list)');
             }
@@ -78,7 +71,4 @@ export class NavbarComponent implements OnInit {
             }
         }
     }
-
-    // mark .views-switch as ng-not-empty ng-valid
-    // mark .views-switch-text as ng-pristine ng-untouched ng-valid ng-not-empty
 }

@@ -1,11 +1,11 @@
-<nav class="navbar navbar-toggleable-md  navbar-default" (click)="this._eventService.resetAllFilters()">
+<nav class="navbar navbar-toggleable-md  navbar-default">
     <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="d-inline-block align-top" alt="">
         <i class="fa fa-chevron-down" aria-hidden="true"></i>
     </button>
     <app-date-selector class="d-md-none"></app-date-selector>
     <div class="navbar-brand">
-      <button (click)="toggleFilterCollapse()" class="navbar-toggler" type="button">
+      <button (click)="toggleFilterButtonCollapse()" class="navbar-toggler" type="button">
         <i class="d-md-none fa fa-sliders" id="filter-dropdown-toggle" aria-hidden="true"></i>
       </button>
       <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
@@ -23,7 +23,7 @@
             <span routerLink="/map" routerLinkActive="active" class="map-switch" (click)="toggleViews()" >
               <img src="/assets/images/switch-map-icon.svg" (click)="toggleViews()">
             </span>
-            <span *ngIf="this._calendarService.retrieveLastView() == 'week'; else monthButton">
+            <span *ngIf="this._displayService.retrieveLastView() == 'week'; else monthButton">
               <span routerLink="/calendar/week" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
                 <img src="/assets/images/switch-calendar-icon.svg" (click)="toggleViews()">
               </span>
