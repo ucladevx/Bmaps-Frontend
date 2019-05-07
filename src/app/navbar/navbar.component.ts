@@ -75,6 +75,9 @@ export class NavbarComponent implements OnInit {
             this._router.navigateByUrl('/map(sidebar:list)');
         }
         else {
+            // Check if day has changed
+            let today = new Date();
+            this.currentDate = today.getDate();
             this.isMapSelected = false;
             if (this._calendarService.retrieveLastView() == 'week'){
                 this.emitChangeView('week')
