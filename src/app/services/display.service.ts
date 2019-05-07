@@ -167,7 +167,7 @@ export class DisplayService {
     // Maintain a set of self-subscribed local values
     this.currentDate$.subscribe(date => this._currentDate = date);
     this.calendarDays$.subscribe(days => this._calendarDays = days);
-    this.selectedDay$.subscribe(day => { this._selectedDay = day; this._currentDate = day.date;);
+    this.selectedDay$.subscribe(day => { this._selectedDay = day; this._currentDate = day.date; });
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
     this.weekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
     this.dayEvents$.subscribe(dayEvents => this._dayEvents = dayEvents);
@@ -189,9 +189,13 @@ export class DisplayService {
     this.updateDayEvents(new Date());
     this.updateMonthEvents(new Date());
     this.updateWeekEvents(new Date());
+    this.isMapView();
+    this.isCalendarView();
+    this.isMonthView();
+    this.isWeekView();
     // Initialize filters to defaults
     this.initCategories();
-    this.resetFilters();
+    this.resetFilters(this._currentView);
   }
 
   // CHANGE DATE SPAN //
@@ -339,9 +343,9 @@ export class DisplayService {
 
   // Retrieve events by date
   getEventsByDate(date: Date): string {
-    const d = date.getDate();
+    const d = moment(date).format('D');
     const monthName = moment(date).format('MMM');
-    const y = date.getFullYear();
+    const y = moment(date).format('YYYY');
     let dateURL = `${this.eventsUrl}/search?date=${d}%20${monthName}%20${y}`;
     return dateURL;
   }
@@ -354,7 +358,7 @@ export class DisplayService {
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(events => {
       this.dayEventsSource.next(events);
       if(this.isMapView()){
-        this.resetFilters();
+        this.resetFilters('map');
       }
     });
   }
@@ -383,10 +387,10 @@ export class DisplayService {
       firstDay = moment(new Date());
     }
     let daysLeftInWeek = 7-parseInt((firstDay).format('d'));
-    let lastDay = moment(firstDay).clone().add(daysLeftInWeek, 'days').toDate();
+    let lastDay = moment(firstDay).clone().add(daysLeftInWeek, 'days');
     allEvents.features.forEach(el => {
       let d = new Date(el.properties.start_time);
-      if (d >= firstDay && d <= lastDay)
+      if (d >= firstDay.toDate() && d <= lastDay.toDate())
         weekEvents.features.push(el)
     });
     return weekEvents;
@@ -395,7 +399,7 @@ export class DisplayService {
   // FILTER HASH FUNCTIONS //
 
   // reset all filters to defaults
-  resetFilters(){
+  resetFilters(view: string){
     this.updateCategories();
     this.allCategories();
     this.resetFilterButtons();
@@ -403,7 +407,7 @@ export class DisplayService {
     this.setLocationFilter("");
     this.setUniversalSearch("");
     let calendarDays = this._calendarDays;
-    if(calendarDays){
+    if(view != 'map' && calendarDays){
       let first = moment([calendarDays[0].year,
         calendarDays[0].month,
         calendarDays[0].dayOfMonth]).toDate();
@@ -424,9 +428,11 @@ export class DisplayService {
 
   // set date hash
   setDateFilterFromDays(calendarDays: CalendarDay[]){
+    if(calendarDays.length > 0){
     let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
     let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
     this.setDateFilter(first,last);
+    }
   }
 
   // return date hash

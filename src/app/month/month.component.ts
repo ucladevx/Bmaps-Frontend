@@ -48,6 +48,9 @@ export class MonthComponent implements OnInit {
     this._displayService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
+    this._displayService.expandedEvent$.subscribe(clickedEventInfo => {
+        this.clickedEvent = clickedEventInfo;
+    });
 
     this._displayService.setDateFilterFromDays(this._displayService.getDays());
     this.currentMonth = moment();
@@ -153,8 +156,9 @@ export class MonthComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     // this.selectedDay = day;
-    if(this._displayService.getSelectedDay() != day)
+    if(this._displayService.getSelectedDay() != day){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
     this._displayService.setSelectedDay(day);
     this._displayService.updateDayEvents(day.date);
   }

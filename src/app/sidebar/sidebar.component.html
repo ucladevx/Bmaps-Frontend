@@ -3,7 +3,7 @@
         <i aria-hidden="true" class="fa fa-lg" [ngClass]="mobileSidebarVisible ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
     </div>
     <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
-        <span *ngIf="this.router.url.startsWith('/map'); else calendarView">
+        <span *ngIf="this._displayService.isMapView(); else calendarView">
           <app-date-selector class="d-none d-md-block"></app-date-selector>
           <app-category-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-map>
         </span>

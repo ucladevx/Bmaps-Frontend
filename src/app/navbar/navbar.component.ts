@@ -29,13 +29,13 @@ export class NavbarComponent implements OnInit {
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
       let d = new Date();
-      if(this._displayService.getSelectedDay() != null){
-        d = this._displayService.getSelectedDay();
+      if(this._displayService.getCurrentDate() != null){
+        d = this._displayService.getCurrentDate();
       }
       this._displayService.updateDayEvents(d);
       this._displayService.updateMonthEvents(d);
       this._displayService.updateWeekEvents(d);
-      this._displayService.resetFilters();
+      this._displayService.resetFilters(newView);
       if(newView == 'map'){
           this._displayService.allCategories();
       }
@@ -54,21 +54,29 @@ export class NavbarComponent implements OnInit {
     }
 
     toggleViews(): void {
-        if (this._displayService.isCalendarView()) {
-            this.emitChangeView('map');
-            this.isMapSelected = true;
-            this._router.navigateByUrl('/map(sidebar:list)');
+      let ev = this._displayService.getExpandedEvent();
+      let path = "";
+      if (this._displayService.isCalendarView()) {
+        this.emitChangeView('map');
+        this.isMapSelected = true;
+        path += '/map';
+      }
+      else {
+        this.isMapSelected = false;
+        if (this._displayService.retrieveLastView() == 'week'){
+          this.emitChangeView('week');
+          path += '/calendar/week';
         }
         else {
-            this.isMapSelected = false;
-            if (this._displayService.retrieveLastView() == 'week'){
-                this.emitChangeView('week')
-                this._router.navigateByUrl('/calendar/week(sidebar:list)');
-            }
-            else {
-                this.emitChangeView('month')
-                this._router.navigateByUrl('/calendar/month(sidebar:list)');
-            }
+          this.emitChangeView('month');
+          path += '/calendar/month';
         }
+      }
+      if(ev!=null)
+        path += "(sidebar:detail/"+ev.id+")";
+      else
+        path += "(sidebar:list)";
+      this._router.navigateByUrl(path);
     }
+
 }

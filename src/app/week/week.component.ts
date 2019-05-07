@@ -38,6 +38,9 @@ export class WeekComponent implements OnInit {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
+      console.log(this.scrollPosition);
+      if(this._displayService.isWeekView())
+        document.getElementById("scrollable").scrollTop = this.scrollPosition;
       this._displayService.setDateFilterFromDays(this._displayService.getDays());
     });
 
@@ -50,12 +53,15 @@ export class WeekComponent implements OnInit {
     this._displayService.clickedEvent$.subscribe(clickedEventInfo => {
       this.clickedEvent = clickedEventInfo;
     });
+    this._displayService.expandedEvent$.subscribe(clickedEventInfo => {
+      this.clickedEvent = clickedEventInfo;
+    });
 
 
     this._displayService.setDateFilterFromDays(this._displayService.getDays());
     this.currentMonth = moment();
     this._displayService.isMonthView();
-    if(this._displayService.getClickedEvent() == null){
+    if(this._displayService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 

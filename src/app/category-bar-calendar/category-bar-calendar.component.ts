@@ -121,7 +121,7 @@ export class CategoryBarCalendarComponent implements OnInit {
 
 
   clearAllFilters(){
-    this._displayService.resetFilters();
+    this._displayService.resetFilters('calendar');
   }
 
   @HostListener('click')

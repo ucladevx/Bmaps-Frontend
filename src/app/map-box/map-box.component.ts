@@ -60,7 +60,7 @@ export class MapBoxComponent implements OnInit {
 
   ngOnInit() {
 
-    if(this._displayService.getClickedEvent() == null){
+    if(this._displayService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 
