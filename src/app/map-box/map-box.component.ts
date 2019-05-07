@@ -4,7 +4,8 @@ import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../services/date.service';
-import { DisplayService } from '../services/display.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import { LocationService } from '../services/location.service';
 
 @Component({
@@ -52,24 +53,25 @@ export class MapBoxComponent implements OnInit {
   constructor(
       private router: Router,
       private _dateService: DateService,
-      private _displayService: DisplayService,
-      private _locationService: LocationService
+      private _eventService: EventService,
+      private _locationService: LocationService,
+      private _viewService: ViewService
   ) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
   ngOnInit() {
 
-    if(this._displayService.getExpandedEvent() == null){
+    if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 
-    this._displayService.filteredDayEvents$.subscribe(eventCollection => {
+    this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
     });
 
-    this._displayService.clickedEvent$.subscribe(clickedEventInfo => {
+    this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
       if(clickedEventInfo == null){
         this.map.easeTo({
@@ -79,6 +81,10 @@ export class MapBoxComponent implements OnInit {
           bearing: 0
         });
       }
+    });
+
+    this._eventService.expandedEvent$.subscribe(expandedEventInfo => {
+      this.boldPopup(expandedEventInfo);
     });
 
     this.buildMap();
@@ -94,7 +100,7 @@ export class MapBoxComponent implements OnInit {
       this.hoverPopup();
       this.addArrowControls();
       this.map.resize();
-      this._displayService.hoveredEvent$.subscribe(hoveredEventInfo => {
+      this._eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
         this.hoverEvent(hoveredEventInfo);
       });
     });
@@ -110,7 +116,7 @@ export class MapBoxComponent implements OnInit {
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
       this.updateSource();
-      this._displayService.allCategories();
+      this._eventService.allCategories();
       let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
       this.map.addImage('bluePin', image);
     });
@@ -124,7 +130,40 @@ export class MapBoxComponent implements OnInit {
     // add extra controls
     this.addControls();
 
-    this._displayService.isMapView();
+    this._viewService.isMapView();
+  }
+
+  //bold the popup event title for the given event, while unbolding all other event titles
+  boldPopup(event: GeoJson): void {
+    let exEv = this._eventService.getExpandedEvent();
+    //iterate through popup event titles and unbold
+    let popups = document.getElementsByClassName("popupEvent");
+    for(let i = 0; i < popups.length; i++){
+      if(exEv == undefined || (exEv != null && popups.item(i).id != "popupEvent"+exEv.id)){
+        (<any>popups.item(i)).style.fontWeight = "normal";
+      }
+    }
+    //bold the selected event title
+    if(event != null){
+      let selectedPopup = document.getElementById("popupEvent"+event.id);
+      if(selectedPopup != null){
+        selectedPopup.style.fontWeight = "bold";
+      }
+    }
+    //iterate through backup popup event titles and unbold
+    let bpopups = document.getElementsByClassName("backupPopupEvent");
+    for(let i = 0; i < bpopups.length; i++){
+      if(exEv == undefined || (exEv != null && bpopups.item(i).id != "popupEvent"+exEv.id)){
+        (<any>bpopups.item(i)).style.fontWeight = "normal";
+      }
+    }
+    //bold the selected backup event title
+    if(event != null){
+      let bselectedPopup = document.getElementById("backupPopupEvent"+event.id);
+      if(bselectedPopup != null){
+        bselectedPopup.style.fontWeight = "bold";
+      }
+    }
   }
 
   addEventLayer(data): void {
@@ -151,9 +190,9 @@ export class MapBoxComponent implements OnInit {
     if (this.map == undefined || this.map.getSource('events') == undefined) return;
     this.map.getSource('events').setData(this.events);
     this.removePinsAndPopups();
-    if(this._displayService.getClickedEvent()){
-        this.selectEvent(this._displayService.getClickedEvent());
-        this._displayService.boldPopup(this._displayService.getClickedEvent());
+    if(this._eventService.getClickedEvent()){
+        this.selectEvent(this._eventService.getClickedEvent());
+        this.boldPopup(this._eventService.getClickedEvent());
     } else {
       this.map.easeTo({
         center: [-118.445320, 34.066915],
@@ -237,8 +276,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     let openDetails = (e: MouseEvent|TouchEvent): void => {
       this.selectedEvent = event;
       this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
-      this._displayService.updateClickedEvent(event);
-      this._displayService.updateExpandedEvent(event);
+      this._eventService.updateClickedEvent(event);
+      this._eventService.updateExpandedEvent(event);
     };
     eventPopup.onclick = openDetails;
   }
@@ -246,10 +285,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   //add hover behavior to an eventPopup (bold and unbold)
   addHoverBehavior(eventPopup, event){
     let bold = (e: MouseEvent|TouchEvent): void => {
-      this._displayService.boldPopup(event);
+      this.boldPopup(event);
     };
     let unbold = (e: MouseEvent|TouchEvent): void => {
-      this._displayService.boldPopup(null);
+      this.boldPopup(null);
     };
     eventPopup.onmouseenter = bold;
     eventPopup.onmouseleave = unbold;
@@ -327,10 +366,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     //HOVER
     this.map.on('mouseenter', 'eventlayer', (e) => {
       // Update hovered event service.
-      this._displayService.updateHoveredEvent(e.features[0]);
+      this._eventService.updateHoveredEvent(e.features[0]);
     });
     this.map.on('mouseleave', 'eventlayer', () => {
-      this._displayService.updateHoveredEvent(null);
+      this._eventService.updateHoveredEvent(null);
     });
     //CLICK
     this.map.on('click', 'eventlayer', (e) => {
@@ -338,21 +377,21 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       this.lastClickEvent = e.originalEvent;
       //Handle if you reclick an event
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
-        this._displayService.updateClickedEvent(null);
+        this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
-        this._displayService.updateExpandedEvent(null);
+        this._eventService.updateExpandedEvent(null);
         return;
       }
       //the service then calls selectEvent
-      this._displayService.updateClickedEvent(e.features[0]);
+      this._eventService.updateClickedEvent(e.features[0]);
     });
     this.map.on('click', (e: mapboxgl.MapMouseEvent) => {
       // deselect event if this event was not an eventlayer click
       if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
-        this._displayService.updateClickedEvent(null);
+        this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
-        this._displayService.updateExpandedEvent(null);
-        this._displayService.boldPopup(null);
+        this._eventService.updateExpandedEvent(null);
+        this.boldPopup(null);
       }
     });
   }

@@ -1,10 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, NgZone } from '@angular/core';
 import { Moment } from 'moment';
 import { Router, NavigationEnd } from '@angular/router';
-import { DisplayService } from '../services/display.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import { DateService } from '../services/date.service';
 import { GeoJson } from '../map';
-import { CalendarDay } from '../services/display.service';
+import { CalendarDay } from '../services/event.service';
 import * as moment from 'moment';
 
 @Component({
@@ -24,44 +25,44 @@ export class WeekComponent implements OnInit {
   private scrollPosition: number = 0;
 
   //constructor statement
-  constructor(private _displayService: DisplayService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
+  constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
   ngOnInit() {
 
-    this._displayService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
+    this._viewService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
 
-    this._displayService.currentDate$.subscribe(date => {
+    this._eventService.currentDate$.subscribe(date => {
       this.ngZone.run( () => { this.showCalendar(date); });
     });
 
-    this._displayService.weekEvents$.subscribe(weekEventCollection => {
+    this._eventService.weekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
-      if(this._displayService.isWeekView())
+      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
+      if(this._viewService.isWeekView())
         document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      if(this._displayService.isWeekView() && this._displayService.getDays())
-          this._displayService.setDateFilterFromDays(this._displayService.getDays());
+      if(this._viewService.isWeekView() && this._eventService.getDays())
+          this._eventService.setDateFilterFromDays(this._eventService.getDays());
     });
 
-    this._displayService.filteredWeekEvents$.subscribe(weekEventCollection => {
+    this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
+      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
     });
 
-    this._displayService.clickedEvent$.subscribe(clickedEventInfo => {
+    this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.clickedEvent = clickedEventInfo;
     });
-    this._displayService.expandedEvent$.subscribe(clickedEventInfo => {
+    this._eventService.expandedEvent$.subscribe(clickedEventInfo => {
       this.clickedEvent = clickedEventInfo;
     });
 
 
-    this._displayService.setDateFilterFromDays(this._displayService.getDays());
+    this._eventService.setDateFilterFromDays(this._eventService.getDays());
     this.currentMonth = moment();
-    this._displayService.isMonthView();
-    if(this._displayService.getExpandedEvent() == null){
+    this._viewService.isMonthView();
+    if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 
@@ -75,7 +76,7 @@ export class WeekComponent implements OnInit {
   //set currentMonth and currentWeek
   this.currentMonth = moment(dateInMonth).startOf('month');
   this.currentWeek = moment(dateInMonth).startOf('week');
-    if(this._displayService.isWeekView() && dateInMonth != undefined){
+    if(this._viewService.isWeekView() && dateInMonth != undefined){
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('week');
@@ -100,10 +101,10 @@ export class WeekComponent implements OnInit {
       this.days.push(weekDay);
       // set selected day to the date provided
       if (d.isSame(dateInMonth, 'day')) {
-        this._displayService.setSelectedDay(weekDay);
+        this._eventService.setSelectedDay(weekDay);
       }
     }
-    this._displayService.setDays(this.days);
+    this._eventService.setDays(this.days);
     }
   }
 
@@ -113,18 +114,18 @@ export class WeekComponent implements OnInit {
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
     // if selected day is in month, that is first option
     let viewDate;
-    if (newWeek.isSame(moment(this._displayService.getCurrentDate()), 'week'))
-      viewDate = this._displayService.getCurrentDate();
+    if (newWeek.isSame(moment(this._eventService.getCurrentDate()), 'week'))
+      viewDate = this._eventService.getCurrentDate();
     else if (newWeek.isSame(moment(), 'week'))
       viewDate = new Date();
     else
       viewDate = newWeek.startOf('week').toDate();
     console.log(viewDate);
-    if(this._displayService.isWeekView())
+    if(this._viewService.isWeekView())
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
-    this._displayService.updateDayEvents(viewDate);
-    this._displayService.updateWeekEvents(viewDate);
-    this._displayService.updateMonthEvents(viewDate);
+    this._eventService.updateDayEvents(viewDate);
+    this._eventService.updateWeekEvents(viewDate);
+    this._eventService.updateMonthEvents(viewDate);
   }
 
   //retrieve events for the given week
@@ -174,19 +175,19 @@ export class WeekComponent implements OnInit {
 
   //highlight selected day
   onSelect(day: CalendarDay): void{
-    if(this._displayService.getClickedEvent() && this._displayService.getSelectedDay() != day &&
-      moment(this._displayService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
+    if(this._eventService.getClickedEvent() && this._eventService.getSelectedDay() != day &&
+      moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
-    this._displayService.setSelectedDay(day);
-    this._displayService.updateDayEvents(day.date);
+    this._eventService.setSelectedDay(day);
+    this._eventService.updateDayEvents(day.date);
   }
 
   //open event in sidebar
   openEvent(event: GeoJson): void{
-    this._displayService.updateClickedEvent(event);
+    this._eventService.updateClickedEvent(event);
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-    this._displayService.updateExpandedEvent(event);
+    this._eventService.updateExpandedEvent(event);
   }
 
   //retrieve and format event title and event time
@@ -256,7 +257,7 @@ export class WeekComponent implements OnInit {
     // account for clicked event
     let font = "normal";
     if(this.clickedEvent && this.clickedEvent.id == event.id &&
-      this._displayService.getSelectedDay().dayOfMonth == moment(this.clickedEvent.properties.start_time).date()){
+      this._eventService.getSelectedDay().dayOfMonth == moment(this.clickedEvent.properties.start_time).date()){
       font = "bold";
       z = 100;
     }

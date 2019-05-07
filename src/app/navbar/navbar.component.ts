@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { DisplayService } from '../services/display.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 
 @Component({
     selector: 'app-navbar',
@@ -13,14 +14,14 @@ export class NavbarComponent implements OnInit {
 
     isMapSelected: boolean = true;
 
-    constructor(private _displayService: DisplayService, private _router: Router) {
-      this._displayService.currentView$.subscribe( view => {
+    constructor(private _eventService: EventService, private _viewService: ViewService, private _router: Router) {
+      this._viewService.currentView$.subscribe( view => {
         if(view == 'map')
           this.isMapSelected = true;
         else
           this.isMapSelected = false;
       });
-      this._displayService.isMapView();
+      this._viewService.isMapView();
     }
     ngOnInit() { }
 
@@ -29,15 +30,15 @@ export class NavbarComponent implements OnInit {
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
       let d = new Date();
-      if(this._displayService.getCurrentDate() != null){
-        d = this._displayService.getCurrentDate();
+      if(this._eventService.getCurrentDate() != null){
+        d = this._eventService.getCurrentDate();
       }
-      this._displayService.updateDayEvents(d);
-      this._displayService.updateMonthEvents(d);
-      this._displayService.updateWeekEvents(d);
-      this._displayService.resetFilters(newView);
+      this._eventService.updateDayEvents(d);
+      this._eventService.updateMonthEvents(d);
+      this._eventService.updateWeekEvents(d);
+      this._eventService.resetFilters(newView);
       if(newView == 'map'){
-          this._displayService.allCategories();
+          this._eventService.allCategories();
       }
     }
 
@@ -48,22 +49,22 @@ export class NavbarComponent implements OnInit {
       this.isFilterCollapsed = true;
     }
 
-    toggleFilterButtonCollapse(): void {
+    toggleTagCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
     }
 
     toggleViews(): void {
-      let ev = this._displayService.getExpandedEvent();
+      let ev = this._eventService.getExpandedEvent();
       let path = "";
-      if (this._displayService.isCalendarView()) {
+      if (this._viewService.isCalendarView()) {
         this.emitChangeView('map');
         this.isMapSelected = true;
         path += '/map';
       }
       else {
         this.isMapSelected = false;
-        if (this._displayService.retrieveLastView() == 'week'){
+        if (this._viewService.retrieveLastView() == 'week'){
           this.emitChangeView('week');
           path += '/calendar/week';
         }
@@ -76,6 +77,7 @@ export class NavbarComponent implements OnInit {
         path += "(sidebar:detail/"+ev.id+")";
       else
         path += "(sidebar:list)";
+      console.log(path);
       this._router.navigateByUrl(path);
     }
 

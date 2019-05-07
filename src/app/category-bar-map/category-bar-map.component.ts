@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
 import { DateService } from '../services/date.service'
-import { DisplayService } from '../services/display.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
 
@@ -19,26 +20,26 @@ export class CategoryBarMapComponent implements OnInit {
   private wasInside = false;
   private events;
 
-  constructor(private _displayService: DisplayService, private _dateService: DateService) {}
+  constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService) {}
 
   ngOnInit() {
-    this._displayService.categHash$.subscribe(categHash => {
+    this._eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
-    this._displayService.buttonHash$.subscribe(filterHash => {
+    this._eventService.tagHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
-    this._displayService.dayEvents$.subscribe(events => {
+    this._eventService.dayEvents$.subscribe(events => {
       this.events = events;
     });
   }
 
   filterClicked(filter: string): void {
-    this._displayService.toggleFilterButton(filter);
+    this._eventService.toggleTag(filter);
   }
 
   categoryClicked(category: string): void {
-    this._displayService.toggleCategory(category);
+    this._eventService.toggleCategory(category);
   }
 
   toggleDropdown() {
@@ -46,13 +47,13 @@ export class CategoryBarMapComponent implements OnInit {
   }
 
   clearCategories(): void {
-    this._displayService.allCategories();
+    this._eventService.allCategories();
   }
 
   clearFilters(): void {
     for (let key in this.filterHash) {
       if (this.filterHash[key]) {
-        this._displayService.toggleFilterButton(key);
+        this._eventService.toggleTag(key);
       }
     }
   }

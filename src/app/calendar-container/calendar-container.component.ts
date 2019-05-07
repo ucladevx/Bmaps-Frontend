@@ -3,7 +3,8 @@ import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { ContentChild } from '@angular/core';
 import { MonthComponent } from '../month/month.component';
 import { WeekComponent } from '../week/week.component';
-import { DisplayService } from '../services/display.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 
@@ -41,14 +42,13 @@ export class CalendarContainerComponent implements OnInit {
     moment([2022,8,19]), moment([2023,0,9]), moment([2023,3,2])
   ];
 
-  constructor(public router: Router, private _displayService: DisplayService, route: ActivatedRoute) {
+  constructor(public router: Router, private _eventService: EventService, private _viewService: ViewService, route: ActivatedRoute) {
     this.currentPath = route.snapshot.url.join('');
   }
 
   ngOnInit() {
-    this._displayService.currentDate$.subscribe( date => {
+    this._eventService.currentDate$.subscribe( date => {
       this.viewDateChange(date);
-      if(this.date)
     });
     this.enumerateWeek();
   }
@@ -58,7 +58,7 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   changeDateSpan(delta: number) : void{
-    this._displayService.changeDateSpan(delta);
+    this._viewService.changeDateSpan(delta);
     this.enumerateWeek();
   }
 
@@ -69,7 +69,7 @@ export class CalendarContainerComponent implements OnInit {
     //iterate backwards through zeroWeeks array to find the first positive week
     for(let i = this.zeroWeeks.length-1; i>=0; i--){
       //determine week count
-      weekCount = Math.floor(moment(this._displayService.getCurrentDate()).diff(this.zeroWeeks[i],'days') / 7);
+      weekCount = Math.floor(moment(this._eventService.getCurrentDate()).diff(this.zeroWeeks[i],'days') / 7);
       //handle zero week
       if(weekCount>=0){ if(i%3 != 0){ weekCount++; } i = -1; }
     }

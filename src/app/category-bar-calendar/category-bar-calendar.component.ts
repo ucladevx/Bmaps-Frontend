@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-import { DisplayService } from '../services/display.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
 import * as moment from 'moment';
@@ -17,13 +18,13 @@ export class CategoryBarCalendarComponent implements OnInit {
   public showDropdown = false;
   private wasInside = false;
 
-  constructor(private _displayService: DisplayService) {}
+  constructor(private _eventService: EventService, private _viewService: ViewService) {}
 
   ngOnInit() {
-    this._displayService.categHash$.subscribe(categHash => {
+    this._eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
-    this._displayService.buttonHash$.subscribe(filterHash => {
+    this._eventService.tagHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
   }
@@ -33,15 +34,15 @@ export class CategoryBarCalendarComponent implements OnInit {
     let first = moment(firstInput).toDate();
     let lastInput = (<HTMLInputElement>document.getElementById('end-date')).value;
     let last = moment(lastInput).toDate();
-    this._displayService.setDateFilter(first,last);
+    this._eventService.setDateFilter(first,last);
   }
 
   getStartDate(){
-    return moment(this._displayService.getDateFilter()[0]).format('YYYY-MM-DD');
+    return moment(this._eventService.getDateFilter()[0]).format('YYYY-MM-DD');
   }
 
   getEndDate(){
-    return moment(this._displayService.getDateFilter()[1]).format('YYYY-MM-DD');
+    return moment(this._eventService.getDateFilter()[1]).format('YYYY-MM-DD');
   }
 
   setTimeFilter(){
@@ -51,28 +52,28 @@ export class CategoryBarCalendarComponent implements OnInit {
     let lastInput = (<HTMLInputElement>document.getElementById('end-time')).value;
     let endtime = lastInput.split(":");
     let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
-    this._displayService.setTimeFilter(start,end);
+    this._eventService.setTimeFilter(start,end);
   }
 
   getStartTime(){
-    return this.convertNumToTime(this._displayService.getTimeFilter()[0]);
+    return this.convertNumToTime(this._eventService.getTimeFilter()[0]);
   }
 
   getEndTime(){
-    return this.convertNumToTime(this._displayService.getTimeFilter()[1]);
+    return this.convertNumToTime(this._eventService.getTimeFilter()[1]);
   }
 
   setLocationFilter(){
     let locInput = (<HTMLInputElement>document.getElementById('location')).value;
-    this._displayService.setLocationFilter(locInput);
+    this._eventService.setLocationFilter(locInput);
   }
 
   getLoc(){
-    return this._displayService.getLocationFilter();
+    return this._eventService.getLocationFilter();
   }
 
   clearLoc(){
-    this._displayService.setLocationFilter(null);
+    this._eventService.setLocationFilter(null);
   }
 
   convertNumToTime(minutes: number){
@@ -91,12 +92,12 @@ export class CategoryBarCalendarComponent implements OnInit {
   }
 
   filterClicked(filter: string): void {
-    this._displayService.toggleFilterButton(filter);
+    this._eventService.toggleTag(filter);
   }
 
   categoryClicked(): void {
     let category = (<HTMLInputElement>document.getElementById("categories")).value;
-    this._displayService.toggleCategory(category);
+    this._eventService.toggleCategory(category);
   }
 
   toggleDropdown() {
@@ -106,7 +107,7 @@ export class CategoryBarCalendarComponent implements OnInit {
   clearCategories(): void {
     for (let key in this.categHash) {
       if (this.categHash[key].selected) {
-        this._displayService.toggleCategory(key);
+        this._eventService.toggleCategory(key);
       }
     }
     if(this.categHash){
@@ -117,7 +118,7 @@ export class CategoryBarCalendarComponent implements OnInit {
   clearFilters(): void {
     for (let key in this.filterHash) {
       if (this.filterHash[key]) {
-        this._displayService.toggleFilterButton(key);
+        this._eventService.toggleTag(key);
       }
     }
   }
@@ -125,7 +126,7 @@ export class CategoryBarCalendarComponent implements OnInit {
 
 
   clearAllFilters(){
-    this._displayService.resetFilters('calendar');
+    this._eventService.resetFilters('calendar');
   }
 
   @HostListener('click')

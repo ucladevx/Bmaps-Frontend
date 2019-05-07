@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DisplayService } from '../services/display.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import { DateService } from '../services/date.service';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
@@ -15,10 +16,10 @@ export class DateSelectorComponent implements OnInit {
     public showLeft: boolean;
     public showRight: boolean;
 
-    constructor(private router: Router, private _displayService: DisplayService, private _dateService: DateService) { }
+    constructor(private router: Router, private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService) { }
 
     ngOnInit() {
-        this._displayService.currentDate$.subscribe(date => {
+        this._eventService.currentDate$.subscribe(date => {
             this.dateString = this.dateToString(date);
             this.showLeft = this.showLeftArrow(date);
             this.showRight = this.showRightArrow(date);
@@ -53,8 +54,8 @@ export class DateSelectorComponent implements OnInit {
 
     public updateDate(days: number) {
         // 1 means advance one day, -1 means go back one day
-        this._displayService.increaseDay(days);
-        if(this._displayService.isMapView()){
+        this._eventService.increaseDay(days);
+        if(this._viewService.isMapView()){
           document.getElementById("resetButton").click();
         }
     }
