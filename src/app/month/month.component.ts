@@ -24,7 +24,7 @@ export class MonthComponent implements OnInit {
 
   ngOnInit() {
 
-    this._displayService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
+    this._displayService.changeToMonth.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
 
     this._displayService.currentDate$.subscribe(date => {
       this.ngZone.run( () => { this.showCalendar(date); });
@@ -60,6 +60,8 @@ export class MonthComponent implements OnInit {
 
   showCalendar(dateInMonth: Moment | Date | string): void {
     if(this._displayService.isMonthView() && dateInMonth != undefined){
+      console.log("monthShow");
+      console.log(dateInMonth);
     this.currentMonth = moment(dateInMonth).startOf('month');
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
@@ -92,6 +94,7 @@ export class MonthComponent implements OnInit {
 
   changeMonth = (delta: number) => {
     if(this._displayService.isMonthView()){
+    console.log("month");
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
     // if selected day is in month, that is first option
@@ -104,9 +107,7 @@ export class MonthComponent implements OnInit {
       viewDate = newMonth.startOf('month').toDate();
     console.log(viewDate);
     this._displayService.updateDayEvents(viewDate);
-    this._displayService.updateWeekEvents(viewDate);
     this._displayService.updateMonthEvents(viewDate);
-    this.showCalendar(viewDate);
     }
   }
 

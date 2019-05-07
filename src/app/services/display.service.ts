@@ -196,9 +196,20 @@ export class DisplayService {
 
   // CHANGE DATE SPAN //
 
-  @Output() change: EventEmitter<Number> = new EventEmitter();
+  @Output() changeToWeek: EventEmitter<Number> = new EventEmitter();
+  @Output() changeToMonth: EventEmitter<Number> = new EventEmitter();
   changeDateSpan(delta : Number) {
-    this.change.emit(delta);
+    if(delta == 0){
+      if(this.isWeekView())
+        this.changeToMonth.emit(delta);
+      else
+        this.changeToWeek.emit(delta);
+    } else {
+      if(this.isWeekView())
+        this.changeToWeek.emit(delta);
+      else
+        this.changeToMonth.emit(delta);
+    }
     this.selectedDaySource.next(this._calendarDays[0]);
   }
 
@@ -302,13 +313,6 @@ export class DisplayService {
 
   // advance selection to the next day
   increaseDay(days: number){
-    if(this.isCalendarView()){
-      let index = this._calendarDays.indexOf(this._selectedDay);
-      index += days;
-      if(index < this._calendarDays.length && index > -1){
-        this.setSelectedDay(this._calendarDays[index]);
-      }
-    }
     this.updateClickedEvent(null);
     this.updateExpandedEvent(null);
     let newDate = this._currentDate;
@@ -346,13 +350,13 @@ export class DisplayService {
 
   // Updates events for given day while persisting the current category
   updateDayEvents(date: Date): void {
+  this.currentDateSource.next(date);
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(events => {
       this.dayEventsSource.next(events);
       if(this.isMapView()){
         this.resetFilters();
       }
     });
-    this.currentDateSource.next(date);
   }
 
   // Updates events for given month while persisting the current category

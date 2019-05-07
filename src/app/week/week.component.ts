@@ -27,7 +27,7 @@ export class WeekComponent implements OnInit {
 
   ngOnInit() {
 
-    this._displayService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
+    this._displayService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
 
     this._displayService.currentDate$.subscribe(date => {
       this.ngZone.run( () => { this.showCalendar(date); });
@@ -64,6 +64,7 @@ export class WeekComponent implements OnInit {
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
     if(this._displayService.isWeekView() && dateInMonth != undefined){
+      console.log("weekShow");
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
@@ -101,22 +102,22 @@ export class WeekComponent implements OnInit {
   //increment or decrement week
   changeWeek(delta: number): void {
     if(this._displayService.isWeekView()){
-      console.log("here");
+    console.log("week");
     // 1 means advance one week, -1 means go back one week
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
     // if selected day is in month, that is first option
     let viewDate;
+    console.log(this._displayService.getCurrentDate());
     if (newWeek.isSame(moment(this._displayService.getCurrentDate()), 'week'))
       viewDate = this._displayService.getCurrentDate();
     else if (newWeek.isSame(moment(), 'week'))
       viewDate = new Date();
     else
       viewDate = newWeek.startOf('week').toDate();
-    document.getElementById("scrollable").scrollTop = 200;
+    console.log(viewDate);
     this._displayService.updateDayEvents(viewDate);
     this._displayService.updateWeekEvents(viewDate);
-    this._displayService.updateMonthEvents(viewDate);
-    this.showCalendar(viewDate);
+    document.getElementById("scrollable").scrollTop = 200;
     }
   }
 
