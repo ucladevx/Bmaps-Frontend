@@ -48,6 +48,7 @@ export class CalendarContainerComponent implements OnInit {
   ngOnInit() {
     this._displayService.currentDate$.subscribe( date => {
       this.viewDateChange(date);
+      if(this.date)
     });
     this.enumerateWeek();
   }

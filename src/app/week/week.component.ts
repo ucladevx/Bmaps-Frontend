@@ -40,7 +40,8 @@ export class WeekComponent implements OnInit {
       this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
       if(this._displayService.isWeekView())
         document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      this._displayService.setDateFilterFromDays(this._displayService.getDays());
+      if(this._displayService.isWeekView() && this._displayService.getDays())
+          this._displayService.setDateFilterFromDays(this._displayService.getDays());
     });
 
     this._displayService.filteredWeekEvents$.subscribe(weekEventCollection => {
@@ -71,10 +72,10 @@ export class WeekComponent implements OnInit {
 
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
+  //set currentMonth and currentWeek
+  this.currentMonth = moment(dateInMonth).startOf('month');
+  this.currentWeek = moment(dateInMonth).startOf('week');
     if(this._displayService.isWeekView() && dateInMonth != undefined){
-    //set currentMonth and currentWeek
-    this.currentMonth = moment(dateInMonth).startOf('month');
-    this.currentWeek = moment(dateInMonth).startOf('week');
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('week');
@@ -118,6 +119,7 @@ export class WeekComponent implements OnInit {
       viewDate = new Date();
     else
       viewDate = newWeek.startOf('week').toDate();
+    console.log(viewDate);
     if(this._displayService.isWeekView())
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
     this._displayService.updateDayEvents(viewDate);

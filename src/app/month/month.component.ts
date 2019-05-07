@@ -34,7 +34,7 @@ export class MonthComponent implements OnInit {
       this.filteredEvents = monthEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
-      if(this._displayService.getDays())
+      if(this._displayService.isMonthView() && this._displayService.getDays())
         this._displayService.setDateFilterFromDays(this._displayService.getDays());
       if(this._displayService.isWeekView()){ document.getElementById("scrollable").scrollTop = 200; }
     });
@@ -62,8 +62,8 @@ export class MonthComponent implements OnInit {
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
-    if(this._displayService.isMonthView() && dateInMonth != undefined){
     this.currentMonth = moment(dateInMonth).startOf('month');
+    if(this._displayService.isMonthView() && dateInMonth != undefined){
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('month').endOf('week');
@@ -161,6 +161,9 @@ export class MonthComponent implements OnInit {
     }
     this._displayService.setSelectedDay(day);
     this._displayService.updateDayEvents(day.date);
+    if(!day.inCurrentMonth){
+      this.changeMonth(0);
+    }
   }
 
 }
