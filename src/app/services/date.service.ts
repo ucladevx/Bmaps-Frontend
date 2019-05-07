@@ -33,7 +33,7 @@ export class DateService {
   }
 
   // Test whether a given date is today
-  isToday(date: string): boolean {
+  isToday(date: Date | string): boolean {
     return moment(date).isSame(moment(), 'day');
   }
 

@@ -43,6 +43,9 @@ export class CalendarContainerComponent implements OnInit {
 
   constructor(public router: Router, private _displayService: DisplayService, route: ActivatedRoute) {
     this.currentPath = route.snapshot.url.join('');
+    this._displayService.currentDate$.subscribe( date => {
+      this.viewDateChange(date);
+    });
   }
 
   ngOnInit() {

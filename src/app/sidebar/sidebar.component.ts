@@ -45,7 +45,10 @@ export class SidebarComponent implements OnInit {
 
     ngOnInit() {
         // TODO: unsubscribe on destroy
-        // this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+        this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+        this._displayService.dayEvents$.subscribe(eventCollection => {
+            this.filteredEvents = eventCollection.features;
+        });
         this._displayService.filteredDayEvents$.subscribe(eventCollection => {
             this.filteredEvents = eventCollection.features;
         });

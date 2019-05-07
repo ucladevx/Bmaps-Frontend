@@ -62,6 +62,7 @@
     border-bottom: 1px solid #aaa;
     color: #bebebe;
     background-color: #fff;
+    cursor: default;
 }
 
 .calendar-day:not(:nth-child(7n)) {

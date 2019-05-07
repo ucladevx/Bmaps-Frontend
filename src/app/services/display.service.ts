@@ -12,6 +12,7 @@ import * as moment from 'moment';
 
 // Calendar Day interface
 export interface CalendarDay {
+  date: Date;                 // full date
   dayOfMonth: number;         // day of month for date
   month: number;              // month number for date
   year: number;               // year number for date
@@ -19,6 +20,7 @@ export interface CalendarDay {
   events: GeoJson[];          // events on day
   selected: boolean;          // is day currently selected
   inCurrentMonth: boolean;    // is day in the current month
+  isToday: boolean;           // is day today
 }
 
 @Injectable()
@@ -355,13 +357,13 @@ export class DisplayService {
 
   // Updates events for given day while persisting the current category
   updateDayEvents(date: Date): void {
-    this.currentDateSource.next(date);
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(events => {
       this.dayEventsSource.next(events);
       if(this.isMapView()){
         this.resetFilters();
       }
     });
+    this.currentDateSource.next(date);
   }
 
   // Updates events for given month while persisting the current category
@@ -421,6 +423,13 @@ export class DisplayService {
     tempHash.push(first);
     tempHash.push(last);
     this.dateFilterSource.next(tempHash);
+  }
+
+  // set date hash
+  setDateFilterFromDays(calendarDays: CalendarDay[]){
+    let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
+    let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
+    this.setDateFilter(first,last);
   }
 
   // return date hash

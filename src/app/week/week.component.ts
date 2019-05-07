@@ -135,13 +135,15 @@ export class WeekComponent implements OnInit {
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
       //create CalendarDay object
       let weekDay: CalendarDay = {
+        date: d.toDate(),
         dayOfMonth: d.date(),
         inCurrentMonth: d.isSame(this.currentMonth, 'month'),
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
         events: this.getEventsOnDate(d),
         selected: d.isSame(dateInMonth, 'day'),
-        dayOfWeek: d.format('ddd')
+        dayOfWeek: d.format('ddd'),
+        isToday: this._dateService.isToday(d.toDate())
       };
       //determine whether it is the current day
       if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
