@@ -588,7 +588,8 @@ export class DisplayService {
     // iterate through events
     for (let event of featuresList) {
       let d = new Date(event.properties.start_time);
-      if(d >= moment().toDate() && event.properties.categories){
+      if(moment(d).isSame(moment(this._currentDate), 'month') &&
+       d >= moment().toDate() && event.properties.categories){
         // iterate through cartegories and increment count
         for (let category of event.properties.categories) {
           let eventCateg: string = category.toLowerCase();
