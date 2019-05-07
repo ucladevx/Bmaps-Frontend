@@ -36,7 +36,7 @@ export class EventDetailComponent implements OnInit {
 
   //check whether an image source exists
   checkImage(imageSrc) {
-      var img = new Image();
+      let img = new Image();
       try {
         img.src = imageSrc;
         return true;

@@ -216,10 +216,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   }
 
   addResetControls(): void {
-    var mapCanvas = document.getElementById("map");
-    var resetButton = document.createElement("BUTTON");
+    let mapCanvas = document.getElementById("map");
+    let resetButton = document.createElement("BUTTON");
     resetButton.id = 'resetButton';
-    var resetDetails = (e: MouseEvent|TouchEvent): void => {
+    let resetDetails = (e: MouseEvent|TouchEvent): void => {
       this.map.easeTo({
         center: [-118.445320, 34.066915],
         zoom: 15,
@@ -234,7 +234,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
   //add click behavior to an eventPopup (open event in sidebar)
   addClickBehavior(eventPopup, event){
-    var openDetails = (e: MouseEvent|TouchEvent): void => {
+    let openDetails = (e: MouseEvent|TouchEvent): void => {
       this.selectedEvent = event;
       this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
       this._displayService.updateClickedEvent(event);
@@ -245,10 +245,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
   //add hover behavior to an eventPopup (bold and unbold)
   addHoverBehavior(eventPopup, event){
-    var bold = (e: MouseEvent|TouchEvent): void => {
+    let bold = (e: MouseEvent|TouchEvent): void => {
       this._displayService.boldPopup(event);
     };
-    var unbold = (e: MouseEvent|TouchEvent): void => {
+    let unbold = (e: MouseEvent|TouchEvent): void => {
       this._displayService.boldPopup(null);
     };
     eventPopup.onmouseenter = bold;
@@ -262,9 +262,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     if (popup == this.popup ) {
       popup.setLngLat(coords).addTo(this.map);
         document.getElementById('popupBody').innerHTML = "";
-        for(var eIndex in eventList){
+        for(let eIndex in eventList){
           //create new popup section for an event
-          var newPopupSection = document.createElement('div');
+          let newPopupSection = document.createElement('div');
           newPopupSection.className = 'popupContainer';
           newPopupSection.id = 'popupContainer'+eventList[eIndex].id;
           //set styling to separate multiple events
@@ -277,13 +277,13 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           this.addHoverBehavior(newPopupSection,eventList[eIndex]);
           document.getElementById('popupBody').append(newPopupSection);
           //create new event name
-          var newEvent = document.createElement('div');
+          let newEvent = document.createElement('div');
           newEvent.className = 'popupEvent';
           newEvent.id = 'popupEvent'+eventList[eIndex].id;
           newEvent.innerHTML = eventList[eIndex].properties.name;
           document.getElementById('popupContainer'+eventList[eIndex].id).append(newEvent);
           //create new event date
-          var newDate = document.createElement('div');
+          let newDate = document.createElement('div');
           newDate.id = 'popupDate'+eventList[eIndex].id;
           newDate.className = 'popupDate';
           newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
@@ -292,9 +292,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     } else {
       popup.setLngLat(coords).addTo(this.map);
         document.getElementById('backupPopupBody').innerHTML = "";
-        for(var eIndex in eventList){
+        for(let eIndex in eventList){
           //create new popup section for an event
-          var newPopupSection = document.createElement('div');
+          let newPopupSection = document.createElement('div');
           newPopupSection.className = 'backupPopupContainer';
           newPopupSection.id = 'backupPopupContainer'+eventList[eIndex].id;
           //set styling to separate multiple events
@@ -307,13 +307,13 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           this.addHoverBehavior(newPopupSection,eventList[eIndex]);
           document.getElementById('backupPopupBody').append(newPopupSection);
           //create new event name
-          var newEvent = document.createElement('div');
+          let newEvent = document.createElement('div');
           newEvent.className = 'backupPopupEvent';
           newEvent.id = 'backupPopupEvent'+eventList[eIndex].id;
           newEvent.innerHTML = eventList[eIndex].properties.name;
           document.getElementById('backupPopupContainer'+eventList[eIndex].id).append(newEvent);
           //create new event date
-          var newDate = document.createElement('div');
+          let newDate = document.createElement('div');
           newDate.id = 'backupPopupDate'+eventList[eIndex].id;
           newDate.className = 'backupPopupDate';
           newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
@@ -371,12 +371,12 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
       location = JSON.stringify(location);
     }
     //start list of all events at the specified coordinates
-    var eventList = [];
+    let eventList = [];
     //iterate through all events
-    for(var eventIndex in this.events.features){
-        var ev = this.events.features[eventIndex];
+    for(let eventIndex in this.events.features){
+        let ev = this.events.features[eventIndex];
         //capture event location
-        var evLocation = JSON.stringify(ev["properties"]["place"]);
+        let evLocation = JSON.stringify(ev["properties"]["place"]);
         //compare event location to provided location
         if(evLocation === location){
           eventList.push(ev);
@@ -399,7 +399,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     if (event === null) {
       return;
     }
-    var eventList = this.listEventsByLocation(event["properties"].place);
+    let eventList = this.listEventsByLocation(event["properties"].place);
     // add blue hovered Pin
     let coords = event.geometry.coordinates.slice();
     this.map.getSource('hoveredPin').setData({
@@ -428,7 +428,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     else {
       // Change the cursor style as a UI indicator.
       this.map.getCanvas().style.cursor = 'pointer';
-      var eventList = this.listEventsByLocation(event["properties"].place);
+      let eventList = this.listEventsByLocation(event["properties"].place);
       //slice returns a copy of the array rather than the actual array
       let coords = event.geometry.coordinates.slice();
       if(this.selectedEvent !== null) {

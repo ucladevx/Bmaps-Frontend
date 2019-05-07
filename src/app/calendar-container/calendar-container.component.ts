@@ -43,13 +43,12 @@ export class CalendarContainerComponent implements OnInit {
 
   constructor(public router: Router, private _displayService: DisplayService, route: ActivatedRoute) {
     this.currentPath = route.snapshot.url.join('');
-    this._displayService.currentDate$.subscribe( date => {
-      this.viewDateChange(date);
-    });
   }
 
   ngOnInit() {
-    this._displayService.change.subscribe( function(set) { this.viewDateChange(set); }.bind(this));
+    this._displayService.currentDate$.subscribe( date => {
+      this.viewDateChange(date);
+    });
     this.enumerateWeek();
   }
 
@@ -65,9 +64,9 @@ export class CalendarContainerComponent implements OnInit {
   //set the week number
   enumerateWeek(){
     //count weeks
-    var weekCount;
+    let weekCount;
     //iterate backwards through zeroWeeks array to find the first positive week
-    for(var i = this.zeroWeeks.length-1; i>=0; i--){
+    for(let i = this.zeroWeeks.length-1; i>=0; i--){
       //determine week count
       weekCount = Math.floor(moment(this._displayService.getCurrentDate()).diff(this.zeroWeeks[i],'days') / 7);
       //handle zero week

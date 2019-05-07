@@ -46,11 +46,11 @@ export class CategoryBarCalendarComponent implements OnInit {
 
   setTimeFilter(){
     let firstInput = (<HTMLInputElement>document.getElementById('start-time')).value;
-    var starttime = firstInput.split(":");
-    var start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
+    let starttime = firstInput.split(":");
+    let start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
     let lastInput = (<HTMLInputElement>document.getElementById('end-time')).value;
-    var endtime = lastInput.split(":");
-    var end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
+    let endtime = lastInput.split(":");
+    let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
     this._displayService.setTimeFilter(start,end);
   }
 
@@ -91,7 +91,7 @@ export class CategoryBarCalendarComponent implements OnInit {
   }
 
   categoryClicked(): void {
-    var category = (<HTMLInputElement>document.getElementById("categories")).value;
+    let category = (<HTMLInputElement>document.getElementById("categories")).value;
     this._displayService.toggleCategory(category);
   }
 

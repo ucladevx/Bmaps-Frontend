@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, NgZone } from '@angular/core';
-import * as moment from 'moment';
 import { Moment } from 'moment';
 import { Router, NavigationEnd } from '@angular/router';
 import { DisplayService } from '../services/display.service';
 import { DateService } from '../services/date.service';
 import { GeoJson } from '../map';
 import { CalendarDay } from '../services/display.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-week',
@@ -15,11 +15,6 @@ import { CalendarDay } from '../services/display.service';
 
 export class WeekComponent implements OnInit {
   public days: CalendarDay[] = [];
-  private selectedMonth: Number;
-  private selectedYear: Number;
-  private selectedDay: CalendarDay;
-  private viewDate: Date ;
-  private today: CalendarDay;
   public currentMonth: Moment;
   private currentWeek: Moment;
   private filteredEvents: GeoJson[];
@@ -28,108 +23,55 @@ export class WeekComponent implements OnInit {
   private zIndexArray: { [id: number] : Number } = {};
 
   //constructor statement
-  constructor(private _displayService: DisplayService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {
-  }
+  constructor(private _displayService: DisplayService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
   ngOnInit() {
-
-    this._displayService.storeView('week');
-    if(this._displayService.getClickedEvent() == null){
-      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-    }
 
     this._displayService.change.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
 
     this._displayService.currentDate$.subscribe(date => {
-      this.ngZone.run( () => {
-        if(this.filteredEvents != null){
-          this.showCalendar(date);
-        }
-      });
+      this.ngZone.run( () => { this.showCalendar(date); });
     });
 
     this._displayService.weekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => {
-        this.showCalendar(this._displayService.getSelectedDay());
-        let calendarDays = this._displayService.getDays();
-        let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
-        let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
-        this._displayService.setDateFilter(first,last);
-        if(this._displayService.isWeekView()){
-            document.getElementById("scrollable").scrollTop = 200;
-        }
-      });
+      this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
+      this._displayService.setDateFilterFromDays(this._displayService.getDays());
+      if(this._displayService.isWeekView()){ document.getElementById("scrollable").scrollTop = 200; }
     });
 
     this._displayService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => {
-        this.showCalendar(this._displayService.getSelectedDay());
-      });
+      this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
     });
 
     this._displayService.clickedEvent$.subscribe(clickedEventInfo => {
-      if(document.getElementById("week-view-indicator") != null){
-        this.clickedEvent = clickedEventInfo;
-      }
+      this.clickedEvent = clickedEventInfo;
     });
 
-
-    if (this._displayService.getSelectedDay() != null) {
-      //on startup
-      this.selectedMonth = moment(this._displayService.getSelectedDay()).month();
-      this.selectedYear = moment(this._displayService.getSelectedDay()).year();
-      //update view
-      this.updateWeekView();
-    }
-    else{
-      //on startup
-      this.selectedMonth = moment().month();
-      this.selectedYear = moment().year();
-      //update view
-      this.updateWeekView();
-    }
-
-    if(this._displayService.getClickedEvent()){
-      this.clickedEvent = this._displayService.getClickedEvent();
-    }
-
-    let calendarDays = this._displayService.getDays();
-    let first = moment([calendarDays[0].year, calendarDays[0].month, calendarDays[0].dayOfMonth]).toDate();
-    let last = moment([calendarDays[calendarDays.length-1].year, calendarDays[calendarDays.length-1].month, calendarDays[calendarDays.length-1].dayOfMonth]).toDate();
-    this._displayService.setDateFilter(first,last);
-
+    this._displayService.setDateFilterFromDays(this._displayService.getDays());
+    this.currentMonth = moment();
+    this._displayService.isMonthView();
     document.getElementById("scrollable").scrollTop = 200;
-    this._displayService.isWeekView();
-  }
+    if(this._displayService.getClickedEvent() == null){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
 
-  changeSelectedDay (day : CalendarDay) {
-    this.selectedDay = day;
-  }
-
-  //update the week view
-  updateWeekView(){
-    //update month events (subscribed to by ngOnInit)
-    this._displayService.updateWeekEvents(this._displayService.getSelectedDay());
-    //set scroll bar to show view of rogughly 8am-10pm
-    document.getElementById("scrollable").scrollTop = 200;
   }
 
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
-    if(this._displayService.isWeekView()){
+    if(this._displayService.isWeekView() && dateInMonth != undefined){
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('week');
-    if(parseInt(lastDay.format('DD')) > 3 && parseInt(lastDay.format('DD')) < 7){
+    if(parseInt(lastDay.format('DD')) > 3 && parseInt(lastDay.format('DD')) < 7)
       this.currentMonth.add(1,'month');
-    }
     //fill days
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
@@ -145,57 +87,37 @@ export class WeekComponent implements OnInit {
         dayOfWeek: d.format('ddd'),
         isToday: this._dateService.isToday(d.toDate())
       };
-      //determine whether it is the current day
-      if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
-        this.today = weekDay;
-      }
       //add weekDay to display days array
       this.days.push(weekDay);
       // set selected day to the date provided
       if (d.isSame(dateInMonth, 'day')) {
-        // this.selectedDay = weekDay;
         this._displayService.setSelectedDay(weekDay);
       }
     }
     this._displayService.setDays(this.days);
-    if(this._displayService.getClickedEvent()){
-      this.clickedEvent = this._displayService.getClickedEvent();
     }
-  }
   }
 
   //increment or decrement week
   changeWeek(delta: number): void {
-    if(!this._displayService.isWeekView()){
-      return;
-    }
+    if(this._displayService.isWeekView()){
+      console.log("here");
     // 1 means advance one week, -1 means go back one week
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
-    //update selectedMonth and selectedYear
-    this.selectedMonth = newWeek.month();
-    this.selectedYear = newWeek.year();
     // if selected day is in month, that is first option
-    if (this._displayService.getSelectedDay() && newWeek.isSame(moment(this._displayService.getSelectedDay()), 'week')) {
-      this._displayService.updateDayEvents(this._displayService.getCurrentDate());
-      this.updateWeekView();
+    let viewDate;
+    if (newWeek.isSame(moment(this._displayService.getCurrentDate()), 'week'))
+      viewDate = this._displayService.getCurrentDate();
+    else if (newWeek.isSame(moment(), 'week'))
+      viewDate = new Date();
+    else
+      viewDate = newWeek.startOf('week').toDate();
+    document.getElementById("scrollable").scrollTop = 200;
+    this._displayService.updateDayEvents(viewDate);
+    this._displayService.updateWeekEvents(viewDate);
+    this._displayService.updateMonthEvents(viewDate);
+    this.showCalendar(viewDate);
     }
-    // if current week, make selected day today
-    else if (newWeek.isSame(moment(), 'week')) {
-      //update view date
-      // this.viewDate = new Date();
-      this._displayService.updateDayEvents(new Date());
-      //update view
-      this.updateWeekView();
-    }
-    // make selected day the 1st of the week
-    else {
-      //update view date
-      // this.viewDate = newWeek.startOf('week').toDate();
-      this._displayService.updateDayEvents(newWeek.startOf('week').toDate());
-      //update view
-      this.updateWeekView();
-    }
-      document.getElementById("scrollable").scrollTop = 200;
   }
 
   //retrieve events for the given week
@@ -223,13 +145,13 @@ export class WeekComponent implements OnInit {
     //retrieve event list from eventsByDay
     if (this.eventsByDay.hasOwnProperty(dayOfYear)){
       //sort array by start time, then by duration
-      var eventList = this.eventsByDay[dayOfYear];
+      let eventList = this.eventsByDay[dayOfYear];
       eventList.sort(function compare(a, b) {
-        var timeA = +new Date(a.properties.start_time);
-        var timeB = +new Date(b.properties.start_time);
+        let timeA = +new Date(a.properties.start_time);
+        let timeB = +new Date(b.properties.start_time);
         if(timeA-timeB == 0){
-          var timeAA = +new Date(a.properties.end_time);
-          var timeBB = +new Date(b.properties.end_time);
+          let timeAA = +new Date(a.properties.end_time);
+          let timeBB = +new Date(b.properties.end_time);
           return timeBB - timeAA;
         }
         return timeA - timeB;
@@ -245,24 +167,17 @@ export class WeekComponent implements OnInit {
 
   //highlight selected day
   onSelect(day: CalendarDay): void{
-    //update selectedDayChange
-    if(this._displayService.getClickedEvent() && moment(this._displayService.getClickedEvent().properties.start_time).date() != day.dayOfMonth
-      && this._displayService.getSelectedDay() != day){
+    if(this._displayService.getClickedEvent() && this._displayService.getSelectedDay() != day &&
+      moment(this._displayService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
-    // this.selectedDay = day;
     this._displayService.setSelectedDay(day);
-    //create date for that day
-    let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
-    //update sidebar to display events for that date
-    this._displayService.updateDayEvents(date);
+    this._displayService.updateDayEvents(day.date);
   }
 
   //open event in sidebar
   openEvent(event: GeoJson): void{
-    //update clicked event
     this._displayService.updateClickedEvent(event);
-    //route to new event detail component
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
     this._displayService.updateExpandedEvent(event);
   }
@@ -276,21 +191,15 @@ export class WeekComponent implements OnInit {
   }
 
   //determine the position of the current time bar
-  currentTime() {
-    //retrieve current time moment
-    var now = moment();
-    //calculate top position
-    return this.convertTimeToPercent(now)+"%";
+  styleCurrentTime() {
+    let now = moment();
+    let style = { 'top' : this.convertTimeToPercent(now)+"%" }
   }
 
   //convert time to top percentage in css
   convertTimeToPercent(time: Moment) {
-    var increment = 3.55;
-    var p = 11;
-    if(time.format("A") == "PM"){
-      p += 42.8;
-      increment = 3.58;
-    }
+    let increment = 3.55; let p = 11;
+    if(time.format("A") == "PM"){ p += 42.8; increment = 3.58; }
     p += (parseInt(time.format("H"))%12)*increment;
     p += (parseInt(time.format("mm"))/15)*(increment/4);
     return p;
@@ -299,28 +208,28 @@ export class WeekComponent implements OnInit {
   // position and size event to match actual start time and duration
   styleEvent(event: GeoJson, events: GeoJson[]) {
     // CALCULATE TOP //
-    var start = moment(event.properties.start_time);
-    var top = this.convertTimeToPercent(start);
+    let start = moment(event.properties.start_time);
+    let top = this.convertTimeToPercent(start);
     // CALCULATE HEIGHT //
-    var temp = moment(event.properties.end_time);
-    var hours = moment.duration(temp.diff(start)).asHours();
+    let temp = moment(event.properties.end_time);
+    let hours = moment.duration(temp.diff(start)).asHours();
     if(hours>24){ hours = (hours%24)+1; }
-    var end = start.clone().add(hours,"hours");
-    var bottom = this.convertTimeToPercent(end)
-    var height = bottom-top;
+    let end = start.clone().add(hours,"hours");
+    let bottom = this.convertTimeToPercent(end)
+    let height = bottom-top;
     if(height<0){ height = 100-top; }
     // CALCULATE WIDTH AND LEFT //
-    var overlapped = [];
-    var eventIndex = 0;
+    let overlapped = [];
+    let eventIndex = 0;
     //iterate through surrounding events
-    for(var j = 0; j < events.length; j++){
+    for(let j = 0; j < events.length; j++){
         if(events[j] == event){ eventIndex = overlapped.length; }
         //retrieve start and end time for new event
-        var s = moment(events[j].properties.start_time);
-        var t = moment(events[j].properties.end_time);
-        var h = moment.duration(t.diff(s)).asHours();
+        let s = moment(events[j].properties.start_time);
+        let t = moment(events[j].properties.end_time);
+        let h = moment.duration(t.diff(s)).asHours();
         if(h>24){ h = (h%24)+1; }
-        var e = s.clone().add(h,"hours");
+        let e = s.clone().add(h,"hours");
         //determine whether events overlap
         if(!s.isSame(end) && !e.isSame(start) &&
             ((s.isSame(start) && e.isSame(end)) ||
@@ -331,26 +240,24 @@ export class WeekComponent implements OnInit {
         { overlapped.push(events[j]); }
     }
     // CALCULATE LEFT
-    var left = 2+((98/overlapped.length)*eventIndex);
+    let left = 2+((98/overlapped.length)*eventIndex);
     // CALCULATE WIDTH
-    var width = 98-left-(5*(overlapped.length-1-eventIndex));
+    let width = 98-left-(5*(overlapped.length-1-eventIndex));
     // CALCULATE ZINDEX
-    var z = eventIndex+1;
+    let z = eventIndex+1;
     this.zIndexArray[event.id] = z;
     // account for clicked event
-    var font = "normal";
-    if(this.clickedEvent && this.clickedEvent.id == event.id && this.selectedDay.dayOfMonth == moment(this.clickedEvent.properties.start_time).date()){
+    let font = "normal";
+    if(this.clickedEvent && this.clickedEvent.id == event.id &&
+      this._displayService.getSelectedDay().dayOfMonth == moment(this.clickedEvent.properties.start_time).date()){
       font = "bold";
       z = 100;
     }
     // CREATE STYLE
-    var style = {
-      'top' : top+"%",
-      'height' : height+"%",
-      'left' : left+"%",
-      'width' : width+"%",
-      'zIndex' : z,
-      'fontWeight' : font
+    let style = {
+      'top' : top+"%", 'height' : height+"%",
+      'left' : left+"%", 'width' : width+"%",
+      'zIndex' : z, 'fontWeight' : font
     }
     return style;
   }

@@ -34,7 +34,8 @@ export class MonthComponent implements OnInit {
       this.filteredEvents = monthEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
-      this._displayService.setDateFilterFromDays(this._displayService.getDays());
+      if(this._displayService.getDays())
+        this._displayService.setDateFilterFromDays(this._displayService.getDays());
       if(this._displayService.isWeekView()){ document.getElementById("scrollable").scrollTop = 200; }
     });
 
@@ -58,9 +59,7 @@ export class MonthComponent implements OnInit {
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
-    if(this._displayService.isMonthView()){
-    if(dateInMonth == undefined)
-      return;
+    if(this._displayService.isMonthView() && dateInMonth != undefined){
     this.currentMonth = moment(dateInMonth).startOf('month');
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
@@ -88,7 +87,7 @@ export class MonthComponent implements OnInit {
       }
     }
     this._displayService.setDays(this.days);
-  }
+    }
   }
 
   changeMonth = (delta: number) => {
@@ -99,13 +98,13 @@ export class MonthComponent implements OnInit {
     let viewDate;
     if (newMonth.isSame(moment(this._displayService.getCurrentDate()), 'month'))
       viewDate = this._displayService.getCurrentDate();
-    // if current month, make selected day today
     else if (newMonth.isSame(moment(), 'month'))
       viewDate = new Date();
-    // make selected day the 1st of the month
     else
       viewDate = newMonth.startOf('month').toDate();
+    console.log(viewDate);
     this._displayService.updateDayEvents(viewDate);
+    this._displayService.updateWeekEvents(viewDate);
     this._displayService.updateMonthEvents(viewDate);
     this.showCalendar(viewDate);
     }
@@ -136,13 +135,13 @@ export class MonthComponent implements OnInit {
     //retrieve event list from eventsByDay
     if (this.eventsByDay.hasOwnProperty(dayOfYear)){
       //sort array by start time, then by duration
-      var eventList = this.eventsByDay[dayOfYear];
+      let eventList = this.eventsByDay[dayOfYear];
       eventList.sort(function compare(a, b) {
-        var timeA = +new Date(a.properties.start_time);
-        var timeB = +new Date(b.properties.start_time);
+        let timeA = +new Date(a.properties.start_time);
+        let timeB = +new Date(b.properties.start_time);
         if(timeA-timeB == 0){
-          var timeAA = +new Date(a.properties.end_time);
-          var timeBB = +new Date(b.properties.end_time);
+          let timeAA = +new Date(a.properties.end_time);
+          let timeBB = +new Date(b.properties.end_time);
           return timeBB - timeAA;
         }
         return timeA - timeB;

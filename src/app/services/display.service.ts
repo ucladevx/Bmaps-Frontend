@@ -30,7 +30,6 @@ export class DisplayService {
   private _currentDate;               // holds the current selected day in Date format
   private _calendarDays;               // holds the days being displayed in CalendarDay format
   private _selectedDay;               // holds the current day in CalendarDay format
-  private _dateSpan;                  // collection of dates currently being displayed
 
   // EVENT STORAGE VARIABLES
   private _monthEvents;               // holds all events stored for the current month view
@@ -61,7 +60,6 @@ export class DisplayService {
   private currentDateSource: BehaviorSubject <Date>;
   private calendarDaysSource: Subject <any>;
   private selectedDaySource: Subject <CalendarDay>;
-  private dateSpanSource: Subject <any>;
   private monthEventsSource: BehaviorSubject <FeatureCollection>;
   private filteredMonthEventsSource: BehaviorSubject <FeatureCollection>;
   private weekEventsSource: BehaviorSubject <FeatureCollection>;
@@ -80,7 +78,7 @@ export class DisplayService {
   private currentViewSource: Subject <string>;
 
   // OBSERVABLES
-  currentDate$; calendarDays$; selectedDay$; dateSpan$; clickedEvent$; expandedEvent$; hoveredEvent$; currentView$;
+  currentDate$; calendarDays$; selectedDay$; clickedEvent$; expandedEvent$; hoveredEvent$; currentView$;
   monthEvents$; filteredMonthEvents$; weekEvents$; filteredWeekEvents$; dayEvents$; filteredDayEvents$;
   categHash$; buttonHash$; locationFilter$; dateFilter$; timeFilter$; universalSearch$;
 
@@ -130,7 +128,6 @@ export class DisplayService {
     this.currentDateSource = new BehaviorSubject <Date> (new Date());
     this.calendarDaysSource = new Subject <CalendarDay[]> ();
     this.selectedDaySource = new Subject <CalendarDay> ();
-    this.dateSpanSource = new Subject <any> ();
     this.monthEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
     this.filteredMonthEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
     this.weekEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
@@ -151,7 +148,6 @@ export class DisplayService {
     this.currentDate$ = this.currentDateSource.asObservable();
     this.calendarDays$ = this.calendarDaysSource.asObservable();
     this.selectedDay$ = this.selectedDaySource.asObservable();
-    this.dateSpan$ = this.dateSpanSource.asObservable();
     this.monthEvents$  = this.monthEventsSource.asObservable();
     this.filteredMonthEvents$  = this.filteredMonthEventsSource.asObservable();
     this.weekEvents$  = this.weekEventsSource.asObservable();
@@ -171,8 +167,7 @@ export class DisplayService {
     // Maintain a set of self-subscribed local values
     this.currentDate$.subscribe(date => this._currentDate = date);
     this.calendarDays$.subscribe(days => this._calendarDays = days);
-    this.selectedDay$.subscribe(day => { this._selectedDay = day; this._currentDate = day.date; });
-    this.dateSpan$.subscribe(dates => this._dateSpan = dates);
+    this.selectedDay$.subscribe(day => { this._selectedDay = day; this._currentDate = day.date;);
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
     this.weekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
     this.dayEvents$.subscribe(dayEvents => this._dayEvents = dayEvents);
@@ -203,16 +198,8 @@ export class DisplayService {
 
   @Output() change: EventEmitter<Number> = new EventEmitter();
   changeDateSpan(delta : Number) {
-    let span = {};
-    this.dateSpanSource.next(span);
     this.change.emit(delta);
-    this._selectedDay = this._calendarDays[0];
-    if(delta == 0){
-      if(this.isWeekView())
-        this.storeView('month');
-      else
-        this.storeView('week');
-    }
+    this.selectedDaySource.next(this._calendarDays[0]);
   }
 
   // VIEW CHECKERS //
@@ -234,6 +221,7 @@ export class DisplayService {
   isMonthView() {
     if(this.router.url.startsWith("/calendar/month")){
       this.currentViewSource.next('month');
+      this.storeView('month');
     }
     return this.router.url.startsWith("/calendar/month");
   }
@@ -242,6 +230,7 @@ export class DisplayService {
   isWeekView() {
     if(this.router.url.startsWith("/calendar/week")){
       this.currentViewSource.next('week');
+      this.storeView('week');
     }
     return this.router.url.startsWith("/calendar/week");
   }
@@ -375,9 +364,9 @@ export class DisplayService {
   }
 
   // Updates events for given week while persisting the current category
-  updateWeekEvents(firstDay: Date): void {
+  updateWeekEvents(date: Date): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      this.weekEventsSource.next(this.filterByWeek(allEvents, firstDay));
+      this.weekEventsSource.next(this.filterByWeek(allEvents, date));
       this.applyAllFilters();
     });
   }
@@ -385,10 +374,10 @@ export class DisplayService {
   // Filter events by week
   private filterByWeek(allEvents: FeatureCollection, firstDay: Date){
     let weekEvents = new FeatureCollection([]);
-    var daysLeftInWeek = 7-parseInt(moment(firstDay).format('D'));
-    var lastDay = moment(firstDay).clone().add(daysLeftInWeek, 'days').toDate();
+    let daysLeftInWeek = 7-parseInt(moment(firstDay).format('d'));
+    let lastDay = moment(firstDay).clone().add(daysLeftInWeek, 'days').toDate();
     allEvents.features.forEach(el => {
-      var d = new Date(el.properties.start_time);
+      let d = new Date(el.properties.start_time);
       if (d >= firstDay && d <= lastDay)
         weekEvents.features.push(el)
     });
@@ -620,7 +609,7 @@ export class DisplayService {
 
   // reset all categories to be false
   resetCategories() {
-    for (var categ in this._categHash) {
+    for (let categ in this._categHash) {
       if (this._categHash.hasOwnProperty(categ)) {
         this._categHash[categ.toLowerCase()].selected = false;
       }
@@ -631,7 +620,7 @@ export class DisplayService {
   // reset all categories to be true
   allCategories() {
     let dayMap = this.getCategoryMap(this._dayEvents.features);
-    for (var categ in this._categHash) {
+    for (let categ in this._categHash) {
       if (categ.toLowerCase() == 'all' || (this._categHash.hasOwnProperty(categ.toLowerCase()) && dayMap[categ.toLowerCase()] > 0)) {
         this._categHash[categ.toLowerCase()].selected = true;
       }
@@ -644,8 +633,10 @@ export class DisplayService {
   // Apply filters and categories together
   applyAllFilters() {
     this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-    if(this.isCalendarView()){
+    if(this.isWeekView()){
       this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
+    }
+    if(this.isMonthView()){
       this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
     }
   }
@@ -793,29 +784,29 @@ export class DisplayService {
   //bold the popup event title for the given event, while unbolding all other event titles
   boldPopup(event: GeoJson): void {
     //iterate through popup event titles and unbold
-    var popups = document.getElementsByClassName("popupEvent");
-    for(var i = 0; i < popups.length; i++){
+    let popups = document.getElementsByClassName("popupEvent");
+    for(let i = 0; i < popups.length; i++){
       if(this._expandedEvent == undefined || (this._expandedEvent != null && popups.item(i).id != "popupEvent"+this._expandedEvent.id)){
         (<any>popups.item(i)).style.fontWeight = "normal";
       }
     }
     //bold the selected event title
     if(event != null){
-      var selectedPopup = document.getElementById("popupEvent"+event.id);
+      let selectedPopup = document.getElementById("popupEvent"+event.id);
       if(selectedPopup != null){
         selectedPopup.style.fontWeight = "bold";
       }
     }
     //iterate through backup popup event titles and unbold
-    var bpopups = document.getElementsByClassName("backupPopupEvent");
-    for(var i = 0; i < bpopups.length; i++){
+    let bpopups = document.getElementsByClassName("backupPopupEvent");
+    for(let i = 0; i < bpopups.length; i++){
       if(this._expandedEvent == undefined || (this._expandedEvent != null && bpopups.item(i).id != "popupEvent"+this._expandedEvent.id)){
         (<any>bpopups.item(i)).style.fontWeight = "normal";
       }
     }
     //bold the selected backup event title
     if(event != null){
-      var bselectedPopup = document.getElementById("backupPopupEvent"+event.id);
+      let bselectedPopup = document.getElementById("backupPopupEvent"+event.id);
       if(bselectedPopup != null){
         bselectedPopup.style.fontWeight = "bold";
       }
