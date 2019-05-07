@@ -21,6 +21,7 @@ export class WeekComponent implements OnInit {
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
   private zIndexArray: { [id: number] : Number } = {};
+  private scrollPosition: number = 0;
 
   //constructor statement
   constructor(private _displayService: DisplayService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
@@ -38,7 +39,6 @@ export class WeekComponent implements OnInit {
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
       this._displayService.setDateFilterFromDays(this._displayService.getDays());
-      if(this._displayService.isWeekView()){ document.getElementById("scrollable").scrollTop = 200; }
     });
 
     this._displayService.filteredWeekEvents$.subscribe(weekEventCollection => {
@@ -51,20 +51,22 @@ export class WeekComponent implements OnInit {
       this.clickedEvent = clickedEventInfo;
     });
 
+
     this._displayService.setDateFilterFromDays(this._displayService.getDays());
     this.currentMonth = moment();
     this._displayService.isMonthView();
-    document.getElementById("scrollable").scrollTop = 200;
     if(this._displayService.getClickedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
+
+    this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+    document.getElementById("scrollable").scrollTop = this.scrollPosition;
 
   }
 
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
     if(this._displayService.isWeekView() && dateInMonth != undefined){
-      console.log("weekShow");
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
@@ -101,24 +103,21 @@ export class WeekComponent implements OnInit {
 
   //increment or decrement week
   changeWeek(delta: number): void {
-    if(this._displayService.isWeekView()){
-    console.log("week");
     // 1 means advance one week, -1 means go back one week
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
     // if selected day is in month, that is first option
     let viewDate;
-    console.log(this._displayService.getCurrentDate());
     if (newWeek.isSame(moment(this._displayService.getCurrentDate()), 'week'))
       viewDate = this._displayService.getCurrentDate();
     else if (newWeek.isSame(moment(), 'week'))
       viewDate = new Date();
     else
       viewDate = newWeek.startOf('week').toDate();
-    console.log(viewDate);
+    if(this._displayService.isWeekView())
+      document.getElementById("scrollable").scrollTop = this.scrollPosition;
     this._displayService.updateDayEvents(viewDate);
     this._displayService.updateWeekEvents(viewDate);
-    document.getElementById("scrollable").scrollTop = 200;
-    }
+    this._displayService.updateMonthEvents(viewDate);
   }
 
   //retrieve events for the given week
@@ -192,9 +191,9 @@ export class WeekComponent implements OnInit {
   }
 
   //determine the position of the current time bar
-  styleCurrentTime() {
+  currentTime() {
     let now = moment();
-    let style = { 'top' : this.convertTimeToPercent(now)+"%" }
+    return this.convertTimeToPercent(now)+"%";
   }
 
   //convert time to top percentage in css

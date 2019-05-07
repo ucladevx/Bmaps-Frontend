@@ -60,8 +60,6 @@ export class MonthComponent implements OnInit {
 
   showCalendar(dateInMonth: Moment | Date | string): void {
     if(this._displayService.isMonthView() && dateInMonth != undefined){
-      console.log("monthShow");
-      console.log(dateInMonth);
     this.currentMonth = moment(dateInMonth).startOf('month');
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
@@ -93,8 +91,6 @@ export class MonthComponent implements OnInit {
   }
 
   changeMonth = (delta: number) => {
-    if(this._displayService.isMonthView()){
-    console.log("month");
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
     // if selected day is in month, that is first option
@@ -105,10 +101,9 @@ export class MonthComponent implements OnInit {
       viewDate = new Date();
     else
       viewDate = newMonth.startOf('month').toDate();
-    console.log(viewDate);
     this._displayService.updateDayEvents(viewDate);
+    this._displayService.updateWeekEvents(viewDate);
     this._displayService.updateMonthEvents(viewDate);
-    }
   }
 
     //retrieve events for the given month

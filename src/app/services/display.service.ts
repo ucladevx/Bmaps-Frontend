@@ -210,10 +210,10 @@ export class DisplayService {
       else
         this.changeToMonth.emit(delta);
     }
-    this.selectedDaySource.next(this._calendarDays[0]);
   }
 
   // VIEW CHECKERS //
+
 
   // test if app is currently in map view
   isMapView() {
@@ -376,9 +376,13 @@ export class DisplayService {
   }
 
   // Filter events by week
-  private filterByWeek(allEvents: FeatureCollection, firstDay: Date){
+  private filterByWeek(allEvents: FeatureCollection, date: Date){
     let weekEvents = new FeatureCollection([]);
-    let daysLeftInWeek = 7-parseInt(moment(firstDay).format('d'));
+    let firstDay = moment(date).startOf('week');
+    if(new Date() > date){
+      firstDay = moment(new Date());
+    }
+    let daysLeftInWeek = 7-parseInt((firstDay).format('d'));
     let lastDay = moment(firstDay).clone().add(daysLeftInWeek, 'days').toDate();
     allEvents.features.forEach(el => {
       let d = new Date(el.properties.start_time);
