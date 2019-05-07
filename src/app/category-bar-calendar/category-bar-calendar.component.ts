@@ -71,6 +71,10 @@ export class CategoryBarCalendarComponent implements OnInit {
     return this._displayService.getLocationFilter();
   }
 
+  clearLoc(){
+    this._displayService.setLocationFilter(null);
+  }
+
   convertNumToTime(minutes: number){
     let hours = (Math.floor(minutes / 60))%24;
     minutes = (minutes-(hours*60))%60;

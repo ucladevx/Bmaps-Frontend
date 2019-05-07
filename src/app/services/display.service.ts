@@ -455,7 +455,7 @@ export class DisplayService {
 
   // set location search
   setLocationFilter(search: string){
-    this._locationFilter = search;
+    this.locationFilterSource.next(search);
   }
 
   // return location search
@@ -465,7 +465,7 @@ export class DisplayService {
 
   // set universal search
   setUniversalSearch(search: string){
-    this._universalSearch = search;
+    this.universalSearchSource.next(search);
   }
 
   // return universal search
@@ -754,9 +754,12 @@ export class DisplayService {
       let passesLocation = true;
       let passesUniversalSearch = true;
       if(this.isCalendarView()){
-        let passesDateAndTime = this.passesDateAndTime(event);
-        let passesLocation = this.passesLocation(event);
-        let passesUniversalSearch = this.passesUniversalSearch(event);
+        if(this._dateFilter && this._timeFilter)
+          passesDateAndTime = this.passesDateAndTime(event);
+        if(this._locationFilter)
+          passesLocation = this.passesLocation(event);
+        if(this._universalSearch)
+          passesUniversalSearch = this.passesUniversalSearch(event);
       }
       // combine all filter checks
       if (passesFilterButtons && passesAllCategories && passesDateAndTime && passesLocation && passesUniversalSearch)

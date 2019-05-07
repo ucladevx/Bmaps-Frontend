@@ -38,7 +38,6 @@ export class WeekComponent implements OnInit {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._displayService.getCurrentDate()); });
-      console.log(this.scrollPosition);
       if(this._displayService.isWeekView())
         document.getElementById("scrollable").scrollTop = this.scrollPosition;
       this._displayService.setDateFilterFromDays(this._displayService.getDays());

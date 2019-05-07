@@ -6,6 +6,12 @@
   font-size: 20px;
 }
 
+::-webkit-clear-button
+{
+    display: none; /* Hide the button */
+    -webkit-appearance: none; /* turn off default browser styling */
+}
+
 #categ-div {
   width: 100%;
   flex-direction: column;

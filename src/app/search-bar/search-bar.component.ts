@@ -21,4 +21,9 @@ export class SearchBarComponent implements OnInit {
   getUni(){
     return this._displayService.getUniversalSearch();
   }
+
+  clearUni(){
+    this._displayService.setUniversalSearch(null);
+  }
+
 }
