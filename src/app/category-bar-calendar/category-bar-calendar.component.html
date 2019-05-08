@@ -1,12 +1,10 @@
 <div id="categ-div" class="btn-group">
-  <button id="categ-btn" type="button" class="btn dropdown-toggle"
-          (click)="toggleDropdown()">
-    Filters<span class="caret"></span>
+  <button id="categ-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()">
+    Filters <span class="caret"></span>
   </button>
   <div *ngIf="showDropdown" class="dropdown-content">
-    <div *ngIf="filterHash" class="filters-header">
-      Filters
-      <a class="clear-all-btn" (click)="clearAllFilters()">CLEAR ALL</a>
+    <div *ngIf="filterHash" class="filters-header">Filters
+      <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div class="filters-content">
       <div class="section-header">Categories</div>
@@ -43,13 +41,13 @@
         <div class="btn-group" id="loc-group">
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['on-campus']}"
-                 (click)="filterClicked('on-campus')">on-campus</label>
+                 (click)="tagClicked('on-campus')">on-campus</label>
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['off-campus']}"
-                 (click)="filterClicked('off-campus')">off-campus</label>
+                 (click)="tagClicked('off-campus')">off-campus</label>
           <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['nearby']}"
-                 (click)="filterClicked('nearby')">nearby</label>
+                 (click)="tagClicked('nearby')">nearby</label>
         </div>
       </div>
     </div>

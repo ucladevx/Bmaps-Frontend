@@ -24,16 +24,14 @@ export class DateSelectorComponent implements OnInit {
             this.showLeft = this.showLeftArrow(date);
             this.showRight = this.showRightArrow(date);
         });
-
     }
 
     private showLeftArrow(date: Date): boolean {
-        let today = new Date();
-        return !this._dateService.equalDates(date, today);
+      return !this._dateService.equalDates(date, new Date());
     }
 
     private showRightArrow(date: Date): boolean {
-        return true;
+      return true;
     }
 
     private dateToString(date: Date): string {
@@ -43,21 +41,18 @@ export class DateSelectorComponent implements OnInit {
         let today = new Date();
         let tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        if (this._dateService.equalDates(date, today)) {
+        if (this._dateService.equalDates(date, today))
             description = 'Today, ';
-        }
-        else if (this._dateService.equalDates(date, tomorrow)) {
+        else if (this._dateService.equalDates(date, tomorrow))
             description = 'Tomorrow, ';
-        }
         return `${description} ${month} ${day}`
     }
 
     public updateDate(days: number) {
         // 1 means advance one day, -1 means go back one day
         this._eventService.increaseDay(days);
-        if(this._viewService.isMapView()){
+        if(this._viewService.isMapView())
           document.getElementById("resetButton").click();
-        }
     }
 
 }

@@ -18,44 +18,26 @@ export class CategoryBarMapComponent implements OnInit {
   public selectedCategory = 'all categories';
   public showDropdown = false;
   private wasInside = false;
-  private events;
+  private events = [];
 
   constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService) {}
 
   ngOnInit() {
-    this._eventService.categHash$.subscribe(categHash => {
-      this.categHash = categHash;
-    });
-    this._eventService.tagHash$.subscribe(filterHash => {
-      this.filterHash = filterHash;
-    });
-    this._eventService.dayEvents$.subscribe(events => {
-      this.events = events;
-    });
+    this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
+    this._eventService.tagHash$.subscribe(filterHash => { this.filterHash = filterHash; });
+    this._eventService.dayEvents$.subscribe(events => { this.events = events; });
   }
 
-  filterClicked(filter: string): void {
-    this._eventService.toggleTag(filter);
-  }
+  filterClicked(filter: string): void { this._eventService.toggleTag(filter); }
+  categoryClicked(category: string): void { this._eventService.toggleCategory(category); }
 
-  categoryClicked(category: string): void {
-    this._eventService.toggleCategory(category);
-  }
-
-  toggleDropdown() {
-    this.showDropdown = !this.showDropdown;
-  }
-
-  clearCategories(): void {
-    this._eventService.allCategories();
-  }
+  toggleDropdown() { this.showDropdown = !this.showDropdown; }
+  clearCategories(): void { this._eventService.allCategories(); }
 
   clearFilters(): void {
-    for (let key in this.filterHash) {
-      if (this.filterHash[key]) {
+    for (let key in this.filterHash)
+      if (this.filterHash[key])
         this._eventService.toggleTag(key);
-      }
-    }
   }
 
   @HostListener('click')

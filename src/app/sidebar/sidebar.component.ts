@@ -38,12 +38,7 @@ export class SidebarComponent implements OnInit {
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
-    constructor(
-        private router: Router,
-        private _eventService: EventService,
-        private _dateService: DateService,
-        private _viewService: ViewService
-    ) {}
+    constructor(private router: Router, private _eventService: EventService, private _dateService: DateService, private _viewService: ViewService) {}
 
     ngOnInit() {
         // TODO: unsubscribe on destroy
@@ -78,18 +73,14 @@ export class SidebarComponent implements OnInit {
         this._eventService.updateHoveredEvent(event);
     }
 
-    toggleMobileSidebar() {
-        this.onPress();
-    }
+    toggleMobileSidebar() { this.onPress(); }
 
     formatCategory(categories): string {
-        if (!categories) {
+        if (!categories)
             return '';
-        }
         let categStr: string = '';
-        for (let category of categories) {
+        for (let category of categories)
           categStr += category.charAt(0).toUpperCase() + category.slice(1).toLowerCase() + ', ';
-        }
         return categStr.slice(0, categStr.length - 2);
     }
 
@@ -98,9 +89,8 @@ export class SidebarComponent implements OnInit {
       if (event) {
         const index: number = this.filteredEvents.findIndex((e: GeoJson) => e.id == event.id);
         const element: ElementRef = this.eventList.find((e: ElementRef, i: number) => index == i);
-        if (element) {
+        if (element)
           element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
       }
     }
 

@@ -50,21 +50,11 @@ export class MapBoxComponent implements OnInit {
 
   private events: FeatureCollection;
 
-  constructor(
-      private router: Router,
-      private _dateService: DateService,
-      private _eventService: EventService,
-      private _locationService: LocationService,
-      private _viewService: ViewService
-  ) {
+  constructor(private router: Router, private _dateService: DateService, private _eventService: EventService, private _locationService: LocationService, private _viewService: ViewService) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
   ngOnInit() {
-
-    if(this._eventService.getExpandedEvent() == null){
-      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-    }
 
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
@@ -88,6 +78,8 @@ export class MapBoxComponent implements OnInit {
     });
 
     this.buildMap();
+    if(this._eventService.getExpandedEvent() == null)
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
 
     let _promiseMapLoad = this.promiseMapLoad();
     let _promiseGetUserLocation = this.promiseGetUserLocation();
@@ -108,16 +100,15 @@ export class MapBoxComponent implements OnInit {
     //Add all Events pins
     let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
     promise_map_pin.then((promiseReturns) => {
-      let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+      let image = promiseReturns[1];
       this.map.addImage('redPin', image);
-      //add events with the new pin
       this.addEventLayer(this.events);
     });
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
       this.updateSource();
       this._eventService.allCategories();
-      let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+      let image = promiseReturns[1];
       this.map.addImage('bluePin', image);
     });
 
@@ -129,8 +120,8 @@ export class MapBoxComponent implements OnInit {
 
     // add extra controls
     this.addControls();
-
     this._viewService.isMapView();
+
   }
 
   //bold the popup event title for the given event, while unbolding all other event titles
@@ -139,34 +130,31 @@ export class MapBoxComponent implements OnInit {
     //iterate through popup event titles and unbold
     let popups = document.getElementsByClassName("popupEvent");
     for(let i = 0; i < popups.length; i++){
-      if(exEv == undefined || (exEv != null && popups.item(i).id != "popupEvent"+exEv.id)){
+      if(exEv == undefined || (exEv != null && popups.item(i).id != "popupEvent"+exEv.id))
         (<any>popups.item(i)).style.fontWeight = "normal";
-      }
     }
     //bold the selected event title
     if(event != null){
       let selectedPopup = document.getElementById("popupEvent"+event.id);
-      if(selectedPopup != null){
+      if(selectedPopup != null)
         selectedPopup.style.fontWeight = "bold";
-      }
     }
     //iterate through backup popup event titles and unbold
     let bpopups = document.getElementsByClassName("backupPopupEvent");
     for(let i = 0; i < bpopups.length; i++){
-      if(exEv == undefined || (exEv != null && bpopups.item(i).id != "popupEvent"+exEv.id)){
+      if(exEv == undefined || (exEv != null && bpopups.item(i).id != "popupEvent"+exEv.id))
         (<any>bpopups.item(i)).style.fontWeight = "normal";
-      }
     }
     //bold the selected backup event title
     if(event != null){
       let bselectedPopup = document.getElementById("backupPopupEvent"+event.id);
-      if(bselectedPopup != null){
+      if(bselectedPopup != null)
         bselectedPopup.style.fontWeight = "bold";
-      }
     }
   }
 
   addEventLayer(data): void {
+    //Add normal pin
     this.map.addSource('events', {
       type: 'geojson',
       data: data
@@ -218,7 +206,7 @@ export class MapBoxComponent implements OnInit {
     });
   }
 
-addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
+  addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
     let point: FeatureCollection =
     { "type": "FeatureCollection",
         "features": [
@@ -365,7 +353,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   hoverPopup(): void {
     //HOVER
     this.map.on('mouseenter', 'eventlayer', (e) => {
-      // Update hovered event service.
       this._eventService.updateHoveredEvent(e.features[0]);
     });
     this.map.on('mouseleave', 'eventlayer', () => {
@@ -406,9 +393,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   //compile list of events at a specific location
   listEventsByLocation(location : string){
     //convert all location input to string format
-    if(typeof location != 'string'){
+    if(typeof location != 'string')
       location = JSON.stringify(location);
-    }
     //start list of all events at the specified coordinates
     let eventList = [];
     //iterate through all events
@@ -435,9 +421,8 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   selectEvent(event: GeoJson): void {
     this.selectedEvent = event;
     this.removePinsAndPopups();
-    if (event === null) {
+    if (event === null)
       return;
-    }
     let eventList = this.listEventsByLocation(event["properties"].place);
     // add blue hovered Pin
     let coords = event.geometry.coordinates.slice();

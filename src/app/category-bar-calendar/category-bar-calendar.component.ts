@@ -21,60 +21,37 @@ export class CategoryBarCalendarComponent implements OnInit {
   constructor(private _eventService: EventService, private _viewService: ViewService) {}
 
   ngOnInit() {
-    this._eventService.categHash$.subscribe(categHash => {
-      this.categHash = categHash;
-    });
-    this._eventService.tagHash$.subscribe(filterHash => {
-      this.filterHash = filterHash;
-    });
+    this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
+    this._eventService.tagHash$.subscribe(filterHash => { this.filterHash = filterHash; });
   }
 
   setDateFilter(){
-    let firstInput = (<HTMLInputElement>document.getElementById('start-date')).value;
-    let first = moment(firstInput).toDate();
-    let lastInput = (<HTMLInputElement>document.getElementById('end-date')).value;
-    let last = moment(lastInput).toDate();
+    let first = moment((<HTMLInputElement>document.getElementById('start-date')).value).toDate();
+    let last = moment((<HTMLInputElement>document.getElementById('end-date')).value).toDate();
     this._eventService.setDateFilter(first,last);
   }
 
-  getStartDate(){
-    return moment(this._eventService.getDateFilter()[0]).format('YYYY-MM-DD');
-  }
-
-  getEndDate(){
-    return moment(this._eventService.getDateFilter()[1]).format('YYYY-MM-DD');
-  }
+  getStartDate(){ return moment(this._eventService.getDateFilter()[0]).format('YYYY-MM-DD'); }
+  getEndDate(){ return moment(this._eventService.getDateFilter()[1]).format('YYYY-MM-DD'); }
 
   setTimeFilter(){
-    let firstInput = (<HTMLInputElement>document.getElementById('start-time')).value;
-    let starttime = firstInput.split(":");
+    let starttime = (<HTMLInputElement>document.getElementById('start-time')).value.split(":");
     let start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
-    let lastInput = (<HTMLInputElement>document.getElementById('end-time')).value;
-    let endtime = lastInput.split(":");
+    let endtime = (<HTMLInputElement>document.getElementById('end-time')).value.split(":");
     let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
     this._eventService.setTimeFilter(start,end);
   }
 
-  getStartTime(){
-    return this.convertNumToTime(this._eventService.getTimeFilter()[0]);
-  }
-
-  getEndTime(){
-    return this.convertNumToTime(this._eventService.getTimeFilter()[1]);
-  }
+  getStartTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[0]); }
+  getEndTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[1]); }
 
   setLocationFilter(){
     let locInput = (<HTMLInputElement>document.getElementById('location')).value;
     this._eventService.setLocationFilter(locInput);
   }
 
-  getLoc(){
-    return this._eventService.getLocationFilter();
-  }
-
-  clearLoc(){
-    this._eventService.setLocationFilter(null);
-  }
+  getLoc(){ return this._eventService.getLocationFilter(); }
+  clearLoc(){ this._eventService.setLocationFilter(null); }
 
   convertNumToTime(minutes: number){
     let hours = (Math.floor(minutes / 60))%24;
@@ -105,27 +82,14 @@ export class CategoryBarCalendarComponent implements OnInit {
   }
 
   clearCategories(): void {
-    for (let key in this.categHash) {
-      if (this.categHash[key].selected) {
+    for (let key in this.categHash)
+      if (this.categHash[key].selected)
         this._eventService.toggleCategory(key);
-      }
-    }
-    if(this.categHash){
+    if(this.categHash)
       this.categHash["all"].selected = true;
-    }
   }
 
-  clearFilters(): void {
-    for (let key in this.filterHash) {
-      if (this.filterHash[key]) {
-        this._eventService.toggleTag(key);
-      }
-    }
-  }
-
-
-
-  clearAllFilters(){
+  clearFilters(){
     this._eventService.resetFilters('calendar');
   }
 

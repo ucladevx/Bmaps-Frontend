@@ -1,12 +1,9 @@
 <div id="categ-div" class="btn-group">
-  <button *ngIf="showToggleButton" id="categ-btn" type="button" class="btn dropdown-toggle"
-          (click)="toggleDropdown()"
-          [disabled]="events.length == 0">
-    Filters<span class="caret"></span>
+  <button *ngIf="showToggleButton" id="categ-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()" [disabled]="events.length == 0">
+    Filters <span class="caret"></span>
   </button>
   <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
-    <div *ngIf="filterHash" class="section-header">
-      Filters
+    <div *ngIf="filterHash" class="section-header"> Filters
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div *ngIf="filterHash" class="filters-wrapper">
@@ -55,21 +52,21 @@
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
           <a *ngIf="categKey == 'all' || (categHash[categKey].numEventsDay && categHash[categKey].numEventsDay > 0)"
-             [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
-             (click)="categoryClicked(categKey)">
+             [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}" (click)="categoryClicked(categKey)">
           <div class="checkbox-container">
             <div *ngIf="categHash[categKey].selected; else unchecked">
               <img class="checkbox" width="16px" src="assets/images/check.svg"/>
             </div>
           </div>
           <ng-template #unchecked>
-              <div>
-                <img class="checkbox" width="16px" src="assets/images/box.svg" />
-              </div>
+            <div>
+              <img class="checkbox" width="16px" src="assets/images/box.svg" />
+            </div>
           </ng-template>
           {{categHash[categKey].formattedCategory}}
-          <span *ngIf="categHash[categKey].numEventsDay"
-                [ngClass]="{'badge': true, 'badge-secondary': true, 'categ-bubble': true, 'categ-bubble-selected': categHash[categKey].selected}">{{categHash[categKey].numEvents}}</span>
+          <span *ngIf="categHash[categKey].numEventsDay" [ngClass]="{'badge': true, 'badge-secondary': true, 'categ-bubble': true, 'categ-bubble-selected': categHash[categKey].selected}">
+            {{categHash[categKey].numEvents}}
+          </span>
           </a>
         </li>
       </ul>

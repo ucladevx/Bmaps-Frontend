@@ -47,9 +47,7 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._eventService.currentDate$.subscribe( date => {
-      this.viewDateChange(date);
-    });
+    this._eventService.currentDate$.subscribe( date => { this.viewDateChange(date); });
     this.enumerateWeek();
   }
 
@@ -74,21 +72,14 @@ export class CalendarContainerComponent implements OnInit {
       if(weekCount>=0){ if(i%3 != 0){ weekCount++; } i = -1; }
     }
     // Week 11 -> Finals Week
-    if(weekCount == 11){
+    if(weekCount == 11)
       this.weekNumber = "finals week";
-    }
     // Week 12+ or Week 0- -> Break
-    else if(weekCount > 11 || weekCount < 0 || weekCount == undefined){
+    else if(weekCount > 11 || weekCount < 0 || weekCount == undefined)
       this.weekNumber = "";
-    }
     // Week 0-12 -> Within Quarter
-    else {
+    else
       this.weekNumber = "week " + weekCount;
-    }
-  }
-
-  public getWeekNumber(){
-    return this.weekNumber;
   }
 
 }
