@@ -1,78 +1,94 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-import { CategoryService } from '../category.service';
-import { EventService } from '../event.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
-import { CalendarService } from '../calendar.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-category-bar-calendar',
   templateUrl: './category-bar-calendar.component.html',
-  styleUrls: ['./category-bar-calendar.component.css']
+  styleUrls: ['./category-bar-calendar.component.scss']
 })
 
 export class CategoryBarCalendarComponent implements OnInit {
   @Input() showToggleButton: boolean;
   private categHash = {};
   private filterHash = {};
-  private events: GeoJson[];
-  public selectedCategory = 'all categories';
   public showDropdown = false;
   private wasInside = false;
 
-  constructor(private _categService: CategoryService, private _eventService: EventService, private _calendarService: CalendarService) {}
+  constructor(private _eventService: EventService, private _viewService: ViewService) {}
 
   ngOnInit() {
-    this._eventService.dayEvents$.subscribe(eventCollection => {
-      this.events = eventCollection.features;
-    });
     this._eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
-    this._eventService.filterHash$.subscribe(filterHash => {
+    this._eventService.tagHash$.subscribe(filterHash => {
       this.filterHash = filterHash;
     });
-    this._calendarService.dateSpan$.subscribe(clear => {
-        this.clearCategories();
-    });
   }
 
-  filterClicked(filter: string): void {
-    this._eventService.toggleFilter(filter);
-    console.log(this.filterHash);
+  setDateFilter(){
+    let first = moment((<HTMLInputElement>document.getElementById('start-date')).value).toDate();
+    let last = moment((<HTMLInputElement>document.getElementById('end-date')).value).toDate();
+    this._eventService.setDateFilter(first,last);
   }
 
-  categoryClicked(): void {
-    var category = (<HTMLInputElement>document.getElementById("categories")).value;
-    console.log(category);
+  getStartDate(){ return moment(this._eventService.getDateFilter()[0]).format('YYYY-MM-DD'); }
+  getEndDate(){ return moment(this._eventService.getDateFilter()[1]).format('YYYY-MM-DD'); }
+
+  setTimeFilter(){
+    let starttime = (<HTMLInputElement>document.getElementById('start-time')).value.split(":");
+    let start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
+    let endtime = (<HTMLInputElement>document.getElementById('end-time')).value.split(":");
+    let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
+    this._eventService.setTimeFilter(start,end);
+  }
+
+  getStartTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[0]); }
+  getEndTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[1]); }
+
+  setLocationFilter(){
+    let locInput = (<HTMLInputElement>document.getElementById('location')).value;
+    this._eventService.setLocationFilter(locInput);
+  }
+
+  getLoc(){ return this._eventService.getLocationFilter(); }
+  clearLoc(){ this._eventService.setLocationFilter(null); }
+
+  convertNumToTime(minutes: number){
+    let hours = (Math.floor(minutes / 60))%24;
+    minutes = (minutes-(hours*60))%60;
+    let minString = minutes.toString();
+    if(minString.length == 1){
+      minString = "0"+minString;
+    }
+    let hourString = hours.toString();
+    if(hourString.length == 1){
+      hourString = "0"+hourString;
+    }
+    let time = hourString+":"+minString;
+    return time;
+  }
+
+  tagClicked(filter: string): void {
+    this._eventService.toggleTag(filter);
+  }
+
+  categoryClicked(category: string): void {
     this._eventService.toggleCategory(category);
-    console.log(this.categHash);
-    this._categService.setSelectedCategory(category);
   }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
-    this._eventService.updateCategories();
   }
 
-  clearCategories(): void {
-    for (let key in this.categHash) {
-      if (this.categHash[key].selected) {
-        this._eventService.toggleCategory(key);
-      }
-    }
-    if(this.categHash){
-      this.categHash["all"].selected = true;
-    }
-    this._categService.setSelectedCategory("all");
-  }
+
+  clearCategories(): void { this._eventService.allCategories(); }
 
   clearFilters(): void {
-    for (let key in this.filterHash) {
-      if (this.filterHash[key]) {
-        this._eventService.toggleFilter(key);
-      }
-    }
+    this._eventService.resetFilters('ignore-categories');
   }
 
   @HostListener('click')

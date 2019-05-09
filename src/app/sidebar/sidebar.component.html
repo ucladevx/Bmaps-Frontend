@@ -3,18 +3,19 @@
         <i aria-hidden="true" class="fa fa-lg" [ngClass]="mobileSidebarVisible ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
     </div>
     <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
-        <app-date-selector class="d-none d-md-block"></app-date-selector>
-        <span *ngIf="this.router.url.startsWith('/map'); else calendarView">
+        <span *ngIf="this._viewService.isMapView(); else calendarView">
+          <app-date-selector class="d-none d-md-block"></app-date-selector>
           <app-category-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-map>
         </span>
         <ng-template #calendarView>
+          <app-search-bar></app-search-bar>
           <app-category-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-calendar>
         </ng-template>
-        <div *ngIf="filteredEvents.length == 0" id="no-events-section">
-          <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
-          <div id="no-events-label">No Events</div>
-        </div>
         <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
+          <div *ngIf="filteredEvents.length == 0" id="no-events-section">
+            <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
+            <div id="no-events-label">No Events</div>
+          </div>
             <div *ngFor="let event of filteredEvents" #eventList>
                 <div class="sidebar-event"
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
@@ -23,9 +24,9 @@
                     <div class="sidebar-event-img-container">
                         <img src="{{
                           event.properties.cover_picture == '<NONE>' ?
-                            checkImage('/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
-                            '/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
-                            : '/assets/images/fb-banner-default.png'
+                            checkImage('/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
+                            '/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
+                            : '/assets/images/banners/fb-banner-default.png'
                           : event.properties.cover_picture
                         }}" class="sidebar-event-img">
                     </div>
@@ -36,7 +37,7 @@
                             {{event.properties.place.name}}
                           </p>
                         <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
-                        <p class="sidebar-event-category" [innerHTML]="formatCategory(event.properties.categories)"></p>
+                        <p class="sidebar-event-category" [innerHTML]="printCategories(event.properties.categories)"></p>
                     </div>
                 </div>
                 <div class="separator"></div>

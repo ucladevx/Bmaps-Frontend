@@ -1,105 +1,70 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import * as moment from 'moment';
 import { Moment } from 'moment';
-import { EventService } from '../event.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
+import { DateService } from '../services/date.service';
 import { GeoJson } from '../map';
 import { Router, NavigationEnd } from '@angular/router';
-import { CalendarService } from '../calendar.service';
-
-interface CalendarDay {
-  dayOfMonth: number;
-  inCurrentMonth: boolean;
-  month: number;
-  year: number;
-  events: GeoJson[];
-  selected: boolean;
-}
+import { CalendarDay } from '../services/event.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-month',
   templateUrl: './month.component.html',
-  styleUrls: ['./month.component.css']
+  styleUrls: ['./month.component.scss']
 })
 
 export class MonthComponent implements OnInit {
   public days: CalendarDay[] = [];
-  private selectedMonth: Number;
-  private selectedYear: Number;
-  private selectedDay: CalendarDay;
-  private today: CalendarDay;
   public currentMonth: Moment;
   private filteredEvents: GeoJson[];
-  private filteredMonthYearEvents: GeoJson[];
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number] : GeoJson[] } = {};
-  private viewDate: Date;
 
-  constructor(private _eventService: EventService, private router: Router, private ngZone: NgZone, private _calendarService: CalendarService) {
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        // this.ngOnInit();
-      }
-    });
-  }
+  constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
   ngOnInit() {
 
-    if(this._eventService.getExpandedEvent() == null){
-      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-    }
-    
-    this.currentMonth = moment();
+    this._viewService.changeToMonth.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
 
-    this._calendarService.change.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
-    this._calendarService.selectedDayChange.subscribe( function(day) { this.changeSelectedDay(day); }.bind(this));
-
-    this._eventService.currDate$.subscribe(date => {
-      this.ngZone.run( () => {
-        this.showCalendar(date);
-      });
+    this._eventService.currentDate$.subscribe(date => {
+      this.ngZone.run( () => { this.showCalendar(date); });
     });
 
     this._eventService.monthEvents$.subscribe(monthEventCollection => {
-      this.filteredMonthYearEvents = monthEventCollection.features;
-      this.selectedMonth = moment().month();
-      this.selectedYear = moment().year();
+      this.filteredEvents = monthEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => {
-        this.showCalendar(this._calendarService.getViewDate());
-      });
+      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
+      if(this._viewService.isMonthView() && this._eventService.getDays())
+        this._eventService.setDateFilterFromDays(this._eventService.getDays());
+      if(this._viewService.isWeekView()){ document.getElementById("scrollable").scrollTop = 200; }
     });
 
     this._eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
-      this.filteredMonthYearEvents = monthEventCollection.features;
+      this.filteredEvents = monthEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => {
-        this.showCalendar(this._eventService.getSelectedDay());
-      });
+      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
     });
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
     });
+    this._eventService.expandedEvent$.subscribe(clickedEventInfo => {
+        this.clickedEvent = clickedEventInfo;
+    });
 
-    this.fillEventsByDay();
-    if (this._eventService.getSelectedDay() != null) {
-      this.showCalendar(this._eventService.getSelectedDay());
-      this._calendarService.setViewDate(this._eventService.getSelectedDay());
+    this._eventService.setDateFilterFromDays(this._eventService.getDays());
+    this.currentMonth = moment();
+    this._viewService.isMonthView();
+    if(this._eventService.getExpandedEvent() == null){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
-    else{
-      this.showCalendar(new Date());
-      this._calendarService.setViewDate(new Date(), true);
-    }
-  }
 
-  changeSelectedDay (day : CalendarDay) {
-    this.selectedDay = day;
   }
 
   showCalendar(dateInMonth: Moment | Date | string): void {
-    if(dateInMonth == undefined)
-      return;
     this.currentMonth = moment(dateInMonth).startOf('month');
+    if(this._viewService.isMonthView() && dateInMonth != undefined){
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('month').endOf('week');
@@ -108,56 +73,41 @@ export class MonthComponent implements OnInit {
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
       //create CalendarDay object
       let weekDay: CalendarDay = {
+        date: d.toDate(),
         dayOfMonth: d.date(),
         inCurrentMonth: d.isSame(this.currentMonth, 'month'),
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
         events: this.getEventsOnDate(d),
-        selected: d.isSame(dateInMonth, 'day')
+        selected: d.isSame(dateInMonth, 'day'),
+        dayOfWeek: d.format('ddd'),
+        isToday: this._dateService.isToday(d.toDate())
       };
-      //determine whether it is the current day
-      if (d.format("MMMM DD YYYY") == moment().format("MMMM DD YYYY")){
-        this.today = weekDay;
-      }
       //add weekDay to display days array
       this.days.push(weekDay);
       // set selected day to the date provided
       if (d.isSame(dateInMonth, 'day')) {
-        // this.selectedDay = weekDay;
-        this._calendarService.setSelectedDay(weekDay);
+        this._eventService.setSelectedDay(weekDay);
       }
     }
-    this._calendarService.setDays(this.days);
+    this._eventService.setDays(this.days);
+    }
   }
 
   changeMonth = (delta: number) => {
-    if(!this._calendarService.isMonthView()){
-      return;
-    }
     // 1 means advance one month, -1 means go back one month
     let newMonth: Moment = this.currentMonth.clone().add(delta, 'months');
     // if selected day is in month, that is first option
-    if (this._eventService.getSelectedDay() && newMonth.isSame(moment(this._eventService.getSelectedDay()), 'month')) {
-      this._calendarService.setViewDate(this._eventService.getSelectedDay());
-      this._eventService.updateDayEvents(this._eventService.getSelectedDay());
-      this.showCalendar(this._eventService.getSelectedDay());
-    }
-    // if current month, make selected day today
-    else if (newMonth.isSame(moment(), 'month')) {
-      this._calendarService.setViewDate(new Date());
-      this._eventService.updateDayEvents(new Date());
-      this.showCalendar( new Date());
-    }
-    // make selected day the 1st of the month
-    else {
-      this._calendarService.setViewDate(newMonth.startOf('month').toDate());
-      this._eventService.updateDayEvents(newMonth.startOf('month').toDate());
-      this.showCalendar(newMonth.startOf('month').toDate());
-    }
-    this.selectedMonth = newMonth.month();
-    this.selectedYear = newMonth.year();
-    let monthyear = this.selectedMonth.toString() + " " + this.selectedYear.toString();
-    this._eventService.updateMonthEvents(monthyear);
+    let viewDate;
+    if (newMonth.isSame(moment(this._eventService.getCurrentDate()), 'month'))
+      viewDate = this._eventService.getCurrentDate();
+    else if (newMonth.isSame(moment(), 'month'))
+      viewDate = new Date();
+    else
+      viewDate = newMonth.startOf('month').toDate();
+    this._eventService.updateDayEvents(viewDate);
+    this._eventService.updateWeekEvents(viewDate);
+    this._eventService.updateMonthEvents(viewDate);
   }
 
     //retrieve events for the given month
@@ -165,7 +115,7 @@ export class MonthComponent implements OnInit {
       //clear events by day for the month
       this.eventsByDay = [];
       //iterate through filteredEvents for the current month
-      this.filteredMonthYearEvents.forEach(el => {
+      this.filteredEvents.forEach(el => {
         //determine dayOfYear
         let eventDate = moment(el.properties.start_time);
         let dayOfYear = eventDate.dayOfYear();
@@ -185,13 +135,13 @@ export class MonthComponent implements OnInit {
     //retrieve event list from eventsByDay
     if (this.eventsByDay.hasOwnProperty(dayOfYear)){
       //sort array by start time, then by duration
-      var eventList = this.eventsByDay[dayOfYear];
+      let eventList = this.eventsByDay[dayOfYear];
       eventList.sort(function compare(a, b) {
-        var timeA = +new Date(a.properties.start_time);
-        var timeB = +new Date(b.properties.start_time);
+        let timeA = +new Date(a.properties.start_time);
+        let timeB = +new Date(b.properties.start_time);
         if(timeA-timeB == 0){
-          var timeAA = +new Date(a.properties.end_time);
-          var timeBB = +new Date(b.properties.end_time);
+          let timeAA = +new Date(a.properties.end_time);
+          let timeBB = +new Date(b.properties.end_time);
           return timeBB - timeAA;
         }
         return timeA - timeB;
@@ -207,14 +157,14 @@ export class MonthComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     // this.selectedDay = day;
-    this._calendarService.setSelectedDay(day);
-    let date = moment([day.year, day.month, day.dayOfMonth]).toDate();
-    this._eventService.updateDayEvents(date);
-  }
-
-  public ngOnDestroy(): void {
-    ("unsubscribe");
-    this._eventService.monthEvents$.unsubscribe(); // or something similar
+    if(this._eventService.getSelectedDay() != day){
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+    }
+    this._eventService.setSelectedDay(day);
+    this._eventService.updateDayEvents(day.date);
+    if(!day.inCurrentMonth){
+      this.changeMonth(0);
+    }
   }
 
 }

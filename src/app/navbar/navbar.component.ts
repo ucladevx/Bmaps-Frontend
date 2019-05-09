@@ -1,17 +1,17 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { CategoryService } from '../category.service';
-import { CalendarService } from '../calendar.service';
-import { EventService } from '../event.service';
-import { HttpClient } from '@angular/common/http';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.css']
+    styleUrls: ['./navbar.component.scss']
 })
 
 export class NavbarComponent implements OnInit {
+    public currentDate: number = 7;
     public temperature: string;
     public weatherIcon: string;
     public celsius: string;
@@ -21,44 +21,43 @@ export class NavbarComponent implements OnInit {
 
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
-    isMapSelected: boolean;
+    isMapSelected: boolean = true;
 
-    constructor(public _eventService: EventService, private _categService: CategoryService, public _calendarService: CalendarService, private _router: Router, private http: HttpClient) {
-      this._calendarService.view$.subscribe( view => {
-        if(view == 'map'){
+    constructor(private _eventService: EventService, private _viewService: ViewService, private _router: Router, private http: HttpClient) {
+      this._viewService.currentView$.subscribe( view => {
+        if(view == 'map')
           this.isMapSelected = true;
-        } else {
+        else
           this.isMapSelected = false;
-        }
       });
+      this._viewService.isMapView();
     }
-  
-    isCollapsed: boolean = true;
-
-    ngOnInit() { 
-      // our call back function 
+    ngOnInit() {
+      this.getCurrentDay();
       this.getTemperature();
       setInterval(() => this.getTemperature(), 9000000);
     }
 
+    isCollapsed: boolean = true;
+
+    getCurrentDay(): void {
+      let today = new Date();
+      this.currentDate = today.getDate();
+    }
+
+    isCollapsed: boolean = true;
+
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
       let d = new Date();
-      if(this._eventService.getSelectedDay() != null){
-        d = this._eventService.getSelectedDay();
-      }
+      if(this._eventService.getCurrentDate() != null)
+        d = this._eventService.getCurrentDate();
       this._eventService.updateDayEvents(d);
-      let monthyear = d.getMonth() + " " + d.getFullYear();
-      this._eventService.updateMonthEvents(monthyear);
+      this._eventService.updateMonthEvents(d);
       this._eventService.updateWeekEvents(d);
-      this._eventService.resetFilters();
-      if(newView == 'map'){
+      this._eventService.resetFilters(newView);
+      if(newView == 'map')
           this._eventService.allCategories();
-      } else {
-        this._eventService.initTimeHash(0,1439);
-        this._eventService.setLocationSearch("");
-        this._eventService.setUniversalSearch("");
-      }
     }
 
     public isFilterCollapsed: boolean = true;
@@ -68,11 +67,11 @@ export class NavbarComponent implements OnInit {
       this.isFilterCollapsed = true;
     }
 
-    toggleFilterCollapse(): void {
+    toggleTagCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
     }
-  
+
     toggleViews(): void {
         if (!this._calendarService.isMapView()) {
             this.emitChangeView('map');
@@ -92,7 +91,7 @@ export class NavbarComponent implements OnInit {
         }
     }
 
-    getTemperature(): void { 
+    getTemperature(): void {
       const API_KEY = "bc6a73dfabbd4e6c9006a835d00589f2";
       const zipcode = "90024";
       const baseWeatherUrl = "http://api.openweathermap.org/data/2.5/weather";
@@ -112,7 +111,7 @@ export class NavbarComponent implements OnInit {
       });
     }
 
-    switchTemperature(): void {     
+    switchTemperature(): void {
       this.isFahrenheit = !this.isFahrenheit;
       if (this.isFahrenheit)
         this.temperature = this.fahrenheit;
@@ -121,6 +120,8 @@ export class NavbarComponent implements OnInit {
     }
 
     checkImage(imageSrc) {
+      if(imageSrc.includes("undefined"))
+        return false;
       var img = new Image();
       try {
         img.src = imageSrc;
@@ -130,7 +131,31 @@ export class NavbarComponent implements OnInit {
       }
     }
 
-  }
 
-  // mark .views-switch as ng-not-empty ng-valid
-  // mark .views-switch-text as ng-pristine ng-untouched ng-valid ng-not-empty
+    toggleViews(): void {
+      let ev = this._eventService.getExpandedEvent();
+      let path = "";
+      if (this._viewService.isCalendarView()) {
+        this.emitChangeView('map');
+        this.isMapSelected = true;
+        path += '/map';
+      }
+      else {
+        this.isMapSelected = false;
+        if (this._viewService.retrieveLastView() == 'week'){
+          this.emitChangeView('week');
+          path += '/calendar/week';
+        }
+        else {
+          this.emitChangeView('month');
+          path += '/calendar/month';
+        }
+      }
+      if(ev!=null)
+        path += "(sidebar:detail/"+ev.id+")";
+      else
+        path += "(sidebar:list)";
+      this._router.navigateByUrl(path);
+    }
+
+}

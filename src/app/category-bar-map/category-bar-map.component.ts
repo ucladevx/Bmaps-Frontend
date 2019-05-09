@@ -1,64 +1,43 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-import { CategoryService } from '../category.service';
-import { EventService } from '../event.service';
+import { DateService } from '../services/date.service'
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import { FeatureCollection, GeoJson } from '../map';
 import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-category-bar-map',
   templateUrl: './category-bar-map.component.html',
-  styleUrls: ['./category-bar-map.component.css']
+  styleUrls: ['./category-bar-map.component.scss']
 })
 
 export class CategoryBarMapComponent implements OnInit {
   @Input() showToggleButton: boolean;
   private categHash = undefined;
   private filterHash = undefined;
-  private events: GeoJson[];
   public selectedCategory = 'all categories';
   public showDropdown = false;
   private wasInside = false;
+  private events = [];
 
-  constructor(private _categService: CategoryService, private _eventService: EventService) {}
+  constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService) {}
 
   ngOnInit() {
-    this._eventService.dayEvents$.subscribe(eventCollection => {
-      this.events = eventCollection.features;
-    });
-    this._eventService.categHash$.subscribe(categHash => {
-      this.categHash = categHash;
-    });
-    this._eventService.filterHash$.subscribe(filterHash => {
-      this.filterHash = filterHash;
-    });
+    this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
+    this._eventService.tagHash$.subscribe(filterHash => { this.filterHash = filterHash; });
+    this._eventService.dayEvents$.subscribe(events => { this.events = events; });
   }
 
-  filterClicked(filter: string): void {
-    this._eventService.toggleFilter(filter);
-  }
+  filterClicked(filter: string): void { this._eventService.toggleTag(filter); }
+  categoryClicked(category: string): void { this._eventService.toggleCategory(category); }
 
-  categoryClicked(category: string): void {
-    this._eventService.toggleCategory(category);
-  }
-
-  toggleDropdown() {
-    this.showDropdown = !this.showDropdown;
-  }
-
-  clearCategories(): void {
-    for (let key in this.categHash) {
-      if (this.categHash[key].selected) {
-        this._eventService.toggleCategory(key);
-      }
-    }
-  }
+  toggleDropdown() { this.showDropdown = !this.showDropdown; }
+  clearCategories(): void { this._eventService.allCategories(); }
 
   clearFilters(): void {
-    for (let key in this.filterHash) {
-      if (this.filterHash[key]) {
-        this._eventService.toggleFilter(key);
-      }
-    }
+    for (let key in this.filterHash)
+      if (this.filterHash[key])
+        this._eventService.toggleTag(key);
   }
 
   @HostListener('click')
@@ -77,5 +56,5 @@ export class CategoryBarMapComponent implements OnInit {
   private objectKeys(obj) {
     return Object.keys(obj);
   }
-  
+
 }

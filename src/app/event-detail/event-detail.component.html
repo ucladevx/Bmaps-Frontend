@@ -8,9 +8,9 @@
   <div *ngIf="event && event.properties" class="event-body">
     <img src="{{
       event.properties.cover_picture == '<NONE>' ?
-        checkImage('/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
-        '/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
-        : '/assets/images/fb-banner-default.png'
+        checkImage('/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
+        '/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
+        : '/assets/images/banners/fb-banner-default.png'
       : event.properties.cover_picture
     }}" class="event-image">
 		<div class="event-title" id="event-title">{{event.properties.name}}</div>
@@ -20,8 +20,12 @@
         {{event.properties.place.name}}
       </span>
     </div>
-    <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
+    <ng-template #venue_street>
+      {{event.properties.place.location.street}}
+    </ng-template>
     <div class="separator"></div>
-    <div class="event-description" id="event-description">{{event.properties.description}}</div>
+    <div class="event-description" id="event-description">
+      {{event.properties.description}}
+    </div>
   </div>
 </div>
