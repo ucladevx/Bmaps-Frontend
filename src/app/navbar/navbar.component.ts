@@ -1,7 +1,11 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { CategoryService } from '../category.service';
+import { CalendarService } from '../calendar.service';
 import { EventService } from '../event.service';
 import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';  
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-navbar',
@@ -15,17 +19,21 @@ export class NavbarComponent implements OnInit {
     public celsius: string;
     public fahrenheit: string;
     isFahrenheit: boolean = true;
+    foundWeatherIcon: boolean;
 
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
-    constructor(private _eventService: EventService, private _categService: CategoryService, private http: HttpClient) { }
+    isMapSelected: boolean;
+
+    constructor(public _eventService: EventService, private _categService: CategoryService, public _calendarService: CalendarService, private _router: Router, private http: HttpClient) {     
+    }
 
     isCollapsed: boolean = true;
 
     ngOnInit() { 
       // our call back function 
       this.getTemperature();
-      setInterval(() => this.getTemperature(), 900000);
+      setInterval(() => this.getTemperature(), 9000000);
     }
 
     collapsed(event: any): void {
@@ -86,4 +94,18 @@ export class NavbarComponent implements OnInit {
       else
         this.temperature = this.celsius;
     }
-}
+
+    checkImage(imageSrc) {
+      var img = new Image();
+      try {
+        img.src = imageSrc;
+        return true;
+      } catch(err) {
+        return false;
+      }
+    }
+
+  }
+
+  // mark .views-switch as ng-not-empty ng-valid
+  // mark .views-switch-text as ng-pristine ng-untouched ng-valid ng-not-empty

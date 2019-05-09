@@ -17,7 +17,13 @@
         <ul class="navbar-nav mr-auto">
         </ul>
         <span class="navbar-text" (click)="switchTemperature()">
-            <img class="weather-icon" src='http://openweathermap.org/img/w/{{weatherIcon}}.png' alt='Icon depicting current weather.' />
+            <img class="weather-icon" 
+            src="{{
+                checkImage('/assets/images/weather/'+weatherIcon+'.svg') ? 
+                '/assets/images/weather/'+weatherIcon+'.svg' 
+                : '/assets/images/map-icon.png'
+                }}"
+                />
             {{temperature}}
         </span>
         <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
