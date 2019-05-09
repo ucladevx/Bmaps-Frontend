@@ -1,11 +1,17 @@
 @import "../../gvars.scss";
 
+$selector-padding: 9.7px;
+
 .selector {
     background-color: #fff;
     color: #484747;
     text-align: center;
     border-bottom: $default_border_width solid $default_border_color;
     position: relative;
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+    padding: $selector-padding;
 }
 
 :host {
@@ -27,16 +33,12 @@
     color: #5dbacd;
 }
 
-.fix-pos-left {
-    position: absolute;
-    right: 65%;
-    top: 18%; 
+#left-caret {
+    float: left;
 }
 
-.fix-pos-right {
-    position: absolute;
-    right: 34%;
-    top: 18%;
+#right-caret {
+    float: right;
 }
 
 router-outlet.router-flex + * {
@@ -46,9 +48,7 @@ router-outlet.router-flex + * {
 }
 
 #calendar-controls {
-    padding: 9.7px;
-    margin: 0 auto;
-    font-size: 26px;
+    width: 300px;
 }
 
 #calendar-controls i {
@@ -62,7 +62,7 @@ router-outlet.router-flex + * {
 #month-week-switch {
     font-size: 0.8rem;
     position: absolute;
-    right: 30px;
+    right: $selector-padding;
     top: 8px;
     cursor: pointer;
 }
@@ -80,6 +80,7 @@ router-outlet.router-flex + * {
     border: $default_border_width solid $default_border_color;
     padding: 4px 10px;
     font-size: 18px;
+    margin: 0;
 }
 
 #month-switch.active {
@@ -98,4 +99,5 @@ router-outlet.router-flex + * {
     border: $default_border_width solid $default_border_color;
     padding: 4px 10px;
     font-size: 18px;
+    margin: 0;
 }
