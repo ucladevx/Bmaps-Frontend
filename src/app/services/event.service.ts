@@ -392,8 +392,11 @@ export class EventService {
       // initialize all other category containers iteratively
       for (let categ of categs.categories) {
         let categName = categ.toLowerCase();
+        let categStr = categName.replace('_', ' ');
+        categStr = categStr.charAt(0).toUpperCase() + categStr.slice(1).toLowerCase() + ', ';
+        categStr = categStr.slice(0, categStr.length - 2);
         tempHash[categName] = {
-          formattedCategory: categName.replace('_', ' '),
+          formattedCategory: categStr,
           numEventsDay: dayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
@@ -422,9 +425,11 @@ export class EventService {
       };
       // initialize all other category containers iteratively
       for (let categ of categs.categories) {
-        let categName = categ.toLowerCase();
+        let categName = categ.toLowerCase().replace('_', ' ');
+        let categStr = categName.charAt(0).toUpperCase() + categName.slice(1).toLowerCase() + ', ';
+        categStr = categStr.slice(0, categStr.length - 2);
         tempHash[categName] = {
-          formattedCategory: categName.replace('_', ' '),
+          formattedCategory: categStr,
           numEventsDay: dayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],

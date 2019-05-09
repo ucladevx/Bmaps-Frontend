@@ -75,13 +75,13 @@ export class SidebarComponent implements OnInit {
 
     toggleMobileSidebar() { this.onPress(); }
 
-    formatCategory(categories): string {
-        if (!categories)
-            return '';
+    printCategories(categories: string[]) {
+      if (categories){
         let categStr: string = '';
         for (let category of categories)
           categStr += category.charAt(0).toUpperCase() + category.slice(1).toLowerCase() + ', ';
-        return categStr.slice(0, categStr.length - 2);
+        return categStr.slice(0, categStr.length - 2).replace('_',' ');
+      }
     }
 
     // scroll to the DOM element for event

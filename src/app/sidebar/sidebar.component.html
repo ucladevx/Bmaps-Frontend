@@ -37,7 +37,7 @@
                             {{event.properties.place.name}}
                           </p>
                         <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
-                        <p class="sidebar-event-category" [innerHTML]="formatCategory(event.properties.categories)"></p>
+                        <p class="sidebar-event-category" [innerHTML]="printCategories(event.properties.categories)"></p>
                     </div>
                 </div>
                 <div class="separator"></div>
