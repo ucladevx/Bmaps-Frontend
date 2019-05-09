@@ -75,7 +75,6 @@ export class NavbarComponent implements OnInit {
         path += "(sidebar:detail/"+ev.id+")";
       else
         path += "(sidebar:list)";
-      console.log(path);
       this._router.navigateByUrl(path);
     }
 

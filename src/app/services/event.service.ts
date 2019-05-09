@@ -236,7 +236,11 @@ export class EventService {
   // Updates events for given month while persisting the current category
   updateMonthEvents(date: Date): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
+      let first = (this._monthEvents.features.length == 0);
       this.monthEventsSource.next(allEvents);
+      this.updateCategories();
+      if(first || this._categHash['all'].selected)
+        this.allCategories();
       this.applyAllFilters();
     });
   }
@@ -244,7 +248,11 @@ export class EventService {
   // Updates events for given week while persisting the current category
   updateWeekEvents(date: Date): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
+      let first = (this._weekEvents.features.length == 0);
       this.weekEventsSource.next(this.filterByWeek(allEvents, date));
+      this.updateCategories();
+      if(first || this._categHash['all'].selected)
+        this.allCategories();
       this.applyAllFilters();
     });
   }
@@ -277,8 +285,10 @@ export class EventService {
   // reset all filters to defaults
   resetFilters(view: string){
     // rest categories
-    this.updateCategories();
-    this.allCategories();
+    if(view != 'ignore-categories'){
+      this.updateCategories();
+      this.allCategories();
+    }
     // reset tags/buttons
     this.resetTags();
     // reset time
@@ -352,10 +362,8 @@ export class EventService {
   toggleCategory(category: string) {
     // if a category is being applied via the category selectors
     if (this._categHash[category] != undefined) {
-      // reset categories in calendar (not multiselect yet)
-      if(this._viewService.isCalendarView()){ this.resetCategories(); }
       // special behavior for map view 'all' (multiselect)
-      if(this._viewService.isMapView() && category == 'all'){
+      if(category == 'all'){
           if(this._categHash['all'].selected)
             this.resetCategories();
           else
@@ -489,10 +497,16 @@ export class EventService {
 
   // reset all categories (in range) to be true
   allCategories() {
-    let dayMap = this.getCategoryMap(this._dayEvents.features);
+    let map;
+    if(this._viewService.isMapView())
+      map = this.getCategoryMap(this._dayEvents.features);
+    else if(this._viewService.isMonthView())
+      map = this.getCategoryMap(this._monthEvents.features);
+    else if(this._viewService.isWeekView())
+      map = this.getCategoryMap(this._weekEvents.features);
     for (let categ in this._categHash)
       if (categ.toLowerCase() == 'all' ||
-      (this._categHash.hasOwnProperty(categ.toLowerCase()) && dayMap[categ.toLowerCase()] > 0))
+      (this._categHash.hasOwnProperty(categ.toLowerCase()) && map[categ.toLowerCase()] > 0))
         this._categHash[categ.toLowerCase()].selected = true;
     this.categHashSource.next(this._categHash);
   }

@@ -64,9 +64,6 @@
             </div>
           </ng-template>
           {{categHash[categKey].formattedCategory}}
-          <span *ngIf="categHash[categKey].numEventsDay" [ngClass]="{'badge': true, 'badge-secondary': true, 'categ-bubble': true, 'categ-bubble-selected': categHash[categKey].selected}">
-            {{categHash[categKey].numEvents}}
-          </span>
           </a>
         </li>
       </ul>
