@@ -24,6 +24,9 @@
       <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
         <div class="btn-group" id="loc-group">
           <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['free food']}"
+                 (click)="filterClicked('free food')">Free Food</label>
+          <label class="btn btn-outline-secondary filter-btn"
                  [ngClass]="{'active': filterHash['on-campus']}"
                  (click)="filterClicked('on-campus')">On-campus</label>
           <label class="btn btn-outline-secondary filter-btn"

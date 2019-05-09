@@ -20,8 +20,6 @@ export class CategoryService {
     this.selectedCategory$ = this.selectedCategorySource.asObservable();
   }
 
-  // private apiUrl = "https://www.mappening.io/api/v1/events/event-categories";
-  // private apiUrl = "http://0.0.0.0:5000/api/v2/events/categories";
   private apiUrl = "https://www.mappening.io/api/v2/events/categories";
   private selectedCategory = "all";
 

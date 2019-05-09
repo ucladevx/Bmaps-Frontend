@@ -1,3 +1,5 @@
+@import "../../gvars.scss";
+
 :host {
     display: flex;
     flex: 1;
@@ -10,11 +12,11 @@
 }
 
 .search-header{
-    border-bottom: 1px solid rgb(167,167,167);
+    border-bottom: 1px solid $default_border_color;
 }
 
 .sidebar-outer{
-    border-right: 1px solid #aaa;
+    border-right: 1px solid $default_border_color;
 }
 
 .sidebar-header{
@@ -115,7 +117,7 @@
 
 .separator {
     height: 1px;
-    background: rgb(151,151,151);
+    background: $default_border_color;
     background-position: 0, 100%, 0, 100%;
 }
 
