@@ -10,6 +10,7 @@
     padding: 0px 15px;
     border-radius: 20px;
     width: 200px;
+    position: relative;
 }
 
 @media only screen and (min-width: 768px) {
@@ -23,7 +24,7 @@
         border-width: 0px 0px 1px 0px;
         border-radius: initial;
         text-align: center;
-        display: flex; 
+        display: flex;
         align-items: center;
     }
 }
@@ -37,7 +38,6 @@
     cursor: pointer;
     outline: inherit;
     transition: color 0.2s ease;
-    position: relative;
     font-size: 30px;
     color: #656565;
 }
@@ -54,6 +54,18 @@
     vertical-align: middle;
     font-size: 18px;
     line-height: 1.1;
+}
+
+.fix-pos-left {
+    position: absolute;
+    right: 90%;
+    top: 16%;
+}
+
+.fix-pos-right {
+    position: absolute;
+    right: 7%;
+    top: 16%;
 }
 
 .small-font {

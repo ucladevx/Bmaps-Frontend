@@ -4,14 +4,11 @@
 }
 
 app-navbar {
-    /*position: fixed;*/
     z-index: 100;
     width: 100%;
-    /*height: var(--navbar-height);*/
 }
 
 .main {
-    /*margin-top: var(--navbar-height);*/
 }
 
 .sidebar-container {

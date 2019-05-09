@@ -3,11 +3,10 @@ import { Router, NavigationEnd } from '@angular/router';
 import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
-import { DateService } from '../shared/date.service';
-import { EventService } from '../event.service';
-import { CategoryService } from '../category.service';
-import { LocationService } from '../shared/location.service';
-import { CalendarService } from '../calendar.service';
+import { DateService } from '../services/date.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
+import { LocationService } from '../services/location.service';
 
 @Component({
     selector: 'app-map-box',
@@ -51,27 +50,11 @@ export class MapBoxComponent implements OnInit {
 
   private events: FeatureCollection;
 
-  constructor(
-      private router: Router,
-      private _dateService: DateService,
-      private _eventService: EventService,
-      private _categService: CategoryService,
-      private _calendarService: CalendarService,
-      private _locationService: LocationService
-  ) {
+  constructor(private router: Router, private _dateService: DateService, private _eventService: EventService, private _locationService: LocationService, private _viewService: ViewService) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        //this.ngOnInit();
-      }
-    });
   }
 
   ngOnInit() {
-
-    if(this._eventService.getExpandedEvent() == null){
-      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-    }
 
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
@@ -80,11 +63,7 @@ export class MapBoxComponent implements OnInit {
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
-    });
-
-    this._eventService.expandedEvent$.subscribe(expandedEventInfo => {
-      this.selectEvent(expandedEventInfo);
-      if(expandedEventInfo == null){
+      if(clickedEventInfo == null){
         this.map.easeTo({
           center: [-118.445320, 34.066915],
           zoom: 15,
@@ -94,7 +73,13 @@ export class MapBoxComponent implements OnInit {
       }
     });
 
+    this._eventService.expandedEvent$.subscribe(expandedEventInfo => {
+      this.boldPopup(expandedEventInfo);
+    });
+
     this.buildMap();
+    if(this._eventService.getExpandedEvent() == null)
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
 
     let _promiseMapLoad = this.promiseMapLoad();
     let _promiseGetUserLocation = this.promiseGetUserLocation();
@@ -115,16 +100,15 @@ export class MapBoxComponent implements OnInit {
     //Add all Events pins
     let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
     promise_map_pin.then((promiseReturns) => {
-      let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+      let image = promiseReturns[1];
       this.map.addImage('redPin', image);
-      //add events with the new pin
       this.addEventLayer(this.events);
     });
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
       this.updateSource();
       this._eventService.allCategories();
-      let image = promiseReturns[1]; //Promise.all returns an array of the inner promise returns based on order in promise.all
+      let image = promiseReturns[1];
       this.map.addImage('bluePin', image);
     });
 
@@ -136,11 +120,41 @@ export class MapBoxComponent implements OnInit {
 
     // add extra controls
     this.addControls();
+    this._viewService.isMapView();
 
-    this._calendarService.isMapView();
+  }
+
+  //bold the popup event title for the given event, while unbolding all other event titles
+  boldPopup(event: GeoJson): void {
+    let exEv = this._eventService.getExpandedEvent();
+    //iterate through popup event titles and unbold
+    let popups = document.getElementsByClassName("popupEvent");
+    for(let i = 0; i < popups.length; i++){
+      if(exEv == undefined || (exEv != null && popups.item(i).id != "popupEvent"+exEv.id))
+        (<any>popups.item(i)).style.fontWeight = "normal";
+    }
+    //bold the selected event title
+    if(event != null){
+      let selectedPopup = document.getElementById("popupEvent"+event.id);
+      if(selectedPopup != null)
+        selectedPopup.style.fontWeight = "bold";
+    }
+    //iterate through backup popup event titles and unbold
+    let bpopups = document.getElementsByClassName("backupPopupEvent");
+    for(let i = 0; i < bpopups.length; i++){
+      if(exEv == undefined || (exEv != null && bpopups.item(i).id != "popupEvent"+exEv.id))
+        (<any>bpopups.item(i)).style.fontWeight = "normal";
+    }
+    //bold the selected backup event title
+    if(event != null){
+      let bselectedPopup = document.getElementById("backupPopupEvent"+event.id);
+      if(bselectedPopup != null)
+        bselectedPopup.style.fontWeight = "bold";
+    }
   }
 
   addEventLayer(data): void {
+    //Add normal pin
     this.map.addSource('events', {
       type: 'geojson',
       data: data
@@ -164,9 +178,9 @@ export class MapBoxComponent implements OnInit {
     if (this.map == undefined || this.map.getSource('events') == undefined) return;
     this.map.getSource('events').setData(this.events);
     this.removePinsAndPopups();
-    if(this._eventService.getExpandedEvent()){
-        this.selectEvent(this._eventService.getExpandedEvent());
-        this._eventService.boldPopup(this._eventService.getExpandedEvent());
+    if(this._eventService.getClickedEvent()){
+        this.selectEvent(this._eventService.getClickedEvent());
+        this.boldPopup(this._eventService.getClickedEvent());
     } else {
       this.map.easeTo({
         center: [-118.445320, 34.066915],
@@ -181,9 +195,7 @@ export class MapBoxComponent implements OnInit {
   buildMap() {
     this.map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3', // UCLA Campus Buildings (restricted by the border)
-      // 'mapbox://styles/trinakat/cjashcgwq7rfo2srstatrxhyi', // UCLA Buildings
-      // 'mapbox://styles/helarabawy/cj9tlpsgj339a2sojau0uv1f4',
+      style: 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3',
       center: [this.lng, this.lat],
       maxBounds: [
         [-118.46, 34.056],
@@ -194,7 +206,7 @@ export class MapBoxComponent implements OnInit {
     });
   }
 
-addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
+  addPinToLocation(id: string, latitude: number, longitude: number, icon: string, size: number, visible = true) {
     let point: FeatureCollection =
     { "type": "FeatureCollection",
         "features": [
@@ -231,10 +243,10 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   }
 
   addResetControls(): void {
-    var mapCanvas = document.getElementById("map");
-    var resetButton = document.createElement("BUTTON");
+    let mapCanvas = document.getElementById("map");
+    let resetButton = document.createElement("BUTTON");
     resetButton.id = 'resetButton';
-    var resetDetails = (e: MouseEvent|TouchEvent): void => {
+    let resetDetails = (e: MouseEvent|TouchEvent): void => {
       this.map.easeTo({
         center: [-118.445320, 34.066915],
         zoom: 15,
@@ -249,22 +261,22 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
 
   //add click behavior to an eventPopup (open event in sidebar)
   addClickBehavior(eventPopup, event){
-    var openDetails = (e: MouseEvent|TouchEvent): void => {
+    let openDetails = (e: MouseEvent|TouchEvent): void => {
       this.selectedEvent = event;
       this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
+      this._eventService.updateClickedEvent(event);
       this._eventService.updateExpandedEvent(event);
-      this._eventService.boldPopup(event);
     };
     eventPopup.onclick = openDetails;
   }
 
   //add hover behavior to an eventPopup (bold and unbold)
   addHoverBehavior(eventPopup, event){
-    var bold = (e: MouseEvent|TouchEvent): void => {
-      this._eventService.boldPopup(event);
+    let bold = (e: MouseEvent|TouchEvent): void => {
+      this.boldPopup(event);
     };
-    var unbold = (e: MouseEvent|TouchEvent): void => {
-      this._eventService.boldPopup(null);
+    let unbold = (e: MouseEvent|TouchEvent): void => {
+      this.boldPopup(null);
     };
     eventPopup.onmouseenter = bold;
     eventPopup.onmouseleave = unbold;
@@ -277,9 +289,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     if (popup == this.popup ) {
       popup.setLngLat(coords).addTo(this.map);
         document.getElementById('popupBody').innerHTML = "";
-        for(var eIndex in eventList){
+        for(let eIndex in eventList){
           //create new popup section for an event
-          var newPopupSection = document.createElement('div');
+          let newPopupSection = document.createElement('div');
           newPopupSection.className = 'popupContainer';
           newPopupSection.id = 'popupContainer'+eventList[eIndex].id;
           //set styling to separate multiple events
@@ -292,13 +304,13 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           this.addHoverBehavior(newPopupSection,eventList[eIndex]);
           document.getElementById('popupBody').append(newPopupSection);
           //create new event name
-          var newEvent = document.createElement('div');
+          let newEvent = document.createElement('div');
           newEvent.className = 'popupEvent';
           newEvent.id = 'popupEvent'+eventList[eIndex].id;
           newEvent.innerHTML = eventList[eIndex].properties.name;
           document.getElementById('popupContainer'+eventList[eIndex].id).append(newEvent);
           //create new event date
-          var newDate = document.createElement('div');
+          let newDate = document.createElement('div');
           newDate.id = 'popupDate'+eventList[eIndex].id;
           newDate.className = 'popupDate';
           newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
@@ -307,9 +319,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     } else {
       popup.setLngLat(coords).addTo(this.map);
         document.getElementById('backupPopupBody').innerHTML = "";
-        for(var eIndex in eventList){
+        for(let eIndex in eventList){
           //create new popup section for an event
-          var newPopupSection = document.createElement('div');
+          let newPopupSection = document.createElement('div');
           newPopupSection.className = 'backupPopupContainer';
           newPopupSection.id = 'backupPopupContainer'+eventList[eIndex].id;
           //set styling to separate multiple events
@@ -322,13 +334,13 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
           this.addHoverBehavior(newPopupSection,eventList[eIndex]);
           document.getElementById('backupPopupBody').append(newPopupSection);
           //create new event name
-          var newEvent = document.createElement('div');
+          let newEvent = document.createElement('div');
           newEvent.className = 'backupPopupEvent';
           newEvent.id = 'backupPopupEvent'+eventList[eIndex].id;
           newEvent.innerHTML = eventList[eIndex].properties.name;
           document.getElementById('backupPopupContainer'+eventList[eIndex].id).append(newEvent);
           //create new event date
-          var newDate = document.createElement('div');
+          let newDate = document.createElement('div');
           newDate.id = 'backupPopupDate'+eventList[eIndex].id;
           newDate.className = 'backupPopupDate';
           newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
@@ -341,7 +353,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   hoverPopup(): void {
     //HOVER
     this.map.on('mouseenter', 'eventlayer', (e) => {
-      // Update hovered event service.
       this._eventService.updateHoveredEvent(e.features[0]);
     });
     this.map.on('mouseleave', 'eventlayer', () => {
@@ -356,7 +367,6 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
         this._eventService.updateExpandedEvent(null);
-        this._eventService.boldPopup(null);
         return;
       }
       //the service then calls selectEvent
@@ -368,7 +378,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
         this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
         this._eventService.updateExpandedEvent(null);
-        this._eventService.boldPopup(null);
+        this.boldPopup(null);
       }
     });
   }
@@ -383,16 +393,15 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   //compile list of events at a specific location
   listEventsByLocation(location : string){
     //convert all location input to string format
-    if(typeof location != 'string'){
+    if(typeof location != 'string')
       location = JSON.stringify(location);
-    }
     //start list of all events at the specified coordinates
-    var eventList = [];
+    let eventList = [];
     //iterate through all events
-    for(var eventIndex in this.events.features){
-        var ev = this.events.features[eventIndex];
+    for(let eventIndex in this.events.features){
+        let ev = this.events.features[eventIndex];
         //capture event location
-        var evLocation = JSON.stringify(ev["properties"]["place"]);
+        let evLocation = JSON.stringify(ev["properties"]["place"]);
         //compare event location to provided location
         if(evLocation === location){
           eventList.push(ev);
@@ -412,10 +421,9 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
   selectEvent(event: GeoJson): void {
     this.selectedEvent = event;
     this.removePinsAndPopups();
-    if (event === null) {
+    if (event === null)
       return;
-    }
-    var eventList = this.listEventsByLocation(event["properties"].place);
+    let eventList = this.listEventsByLocation(event["properties"].place);
     // add blue hovered Pin
     let coords = event.geometry.coordinates.slice();
     this.map.getSource('hoveredPin').setData({
@@ -444,7 +452,7 @@ addPinToLocation(id: string, latitude: number, longitude: number, icon: string, 
     else {
       // Change the cursor style as a UI indicator.
       this.map.getCanvas().style.cursor = 'pointer';
-      var eventList = this.listEventsByLocation(event["properties"].place);
+      let eventList = this.listEventsByLocation(event["properties"].place);
       //slice returns a copy of the array rather than the actual array
       let coords = event.geometry.coordinates.slice();
       if(this.selectedEvent !== null) {

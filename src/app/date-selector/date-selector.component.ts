@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { EventService } from '../event.service';
-import { DateService } from '../shared/date.service';
-import { CalendarService } from '../calendar.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
+import { DateService } from '../services/date.service';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
-
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-date-selector',
@@ -16,50 +16,43 @@ export class DateSelectorComponent implements OnInit {
     public showLeft: boolean;
     public showRight: boolean;
 
-    constructor(private router: Router, private _eventService: EventService, private _dateService: DateService, private _calendarService: CalendarService) { }
+    constructor(private router: Router, private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService) { }
 
     ngOnInit() {
-        this._eventService.currDate$.subscribe(date => {
+        this._eventService.currentDate$.subscribe(date => {
             this.dateString = this.dateToString(date);
             this.showLeft = this.showLeftArrow(date);
             this.showRight = this.showRightArrow(date);
-            this._calendarService.setSelectedDay(date);
         });
-
     }
 
     private showLeftArrow(date: Date): boolean {
-        let today = new Date();
-        return !this._dateService.equalDates(date, today);
+      return !this._dateService.equalDates(date, new Date());
     }
 
     private showRightArrow(date: Date): boolean {
-        return true;
+      return true;
     }
 
     private dateToString(date: Date): string {
-        let day = date.getDate();
-        let month = this._dateService.getMonthName(date);
+        let day = moment(date).format('D');
+        let month = moment(date).format('MMM');
         let description = '';
         let today = new Date();
         let tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        if (this._dateService.equalDates(date, today)) {
+        if (this._dateService.equalDates(date, today))
             description = 'Today, ';
-        }
-        else if (this._dateService.equalDates(date, tomorrow)) {
+        else if (this._dateService.equalDates(date, tomorrow))
             description = 'Tomorrow, ';
-        }
         return `${description} ${month} ${day}`
     }
 
     public updateDate(days: number) {
         // 1 means advance one day, -1 means go back one day
-        this._calendarService.increaseDay(days);
-        this._eventService.updateDateByDays(days);
-        if(this.router.url.startsWith('/map')){
+        this._eventService.increaseDay(days);
+        if(this._viewService.isMapView())
           document.getElementById("resetButton").click();
-        }
     }
 
 }

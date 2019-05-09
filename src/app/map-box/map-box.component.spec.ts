@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MapBoxComponent } from './map-box.component';
+import { MapBoxComponent } from '../map-box.component';
 
 describe('MapBoxComponent', () => {
 
