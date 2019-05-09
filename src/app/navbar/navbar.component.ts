@@ -4,8 +4,6 @@ import { CategoryService } from '../category.service';
 import { CalendarService } from '../calendar.service';
 import { EventService } from '../event.service';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';  
-import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-navbar',
@@ -25,23 +23,22 @@ export class NavbarComponent implements OnInit {
 
     isMapSelected: boolean;
 
-    constructor(public _eventService: EventService, private _categService: CategoryService, public _calendarService: CalendarService, private _router: Router, private http: HttpClient) {     
+    constructor(public _eventService: EventService, private _categService: CategoryService, public _calendarService: CalendarService, private _router: Router, private http: HttpClient) {
+      this._calendarService.view$.subscribe( view => {
+        if(view == 'map'){
+          this.isMapSelected = true;
+        } else {
+          this.isMapSelected = false;
+        }
+      });
     }
-
+  
     isCollapsed: boolean = true;
 
     ngOnInit() { 
       // our call back function 
       this.getTemperature();
       setInterval(() => this.getTemperature(), 9000000);
-    }
-
-    collapsed(event: any): void {
-        // console.log(event);
-    }
-
-    expanded(event: any): void {
-        // console.log(event);
     }
 
     emitChangeView(newView: string): void {
@@ -53,6 +50,15 @@ export class NavbarComponent implements OnInit {
       this._eventService.updateDayEvents(d);
       let monthyear = d.getMonth() + " " + d.getFullYear();
       this._eventService.updateMonthEvents(monthyear);
+      this._eventService.updateWeekEvents(d);
+      this._eventService.resetFilters();
+      if(newView == 'map'){
+          this._eventService.allCategories();
+      } else {
+        this._eventService.initTimeHash(0,1439);
+        this._eventService.setLocationSearch("");
+        this._eventService.setUniversalSearch("");
+      }
     }
 
     public isFilterCollapsed: boolean = true;
@@ -65,6 +71,25 @@ export class NavbarComponent implements OnInit {
     toggleFilterCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
+    }
+  
+    toggleViews(): void {
+        if (!this._calendarService.isMapView()) {
+            this.emitChangeView('map');
+            this.isMapSelected = true;
+            this._router.navigateByUrl('/map(sidebar:list)');
+        }
+        else {
+            this.isMapSelected = false;
+            if (this._calendarService.retrieveLastView() == 'week'){
+                this.emitChangeView('week')
+                this._router.navigateByUrl('/calendar/week(sidebar:list)');
+            }
+            else {
+                this.emitChangeView('month')
+                this._router.navigateByUrl('/calendar/month(sidebar:list)');
+            }
+        }
     }
 
     getTemperature(): void { 
