@@ -11,6 +11,7 @@ import { EventService } from '../event.service';
 })
 
 export class NavbarComponent implements OnInit {
+    public currentDate: number = 7;
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
     isMapSelected: boolean;
@@ -24,7 +25,14 @@ export class NavbarComponent implements OnInit {
         }
       });
     }
-    ngOnInit() { }
+    ngOnInit() {
+      this.getCurrentDay();
+    }
+
+    getCurrentDay(): void {
+      let today = new Date();
+      this.currentDate = today.getDate();
+    }
 
     isCollapsed: boolean = true;
 
@@ -67,6 +75,9 @@ export class NavbarComponent implements OnInit {
             this._router.navigateByUrl('/map(sidebar:list)');
         }
         else {
+            // Check if day has changed
+            let today = new Date();
+            this.currentDate = today.getDate();
             this.isMapSelected = false;
             if (this._calendarService.retrieveLastView() == 'week'){
                 this.emitChangeView('week')
