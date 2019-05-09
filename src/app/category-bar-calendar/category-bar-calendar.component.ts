@@ -8,7 +8,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-category-bar-calendar',
   templateUrl: './category-bar-calendar.component.html',
-  styleUrls: ['./category-bar-calendar.component.css']
+  styleUrls: ['./category-bar-calendar.component.scss']
 })
 
 export class CategoryBarCalendarComponent implements OnInit {
