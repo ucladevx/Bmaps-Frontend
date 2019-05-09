@@ -10,6 +10,7 @@ import { EventService } from '../services/event.service';
 })
 
 export class NavbarComponent implements OnInit {
+    public currentDate: number = 7;
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
     isMapSelected: boolean = true;
@@ -23,7 +24,14 @@ export class NavbarComponent implements OnInit {
       });
       this._viewService.isMapView();
     }
-    ngOnInit() { }
+    ngOnInit() {
+      this.getCurrentDay();
+    }
+
+    getCurrentDay(): void {
+      let today = new Date();
+      this.currentDate = today.getDate();
+    }
 
     isCollapsed: boolean = true;
 

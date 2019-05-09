@@ -6,14 +6,14 @@
     <span class="header-text">Explore Events</span>
   </div>
   <div *ngIf="event && event.properties" class="event-body">
-    <img src="{{ event.properties.cover_picture == '<NONE>' ?
-        checkImage('/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
-        '/assets/images/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
-        : '/assets/images/fb-banner-default.png'
-        : event.properties.cover_picture }}" class="event-image">
-		<div class="event-title" id="event-title">
-      {{event.properties.name}}
-    </div>
+    <img src="{{
+      event.properties.cover_picture == '<NONE>' ?
+        checkImage('/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
+        '/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
+        : '/assets/images/banners/fb-banner-default.png'
+      : event.properties.cover_picture
+    }}" class="event-image">
+		<div class="event-title" id="event-title">{{event.properties.name}}</div>
 		<div class="event-info" id="event-info">
       {{_dateService.formatEventDate(event) +' \u2022 '}} {{event.properties.hoster}}
       <span class="sidebar-event-location" *ngIf="event.properties.place.name;else venue_street">
