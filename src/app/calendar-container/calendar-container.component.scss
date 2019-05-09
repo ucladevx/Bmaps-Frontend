@@ -27,6 +27,14 @@
     color: #5dbacd;
 }
 
+#left-caret {
+    float: left;
+}
+
+#right-caret {
+    float: right;
+}
+
 router-outlet.router-flex + * {
     display: flex;
     flex: 1 1 auto;
@@ -37,6 +45,8 @@ router-outlet.router-flex + * {
     padding: 9.7px;
     margin: 0 auto;
     font-size: 26px;
+    display: flex;
+    justify-content: center;
 }
 
 #calendar-controls i {
@@ -47,10 +57,14 @@ router-outlet.router-flex + * {
     margin: 0 10px;
 }
 
+#month-year-selector {
+    width: 232px;
+}
+
 #month-week-switch {
     font-size: 0.8rem;
     position: absolute;
-    right: 30px;
+    right: 9.7px;
     top: 8px;
     cursor: pointer;
 }
@@ -67,7 +81,8 @@ router-outlet.router-flex + * {
     border-bottom-right-radius: 4px;
     border: $default_border_width solid $default_border_color;
     padding: 4px 10px;
-    font-size: 18px;
+    font-size: 18px !important;
+    margin: 0 !important;
 }
 
 #month-switch.active {
@@ -85,5 +100,6 @@ router-outlet.router-flex + * {
     border-bottom-left-radius: 4px;
     border: $default_border_width solid $default_border_color;
     padding: 4px 10px;
-    font-size: 18px;
+    font-size: 18px !important;
+    margin: 0 !important;
 }

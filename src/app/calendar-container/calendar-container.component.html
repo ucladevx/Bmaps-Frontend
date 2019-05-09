@@ -4,20 +4,22 @@
       <div id="week-number" *ngIf="this.router.url.startsWith('/calendar/week')">
         <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
       </div>
-      <!-- month and year label -->
       <div id="calendar-controls">
-        <button class="custom-btn">
-          <i class="fa fa-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
-        </button>
-        <span>{{viewDate.toLocaleDateString("en-US", {month: 'long', year: 'numeric'})}}</span>
-        <button class="custom-btn">
-          <i class="fa fa-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
-        </button>
-      </div>
-      <!-- buttons for changing between week and month view -->
-      <div id="month-week-switch">
-        <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0)">Week</span>
-        <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0)">Month</span>
+        <!-- month and year label -->
+        <div id="month-year-selector">
+          <button id="left-caret" class="custom-btn">
+            <i class="fa fa-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
+          </button>
+          <span>{{viewDate.toLocaleDateString("en-US", {month: 'long', year: 'numeric'})}}</span>
+          <button id="right-caret" class="custom-btn">
+            <i class="fa fa-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
+          </button>
+        </div>
+        <!-- buttons for changing between week and month view -->
+        <div id="month-week-switch">
+            <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0)">Week</span>
+            <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0)">Month</span>
+          </div>
       </div>
     </div>
     <!-- where month and week view appear -->
