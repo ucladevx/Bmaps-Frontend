@@ -61,7 +61,7 @@ export class WeekComponent implements OnInit {
 
     this._eventService.setDateFilterFromDays(this._eventService.getDays());
     this.currentMonth = moment();
-    this._viewService.isMonthView();
+    this._viewService.isWeekView();
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
@@ -120,7 +120,6 @@ export class WeekComponent implements OnInit {
       viewDate = new Date();
     else
       viewDate = newWeek.startOf('week').toDate();
-    console.log(viewDate);
     if(this._viewService.isWeekView())
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
     this._eventService.updateDayEvents(viewDate);

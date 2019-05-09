@@ -1,6 +1,6 @@
 <div class="selector">
     <button [style.visibility]="showLeft ? 'visible' : 'hidden'" class="custom-btn" id="left-arrow" (click)="updateDate(-1)">
-        <i class="fa fa-caret-left" aria-hidden="true"></i>
+        <i class="fa fa-caret-left fix-pos-left" aria-hidden="true"></i>
     </button>
     <div id="date-text">
       <span class="sm-text">
@@ -11,6 +11,6 @@
       </span>
     </div>
     <button [style.visibility]="showRight ? 'visible' : 'hidden'" class="custom-btn" id="right-arrow" (click)="updateDate(1)">
-        <i class="fa fa-caret-right" aria-hidden="true"></i>
+        <i class="fa fa-caret-right fix-pos-right" aria-hidden="true"></i>
     </button>
 </div>

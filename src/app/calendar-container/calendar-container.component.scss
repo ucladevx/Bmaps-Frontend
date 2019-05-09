@@ -27,6 +27,18 @@
     color: #5dbacd;
 }
 
+.fix-pos-left {
+    position: absolute;
+    right: 65%;
+    top: 18%; 
+}
+
+.fix-pos-right {
+    position: absolute;
+    right: 34%;
+    top: 18%;
+}
+
 router-outlet.router-flex + * {
     display: flex;
     flex: 1 1 auto;

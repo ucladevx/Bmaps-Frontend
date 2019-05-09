@@ -7,25 +7,6 @@
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div class="filters-content">
-      <div class="section-header">Categories</div>
-      <span *ngIf="this._viewService.isMonthView()">
-      <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{selectedCategory}}">
-        <ng-container *ngFor="let categKey of objectKeys(categHash)">
-          <option *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0" value="{{categKey}}">
-            {{categHash[categKey].formattedCategory}}
-          </option>
-        </ng-container>
-      </select>
-      </span>
-      <span *ngIf="this._viewService.isWeekView()">
-        <select name="categories" id="categories" class="custom-select" (change)="categoryClicked()" value="{{selectedCategory}}">
-          <ng-container *ngFor="let categKey of objectKeys(categHash)">
-            <option *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0" value="{{categKey}}">
-              {{categHash[categKey].formattedCategory}}
-            </option>
-          </ng-container>
-        </select>
-      </span>
       <div class="section-header">Location</div>
       <input class="form-control" type="text" id="location" placeholder="Enter a Location" value="{{getLoc()}}" autocomplete="off" (focus)="clearLoc()" (input)="setLocationFilter()">
       <div class="section-header">Date</div>
@@ -51,5 +32,48 @@
         </div>
       </div>
     </div>
+    <div *ngIf="categHash" class="categ-section-header">
+        Categories
+        <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
+      </div>
+      <div *ngIf="categHash" class="categories-wrapper">
+        <ul class="categories-list" role="menu">
+          <li *ngFor="let categKey of objectKeys(categHash)">
+            <span *ngIf="this._viewService.isMonthView()">
+            <a *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0"
+               [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+               (click)="categoryClicked(categKey)">
+            <div class="checkbox-container">
+              <div *ngIf="categHash[categKey].selected; else unchecked">
+                <img class="checkbox" width="16px" src="assets/images/check.svg"/>
+              </div>
+            </div>
+            <ng-template #unchecked>
+                <div>
+                  <img class="checkbox" width="16px" src="assets/images/box.svg" />
+                </div>
+            </ng-template>
+            {{categHash[categKey].formattedCategory}}
+          </a>
+            </span>
+            <span *ngIf="this._viewService.isWeekView()">
+            <a *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0"
+               [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+               (click)="categoryClicked(categKey)">
+            <div class="checkbox-container">
+              <div *ngIf="categHash[categKey].selected; else unchecked">
+                <img class="checkbox" width="16px" src="assets/images/check.svg"/>
+              </div>
+            </div>
+            <ng-template #unchecked>
+                <div>
+                  <img class="checkbox" width="16px" src="assets/images/box.svg" />
+                </div>
+            </ng-template>
+            {{categHash[categKey].formattedCategory}}</a>
+            </span>
+          </li>
+        </ul>
+      </div>
   </div>
 </div>

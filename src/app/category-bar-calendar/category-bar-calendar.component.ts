@@ -21,8 +21,12 @@ export class CategoryBarCalendarComponent implements OnInit {
   constructor(private _eventService: EventService, private _viewService: ViewService) {}
 
   ngOnInit() {
-    this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
-    this._eventService.tagHash$.subscribe(filterHash => { this.filterHash = filterHash; });
+    this._eventService.categHash$.subscribe(categHash => {
+      this.categHash = categHash;
+    });
+    this._eventService.tagHash$.subscribe(filterHash => {
+      this.filterHash = filterHash;
+    });
   }
 
   setDateFilter(){
@@ -68,12 +72,11 @@ export class CategoryBarCalendarComponent implements OnInit {
     return time;
   }
 
-  filterClicked(filter: string): void {
+  tagClicked(filter: string): void {
     this._eventService.toggleTag(filter);
   }
 
-  categoryClicked(): void {
-    let category = (<HTMLInputElement>document.getElementById("categories")).value;
+  categoryClicked(category: string): void {
     this._eventService.toggleCategory(category);
   }
 
@@ -81,16 +84,11 @@ export class CategoryBarCalendarComponent implements OnInit {
     this.showDropdown = !this.showDropdown;
   }
 
-  clearCategories(): void {
-    for (let key in this.categHash)
-      if (this.categHash[key].selected)
-        this._eventService.toggleCategory(key);
-    if(this.categHash)
-      this.categHash["all"].selected = true;
-  }
 
-  clearFilters(){
-    this._eventService.resetFilters('calendar');
+  clearCategories(): void { this._eventService.allCategories(); }
+
+  clearFilters(): void {
+    this._eventService.resetFilters('ignore-categories');
   }
 
   @HostListener('click')
