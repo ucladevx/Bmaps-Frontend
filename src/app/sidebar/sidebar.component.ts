@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
-import { DateService } from '../shared/date.service';
-import { EventService } from '../event.service';
+import { DateService } from '../services/date.service';
+import { ViewService } from '../services/view.service';
+import { EventService } from '../services/event.service';
 import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
-import { CategoryService } from '../category.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -38,16 +38,14 @@ export class SidebarComponent implements OnInit {
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
-    constructor(
-        public router: Router,
-        private _eventService: EventService,
-        private _dateService: DateService,
-        public _categService: CategoryService
-    ) {}
+    constructor(private router: Router, private _eventService: EventService, private _dateService: DateService, private _viewService: ViewService) {}
 
     ngOnInit() {
         // TODO: unsubscribe on destroy
-        // this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+        this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+        this._eventService.dayEvents$.subscribe(eventCollection => {
+            this.filteredEvents = eventCollection.features;
+        });
         this._eventService.filteredDayEvents$.subscribe(eventCollection => {
             this.filteredEvents = eventCollection.features;
         });
@@ -65,11 +63,9 @@ export class SidebarComponent implements OnInit {
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
     // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
-      this._eventService.updateExpandedEvent(event);
         this._eventService.updateClickedEvent(event);
         this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
         this._eventService.updateExpandedEvent(event);
-        this._eventService.boldPopup(event);
     }
 
     onHover(event: GeoJson): void {
@@ -77,19 +73,15 @@ export class SidebarComponent implements OnInit {
         this._eventService.updateHoveredEvent(event);
     }
 
-    toggleMobileSidebar() {
-        this.onPress();
-    }
+    toggleMobileSidebar() { this.onPress(); }
 
-    formatCategory(categories): string {
-        if (!categories) {
-            return '';
-        }
+    printCategories(categories: string[]) {
+      if (categories){
         let categStr: string = '';
-        for (let category of categories) {
+        for (let category of categories)
           categStr += category.charAt(0).toUpperCase() + category.slice(1).toLowerCase() + ', ';
-        }
-        return categStr.slice(0, categStr.length - 2);
+        return categStr.slice(0, categStr.length - 2).replace('_',' ');
+      }
     }
 
     // scroll to the DOM element for event
@@ -97,15 +89,14 @@ export class SidebarComponent implements OnInit {
       if (event) {
         const index: number = this.filteredEvents.findIndex((e: GeoJson) => e.id == event.id);
         const element: ElementRef = this.eventList.find((e: ElementRef, i: number) => index == i);
-        if (element) {
+        if (element)
           element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
       }
     }
 
   //check whether an image source exists
   checkImage(imageSrc) {
-      var img = new Image();
+      let img = new Image();
       try {
         img.src = imageSrc;
         return true;

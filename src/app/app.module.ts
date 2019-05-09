@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';  // replaces previous H
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './router-strategy';
-import { SharedModule } from './shared/shared.module';
+import { SharedModule } from './shared.module';
 
 import { AppComponent } from './app.component';
 import { MapBoxComponent } from './map-box/map-box.component';
@@ -13,21 +13,20 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
 import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
-import { CategoryService } from './category.service';
 
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NavbarComponent } from './navbar/navbar.component';
-import { EventService } from './event.service';
-import { CalendarService } from './calendar.service';
+import { ViewService } from './services/view.service';
+import { EventService } from './services/event.service';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 
 
@@ -74,7 +73,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, {useHash: true}),
   ],
   providers: [
-    CategoryService,
+    ViewService,
     EventService,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
   ],
