@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { CategoryService } from '../category.service';
+import { CalendarService } from '../calendar.service';
 import { EventService } from '../event.service';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,25 +17,28 @@ export class NavbarComponent implements OnInit {
     public celsius: string;
     public fahrenheit: string;
     isFahrenheit: boolean = true;
+    foundWeatherIcon: boolean;
 
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
-    constructor(private _eventService: EventService, private _categService: CategoryService, private http: HttpClient) { }
+    isMapSelected: boolean;
 
+    constructor(public _eventService: EventService, private _categService: CategoryService, public _calendarService: CalendarService, private _router: Router, private http: HttpClient) {
+      this._calendarService.view$.subscribe( view => {
+        if(view == 'map'){
+          this.isMapSelected = true;
+        } else {
+          this.isMapSelected = false;
+        }
+      });
+    }
+  
     isCollapsed: boolean = true;
 
     ngOnInit() { 
       // our call back function 
       this.getTemperature();
-      setInterval(() => this.getTemperature(), 900000);
-    }
-
-    collapsed(event: any): void {
-        // console.log(event);
-    }
-
-    expanded(event: any): void {
-        // console.log(event);
+      setInterval(() => this.getTemperature(), 9000000);
     }
 
     emitChangeView(newView: string): void {
@@ -45,6 +50,15 @@ export class NavbarComponent implements OnInit {
       this._eventService.updateDayEvents(d);
       let monthyear = d.getMonth() + " " + d.getFullYear();
       this._eventService.updateMonthEvents(monthyear);
+      this._eventService.updateWeekEvents(d);
+      this._eventService.resetFilters();
+      if(newView == 'map'){
+          this._eventService.allCategories();
+      } else {
+        this._eventService.initTimeHash(0,1439);
+        this._eventService.setLocationSearch("");
+        this._eventService.setUniversalSearch("");
+      }
     }
 
     public isFilterCollapsed: boolean = true;
@@ -57,6 +71,25 @@ export class NavbarComponent implements OnInit {
     toggleFilterCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
+    }
+  
+    toggleViews(): void {
+        if (!this._calendarService.isMapView()) {
+            this.emitChangeView('map');
+            this.isMapSelected = true;
+            this._router.navigateByUrl('/map(sidebar:list)');
+        }
+        else {
+            this.isMapSelected = false;
+            if (this._calendarService.retrieveLastView() == 'week'){
+                this.emitChangeView('week')
+                this._router.navigateByUrl('/calendar/week(sidebar:list)');
+            }
+            else {
+                this.emitChangeView('month')
+                this._router.navigateByUrl('/calendar/month(sidebar:list)');
+            }
+        }
     }
 
     getTemperature(): void { 
@@ -86,4 +119,18 @@ export class NavbarComponent implements OnInit {
       else
         this.temperature = this.celsius;
     }
-}
+
+    checkImage(imageSrc) {
+      var img = new Image();
+      try {
+        img.src = imageSrc;
+        return true;
+      } catch(err) {
+        return false;
+      }
+    }
+
+  }
+
+  // mark .views-switch as ng-not-empty ng-valid
+  // mark .views-switch-text as ng-pristine ng-untouched ng-valid ng-not-empty
