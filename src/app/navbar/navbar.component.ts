@@ -73,7 +73,7 @@ export class NavbarComponent implements OnInit {
     getTemperature(): void {
       const API_KEY = "bc6a73dfabbd4e6c9006a835d00589f2";
       const zipcode = "90024";
-      const baseWeatherUrl = "http://api.openweathermap.org/data/2.5/weather";
+      const baseWeatherUrl = "https://api.openweathermap.org/data/2.5/weather";
       const defaultTemperatureUnits = "imperial";
 
       let weatherQuery = `${baseWeatherUrl}?units=${defaultTemperatureUnits}&zip=${zipcode},us&APPID=${API_KEY}`;
