@@ -45,7 +45,7 @@ export class NavbarComponent implements OnInit {
       this.currentDate = today.getDate();
     }
 
-    isCollapsed: boolean = true;
+    // isCollapsed: boolean = true;
 
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
@@ -72,24 +72,24 @@ export class NavbarComponent implements OnInit {
       this.isCollapsed = true;
     }
 
-    toggleViews(): void {
-        if (!this._calendarService.isMapView()) {
-            this.emitChangeView('map');
-            this.isMapSelected = true;
-            this._router.navigateByUrl('/map(sidebar:list)');
-        }
-        else {
-            this.isMapSelected = false;
-            if (this._calendarService.retrieveLastView() == 'week'){
-                this.emitChangeView('week')
-                this._router.navigateByUrl('/calendar/week(sidebar:list)');
-            }
-            else {
-                this.emitChangeView('month')
-                this._router.navigateByUrl('/calendar/month(sidebar:list)');
-            }
-        }
-    }
+    // toggleViews(): void {
+    //     if (!this._calendarService.isMapView()) {
+    //         this.emitChangeView('map');
+    //         this.isMapSelected = true;
+    //         this._router.navigateByUrl('/map(sidebar:list)');
+    //     }
+    //     else {
+    //         this.isMapSelected = false;
+    //         if (this._calendarService.retrieveLastView() == 'week'){
+    //             this.emitChangeView('week')
+    //             this._router.navigateByUrl('/calendar/week(sidebar:list)');
+    //         }
+    //         else {
+    //             this.emitChangeView('month')
+    //             this._router.navigateByUrl('/calendar/month(sidebar:list)');
+    //         }
+    //     }
+    // }
 
     getTemperature(): void {
       const API_KEY = "bc6a73dfabbd4e6c9006a835d00589f2";
