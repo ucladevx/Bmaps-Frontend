@@ -45,8 +45,6 @@ export class NavbarComponent implements OnInit {
       this.currentDate = today.getDate();
     }
 
-    isCollapsed: boolean = true;
-
     emitChangeView(newView: string): void {
       this.changeView.emit(newView);
       let d = new Date();
@@ -70,25 +68,6 @@ export class NavbarComponent implements OnInit {
     toggleTagCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
-    }
-
-    toggleViews(): void {
-        if (!this._calendarService.isMapView()) {
-            this.emitChangeView('map');
-            this.isMapSelected = true;
-            this._router.navigateByUrl('/map(sidebar:list)');
-        }
-        else {
-            this.isMapSelected = false;
-            if (this._calendarService.retrieveLastView() == 'week'){
-                this.emitChangeView('week')
-                this._router.navigateByUrl('/calendar/week(sidebar:list)');
-            }
-            else {
-                this.emitChangeView('month')
-                this._router.navigateByUrl('/calendar/month(sidebar:list)');
-            }
-        }
     }
 
     getTemperature(): void {
