@@ -313,7 +313,7 @@ export class MapBoxComponent implements OnInit {
           let newDate = document.createElement('div');
           newDate.id = 'popupDate'+eventList[eIndex].id;
           newDate.className = 'popupDate';
-          newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
+          newDate.innerHTML = this._dateService.formatTime(eventList[eIndex].properties.start_time);
           document.getElementById('popupContainer'+eventList[eIndex].id).append(newDate);
         }
     } else {
@@ -343,7 +343,7 @@ export class MapBoxComponent implements OnInit {
           let newDate = document.createElement('div');
           newDate.id = 'backupPopupDate'+eventList[eIndex].id;
           newDate.className = 'backupPopupDate';
-          newDate.innerHTML = this._dateService.formatTime(new Date(eventList[eIndex].properties.start_time));
+          newDate.innerHTML = this._dateService.formatTime(eventList[eIndex].properties.start_time);
           document.getElementById('backupPopupContainer'+eventList[eIndex].id).append(newDate);
         }
     }

@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit {
 
     isMapSelected: boolean = true;
 
-    constructor(private _eventService: EventService, private _viewService: ViewService, private _router: Router, private http: HttpClient) {
+    constructor(private _eventService: EventService, public _viewService: ViewService, private _router: Router, private http: HttpClient) {
       this._viewService.currentView$.subscribe( view => {
         if(view == 'map')
           this.isMapSelected = true;
