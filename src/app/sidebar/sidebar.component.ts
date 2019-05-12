@@ -38,7 +38,7 @@ export class SidebarComponent implements OnInit {
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
-    constructor(private router: Router, private _eventService: EventService, private _dateService: DateService, private _viewService: ViewService) {}
+    constructor(private router: Router, public _eventService: EventService, private _dateService: DateService, public _viewService: ViewService) {}
 
     ngOnInit() {
         // TODO: unsubscribe on destroy
