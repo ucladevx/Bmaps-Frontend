@@ -16,6 +16,16 @@
     <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">
         <ul class="navbar-nav mr-auto">
         </ul>
+        <span class="navbar-text" (click)="switchTemperature()">
+            <img class="weather-icon"
+            src="{{
+                checkImage('/assets/images/weather/'+weatherIcon+'.svg') ?
+                '/assets/images/weather/'+weatherIcon+'.svg'
+                : '/assets/images/weather.svg'
+                }}"
+                />
+            {{temperature}}
+        </span>
         <span class="views-switch" (click)="toggleViews()" [ngClass]="isMapSelected ? 'checked' : ''">
           <small></small>
           <input type="checkbox" style="display:none">

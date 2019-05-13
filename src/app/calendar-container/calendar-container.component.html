@@ -1,24 +1,34 @@
 <div class="calendar">
   <div class="selector">
       <!-- if current route is week -->
-      <div id="week-number" *ngIf="this.router.url.startsWith('/calendar/week')">
+      <div id="week-number" *ngIf="this.router.url.startsWith('/calendar/week'); else emptyBlock">
         <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
       </div>
+      <ng-template #emptyBlock>
+        <div id="empty-selector-block"></div>
+      </ng-template>
+      <span id="mobile-week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0)">Week</span>
       <!-- month and year label -->
-      <div id="calendar-controls">
-        <button id="left-caret" class="custom-btn">
-          <i class="fa fa-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
-        </button>
-        <span>{{viewDate}}</span>
-        <button id="right-caret" class="custom-btn">
-          <i class="fa fa-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
-        </button>
+      <div id="calendar-controls-wrapper">
+        <div id="calendar-controls">
+          <button id="left-caret" class="custom-btn">
+            <i class="fa fa-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
+          </button>
+          <span>{{viewDate}}</span>
+          <button id="right-caret" class="custom-btn">
+            <i class="fa fa-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div id="mobile-week-number" *ngIf="this.router.url.startsWith('/calendar/week')">
+          <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
+        </div>
       </div>
       <!-- buttons for changing between week and month view -->
       <div id="month-week-switch">
         <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0)">Week</span>
         <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0)">Month</span>
       </div>
+      <span id="mobile-month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0)">Month</span>
     </div>
     <!-- where month and week view appear -->
     <router-outlet class="router-flex"></router-outlet>

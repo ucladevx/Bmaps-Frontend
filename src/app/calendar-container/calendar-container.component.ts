@@ -52,7 +52,7 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   viewDateChange(set : Date) {
-    this.viewDate = set.toLocaleDateString("en-US", {month: 'long', year: 'numeric'});
+    this.viewDate = set.toLocaleDateString("en-US", {month: 'short', year: 'numeric'});
   }
 
   changeDateSpan(delta: number) : void{
