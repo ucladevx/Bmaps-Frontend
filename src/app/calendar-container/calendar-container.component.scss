@@ -10,8 +10,12 @@ $selector-padding: 9.7px;
     position: relative;
     font-size: 26px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     padding: $selector-padding;
+}
+
+#empty-selector-block {
+    width: 100px;
 }
 
 :host {
@@ -48,30 +52,38 @@ router-outlet.router-flex + * {
 }
 
 #calendar-controls {
-    width: 300px;
+    font-size: 26px;
 }
 
-#calendar-controls i {
+#calendar-controls-wrapper {
+    width: 200px;
+}
+
+#calendar-controls-wrapper i {
     font-size: 30px;
 }
 
-#calendar-controls span {
+#calendar-controls-wrapper span {
     margin: 0 10px;
 }
 
 #month-week-switch {
     font-size: 0.8rem;
-    position: absolute;
-    right: $selector-padding;
-    top: 8px;
     cursor: pointer;
+    display: flex;
+    margin-left: 5px;
 }
 
 #week-number {
-  position: absolute;
-  left: 30px;
-  top: 10px;
   font-size: 20px;
+  width: 100px;
+}
+
+#mobile-week-number {
+    display: none;
+    z-index: 1000;
+    font-size: 10px;
+    text-align: center;
 }
 
 #month-switch {
@@ -100,4 +112,64 @@ router-outlet.router-flex + * {
     padding: 4px 10px;
     font-size: 18px;
     margin: 0;
+}
+
+#mobile-month-switch {
+    display: none;
+    border-radius: 4px;
+    border: $default_border_width solid $default_border_color;
+    padding: 8px 10px;
+    font-size: 18px;
+    margin: 0;
+}
+
+#mobile-month-switch.active {
+    background: #656565;
+    color: #fff;
+}
+
+#mobile-week-switch.active {
+    background: #656565;
+    color: #fff;
+}
+
+#mobile-week-switch {
+    display: none;
+    border-radius: 4px;
+    border: $default_border_width solid $default_border_color;
+    padding: 8px 10px;
+    font-size: 18px;
+    margin: 0;
+}
+
+/* mobile css */
+@media screen and (max-width: 768px) {
+    /* display short day abbreviations */
+    #calendar-controls-wrapper {
+        width: 150px;
+    }
+    #calendar-controls {
+        font-size: 20px;
+    }
+    #week-number {
+        display: none;
+    }
+    #month-week-switch {
+        display: none;
+    }
+    #empty-selector-block {
+        display: none;
+    }
+    #mobile-week-switch {
+        display: flex;
+        align-items: center;
+    }
+    
+    #mobile-month-switch {
+        display: flex;
+        align-items: center;
+    }
+    #mobile-week-number {
+        display: block;
+    }
 }
