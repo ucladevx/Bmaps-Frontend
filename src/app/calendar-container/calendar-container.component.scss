@@ -145,6 +145,9 @@ router-outlet.router-flex + * {
 /* mobile css */
 @media screen and (max-width: 768px) {
     /* display short day abbreviations */
+    #calendar-controls-wrapper {
+        width: 150px;
+    }
     #calendar-controls {
         font-size: 20px;
     }
