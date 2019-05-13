@@ -5,7 +5,7 @@
     </button>
     <app-date-selector class="d-md-none"></app-date-selector>
     <div class="navbar-brand">
-      <button (click)="toggleTagCollapse()" class="navbar-toggler" type="button">
+      <button (click)="toggleFilterCollapse()" class="navbar-toggler" type="button">
         <i class="d-md-none fa fa-sliders" id="filter-dropdown-toggle" aria-hidden="true"></i>
       </button>
       <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
@@ -40,6 +40,11 @@
         </span>
     </div>
     <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
+      <span *ngIf="this._viewService.isMapView(); else calendarView">
         <app-category-bar-map [showToggleButton]="false"></app-category-bar-map>
+      </span>
+      <ng-template #calendarView>
+        <app-category-bar-calendar [showToggleButton]="false"></app-category-bar-calendar>
+      </ng-template>
     </div>
 </nav>

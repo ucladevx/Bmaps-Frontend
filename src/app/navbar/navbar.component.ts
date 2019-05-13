@@ -55,7 +55,7 @@ export class NavbarComponent implements OnInit {
       this.isFilterCollapsed = true;
     }
 
-    toggleTagCollapse(): void {
+    toggleFilterCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
     }
