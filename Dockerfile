@@ -7,10 +7,6 @@ RUN apk update && \
     apk add --update-cache bash yarn nginx make && \
     rm -rf /var/cache/apk/*
 
-# https://pkgs.alpinelinux.org/package/edge/main/x86_64/nodejs
-# https://stackoverflow.com/questions/37416671/node-not-found-in-alpine-docker
-# https://superuser.com/questions/1252624/what-is-the-best-way-to-install-latest-nodejs-with-npm-on-alpine-linux/1252982
-RUN apk add nodejs
 
 COPY package.json yarn.lock ./
 
