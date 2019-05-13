@@ -274,7 +274,7 @@ export class EventService {
     let daysLeftInWeek = 7-parseInt((firstDay).format('d'));
     let lastDay = firstDay.clone().add(daysLeftInWeek, 'days');
     allEvents.features.forEach(el => {
-      let d = new Date(el.properties.start_time);
+      let d = moment(el.properties.start_time).toDate();
       if (d >= firstDay.toDate() && d <= lastDay.toDate()){ weekEvents.features.push(el); }
     });
     return weekEvents;
