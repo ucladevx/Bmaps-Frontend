@@ -26,35 +26,19 @@
                 />
             {{temperature}}
         </span>
-        <span class="views-switch" (click)="toggleViews()" [ngClass]="isMapSelected ? 'checked' : ''">
-          <small></small>
-          <input type="checkbox" style="display:none">
-          <span class="views-switch-text">
-            <span routerLink="/map" routerLinkActive="active" class="map-switch" (click)="toggleViews()" >
-              <img src="/assets/images/switch-map-icon.svg" (click)="toggleViews()">
-            </span>
-            <span *ngIf="this.isMonth; else monthButton">
-              <span routerLink="/calendar/month" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
-                <img src="/assets/images/calendars/{{currentDate}}.svg" (click)="toggleViews()">
-              </span>
-            </span>
-            <ng-template #monthButton>
-              <span routerLink="/calendar/week" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
-                <img src="/assets/images/calendars/{{currentDate}}.svg" (click)="toggleViews()">
-              </span>
-            </ng-template>
-          </span>
+        <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
+        <span *ngIf="this.isMonth; else weekButton">
+          <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
         </span>
+        <ng-template #weekButton>
+          <span class="navbar-text"  routerLink="/calendar/week" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
+        </ng-template>
+        <!-- <span class="navbar-text"  routerLink="/week" routerLinkActive="active">Week View</span> -->
         <span class="navbar-text">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">Feedback</a>
         </span>
     </div>
     <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
-      <span *ngIf="this._viewService.isMapView(); else calendarView">
         <app-category-bar-map [showToggleButton]="false"></app-category-bar-map>
-      </span>
-      <ng-template #calendarView>
-        <app-category-bar-calendar [showToggleButton]="false"></app-category-bar-calendar>
-      </ng-template>
     </div>
 </nav>
