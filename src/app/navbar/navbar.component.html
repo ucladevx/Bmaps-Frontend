@@ -16,6 +16,13 @@
     <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">
         <ul class="navbar-nav mr-auto">
         </ul>
+        <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
+        <span *ngIf="this.isMonth; else weekButton">
+          <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
+        </span>
+        <ng-template #weekButton>
+          <span class="navbar-text" routerLink="/calendar/week" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
+        </ng-template>
         <span class="navbar-text" (click)="switchTemperature()">
             <img class="weather-icon"
             src="{{
@@ -26,19 +33,17 @@
                 />
             {{temperature}}
         </span>
-        <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
-        <span *ngIf="this.isMonth; else weekButton">
-          <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
-        </span>
-        <ng-template #weekButton>
-          <span class="navbar-text"  routerLink="/calendar/week" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
-        </ng-template>
         <!-- <span class="navbar-text"  routerLink="/week" routerLinkActive="active">Week View</span> -->
         <span class="navbar-text">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">Feedback</a>
         </span>
     </div>
     <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
+      <span *ngIf="this._viewService.isMapView(); else calendarView">
         <app-category-bar-map [showToggleButton]="false"></app-category-bar-map>
+      </span>
+      <ng-template #calendarView>
+        <app-category-bar-calendar [showToggleButton]="false"></app-category-bar-calendar>
+      </ng-template>
     </div>
 </nav>
