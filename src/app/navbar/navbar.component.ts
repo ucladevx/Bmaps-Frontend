@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
     isMapSelected: boolean = true;
+    isMonth: boolean = false;
 
     constructor(private _eventService: EventService, public _viewService: ViewService, private _router: Router, private http: HttpClient) {
       this._viewService.currentView$.subscribe( view => {
@@ -29,6 +30,10 @@ export class NavbarComponent implements OnInit {
           this.isMapSelected = true;
         else
           this.isMapSelected = false;
+        if(view == 'month')
+          this.isMonth = true;
+        else
+          this.isMonth = false;
       });
       this._viewService.isMapView();
     }

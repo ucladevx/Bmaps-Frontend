@@ -35,8 +35,8 @@ export class CategoryBarCalendarComponent implements OnInit {
     this._eventService.setDateFilter(first,last);
   }
 
-  getStartDate(){ return moment(this._eventService.getDateFilter()[0]).format('YYYY-MM-DD'); }
-  getEndDate(){ return moment(this._eventService.getDateFilter()[1]).format('YYYY-MM-DD'); }
+  getStartDate(){ if(this._eventService.getDateFilter()){ return moment(this._eventService.getDateFilter()[0]).format('YYYY-MM-DD'); }}
+  getEndDate(){ if(this._eventService.getDateFilter()){ return moment(this._eventService.getDateFilter()[1]).format('YYYY-MM-DD'); }}
 
   setTimeFilter(){
     let starttime = (<HTMLInputElement>document.getElementById('start-time')).value.split(":");

@@ -33,13 +33,13 @@
             <span routerLink="/map" routerLinkActive="active" class="map-switch" (click)="toggleViews()" >
               <img src="/assets/images/switch-map-icon.svg" (click)="toggleViews()">
             </span>
-            <span *ngIf="this._viewService.retrieveLastView() == 'week'; else monthButton">
-              <span routerLink="/calendar/week" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
+            <span *ngIf="this.isMonth; else monthButton">
+              <span routerLink="/calendar/month" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
                 <img src="/assets/images/calendars/{{currentDate}}.svg" (click)="toggleViews()">
               </span>
             </span>
             <ng-template #monthButton>
-              <span routerLink="/calendar/month" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
+              <span routerLink="/calendar/week" routerLinkActive="active" class="calendar-switch" (click)="toggleViews()">
                 <img src="/assets/images/calendars/{{currentDate}}.svg" (click)="toggleViews()">
               </span>
             </ng-template>
