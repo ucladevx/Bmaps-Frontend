@@ -51,10 +51,10 @@
 }
 
 #scrollable {
-  width: 100%;
   height: 100%;
   margin: 0;
   overflow-y: scroll;
+  width: 100%;
 }
 
 .timebar {
@@ -64,6 +64,10 @@
   align-items: flex-start;
   float: left;
   border-right: 1px solid $default_border_color;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 200;
 }
 
 .filler-block {
@@ -71,8 +75,9 @@
   background-color: inherit;
   position: -webkit-sticky;
   position: sticky;
-  z-index: 5;
+  z-index: 300;
   top: 0;
+  overflow: visible;
 }
 
 .time-of-day {
@@ -88,9 +93,8 @@
   font-size: 10px;
   font-weight: bold;
   color: black;
-  z-index: 1;
   white-space: nowrap;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .weekview-day .time-of-day tr:not(:last-child) {
@@ -211,6 +215,13 @@
     }
     .weekview-header > .long-abbr {
         display: none;
+    }
+    #scrollable {
+      overflow-x: scroll;
+      box-shadow: inset 200px 200px black;
+    }
+    .weekview-month {
+      width: 200%;
     }
 }
 /* end mobile css */
