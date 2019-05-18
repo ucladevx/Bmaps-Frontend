@@ -115,7 +115,6 @@ export class NavbarComponent implements OnInit {
       }
     }
 
-
     toggleViews(): void {
       let ev = this._eventService.getExpandedEvent();
       let path = "";

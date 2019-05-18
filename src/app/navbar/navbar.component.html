@@ -17,13 +17,19 @@
     <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">
         <ul class="navbar-nav mr-auto">
         </ul>
+        <ul class="navbar-nav ml-auto">
+        <li>
         <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
+        </li>
+        <li>
         <span *ngIf="this.isMonth; else weekButton">
           <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
         </span>
         <ng-template #weekButton>
           <span class="navbar-text" routerLink="/calendar/week" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
         </ng-template>
+        </li>
+        <li>
         <span class="navbar-text" (click)="switchTemperature()">
             <img class="weather-icon"
             src="{{
@@ -34,10 +40,15 @@
                 />
             {{temperature}}
         </span>
+        </li>
         <!-- <span class="navbar-text"  routerLink="/week" routerLinkActive="active">Week View</span> -->
+        <li>
         <span class="navbar-text">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">Feedback</a>
         </span>
+        </li>
+        </ul>
+
     </div>
     <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
       <span *ngIf="this._viewService.isMapView(); else calendarView">
