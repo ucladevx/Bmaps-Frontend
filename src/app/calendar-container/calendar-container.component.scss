@@ -168,7 +168,7 @@ router-outlet.router-flex + * {
         display: none;
     }
     #mobile-week-switch {
-        display: flex;
+        display: block;
         width: 20%;
         overflow-x: hidden;
         white-space: nowrap;
@@ -176,9 +176,10 @@ router-outlet.router-flex + * {
         align-items: center;
         position: absolute;
         left: 3%;
+        text-align: center;
     }
     #mobile-month-switch {
-        display: flex;
+        display: block;
         width: 20%;
         overflow-x: hidden;
         white-space: nowrap;
@@ -186,6 +187,7 @@ router-outlet.router-flex + * {
         align-items: center;
         position: absolute;
         right: 3%;
+        text-align: center;
     }
     #mobile-week-number {
         display: block;
