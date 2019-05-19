@@ -147,9 +147,16 @@ router-outlet.router-flex + * {
     /* display short day abbreviations */
     #calendar-controls-wrapper {
         width: 150px;
+        width: 46%;
+        display: block;
+        position: absolute;
+        left: 27%;
+    }
+    .selector {
+      height: 60px;
     }
     #calendar-controls {
-        font-size: 20px;
+        font-size: 16px;
     }
     #week-number {
         display: none;
@@ -162,14 +169,32 @@ router-outlet.router-flex + * {
     }
     #mobile-week-switch {
         display: flex;
+        width: 20%;
+        overflow-x: hidden;
+        white-space: nowrap;
+        font-size: 14px;
         align-items: center;
+        position: absolute;
+        left: 3%;
     }
-    
     #mobile-month-switch {
         display: flex;
+        width: 20%;
+        overflow-x: hidden;
+        white-space: nowrap;
+        font-size: 14px;
         align-items: center;
+        position: absolute;
+        right: 3%;
     }
     #mobile-week-number {
         display: block;
+        font-size: 12px;
+    }
+    #left-caret {
+        float: left;
+    }
+    #right-caret {
+        float: right;
     }
 }
