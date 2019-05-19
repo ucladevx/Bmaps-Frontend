@@ -73,8 +73,6 @@ export class NavbarComponent implements OnInit {
     toggleFilterCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
       this.isCollapsed = true;
-      console.log(this.isFilterCollapsed);
-      console.log(this.isCollapsed);
     }
 
     getTemperature(): void {

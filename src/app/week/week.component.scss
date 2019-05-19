@@ -68,10 +68,12 @@
   position: sticky;
   left: 0;
   z-index: 200;
+  white-space: nowrap;
 }
 
 .filler-block {
   height: 11%;
+  width: 100%;
   background-color: inherit;
   position: -webkit-sticky;
   position: sticky;
@@ -85,6 +87,11 @@
   height: 89%;
 }
 
+#far-left {
+  overflow-x: hidden;
+  table-layout: fixed;
+}
+
 .time-of-day tr {
   width: 100%;
   height: 4%;
@@ -93,8 +100,6 @@
   font-size: 10px;
   font-weight: bold;
   color: black;
-  white-space: nowrap;
-  overflow-x: hidden;
 }
 
 .weekview-day .time-of-day tr:not(:last-child) {
@@ -131,6 +136,7 @@
     border-right: 1px solid $default_border_color;
     color: #bebebe;
     background-color: #fff;
+    z-index: 1;
 }
 
 .weekview-day.in-current-month {
@@ -218,9 +224,13 @@
     }
     #scrollable {
       overflow-x: scroll;
+      z-index: 1;
     }
     .weekview-month {
       width: 200%;
+    }
+    .time-of-day td {
+      overflow-x: hidden;
     }
 }
 /* end mobile css */
