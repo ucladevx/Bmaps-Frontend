@@ -2,6 +2,7 @@
 
 .navbar {
     z-index: 5000;
+    height: var(--navbar-height);
 }
 
 .navbar-text {
@@ -23,17 +24,7 @@
     border-color: $default_border_color;
 }
 
-.navbar-default .navbar-toggler {
-    display: flex;
-    align-items: center;
-    padding: 0;
-}
 
-.navbar-default .navbar-toggler i {
-    padding: 5px;
-    color: #9d9d9d;
-    font-size: 20px;
-}
 
 .navbar-default .navbar-nav > .active{
     background: rgb(216,216,216);
@@ -68,16 +59,48 @@
   margin-left: 9px;
 }
 
+.navbar-toggler {
+    align-items: center;
+    width: 10%;
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 8px;
+}
+
+.navbar-toggler-right {
+  position: absolute;
+  right: 5%;
+}
+
+.navbar-toggler-left {
+  position: absolute;
+  left: 5%;
+}
+
+.navbar-toggler i {
+    padding: 5px;
+    color: #9d9d9d;
+    font-size: 20px;
+}
+
 #filter-dropdown-toggle {
     color: #9d9d9d;
     font-size: 30px;
-    cursor: pointer;
 }
 
 #filter-dropdown-toggle-2 {
     color: #9d9d9d;
     font-size: 20px;
-    cursor: pointer;
+}
+
+.d-md-none{
+  width: 70%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  left: 15%;
 }
 
 .nav-logo{
@@ -109,8 +132,15 @@ button {
 }
 
 .navbar-collapse.filter {
+  position: absolute;
   margin-bottom: -.5rem;
+  margin-top: 0;
+  top: var(--navbar-height);
   border-bottom: $default_border_width solid $default_border_color;
+}
+
+@media (max-width: 768px){
+
 }
 
 @media (min-width: 768px){

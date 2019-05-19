@@ -1,14 +1,14 @@
 <nav class="navbar navbar-toggleable-md  navbar-default">
-    <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-left" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fa fa-bars" aria-hidden="true" *ngIf="isCollapsed"></i>
         <i class="fa fa-times" aria-hidden="true" *ngIf="!isCollapsed"></i>
     </button>
     <app-date-selector class="d-md-none"></app-date-selector>
+    <button (click)="toggleFilterCollapse()" class="navbar-toggler navbar-toggler-right" type="button">
+      <i class="fa fa-filter" id="filter-dropdown-toggle" aria-hidden="true" *ngIf="isFilterCollapsed"></i>
+      <i class="fa fa-times" id="filter-dropdown-toggle-2" aria-hidden="true" *ngIf="!isFilterCollapsed"></i>
+    </button>
     <div class="navbar-brand">
-      <button (click)="toggleFilterCollapse()" class="navbar-toggler" type="button">
-        <i class="fa fa-filter" id="filter-dropdown-toggle" aria-hidden="true" *ngIf="isFilterCollapsed"></i>
-        <i class="fa fa-times" id="filter-dropdown-toggle-2" aria-hidden="true" *ngIf="!isFilterCollapsed"></i>
-      </button>
       <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
           <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="align-top" alt="">
           <span id="brand-name">mappening</span>
