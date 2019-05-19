@@ -218,6 +218,7 @@
     /* display short day abbreviations */
     .weekview-header > .short-abbr {
         display: flex;
+          font-size: 12px;
     }
     .weekview-header > .long-abbr {
         display: none;
@@ -231,6 +232,9 @@
     }
     .time-of-day td {
       overflow-x: hidden;
+    }
+    .day-of-month {
+      font-size: 20px;
     }
 }
 /* end mobile css */

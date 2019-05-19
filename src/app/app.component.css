@@ -9,6 +9,7 @@ app-navbar {
 }
 
 .main {
+  height: calc(100% - var(--navbar-height));
 }
 
 .sidebar-container {
