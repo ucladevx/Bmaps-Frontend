@@ -29,17 +29,28 @@
       </div>
       <div class="section-container">
         <div class="section-header">Tags</div>
-        <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
+        <div *ngIf="filterHash" class="filters-wrapper">
           <div class="btn-group" id="loc-group">
-            <label class="btn btn-outline-secondary filter-btn"
+            <div class="btn btn-outline-secondary filter-btn" id="mobile-exclude"
                   [ngClass]="{'active': filterHash['on-campus']}"
-                  (click)="tagClicked('on-campus')">on-campus</label>
-            <label class="btn btn-outline-secondary filter-btn"
+                  (click)="tagClicked('on-campus')">on-campus</div>
+            <div class="btn btn-outline-secondary filter-btn" id="mobile-exclude"
                   [ngClass]="{'active': filterHash['off-campus']}"
-                  (click)="tagClicked('off-campus')">off-campus</label>
-            <label class="btn btn-outline-secondary filter-btn"
+                  (click)="tagClicked('off-campus')">off-campus</div>
+            <div class="btn btn-outline-secondary filter-btn" id="mobile-exclude"
                   [ngClass]="{'active': filterHash['nearby']}"
-                  (click)="tagClicked('nearby')">nearby</label>
+                  (click)="tagClicked('nearby')">nearby</div>
+          </div>
+          <div class="btn-group" id="loc-group-mobile">
+            <div class="btn btn-outline-secondary filter-btn" id="mobile-only"
+                  [ngClass]="{'active': filterHash['on-campus']}"
+                  (click)="tagClicked('on-campus')"><p>on<br>campus</p></div>
+            <div class="btn btn-outline-secondary filter-btn" id="mobile-only"
+                  [ngClass]="{'active': filterHash['off-campus']}"
+                  (click)="tagClicked('off-campus')"><p>off<br>campus</p></div>
+            <div class="btn btn-outline-secondary filter-btn" id="mobile-only"
+                  [ngClass]="{'active': filterHash['nearby']}"
+                  (click)="tagClicked('nearby')"><p>nearby</p></div>
           </div>
         </div>
       </div>
