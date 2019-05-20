@@ -7,28 +7,40 @@
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div class="filters-content">
-      <div class="section-header">Location</div>
-      <input class="form-control" type="text" id="location" placeholder="Enter a Location" value="{{getLoc()}}" autocomplete="off" (focus)="clearLoc()" (input)="setLocationFilter()">
-      <div class="section-header">Date</div>
-      <input type="date" class="form-control short-input" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter()">
-      to
-      <input type="date" class="form-control short-input" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter()">
-      <div class="section-header">Time</div>
-      <input type="time" class="form-control short-input" id="start-time" value="{{getStartTime()}}" (change)="setTimeFilter()">
-      to
-      <input type="time" class="form-control short-input" id="end-time" value="{{getEndTime()}}" (change)="setTimeFilter()">
-      <div class="section-header">Tags</div>
-      <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
-        <div class="btn-group" id="loc-group">
-          <label class="btn btn-outline-secondary filter-btn"
-                 [ngClass]="{'active': filterHash['on-campus']}"
-                 (click)="tagClicked('on-campus')">on-campus</label>
-          <label class="btn btn-outline-secondary filter-btn"
-                 [ngClass]="{'active': filterHash['off-campus']}"
-                 (click)="tagClicked('off-campus')">off-campus</label>
-          <label class="btn btn-outline-secondary filter-btn"
-                 [ngClass]="{'active': filterHash['nearby']}"
-                 (click)="tagClicked('nearby')">nearby</label>
+      <div class="section-container">
+        <div class="section-header">Location</div>
+        <input class="form-control" type="text" id="location" placeholder="Enter a Location" value="{{getLoc()}}" autocomplete="off" (focus)="clearLoc()" (input)="setLocationFilter()">
+      </div>
+      <div class="section-container">
+        <div class="section-header">Date</div>
+        <div class="section-input">
+          <input type="date" class="form-control short-input" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter()">
+          to
+          <input type="date" class="form-control short-input" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter()">
+        </div>
+      </div>
+      <div class="section-container">
+        <div class="section-header">Time</div>
+        <div class="section-input">
+          <input type="time" class="form-control short-input" id="start-time" value="{{getStartTime()}}" (change)="setTimeFilter()">
+          to
+          <input type="time" class="form-control short-input" id="end-time" value="{{getEndTime()}}" (change)="setTimeFilter()">
+        </div>
+      </div>
+      <div class="section-container">
+        <div class="section-header">Tags</div>
+        <div *ngIf="filterHash" class="filters-wrapper" id="loc-group">
+          <div class="btn-group" id="loc-group">
+            <label class="btn btn-outline-secondary filter-btn"
+                  [ngClass]="{'active': filterHash['on-campus']}"
+                  (click)="tagClicked('on-campus')">on-campus</label>
+            <label class="btn btn-outline-secondary filter-btn"
+                  [ngClass]="{'active': filterHash['off-campus']}"
+                  (click)="tagClicked('off-campus')">off-campus</label>
+            <label class="btn btn-outline-secondary filter-btn"
+                  [ngClass]="{'active': filterHash['nearby']}"
+                  (click)="tagClicked('nearby')">nearby</label>
+          </div>
         </div>
       </div>
     </div>
