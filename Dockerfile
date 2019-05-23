@@ -1,12 +1,8 @@
-# start with a lightweight linux image
-FROM alpine:3.8 as builder
+# https://medium.com/@avatsaev/create-efficient-angular-docker-images-with-multi-stage-builds-907e2be3008d
+### STAGE 1: Build ###
 
-# add necessary packages
-RUN apk update && \
-    apk upgrade && \
-    apk add --update-cache bash yarn nginx make && \
-    rm -rf /var/cache/apk/*
-
+# We label our stage as 'builder'
+FROM node:9-alpine as builder
 
 COPY package.json yarn.lock ./
 
@@ -20,11 +16,14 @@ WORKDIR /ng-app
 COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder
-RUN yarn global add @angular/cli
-RUN ng build --prod --build-optimizer
+RUN $(npm bin)/ng build --prod --build-optimizer
 
-# Copy the configuration file
-RUN mkdir -p /run/nginx
+
+### STAGE 2: Setup ###
+
+FROM nginx:1.13.3-alpine
+
+## Copy our default nginx config
 COPY nginx/conf/nginx.conf /etc/nginx
 
 ## Remove default nginx website
@@ -33,5 +32,4 @@ RUN rm -rf /usr/share/nginx/html/*
 ## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
 COPY --from=builder /ng-app/dist /usr/share/nginx/html
 
-# open a port and start the server
 CMD ["nginx", "-g", "daemon off;"]
