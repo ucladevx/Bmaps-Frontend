@@ -108,7 +108,7 @@ a.clear-all-btn:active {
 .custom-select{
   background-color: rgb(239,239,239);
   display: inline-block;
-  width: 74%;
+  width: 80%;
   border: none;
   border-radius: 0px;
 }
@@ -116,23 +116,20 @@ a.clear-all-btn:active {
 .form-control{
   background-color: rgb(239,239,239);
   display: inline-block;
-  width: 82%;
+  width: 80%;
   border: none;
   border-radius: 0;
-  padding: .3rem .3rem; 
 }
 
 .short-input{
-  background-color: #efefef;
+  background-color: rgb(239,239,239);
   display: inline-block;
-  width: 37.5%;
-  min-width: 136px;
-  margin-bottom: 0.2rem;
+  width: 36.5%;
 }
 
 .filters-wrapper {
   text-align: left;
-  width: 70%;
+  width: 80%;
   align-items: left;
   display: inline-block;
 }
@@ -251,3 +248,58 @@ a.clear-all-btn:active {
   display: initial;
 }
 
+#mobile-only{
+  display: none;
+}
+
+#loc-group-mobile{
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .section-header{
+    width: 20%;
+    font-size: 14px;
+    overflow-x: none;
+    white-space: nowrap;
+  }
+  .form-control{
+    width: 80%;
+    font-size: 14px;
+  }
+  .short-input{
+    width: 36%;
+    font-size: 14px;
+  }
+  .filters-wrapper{
+    width: 80%;
+  }
+  .filter-btn {
+    width: 33%;
+    display: block;
+    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height:1em;
+  }
+  #loc-group {
+    display: none;
+  }
+  #loc-group-mobile {
+    display: flex;
+    width: 100%;
+  }
+  #mobile-only{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    height: 45px;
+  }
+  #mobile-only p {
+    margin: 0;
+  }
+  #mobile-exclude{
+    display: none;
+  }
+}

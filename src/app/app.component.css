@@ -1,6 +1,6 @@
 :host {
     --navbar-height: 58px;
-    --sidebartoggle-height: 40px;
+    --sidebartoggle-height: 50px;
 }
 
 app-navbar {
@@ -9,6 +9,7 @@ app-navbar {
 }
 
 .main {
+  height: calc(100% - var(--navbar-height));
 }
 
 .sidebar-container {

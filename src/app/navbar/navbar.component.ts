@@ -32,8 +32,6 @@ export class NavbarComponent implements OnInit {
           this.isMapSelected = false;
         if(view == 'month')
           this.isMonth = true;
-        else
-          this.isMonth = false;
       });
       this._viewService.isMapView();
     }

@@ -1,25 +1,37 @@
 <nav class="navbar navbar-toggleable-md  navbar-default">
-    <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fa fa-bars" aria-hidden="true"></i>
+    <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-left" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars" aria-hidden="true" *ngIf="isCollapsed"></i>
+        <i class="fa fa-times" aria-hidden="true" *ngIf="!isCollapsed"></i>
     </button>
     <app-date-selector class="d-md-none"></app-date-selector>
+    <button (click)="toggleFilterCollapse()" class="navbar-toggler navbar-toggler-right" type="button">
+      <i class="fa fa-filter" id="filter-dropdown-toggle" aria-hidden="true" *ngIf="isFilterCollapsed"></i>
+      <i class="fa fa-times" id="filter-dropdown-toggle-2" aria-hidden="true" *ngIf="!isFilterCollapsed"></i>
+    </button>
     <div class="navbar-brand">
-      <button (click)="toggleFilterCollapse()" class="navbar-toggler" type="button">
-        <i class="fa fa-filter" id="filter-dropdown-toggle" aria-hidden="true"></i>
-      </button>
       <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
           <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="align-top" alt="">
           <span id="brand-name">mappening</span>
       </a>
     </div>
-    <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">        
+    <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">
         <ul class="navbar-nav mr-auto">
         </ul>
         <ul class="navbar-nav ml-auto">
+          <span class="navbar-text" (click)="switchTemperature()">
+              <img class="weather-icon"
+              src="{{
+                  checkImage('/assets/images/weather/'+weatherIcon+'.svg') ?
+                  '/assets/images/weather/'+weatherIcon+'.svg'
+                  : '/assets/images/weather.svg'
+                  }}"
+                  />
+              {{temperature}}
+          </span>
         <li>
         <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
-        </li> 
-        <li> 
+        </li>
+        <li>
         <span *ngIf="this.isMonth; else weekButton">
           <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
         </span>
@@ -28,16 +40,6 @@
         </ng-template>
         </li>
         <li>
-        <span class="navbar-text" (click)="switchTemperature()">
-            <img class="weather-icon"
-            src="{{
-                checkImage('/assets/images/weather/'+weatherIcon+'.svg') ?
-                '/assets/images/weather/'+weatherIcon+'.svg'
-                : '/assets/images/weather.svg'
-                }}"
-                />
-            {{temperature}}
-        </span>
         </li>
         <!-- <span class="navbar-text"  routerLink="/week" routerLinkActive="active">Week View</span> -->
         <li>
