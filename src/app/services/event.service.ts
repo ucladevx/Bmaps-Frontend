@@ -261,8 +261,6 @@ export class EventService {
   updateDayEvents(date: Date): void {
   this.currentDateSource.next(date);
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(events => {
-      console.log(events)
-      console.log(this.getEventsByDate(date))
       this.dayEventsSource.next(events);
       if(this._viewService.isMapView()){ this.resetFilters('map'); }
     });
