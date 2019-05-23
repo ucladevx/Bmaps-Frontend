@@ -18,6 +18,16 @@
         <ul class="navbar-nav mr-auto">
         </ul>
         <ul class="navbar-nav ml-auto">
+          <span class="navbar-text" (click)="switchTemperature()">
+              <img class="weather-icon"
+              src="{{
+                  checkImage('/assets/images/weather/'+weatherIcon+'.svg') ?
+                  '/assets/images/weather/'+weatherIcon+'.svg'
+                  : '/assets/images/weather.svg'
+                  }}"
+                  />
+              {{temperature}}
+          </span>
         <li>
         <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
         </li>
@@ -30,16 +40,6 @@
         </ng-template>
         </li>
         <li>
-        <span class="navbar-text" (click)="switchTemperature()">
-            <img class="weather-icon"
-            src="{{
-                checkImage('/assets/images/weather/'+weatherIcon+'.svg') ?
-                '/assets/images/weather/'+weatherIcon+'.svg'
-                : '/assets/images/weather.svg'
-                }}"
-                />
-            {{temperature}}
-        </span>
         </li>
         <!-- <span class="navbar-text"  routerLink="/week" routerLinkActive="active">Week View</span> -->
         <li>
