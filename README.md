@@ -58,5 +58,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## More Info
 
 - Checkout the [backend](https://github.com/ucladevx/Mappening-Backend) repository
-- Checkout the [deployment](https://github.com/ucladevx/Mappening-Deployment) repository
+- Checkout the [deployment](https://github.com/ucladevx/Mappening) repository
   - Contains instructions for local development and production
