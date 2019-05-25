@@ -236,10 +236,10 @@ export class EventService {
   // Updates events for given month while persisting the current category
   updateMonthEvents(date: Date): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      let first = (this._monthEvents.features.length == 0);
-      this.monthEventsSource.next(allEvents);
+      let noCategs = (this._monthEvents.features.length == 0);
+      this.monthEventsSource.next(this.filterByMonth(allEvents, date));
       this.updateCategories();
-      if(first || this._categHash['all'].selected)
+      if(noCategs || this._categHash['all'].selected)
         this.allCategories();
       this.applyAllFilters();
     });
@@ -248,10 +248,10 @@ export class EventService {
   // Updates events for given week while persisting the current category
   updateWeekEvents(date: Date): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      let first = (this._weekEvents.features.length == 0);
+      let noCategs = (this._weekEvents.features.length == 0);
       this.weekEventsSource.next(this.filterByWeek(allEvents, date));
       this.updateCategories();
-      if(first || this._categHash['all'].selected)
+      if(noCategs || this._categHash['all'].selected)
         this.allCategories();
       this.applyAllFilters();
     });
@@ -261,9 +261,20 @@ export class EventService {
   updateDayEvents(date: Date): void {
   this.currentDateSource.next(date);
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(events => {
-      this.dayEventsSource.next(events);
+      this.dayEventsSource.next(this.filterByDay(events, date));
       if(this._viewService.isMapView()){ this.resetFilters('map'); }
     });
+  }
+
+  private filterByDay(allEvents: FeatureCollection, date: Date){
+    let dayEvents = new FeatureCollection([]);
+    allEvents.features.forEach(el => {
+      let d = moment(el.properties.start_time);
+      if (d.diff(moment(),'minutes') >= 0) {
+        dayEvents.features.push(el);
+      }
+    });
+    return dayEvents;
   }
 
   // Filter events by week
@@ -279,6 +290,23 @@ export class EventService {
     });
     return weekEvents;
   }
+
+  // Filter events by month
+  private filterByMonth(allEvents: FeatureCollection, date: Date){
+      let monthEvents = new FeatureCollection([]);
+      let firstDay = moment(date).startOf('month').startOf('week');
+      if(new Date() > date){ firstDay = moment(new Date()); }
+      let lastTemp = firstDay.clone().add(31, 'days');
+      let daysLeftInWeek = 7-parseInt((lastTemp).format('d'));
+      let lastDay = lastTemp.clone().add(daysLeftInWeek, 'days');
+      allEvents.features.forEach(el => {
+        let d = moment(el.properties.start_time).toDate();
+        if (d >= firstDay.toDate() && d <= lastDay.toDate()){ monthEvents.features.push(el); }
+      });
+      return monthEvents;
+    }
+
+
 
   // FILTER RELATED FUNCTIONS //
 

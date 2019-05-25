@@ -7,6 +7,7 @@ import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-sidebar',
@@ -44,7 +45,10 @@ export class SidebarComponent implements OnInit {
         // TODO: unsubscribe on destroy
         this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
         this._eventService.dayEvents$.subscribe(eventCollection => {
-            this.filteredEvents = eventCollection.features;
+          eventCollection.features.sort(function(a,b){
+              return moment(a.properties.start_time).diff(moment(b.properties.start_time),'seconds');
+          });
+          this.filteredEvents = eventCollection.features;
         });
         this._eventService.filteredDayEvents$.subscribe(eventCollection => {
             this.filteredEvents = eventCollection.features;
