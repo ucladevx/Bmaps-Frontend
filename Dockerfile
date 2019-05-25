@@ -4,6 +4,9 @@
 # We label our stage as 'builder'
 FROM node:9-alpine as builder
 
+# Set . to /usr/app/
+WORKDIR /usr/app/
+
 COPY package.json yarn.lock ./
 
 # RUN npm set progress=false && npm config set depth 0 && npm cache clean --force

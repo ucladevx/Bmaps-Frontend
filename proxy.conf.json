@@ -1,0 +1,8 @@
+{
+  "/api/*": {
+    "target": "https://www.mappening.io",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

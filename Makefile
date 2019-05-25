@@ -31,6 +31,7 @@ dora: ecr-login build-dora
 
 ##################      LOCAL DEVELOPMENT (Frontend Only)     ##################
 
+# TODO: DELETE EVERYTHING ABOVE THIS POINT
 # Run a dev server. Navigate to http://localhost:4200/
 # The app will automatically reload if you change any of the source files.
 dev:
@@ -39,8 +40,3 @@ dev:
 # Open whatever is currently running
 open:
 	ng serve --open
-
-# Runs the docker container locally rather than the dev server.
-# The app will be available at http://localhost:8080
-dev-docker: build
-	docker run -d -p 8080:80 $(APP_NAME)
