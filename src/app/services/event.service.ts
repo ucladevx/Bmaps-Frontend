@@ -110,11 +110,8 @@ export class EventService {
   ];
 
   // retrieve events and categories
-  private eventsUrl = "api/v2/events";
-  private categoriesUrl = "api/v2/events/categories"
-  // TODO: change to below once backend/deployment are pushed
-  // private eventsUrl = "api/events";
-  // private categoriesUrl = "api/events/categories"
+  private eventsUrl = "api/events";
+  private categoriesUrl = "api/events/categories"
 
   // Constructor
   constructor(private http: HttpClient, private _dateService: DateService, private _viewService: ViewService, private _locationService: LocationService) {
