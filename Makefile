@@ -1,7 +1,5 @@
 ECR_REPO=698514710897.dkr.ecr.us-west-1.amazonaws.com
 APP_NAME=mappening/frontend
-DEV_NAME=mappening/dev
-DEV_DOCKERFILE=Dora-Dockerfile
 
 ##########################      AWS / PRODUCTION      ##########################
 
@@ -17,17 +15,6 @@ build:
 push: ecr-login build
 	docker tag $(APP_NAME):latest $(ECR_REPO)/$(APP_NAME):latest
 	docker push $(ECR_REPO)/$(APP_NAME):latest
-
-#############################      AWS / DEV      ##############################
-
-# Build backend image for dora
-build-dora:
-	docker build . -t $(DEV_NAME):dora -f $(DEV_DOCKERFILE)
-
-# Login, build, and push latest image to AWS for dev testing
-dora: ecr-login build-dora
-	docker tag $(DEV_NAME):dora $(ECR_REPO)/$(DEV_NAME):dora
-	docker push $(ECR_REPO)/$(DEV_NAME):dora
 
 ##################      LOCAL DEVELOPMENT (Frontend Only)     ##################
 
