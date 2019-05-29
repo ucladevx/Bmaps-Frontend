@@ -1,6 +1,6 @@
 {
   "/api/*": {
-    "target": "https://www.mappening.io",
+    "target": "https://ec2.mappening.io/",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
