@@ -116,7 +116,7 @@ a.clear-all-btn:active {
 .form-control{
   background-color: rgb(239,239,239);
   display: inline-block;
-  width: 80%;
+  width: 82%;
   border: none;
   border-radius: 0;
 }
@@ -124,12 +124,35 @@ a.clear-all-btn:active {
 .short-input{
   background-color: rgb(239,239,239);
   display: inline-block;
-  width: 36.5%;
+  width: 37%;
+}
+
+.section-container{
+  position: relative;
+}
+
+.to {
+  width: 8%;
+  margin: 0%;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  padding: 0%;
+  display: inline-block;
+}
+
+#end-date{
+  position: absolute;
+  right: 0;
+}
+#end-time{
+  position: absolute;
+  right: 0;
 }
 
 .filters-wrapper {
   text-align: left;
-  width: 80%;
+  width: 82%;
   align-items: left;
   display: inline-block;
 }
@@ -141,6 +164,12 @@ a.clear-all-btn:active {
   margin-right: 3%;
   width: 100%;
 }
+
+#food-group {
+  margin-right: 3%;
+  width: 100%;
+}
+
 
 
 ul {
@@ -201,7 +230,7 @@ a:active {
   display: flex;
   justify-content: center;
   margin-bottom: 0px;
-  width: 33%;
+  width: 34%;
 }
 
 .filter-group + .filter-group {
@@ -259,8 +288,14 @@ a.clear-all-btn:active {
 #loc-group-mobile{
   display: none;
 }
+#food-group-mobile{
+  display: none;
+}
 
 @media screen and (max-width: 1000px) {
+  .dropdown-content {
+    flex-basis: 336px;
+  }
   .section-header{
     width: 20%;
     font-size: 14px;
@@ -290,6 +325,13 @@ a.clear-all-btn:active {
     display: none;
   }
   #loc-group-mobile {
+    display: flex;
+    width: 100%;
+  }
+  #food-group {
+    display: none;
+  }
+  #food-group-mobile {
     display: flex;
     width: 100%;
   }
