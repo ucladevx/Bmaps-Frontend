@@ -139,6 +139,7 @@ a.clear-all-btn:active {
 
 #loc-group {
   margin-right: 3%;
+  width: 100%;
 }
 
 
@@ -195,9 +196,12 @@ a:active {
   height: 40px;
   pointer-events: auto;
   transition: unset;
-  display: flex;
   align-items: center;
+  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-bottom: 0px;
+  width: 33%;
 }
 
 .filter-group + .filter-group {
@@ -256,7 +260,7 @@ a.clear-all-btn:active {
   display: none;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1000px) {
   .section-header{
     width: 20%;
     font-size: 14px;
