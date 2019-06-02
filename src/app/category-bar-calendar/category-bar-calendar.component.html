@@ -15,7 +15,7 @@
         <div class="section-header">Date</div>
         <div class="section-input">
           <input type="date" class="form-control short-input" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter()">
-          to
+          <div class="to">to</div>
           <input type="date" class="form-control short-input" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter()">
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="section-header">Time</div>
         <div class="section-input">
           <input type="time" class="form-control short-input" id="start-time" value="{{getStartTime()}}" (change)="setTimeFilter()">
-          to
+          <div class="to">to</div>
           <input type="time" class="form-control short-input" id="end-time" value="{{getEndTime()}}" (change)="setTimeFilter()">
         </div>
       </div>
@@ -51,6 +51,21 @@
             <div class="btn btn-outline-secondary filter-btn" id="mobile-only"
                   [ngClass]="{'active': filterHash['nearby']}"
                   (click)="tagClicked('nearby')"><p>nearby</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="section-container">
+        <div class="section-header"></div>
+        <div *ngIf="filterHash" class="filters-wrapper">
+          <div class="btn-group" id="food-group">
+            <div class="btn btn-outline-secondary filter-btn" id="mobile-exclude"
+                  [ngClass]="{'active': filterHash['free food']}"
+                  (click)="tagClicked('free food')">free food</div>
+          </div>
+          <div class="btn-group" id="food-group-mobile">
+            <div class="btn btn-outline-secondary filter-btn" id="mobile-only"
+                  [ngClass]="{'active': filterHash['free food']}"
+                  (click)="tagClicked('free food')">free food</div>
           </div>
         </div>
       </div>
