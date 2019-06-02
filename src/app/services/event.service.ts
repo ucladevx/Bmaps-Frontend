@@ -110,8 +110,8 @@ export class EventService {
   ];
 
   // retrieve events and categories
-  private eventsUrl = "https://www.mappening.io/api/v2/events";
-  private categoriesUrl = "https://www.mappening.io/api/v2/events/categories"
+  private eventsUrl = "api/events";
+  private categoriesUrl = "api/events/categories"
 
   // Constructor
   constructor(private http: HttpClient, private _dateService: DateService, private _viewService: ViewService, private _locationService: LocationService) {
