@@ -43,6 +43,13 @@
                  (click)="filterClicked('nearby')">nearby</label>
         </div>
       </div>
+      <div class="filter-group loc-filter-group">
+        <div class="btn-group">
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': filterHash['free food']}"
+                 (click)="filterClicked('free food')">free food</label>
+        </div>
+      </div>
     </div>
     <div *ngIf="categHash" class="section-header">
       Categories
