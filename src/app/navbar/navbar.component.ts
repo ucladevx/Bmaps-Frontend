@@ -44,11 +44,13 @@ export class NavbarComponent implements OnInit {
       this.getTemperature();
       this.setImageSource();
 
-      //this.getTemperature().then(value => {
-        //console.log(value);
-        //this.setImageSource();
-      //});
+      //Non-Hacky way but doesn't work
+      this.getTemperature().then(value => {
+        console.log(value);
+        this.setImageSource();
+      });
 
+      //Hacky way
       setTimeout(() =>this.setImageSource(), 1000);
       setInterval(() => this.getTemperature(), 9000000);
       setInterval(() => this.setImageSource(), 9000000);
@@ -103,7 +105,6 @@ export class NavbarComponent implements OnInit {
         else
           this.temperature = String(this.celsius);
         this.weatherIcon = weatherData['weather'][0]['icon'];
-        return weatherData['weather'][0]['icon'];
       });
     }
 
