@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { resolve } from 'q';
 
 @Component({
     selector: 'app-navbar',
@@ -16,6 +17,7 @@ export class NavbarComponent implements OnInit {
     public weatherIcon: string;
     public celsius: string;
     public fahrenheit: string;
+    public imageSource: string;
     isFahrenheit: boolean = true;
     foundWeatherIcon: boolean;
 
@@ -40,7 +42,16 @@ export class NavbarComponent implements OnInit {
     ngOnInit() {
       this.getCurrentDay();
       this.getTemperature();
+      this.setImageSource();
+
+      //this.getTemperature().then(value => {
+        //console.log(value);
+        //this.setImageSource();
+      //});
+
+      setTimeout(() =>this.setImageSource(), 1000);
       setInterval(() => this.getTemperature(), 9000000);
+      setInterval(() => this.setImageSource(), 9000000);
     }
 
     isCollapsed: boolean = true;
@@ -75,7 +86,7 @@ export class NavbarComponent implements OnInit {
       this.isCollapsed = true;
     }
 
-    getTemperature(): void {
+    async getTemperature() {
       const API_KEY = "bc6a73dfabbd4e6c9006a835d00589f2";
       const zipcode = "90024";
       const baseWeatherUrl = "https://api.openweathermap.org/data/2.5/weather";
@@ -92,6 +103,7 @@ export class NavbarComponent implements OnInit {
         else
           this.temperature = String(this.celsius);
         this.weatherIcon = weatherData['weather'][0]['icon'];
+        return weatherData['weather'][0]['icon'];
       });
     }
 
@@ -103,9 +115,11 @@ export class NavbarComponent implements OnInit {
         this.temperature = this.celsius;
     }
 
-    checkImage(imageSrc) {
+    checkImage(imageSrc): boolean {
       if(imageSrc.includes("undefined"))
+      {
         return false;
+      }
       var img = new Image();
       try {
         img.src = imageSrc;
@@ -113,6 +127,13 @@ export class NavbarComponent implements OnInit {
       } catch(err) {
         return false;
       }
+    }
+
+    setImageSource(): void {
+      if(this.checkImage('/assets/images/weather/'+this.weatherIcon+'.svg'))
+        this.imageSource = '/assets/images/weather/'+this.weatherIcon+'.svg';
+      else  
+        this.imageSource = '/assets/images/weather.svg';
     }
 
     toggleViews(): void {
