@@ -1,6 +1,6 @@
 {
-  "name": "Mappening.io",
-  "short_name": "Mappening",
+  "name": "Bmaps.io",
+  "short_name": "Bmaps",
   "description": "Find UCLA events on a map",
   "icons": [{
       "src": "assets/favicons/icon-512x512.png",

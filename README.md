@@ -1,8 +1,8 @@
-# Mappening-Frontend
+# Bmaps-Frontend
 
 ## Setting Up the Environment
 
-- Follow instructions in main [Mappening](https://github.com/ucladevx/Mappening) repository
+- Follow instructions in main [Bmaps](https://github.com/ucladevx/Bmaps) repository
 - Install necessary packages to develop locally
   - Install yarn with `brew install yarn`
   - Import node modules with command `yarn` or `yarn install` or `make install`

@@ -38,7 +38,7 @@
     "updateMode": "prefetch",
     "resources": {
       "urls": [
-        "http://www.mappening.io/api/v2/**"
+        "http://www.bmaps.io/api/v2/**"
       ]
     }
   }],
