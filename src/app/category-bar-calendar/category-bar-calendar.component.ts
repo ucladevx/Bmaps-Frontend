@@ -49,8 +49,7 @@ export class CategoryBarCalendarComponent implements OnInit {
   getStartTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[0]); }
   getEndTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[1]); }
 
-  setLocationFilter(){
-    let locInput = (<HTMLInputElement>document.getElementById('location')).value;
+  setLocationFilter(locInput: string){
     this._eventService.setLocationFilter(locInput);
   }
 
