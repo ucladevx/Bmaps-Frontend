@@ -22,9 +22,9 @@
       <div class="section-container">
         <div class="section-header">Time</div>
         <div class="section-input">
-          <input type="time" class="form-control short-input" id="start-time" value="{{getStartTime()}}" (change)="setTimeFilter()">
+          <input #startTime type="time" class="form-control short-input" id="start-time" value="{{getStartTime()}}" (change)="setTimeFilter(startTime.value, endTime.value)">
           <div class="to">to</div>
-          <input type="time" class="form-control short-input" id="end-time" value="{{getEndTime()}}" (change)="setTimeFilter()">
+          <input #endTime type="time" class="form-control short-input" id="end-time" value="{{getEndTime()}}" (change)="setTimeFilter(startTime.value, endTime.value)">
         </div>
       </div>
       <div class="section-container">
