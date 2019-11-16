@@ -29,9 +29,9 @@ export class CategoryBarCalendarComponent implements OnInit {
     });
   }
 
-  setDateFilter(){
-    let first = moment((<HTMLInputElement>document.getElementById('start-date')).value).toDate();
-    let last = moment((<HTMLInputElement>document.getElementById('end-date')).value).toDate();
+  setDateFilter(startDate: string, endDate: string){
+    let first  = moment(startDate).toDate();
+    let last = moment(endDate).toDate();
     this._eventService.setDateFilter(first,last);
   }
 

@@ -14,9 +14,9 @@
       <div class="section-container">
         <div class="section-header">Date</div>
         <div class="section-input">
-          <input type="date" class="form-control short-input" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter()">
+          <input #startDate type="date" class="form-control short-input" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter(startDate.value, endDate.value)">
           <div class="to">to</div>
-          <input type="date" class="form-control short-input" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter()">
+          <input #endDate type="date" class="form-control short-input" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter(startDate.value, endDate.value)">
         </div>
       </div>
       <div class="section-container">
