@@ -10,6 +10,7 @@
       <div class="section-container">
         <div class="section-header">Location</div>
         <input #locationBar class="form-control" type="text" id="location" placeholder="Enter a Location" value={{getLoc()}} autocomplete="off" (input)="setLocationFilter(locationBar.value)">
+        <input class="clear-button" type="button" value="X" (click)="clearLoc()">
       </div>
       <div class="section-container">
         <div class="section-header">Date</div>
