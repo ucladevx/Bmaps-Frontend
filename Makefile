@@ -5,6 +5,13 @@
 dev:
 	ng serve --proxy-config proxy.conf.json
 
+# Bundle code for production.
+prod:
+	docker build .
+
+test:
+	echo "Success."
+
 # Install dependencies
 install:
 	yarn install

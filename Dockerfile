@@ -4,6 +4,8 @@
 # We label our stage as 'builder'
 FROM node:9-alpine as builder
 
+LABEL maintainer="hak7alp@gmail.com, wfehrnstrom@gmail.com, kwijaya@gmail.com"
+
 # Set . to /usr/app/
 WORKDIR /usr/app/
 
