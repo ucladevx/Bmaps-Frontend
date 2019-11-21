@@ -8,8 +8,11 @@ dev:
 # Bundle code for production.
 prod:
 	docker build .
+	
+prod-test:
+	docker build . --build-arg OPTIMIZE_BUILD=0
 
-test:
+unit-test:
 	echo "Success."
 
 # Install dependencies

@@ -1,0 +1,20 @@
+name: Production Build Dry-Run
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Cache Node Modules
+      id: cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+        restore-keys:
+          ${{ runner.OS }}-build-
+          ${{ runner.OS }}-
+    - name: Build Production bundle
+      run: make prod-test
