@@ -29,11 +29,9 @@ COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder.
 # If this is a test build, then don't do optimizations.
-RUN if [ $(OPTIMIZE_BUILD) -eq 1 ]; then \
-    $(npm bin)/ng build --prod --build-optimizer \
-  else \
-    $(npm bin)/ng build --prod \
-  fi
+RUN if [ $OPTIMIZE_BUILD -eq 1 ]; then $(npm bin)/ng build --prod --build-optimizer ;\
+    else $(npm bin)/ng build --prod ;\
+    fi
 
 
 ### STAGE 2: Setup ###
