@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mappening-frontend": {
+    "bmaps-frontend": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -52,18 +52,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mappening-frontend:build"
+            "browserTarget": "bmaps-frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "mappening-frontend:build:production"
+              "browserTarget": "bmaps-frontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mappening-frontend:build"
+            "browserTarget": "bmaps-frontend:build"
           }
         },
         "test": {
@@ -98,7 +98,7 @@
         }
       }
     },
-    "mappening-frontend-e2e": {
+    "bmaps-frontend-e2e": {
       "root": "e2e",
       "sourceRoot": "e2e",
       "projectType": "application",
@@ -107,7 +107,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "mappening-frontend:serve"
+            "devServerTarget": "bmaps-frontend:serve"
           }
         },
         "lint": {
@@ -124,7 +124,7 @@
       }
     }
   },
-  "defaultProject": "mappening-frontend",
+  "defaultProject": "bmaps-frontend",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
