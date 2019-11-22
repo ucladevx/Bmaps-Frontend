@@ -27,5 +27,15 @@
     <div class="event-description" id="event-description">
       {{event.properties.description}}
     </div>
+    <a href="http://www.google.com/calendar/render?
+action=TEMPLATE
+&text={{event.properties.name}}
+&dates={{_dateService.formatEventCalendar(event)[0]}}/{{_dateService.formatEventCalendar(event)[1]}}
+&details={{event.properties.description}}
+&location={{event.properties.place.location.street}}
+&trp=false
+&sprop=
+&sprop=name:"
+target="_blank" rel="nofollow">Add to my calendar</a>
   </div>
 </div>
