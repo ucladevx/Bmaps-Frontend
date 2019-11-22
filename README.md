@@ -1,8 +1,8 @@
-# Bmaps-Frontend
+# BMaps-Frontend
 
 ## Setting Up the Environment
 
-- Follow instructions in main [Bmaps](https://github.com/ucladevx/Bmaps) repository
+- Follow instructions in main [BMaps](https://github.com/ucladevx/BMaps) repository
 - Install necessary packages to develop locally
   - Install yarn with `brew install yarn`
   - Import node modules with command `yarn` or `yarn install` or `make install`
@@ -18,4 +18,3 @@
 - Run a dev server with `make dev`
   - Navigate to http://localhost:4200/ or use `make open`
   - The app will automatically reload if you change any of the source files.
-
