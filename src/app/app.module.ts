@@ -68,7 +68,7 @@ const appRoutes: Routes = [
     AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
-    ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
+    ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
     ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
   ],
