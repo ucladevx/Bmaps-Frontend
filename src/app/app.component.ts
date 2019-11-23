@@ -11,7 +11,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 
 export class AppComponent {
 
-  title = 'mappening';
+  title = 'bmaps';
 
   constructor(){}
 

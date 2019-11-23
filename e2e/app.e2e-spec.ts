@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('mappening-frontend App', () => {
+describe('bmaps-frontend App', () => {
   let page: AppPage;
 
   beforeEach(() => {
