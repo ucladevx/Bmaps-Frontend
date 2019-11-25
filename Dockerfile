@@ -2,7 +2,7 @@
 ### STAGE 1: Build ###
 
 # We label our stage as 'builder'
-FROM node:9-alpine as builder
+FROM node:10-alpine as builder
 
 # Set . to /usr/app/
 WORKDIR /usr/app/
@@ -12,7 +12,7 @@ COPY package.json yarn.lock ./
 # RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
 ## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
-RUN yarn install && mkdir /usr/app/ng-app && cp -R ./node_modules ./ng-app
+RUN yarn install && yarn upgrade && mkdir /usr/app/ng-app && cp -R ./node_modules ./ng-app
 
 WORKDIR /usr/app/ng-app
 
