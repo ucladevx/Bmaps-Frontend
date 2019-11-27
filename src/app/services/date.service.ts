@@ -61,7 +61,7 @@ export class DateService {
   formatEventCalendar(event: GeoJson): string {
     let start: string = event.properties.start_time;
     let end: string = event.properties.end_time;
-    let dates = [moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS'), moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS')];
+    let dates = moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS') + "/" + moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
     return dates;
   }
 
