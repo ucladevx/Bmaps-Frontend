@@ -20,14 +20,9 @@
         {{event.properties.place.name}}
       </span>
     </div>
-    <ng-template #venue_street>
-      {{event.properties.place.location.street}}
-    </ng-template>
-    <div class="separator"></div>
-    <div class="event-description" id="event-description">
-      {{event.properties.description}}
-    </div>
-    <a href="http://www.google.com/calendar/render?
+    <div class="event-add" id="event-add">
+      <span>
+       <a id="event-add-button" href="http://www.google.com/calendar/render?
 action=TEMPLATE
 &text={{event.properties.name}}
 &dates={{_dateService.formatEventCalendar(event)}}
@@ -36,6 +31,15 @@ action=TEMPLATE
 &trp=false
 &sprop=
 &sprop=name:"
-target="_blank" rel="nofollow">Add to my calendar</a>
+target="_blank" rel="nofollow">Add to Calendar</a>
+</span>
+    </div>
+    <ng-template #venue_street>
+      {{event.properties.place.location.street}}
+    </ng-template>
+    <div class="separator"></div>
+    <div class="event-description" id="event-description">
+      {{event.properties.description}}
+    </div>
   </div>
 </div>
