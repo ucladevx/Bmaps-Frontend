@@ -39,6 +39,19 @@
                           </p>
                         <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
                         <p class="sidebar-event-category" [innerHTML]="printCategories(event.properties.categories)"></p>
+                        <p class="sidebar-event-add">
+                          <!--- need it to not click into the event when adding to calendar!-->
+                        <a id="sidebar-event-add-button" href="http://www.google.com/calendar/render?
+action=TEMPLATE
+&text={{event.properties.name}}
+&dates={{_dateService.formatEventCalendar(event)}}
+&details={{event.properties.description}}
+&location={{event.properties.place.location.street}}
+&trp=false
+&sprop=
+&sprop=name:"
+target="_blank" rel="nofollow">Add to Calendar</a>
+</p>
                     </div>
                 </div>
                 <div class="separator"></div>

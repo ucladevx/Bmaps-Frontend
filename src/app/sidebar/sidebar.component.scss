@@ -72,6 +72,16 @@
     width: 100%;
 }
 
+.sidebar-event-add {
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+}
+
+#sidebar-event-add-button {
+    color: #53D7D7;
+}
+
 @media only screen and (min-width: 768px) {
   .sidebar-event-img-container {
     width: 50%;
