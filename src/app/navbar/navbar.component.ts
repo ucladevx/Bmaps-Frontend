@@ -41,6 +41,29 @@ export class NavbarComponent implements OnInit {
       this.getCurrentDay();
       this.getTemperature();
       setInterval(() => this.getTemperature(), 9000000);
+      let deferredPrompt;
+      let installButton;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('PWA Enabled on this Browser');
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installButton == undefined) {
+          installButton = document.getElementById('install-button');
+          installButton.style.display = 'block';
+          installButton.addEventListener('click', (e) => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('PWA setup accepted');
+              } else {
+                console.log('PWA setup rejected');
+              }
+              deferredPrompt = null;
+            });
+          });
+        }
+      });
+
     }
 
     isCollapsed: boolean = true;

@@ -18,4 +18,3 @@
 - Run a dev server with `make dev`
   - Navigate to http://localhost:4200/ or use `make open`
   - The app will automatically reload if you change any of the source files.
-
