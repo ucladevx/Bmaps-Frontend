@@ -5,6 +5,16 @@
 dev:
 	ng serve --proxy-config proxy.conf.json
 
+# Bundle code for production.
+prod:
+	docker build .
+	
+prod-test:
+	docker build . --build-arg OPTIMIZE_BUILD=0
+
+unit-test:
+	echo "Success."
+
 # Install dependencies
 install:
 	yarn install
