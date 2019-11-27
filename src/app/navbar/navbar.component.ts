@@ -44,11 +44,12 @@ export class NavbarComponent implements OnInit {
       let deferredPrompt;
       let installButton;
       window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('PWA Enabled on this Browser');
         e.preventDefault();
         deferredPrompt = e;
         if (installButton == undefined) {
           installButton = document.getElementById('install-button');
-          installButton.style.display = 'auto';
+          installButton.style.display = 'block';
           installButton.addEventListener('click', (e) => {
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
