@@ -24,7 +24,9 @@
     border-color: $default_border_color;
 }
 
-
+#install-button{
+  display: none;
+}
 
 .navbar-default .navbar-nav > .active{
     background: rgb(216,216,216);

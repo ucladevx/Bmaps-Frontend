@@ -48,6 +48,7 @@ export class NavbarComponent implements OnInit {
         deferredPrompt = e;
         if (installButton == undefined) {
           installButton = document.getElementById('install-button');
+          installButton.style.display = 'auto';
           installButton.addEventListener('click', (e) => {
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
