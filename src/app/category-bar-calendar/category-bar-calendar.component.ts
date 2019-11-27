@@ -29,19 +29,19 @@ export class CategoryBarCalendarComponent implements OnInit {
     });
   }
 
-  setDateFilter(){
-    let first = moment((<HTMLInputElement>document.getElementById('start-date')).value).toDate();
-    let last = moment((<HTMLInputElement>document.getElementById('end-date')).value).toDate();
+  setDateFilter(startDate: string, endDate: string){
+    let first  = moment(startDate).toDate();
+    let last = moment(endDate).toDate();
     this._eventService.setDateFilter(first,last);
   }
 
   getStartDate(){ if(this._eventService.getDateFilter()){ return moment(this._eventService.getDateFilter()[0]).format('YYYY-MM-DD'); }}
   getEndDate(){ if(this._eventService.getDateFilter()){ return moment(this._eventService.getDateFilter()[1]).format('YYYY-MM-DD'); }}
 
-  setTimeFilter(){
-    let starttime = (<HTMLInputElement>document.getElementById('start-time')).value.split(":");
+  setTimeFilter(startTime: string, endTime: string){
+    let starttime = startTime.split(":");
     let start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
-    let endtime = (<HTMLInputElement>document.getElementById('end-time')).value.split(":");
+    let endtime = endTime.split(":");
     let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
     this._eventService.setTimeFilter(start,end);
   }
@@ -49,8 +49,7 @@ export class CategoryBarCalendarComponent implements OnInit {
   getStartTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[0]); }
   getEndTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[1]); }
 
-  setLocationFilter(){
-    let locInput = (<HTMLInputElement>document.getElementById('location')).value;
+  setLocationFilter(locInput: string){
     this._eventService.setLocationFilter(locInput);
   }
 
@@ -83,7 +82,6 @@ export class CategoryBarCalendarComponent implements OnInit {
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
   }
-
 
   clearCategories(): void { this._eventService.allCategories(); }
 
