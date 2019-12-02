@@ -16,12 +16,8 @@ COPY package.json yarn.lock ./
 ## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
 ## Necessary for bundling python, make, and g++ tools under the name .gyp, using it for yarn install,
 ## and then removing .gyp at the end of the install process.
-RUN apk add --no-cache --virtual .gyp \
-  python \
-  make \
-  g++ \
-  && yarn install && mkdir /usr/app/ng-app && cp -R ./node_modules ./ng-app \
-  && apk del .gyp
+RUN yarn install
+RUN mkdir /usr/app/ng-app && cp -R ./node_modules ./ng-app
 
 WORKDIR /usr/app/ng-app
 
@@ -47,4 +43,5 @@ RUN rm -rf /usr/share/nginx/html/*
 ## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
 COPY --from=builder /usr/app/ng-app/dist /usr/share/nginx/html
 
+# daemon off sets global configuration option that runs nginx in foreground for this container
 CMD ["nginx", "-g", "daemon off;"]
