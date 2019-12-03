@@ -75,11 +75,13 @@
 .sidebar-event-add {
     display: inline-block;
     vertical-align: top;
-    width: 100%;
+    width: 20%;
 }
 
 #sidebar-event-add-button {
     color: #53D7D7;
+    font-size: 2em;
+    text-decoration: none;
 }
 
 @media only screen and (min-width: 768px) {

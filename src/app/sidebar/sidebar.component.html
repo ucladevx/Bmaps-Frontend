@@ -32,6 +32,7 @@
                         }}" class="sidebar-event-img">
                     </div>
                     <div class="sidebar-event-details">
+                      <div>
                         <p class="sidebar-event-name">{{event.properties.name}}</p>
                         <p class="sidebar-event-date">{{_dateService.formatEventDate(event)}}</p>
                           <p class="sidebar-event-location" *ngIf="event.properties.place.name;else venue_street">
@@ -39,7 +40,9 @@
                           </p>
                         <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
                         <p class="sidebar-event-category" [innerHTML]="printCategories(event.properties.categories)"></p>
-                        <p class="sidebar-event-add">
+                      </div>
+                    </div>
+                    <div class="sidebar-event-add">
                           <!--- need it to not click into the event when adding to calendar!-->
                         <a id="sidebar-event-add-button" href="http://www.google.com/calendar/render?
 action=TEMPLATE
@@ -50,9 +53,8 @@ action=TEMPLATE
 &trp=false
 &sprop=
 &sprop=name:"
-target="_blank" rel="nofollow">Add to Calendar</a>
-</p>
-                    </div>
+target="_blank" rel="nofollow">+</a>
+</div>
                 </div>
                 <div class="separator"></div>
             </div>
