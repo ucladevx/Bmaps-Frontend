@@ -20,6 +20,20 @@
         {{event.properties.place.name}}
       </span>
     </div>
+    <div class="event-add" id="event-add">
+      <span>
+       <a id="event-add-button" href="http://www.google.com/calendar/render?
+action=TEMPLATE
+&text={{event.properties.name}}
+&dates={{_dateService.formatEventCalendar(event)}}
+&details={{event.properties.description}}
+&location={{event.properties.place.location.street}}
+&trp=false
+&sprop=
+&sprop=name:"
+target="_blank" rel="nofollow">Add to Calendar</a>
+</span>
+    </div>
     <ng-template #venue_street>
       {{event.properties.place.location.street}}
     </ng-template>

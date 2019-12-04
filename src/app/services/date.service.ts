@@ -57,6 +57,14 @@ export class DateService {
       return `${this.formatDate(start)} \u2022 ${this.formatTime(start)}`;
   }
 
+  // For a given event, format the start and end date for Google calendar export (as an array)    i.e.  ["20201231T193000", "20201231T223000"]
+  formatEventCalendar(event: GeoJson): string {
+    let start: string = event.properties.start_time;
+    let end: string = event.properties.end_time;
+    let dates = moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS') + "/" + moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
+    return dates;
+  }
+
   // Test whether given mmt is between start and end (inclusive)
   checkRange(mmt, start, end): boolean {
     let val = mmt.valueOf();
