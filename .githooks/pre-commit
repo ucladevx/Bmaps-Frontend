@@ -1,4 +1,6 @@
 #!/bin/bash
+# All git hooks are run from frontend directory location
+
 ################################################################################
 # See <https://gist.github.com/Falkor/848c82daa63710b6c132bb42029b30ef>
 # Pre-commit hook to avoid accidentally adding unencrypted files with [git-crypt](https://www.agwa.name/projects/git-crypt/)
@@ -35,11 +37,7 @@ if [ -d .git-crypt ]; then
 fi
 
 # CSS px unit check for frontend. See https://github.com/ucladevx/Bmaps-Frontend/issues/337
-wd=$(pwd)
-cd ../.. && .git/aux-scripts/css-scan frontend/src
+source .githooks/aux-scripts/css-scan .
 if [[ $? -ne 0 ]]; then
-  cd "$wd"
   exit 1
-else
-  cd "$wd"
 fi

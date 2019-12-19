@@ -1,0 +1,22 @@
+#!/bin/bash
+WORK_DIR=$1
+SRCH_PATH=$WORK_DIR/src
+CMD=$(grep --include=\*.{sc,c}ss --line-buffered -Ern -e 'px' $SRCH_PATH)
+if [[ $CMD != '' ]]; then
+	echo "-- WARNING: non-relative px units found in the following css files. we are trying to make all css rem based. --"
+	echo "$CMD"
+	echo "-- END WARNING --"
+	exec < /dev/tty
+	read -rp "Are you sure you still want to commit this code? (y/n): " response
+	case "$response" in
+		[yY][eE][sS]|[yY])
+			exec <&-
+			exit 0
+			;;
+		*)
+			exec <&-
+			exit 1
+			;;
+	esac
+fi
+exit 0
