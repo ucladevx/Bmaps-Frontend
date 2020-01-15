@@ -20,10 +20,10 @@ export class CalendarContainerComponent implements OnInit {
   public viewDate: string;
   currentPath = '';
 
-  @ContentChild(MonthComponent)
+  @ContentChild(MonthComponent, {static: false})
   private monthComponent: MonthComponent;
 
-  @ContentChild(WeekComponent)
+  @ContentChild(WeekComponent, {static: false})
   private weekComponent: WeekComponent;
 
   // week number
