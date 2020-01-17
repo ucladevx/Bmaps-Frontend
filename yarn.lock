@@ -117,10 +117,21 @@
     ora "4.0.2"
     rxjs "6.5.3"
 
-"@angular/animations@^9.0.0-rc.9":
-  version "9.0.0-rc.9"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-9.0.0-rc.9.tgz#2a7747255470b1a80e072b3ed1c79186dc5acb5f"
-  integrity sha512-JuLyMn2NYwBc8hN130bn42oaQROmzWXLku3QhrEtf5VBJkyo9fdkj/00UWMHWnOiJygh4oMC04jL9p10iTtVzw==
+"@angular/animations@^8.2.14":
+  version "8.2.14"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-8.2.14.tgz#76736b21e56165e6ca4925fb69605bdcc56aba7d"
+  integrity sha512-3Vc9TnNpKdtvKIXcWDFINSsnwgEMiDmLzjceWg1iYKwpeZGQahUXPoesLwQazBMmxJzQiA4HOMj0TTXKZ+Jzkg==
+  dependencies:
+    tslib "^1.9.0"
+
+"@angular/cdk@^8.2.3":
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-8.2.3.tgz#16b96ffa935cbf5a646757ecaf2b19c434678f72"
+  integrity sha512-ZwO5Sn720RA2YvBqud0JAHkZXjmjxM0yNzCO8RVtRE9i8Gl26Wk0j0nQeJkVm4zwv2QO8MwbKUKGTMt8evsokA==
+  dependencies:
+    tslib "^1.7.1"
+  optionalDependencies:
+    parse5 "^5.0.0"
 
 "@angular/cli@^9.0.0-rc.9":
   version "9.0.0-rc.9"
@@ -174,10 +185,12 @@
   resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-9.0.0-rc.9.tgz#f6b9ce0e7ce723a6bcbbc6d10e21540ba528e9d7"
   integrity sha512-g8Z2tBB5KGF5WTJTnR02f3TZ+yBlkxdOT1vbrPOlPby2nR5a0+W9f/km0d9lPcQ/yYZcoG5EPlSecPoorI7qgQ==
 
-"@angular/core@^9.0.0-rc.9":
-  version "9.0.0-rc.9"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-9.0.0-rc.9.tgz#c9a2746106583036376db561a492f42edb5aeee2"
-  integrity sha512-roC9wykbRv+n+Uen1KbdHS8xpaCEAFAemZXj9ClsIAcx1t6S2Wiw6QsgyhZZg4BKxKrqQc3eMG4bd+xY/XcKrw==
+"@angular/core@^8.2.14":
+  version "8.2.14"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-8.2.14.tgz#35566f5b19480369229477e7e0e0fde740bd5204"
+  integrity sha512-zeePkigi+hPh3rN7yoNENG/YUBUsIvUXdxx+AZq+QPaFeKEA2FBSrKn36ojHFrdJUjKzl0lPMEiGC2b6a6bo6g==
+  dependencies:
+    tslib "^1.9.0"
 
 "@angular/forms@^9.0.0-rc.9":
   version "9.0.0-rc.9"
@@ -188,6 +201,13 @@
   version "9.0.0-rc.9"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-9.0.0-rc.9.tgz#1c8dfee291030ab4bcf580b653c26e9078c1f90e"
   integrity sha512-sJUH8vpZzx4rxCSsa0wPaI0K2VWWvRb7F4ZRsLoUw6ee83AbZkj5eEQQcWvKT0RkGPlWr/0T4M/PxqG4SSzonA==
+
+"@angular/material@^8.2.3":
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-8.2.3.tgz#16543e4e06a3fde2651a25cfe126e88e714ae105"
+  integrity sha512-SOczkIaqes+r+9XF/UUiokidfFKBpHkOPIaFK857sFD0FBNPvPEpOr5oHKCG3feERRwAFqHS7Wo2ohVEWypb5A==
+  dependencies:
+    tslib "^1.7.1"
 
 "@angular/platform-browser-dynamic@^9.0.0-rc.9":
   version "9.0.0-rc.9"
@@ -889,7 +909,7 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@fortawesome/angular-fontawesome@^0.5.0":
+"@fortawesome/angular-fontawesome@0.5":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/angular-fontawesome/-/angular-fontawesome-0.5.0.tgz#5dbc01714b4af45a2ecb8dd63a6f8b462a8337e1"
   integrity sha512-5IR/jNMddiEpgApcqSMfp7l5kZqOtxQYzkSLW6iZ4MZHbQQ+Kc9tu9qi2hro6VFSk/sPxeYEzkzGZUNrMYiwOg==
@@ -8262,6 +8282,11 @@ parse5@4.0.0:
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-4.0.0.tgz#6d78656e3da8d78b4ec0b906f7c08ef1dfe3f608"
   integrity sha512-VrZ7eOd3T1Fk4XWNXMgiGBK/z0MG48BWG2uQNU4I72fkQuKUTZpl+u9k+CxEG0twMVzSmXEEz12z5Fnw1jIQFA==
 
+parse5@^5.0.0:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/parse5/-/parse5-5.1.1.tgz#f68e4e5ba1852ac2cadc00f4555fff6c2abb6178"
+  integrity sha512-ugq4DFI0Ptb+WWjAdOK16+u/nHfiIrcE+sh8kZMaM0WllQKLI9rOUq6c2b7cwPkXdzfQESqvoqK6ug7U/Yyzug==
+
 parseqs@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/parseqs/-/parseqs-0.0.5.tgz#d5208a3738e46766e291ba2ea173684921a8b89d"
@@ -11058,7 +11083,7 @@ tsconfig@^7.0.0:
     strip-bom "^3.0.0"
     strip-json-comments "^2.0.0"
 
-tslib@1.10.0, tslib@^1.10.0, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
+tslib@1.10.0, tslib@^1.10.0, tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
   integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
