@@ -65,7 +65,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     SharedModule,
-    AngularFontAwesomeModule,
+    //AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
