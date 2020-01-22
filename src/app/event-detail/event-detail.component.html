@@ -34,6 +34,11 @@ action=TEMPLATE
 target="_blank" rel="nofollow">Add to Calendar</a>
 </span>
     </div>
+    <div class="sidebar-apple-add">
+      <span>
+        <a id="sidebar-apple-add-button" (click)="downloadICS()">Download ICS</a>
+      </span>
+    </div>
     <ng-template #venue_street>
       {{event.properties.place.location.street}}
     </ng-template>
