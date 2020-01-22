@@ -268,6 +268,7 @@ export class MapBoxComponent implements OnInit {
       this._eventService.updateExpandedEvent(event);
     };
     eventPopup.onclick = openDetails;
+    eventPopup.addEventListener("touchend", openDetails, false);
   }
 
   //add hover behavior to an eventPopup (bold and unbold)
@@ -280,6 +281,8 @@ export class MapBoxComponent implements OnInit {
     };
     eventPopup.onmouseenter = bold;
     eventPopup.onmouseleave = unbold;
+    eventPopup.addEventListener("touchstart", bold, false);
+    eventPopup.addEventListener("touchend", unbold, false);
   }
 
   //add popup to a mapbox pin, containing sections for every event in that location
@@ -359,7 +362,8 @@ export class MapBoxComponent implements OnInit {
       this._eventService.updateHoveredEvent(null);
     });
     //CLICK
-    this.map.on('click', 'eventlayer', (e) => {
+    this.map.on('mousedown', 'eventlayer', (e) => {
+      console.log("HERE");
       // save this event
       this.lastClickEvent = e.originalEvent;
       //Handle if you reclick an event
@@ -372,7 +376,8 @@ export class MapBoxComponent implements OnInit {
       //the service then calls selectEvent
       this._eventService.updateClickedEvent(e.features[0]);
     });
-    this.map.on('click', (e: mapboxgl.MapMouseEvent) => {
+    this.map.on('mousedown', (e: mapboxgl.MapMouseEvent) => {
+      console.log("HERE2");
       // deselect event if this event was not an eventlayer click
       if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
         this._eventService.updateClickedEvent(null);
@@ -435,6 +440,7 @@ export class MapBoxComponent implements OnInit {
     });
     this.map.setLayoutProperty('hoveredPin', 'visibility', 'visible');
     this.addPopup(this.popup, coords, eventList);
+    console.log(event.geometry.coordinates);
     this.map.flyTo({center: event.geometry.coordinates, zoom: 17, speed: .3});
   }
 
