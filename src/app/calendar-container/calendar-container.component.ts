@@ -7,6 +7,7 @@ import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import { CalendarViewState } from '../calendar-view-enum';
 
 @Component({
   selector: 'app-calendar-container',
@@ -16,6 +17,7 @@ import { Moment } from 'moment';
 })
 
 export class CalendarContainerComponent implements OnInit {
+  public CalendarViewState = CalendarViewState;
 
   public viewDate: string;
   currentPath = '';
@@ -55,9 +57,22 @@ export class CalendarContainerComponent implements OnInit {
     this.viewDate = set.toLocaleDateString("en-US", {month: 'short', year: 'numeric'});
   }
 
-  changeDateSpan(delta: number) : void{
-    this._viewService.changeDateSpan(delta);
+  changeDateSpan(delta: number, calendarView: CalendarViewState) : void{
+    this._viewService.changeDateSpan(delta, calendarView);
     this.enumerateWeek();
+  }
+
+  getCalendarView(): CalendarViewState {
+    if (this.router.url.startsWith('/calendar/day'))
+      return CalendarViewState.day;
+    else if (this.router.url.startsWith('/calendar/three-day'))
+      return CalendarViewState.threeday;
+    else if (this.router.url.startsWith('/calendar/week'))
+      return CalendarViewState.week;
+    else if (this.router.url.startsWith('/calendar/month'))
+      return CalendarViewState.month;
+
+    console.log("getCalendarView() called not in Calendar View?");
   }
 
   //set the week number
