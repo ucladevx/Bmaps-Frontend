@@ -28,6 +28,7 @@ import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { ThreeDayComponent } from './three-day/three-day.component';
 
 
 const appRoutes: Routes = [
@@ -36,7 +37,8 @@ const appRoutes: Routes = [
     component: CalendarContainerComponent,
     children: [
       {path: 'month', component: MonthComponent},
-      {path: 'week', component: WeekComponent}
+      {path: 'week', component: WeekComponent},
+      {path: 'three-day', component: ThreeDayComponent}
     ]
   },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
@@ -57,7 +59,8 @@ const appRoutes: Routes = [
     MonthComponent,
     WeekComponent,
     CalendarContainerComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    ThreeDayComponent
   ],
   imports: [
     BrowserModule,

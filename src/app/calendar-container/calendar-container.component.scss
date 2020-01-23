@@ -67,7 +67,7 @@ router-outlet.router-flex + * {
     margin: 0 10px;
 }
 
-#month-week-switch {
+#calendar-view-switch {
     font-size: 0.8rem;
     cursor: pointer;
     display: flex;
@@ -112,6 +112,20 @@ router-outlet.router-flex + * {
     padding: 4px 10px;
     font-size: 18px;
     margin: 0;
+}
+
+#three-day-switch {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border: $default_border_width solid $default_border_color;
+    padding: 4px 10px;
+    font-size: 18px;
+    margin: 0;
+}
+
+#three-day-switch.active {
+    background: #656565;
+    color: #fff;
 }
 
 #mobile-month-switch {
@@ -161,7 +175,7 @@ router-outlet.router-flex + * {
     #week-number {
         display: none;
     }
-    #month-week-switch {
+    #calendar-view-switch {
         display: none;
     }
     #empty-selector-block {
