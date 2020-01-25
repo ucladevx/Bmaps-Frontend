@@ -28,6 +28,11 @@ import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { MapModule } from './map/map.module';
+import { CalendarModule } from './calendar/calendar.module';
+import { MonthModule } from './month/month.module';
+import { WeekModule } from './week/week.module';
+import { ListModule } from './list/list.module';
 
 
 const appRoutes: Routes = [
@@ -71,6 +76,11 @@ const appRoutes: Routes = [
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
     ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
+    MapModule,
+    CalendarModule,
+    MonthModule,
+    WeekModule,
+    ListModule,
   ],
   providers: [
     ViewService,
