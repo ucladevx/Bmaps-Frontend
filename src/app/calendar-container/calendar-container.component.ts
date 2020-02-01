@@ -88,13 +88,13 @@ export class CalendarContainerComponent implements OnInit {
     }
     // Week 11 -> Finals Week
     if(weekCount == 11)
-      this.weekNumber = "finals week";
+      this.weekNumber = "Finals week";
     // Week 12+ or Week 0- -> Break
     else if(weekCount > 11 || weekCount < 0 || weekCount == undefined)
       this.weekNumber = "";
     // Week 0-12 -> Within Quarter
     else
-      this.weekNumber = "week " + weekCount;
+      this.weekNumber = "Week " + weekCount;
   }
 
 }
