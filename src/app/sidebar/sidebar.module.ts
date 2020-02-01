@@ -1,17 +1,34 @@
-import { NgModule } from '@angular/core';
+/*import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { SidebarComponent } from './sidebar.component';
+import { DateSelectorComponent } from '../date-selector/date-selector.component';
+import { CategoryBarMapComponent } from '../category-bar-map/category-bar-map.component';
+import { CategoryBarCalendarComponent } from '../category-bar-calendar/category-bar-calendar.component';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
+
+
+const routes: Routes = [
+  { path: '', component: SidebarComponent }
+];
 
 @NgModule({
-  declarations: [SidebarComponent],
+  declarations: [
+    SidebarComponent,
+    DateSelectorComponent,
+    CategoryBarMapComponent,
+    CategoryBarCalendarComponent,
+    SearchBarComponent
+  ],
   imports: [
     CommonModule,
-    RouterModule.forChild([{
-      path: '',
-      pathMatch: 'full',
-      component: SidebarComponent
-    }])
+    RouterModule.forChild(routes)
+  ],
+  exports: [
+    DateSelectorComponent,
+    CategoryBarMapComponent,
+    CategoryBarCalendarComponent,
+    SearchBarComponent
   ]
 })
-export class SidebarModule { }
+export class SidebarModule { }*/

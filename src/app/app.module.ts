@@ -8,11 +8,7 @@ import { CustomReuseStrategy } from './router-strategy';
 import { SharedModule } from './shared.module';
 
 import { AppComponent } from './app.component';
-import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
-import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
-import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
-import { SearchBarComponent } from './search-bar/search-bar.component';
 
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -24,14 +20,14 @@ import { EventService } from './services/event.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
-import { MapBoxModule } from './map-box/map-box.module';
-import { MonthModule } from './month/month.module';
-import { WeekModule } from './week/week.module';
-import { SidebarModule } from './sidebar/sidebar.module';
-import { EventDetailModule } from './event-detail/event-detail.module';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
+import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 
 const appRoutes: Routes = [
-  { path: 'map', loadChildren: './map-box/map-box.module#MapModule' },
+  { path: 'map', loadChildren: './map-box/map-box.module#MapBoxModule'  },
   { path: 'calendar',
     component: CalendarContainerComponent,
     children: [
@@ -39,7 +35,7 @@ const appRoutes: Routes = [
       {path: 'week', loadChildren: './week/week.module#WeekModule' }
     ]
   },
-  { path: 'list', outlet: 'sidebar', loadChildren: './sidebar/sidebar.module#SidebarModule' },
+  { path: 'list', outlet: 'sidebar', component: SidebarComponent },
   { path: 'detail/:id', outlet: 'sidebar', loadChildren: './event-detail/event-detail.module#EventDetailModule' },
   { path: '**', redirectTo: '/map(sidebar:list)', pathMatch: 'full' },
 ];
@@ -47,11 +43,12 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    CategoryBarMapComponent,
-    CategoryBarCalendarComponent,
-    DateSelectorComponent,
     NavbarComponent,
     CalendarContainerComponent,
+    SidebarComponent,
+    DateSelectorComponent,
+    CategoryBarMapComponent,
+    CategoryBarCalendarComponent,
     SearchBarComponent
   ],
   imports: [
@@ -65,12 +62,7 @@ const appRoutes: Routes = [
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
     ButtonsModule.forRoot(),
-    RouterModule.forRoot(appRoutes, {useHash: true}),
-    MapBoxModule,
-    MonthModule,
-    WeekModule,
-    SidebarModule,
-    EventDetailModule
+    RouterModule.forRoot(appRoutes, {useHash: true})
   ],
   providers: [
     ViewService,

@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { MapBoxComponent } from './map-box.component';
+
+const routes: Routes = [
+  { path: '', component: MapBoxComponent }
+];
 
 @NgModule({
   declarations: [MapBoxComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([{
-      path: '',
-      pathMatch: 'full',
-      component: MapBoxComponent
-    }])
+    RouterModule.forChild(routes)
   ]
 })
 export class MapBoxModule { }

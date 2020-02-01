@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { MonthComponent } from './month.component';
+
+const routes: Routes = [
+  { path: '', component: MonthComponent }
+];
 
 @NgModule({
   declarations: [MonthComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([{
-      path: '',
-      pathMatch: 'full',
-      component: MonthComponent
-    }])
+    RouterModule.forChild(routes)
   ]
 })
 export class MonthModule { }
