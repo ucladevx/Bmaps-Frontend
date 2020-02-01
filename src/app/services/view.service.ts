@@ -12,8 +12,8 @@ import * as moment from 'moment';
 @Injectable()
 export class ViewService {
   // VIEW VARIABLES
-  private _currentView;               // stores either 'month' 'week' or 'map'
-  private _lastCalendarView;          // stores either 'month' or 'week'
+  private _currentView;               // stores either 'three-day' month' 'week' or 'map'
+  private _lastCalendarView;          // stores either 'three-day' month' or 'week'
 
   // SOURCES
   private currentViewSource: Subject <string>; currentView$;

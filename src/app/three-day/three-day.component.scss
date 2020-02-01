@@ -5,7 +5,7 @@
     flex: 1;
 }
 
-.weekview-container {
+.threedayview-container {
     height: 100%;
     width: 100%;
     display: flex;
@@ -130,7 +130,7 @@
 
 .weekview-day {
     position: relative;
-    width: 14.2857%;
+    width: 33.3333%;
     display: block;
     align-items: flex-start;
     border-right: 1px solid $default_border_color;

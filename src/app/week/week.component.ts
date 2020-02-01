@@ -74,8 +74,8 @@ export class WeekComponent implements OnInit {
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
   //set currentMonth and currentWeek
-  this.currentMonth = moment(dateInMonth).startOf('month');
-  this.currentWeek = moment(dateInMonth).startOf('week');
+    this.currentMonth = moment(dateInMonth).startOf('month');
+    this.currentWeek = moment(dateInMonth).startOf('week');
     if(this._viewService.isWeekView() && dateInMonth != undefined){
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('week');
