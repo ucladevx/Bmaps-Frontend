@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+/* import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { MonthComponent } from './month.component';
@@ -14,4 +14,4 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ]
 })
-export class MonthModule { }
+export class MonthModule { } */

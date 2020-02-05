@@ -20,6 +20,10 @@ import { EventService } from './services/event.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
+import { MapBoxComponent } from './map-box/map-box.component';
+import { MonthComponent } from './month/month.component';
+import { WeekComponent } from './week/week.component';
+import { EventDetailComponent } from './event-detail/event-detail.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
@@ -27,16 +31,16 @@ import { CategoryBarCalendarComponent } from './category-bar-calendar/category-b
 import { SearchBarComponent } from './search-bar/search-bar.component';
 
 const appRoutes: Routes = [
-  { path: 'map', loadChildren: './map-box/map-box.module#MapBoxModule'  },
+  { path: 'map', component: MapBoxComponent  },
   { path: 'calendar',
     component: CalendarContainerComponent,
     children: [
-      {path: 'month', loadChildren: './month/month.module#MonthModule' },
-      {path: 'week', loadChildren: './week/week.module#WeekModule' }
+      {path: 'month', component: MonthComponent  },
+      {path: 'week', component: WeekComponent  }
     ]
   },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
-  { path: 'detail/:id', outlet: 'sidebar', loadChildren: './event-detail/event-detail.module#EventDetailModule' },
+  { path: 'detail/:id', outlet: 'sidebar', component: EventDetailComponent },
   { path: '**', redirectTo: '/map(sidebar:list)', pathMatch: 'full' },
 ];
 
@@ -49,7 +53,11 @@ const appRoutes: Routes = [
     DateSelectorComponent,
     CategoryBarMapComponent,
     CategoryBarCalendarComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    EventDetailComponent,
+    MapBoxComponent,
+    MonthComponent,
+    WeekComponent
   ],
   imports: [
     BrowserModule,
