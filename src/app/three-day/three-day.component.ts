@@ -78,13 +78,33 @@ export class ThreeDayComponent implements OnInit {
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
     this.currentDay = moment(dateInMonth);
+    //console.log(this.currentDay);
 
     if(this._viewService.isThreeDayView() && dateInMonth != undefined){
     // range of days shown on calendar
-    let firstDay: Moment = this.currentDay;
-    let lastDay: Moment = moment(dateInMonth).add(3, 'days');
-    if(parseInt(lastDay.format('DD')) > 3 && parseInt(lastDay.format('DD')) < 7)
+    let firstDay: Moment;
+    // first day should be first of group
+    
+    let numDaysDiff = this.currentDay.startOf('day').diff(moment().startOf('day'), 'days');
+    //console.log(numDaysDiff);
+    // 0 means first day of group, 1 - second, 2 - third
+    let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
+
+    if (dayOfGroup == 0) {
+      firstDay = this.currentDay;
+    }
+    else if (dayOfGroup == 1) {
+      firstDay = this.currentDay.clone().add(-1, 'days');
+    }
+    else { // 2
+      firstDay = this.currentDay.clone().add(-2, 'days');
+    }
+
+    let lastDay: Moment = firstDay.clone().add(3, 'days');
+
+    if(parseInt(lastDay.format('DD')) == 2 && parseInt(lastDay.format('DD')) == 3)
       this.currentMonth.add(1,'month');
+
     //fill days
     this.days = [];
     for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
@@ -114,8 +134,9 @@ export class ThreeDayComponent implements OnInit {
   //increment or decrement day
   changeThreeDay(delta: number): void {
     // 1 means advance three days, -1 means go back three days
-    let newDay: Moment = this.currentDay.clone().add(delta*4, 'days');
-    let selectedDay = moment(this._eventService.getCurrentDate());
+    // not currentDay should add 3 to start of group
+    let newDay: Moment = this.currentDay.clone().add(delta*3, 'days');
+    let selectedDay = moment(this._eventService.getSelectedDay());
 
     let viewDate;
 
@@ -127,27 +148,30 @@ export class ThreeDayComponent implements OnInit {
     let thirdDay = tomorrow.clone().add(1, 'days');
 
     // Stuff to check if newDay is in selected day's group of 3
-    let numDaysDiff = moment().diff(selectedDay);  // gets # of days diff from selected and today
-    
+    let numDaysDiff = selectedDay.startOf('day').diff(moment().startOf('day'), 'days');  // gets # of days diff from selected and today
     // 0 means first day of group, 1 - second, 2 - third
     let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
-    
+    //let newDay: Moment;
+
     let selectedDayGroupDayTwo;
     let selectedDayGroupDayThree;
     if (dayOfGroup == 0) {
       // selectedDay is first day of group of 3 --> check next 2 days
       selectedDayGroupDayTwo = selectedDay.clone().add(1, 'days');
       selectedDayGroupDayThree = selectedDay.clone().add(2, 'days');
+      //newDay = this.currentDay.clone().add(delta*3, 'days');
     }
     else if (dayOfGroup == 1) {
       // selectedDay is second day of group --> check prev and next day
       selectedDayGroupDayTwo = selectedDay.clone().add(-1, 'days');
       selectedDayGroupDayThree = selectedDay.clone().add(1, 'days');
+      //newDay = this.currentDay.clone().add(delta*2, 'days');
     }
     else {
       // selectedDay is third day of group --> check prev 2 days
       selectedDayGroupDayTwo = selectedDay.add(-2, 'days');
       selectedDayGroupDayThree = selectedDay.add(-1, 'days');
+      //newDay = this.currentDay.clone().add(delta*1, 'days');
     }
 
 
@@ -160,7 +184,7 @@ export class ThreeDayComponent implements OnInit {
       // set selected date to today
       viewDate = new Date();
     else
-      viewDate = newDay;
+      viewDate = newDay.toDate();
       //viewDate = newDay.startOf('week').toDate();
     if(this._viewService.isThreeDayView())
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
@@ -221,7 +245,7 @@ export class ThreeDayComponent implements OnInit {
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
     this._eventService.setSelectedDay(day);
-    this._eventService.updateDayEvents(day.date);
+    this._eventService.updateDayEvents(day.date);  //TODO: clicking on date shifts groups of 3
   }
 
   //open event in sidebar
