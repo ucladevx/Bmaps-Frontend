@@ -56,6 +56,11 @@ action=TEMPLATE
 target="_blank" title="Add to Google Calendar" rel="nofollow">+</a>
 </div>
                 </div>
+                <div class="sidebar-apple-add">
+      <span>
+        <a (click)= "createICS(event)" [href]="fileUrl" download="{{event.properties.name}}.ics">Download File</a>
+      </span>
+    </div>
                 <div class="separator"></div>
             </div>
         </div>

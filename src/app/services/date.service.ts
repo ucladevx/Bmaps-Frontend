@@ -57,11 +57,19 @@ export class DateService {
       return `${this.formatDate(start)} \u2022 ${this.formatTime(start)}`;
   }
 
+  formatEventCalendarStart(event: GeoJson): string {
+    let start: string = event.properties.start_time;
+    return moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS');
+  }
+
+  formatEventCalendarEnd(event: GeoJson): string {
+    let end: string = event.properties.end_time;
+    return moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
+  }
+
   // For a given event, format the start and end date for Google calendar export (as an array)    i.e.  ["20201231T193000", "20201231T223000"]
   formatEventCalendar(event: GeoJson): string {
-    let start: string = event.properties.start_time;
-    let end: string = event.properties.end_time;
-    let dates = moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS') + "/" + moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
+    let dates = this.formatEventCalendarStart(event) + "/" + this.formatEventCalendarEnd(event);
     return dates;
   }
 
