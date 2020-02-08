@@ -9,7 +9,6 @@ import { Observable } from 'rxjs/Observable';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
-import { ICalendar } from 'datebook';
 
 @Component({
     selector: 'app-sidebar',
