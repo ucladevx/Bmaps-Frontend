@@ -78,7 +78,6 @@ export class ThreeDayComponent implements OnInit {
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
     this.currentDay = moment(dateInMonth);
-    //console.log(this.currentDay);
 
     if(this._viewService.isThreeDayView() && dateInMonth != undefined){
     // range of days shown on calendar
@@ -86,9 +85,15 @@ export class ThreeDayComponent implements OnInit {
     // first day should be first of group
     
     let numDaysDiff = this.currentDay.startOf('day').diff(moment().startOf('day'), 'days');
-    //console.log(numDaysDiff);
     // 0 means first day of group, 1 - second, 2 - third
-    let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
+    let dayOfGroup;
+    if (numDaysDiff >= 0) {
+      dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
+    }
+    else {
+      numDaysDiff *= -1;
+      dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1);
+    }
 
     if (dayOfGroup == 0) {
       firstDay = this.currentDay;
@@ -245,7 +250,7 @@ export class ThreeDayComponent implements OnInit {
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
     this._eventService.setSelectedDay(day);
-    this._eventService.updateDayEvents(day.date);  //TODO: clicking on date shifts groups of 3
+    this._eventService.updateDayEvents(day.date);
   }
 
   //open event in sidebar
