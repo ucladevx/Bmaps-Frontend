@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, HostBinding, HostListener, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { DateService } from '../services/date.service';
 import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
@@ -7,7 +7,9 @@ import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
+import { ICalendar } from 'datebook';
 
 @Component({
     selector: 'app-sidebar',
@@ -34,14 +36,16 @@ export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
+    fileUrl;
+    msgData1 = "wow";
+    msgData2 = "woe";
+    msgData3 = "hee";
     public mobileSidebarVisible: boolean = false;
-    @HostListener("click", ["$event"])
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
 
-
-    constructor(private router: Router, public _eventService: EventService, private _dateService: DateService, public _viewService: ViewService) {}
+    constructor(private sanitizer: DomSanitizer, private router: Router, public _eventService: EventService, private _dateService: DateService, public _viewService: ViewService) {}
 
     ngOnInit() {
         // TODO: unsubscribe on destroy
@@ -69,7 +73,6 @@ export class SidebarComponent implements OnInit {
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
     // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: GeoJson): void {
-        console.log(event.properties)
         this._eventService.updateClickedEvent(event);
         this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
         this._eventService.updateExpandedEvent(event);
@@ -78,10 +81,6 @@ export class SidebarComponent implements OnInit {
     onHover(event: GeoJson): void {
         this.hoveredEvent = event;
         this._eventService.updateHoveredEvent(event);
-    }
-
-    stopProp(event: any): void {
-        event.stopPropagation();
     }
 
     toggleMobileSidebar() { this.onPress(); }
@@ -105,7 +104,7 @@ export class SidebarComponent implements OnInit {
       }
     }
 
-  //check whether an image source exists
+  // check whether an image source exists
   checkImage(imageSrc) {
       let img = new Image();
       try {
@@ -114,6 +113,44 @@ export class SidebarComponent implements OnInit {
       } catch(err) {
         return false;
       }
+    }
+
+    createICS(event: GeoJson){
+        const data = `BEGIN:VCALENDAR
+VERSION:2.0
+X-WR-CALNAME:BMaps Events
+NAME:BMaps Events
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:America/Los_Angeles
+TZURL:http://tzurl.org/zoneinfo-outlook/America/Los_Angeles
+X-LIC-LOCATION:America/Los_Angeles
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+TZNAME:PDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+TZNAME:PST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20200207T225053Z
+DTSTART;TZID=America/Los_Angeles:` + this._dateService.formatEventCalendarStart(event) +
+`\nDTEND;TZID=America/Los_Angeles:` + this._dateService.formatEventCalendarEnd(event) +
+`\nSUMMARY:` + event.properties.name +
+`\nDESCRIPTION:` + event.properties.description +
+`\nLOCATION:` + event.properties.place.location.street + //loc??
+`\nEND:VEVENT
+END:VCALENDAR`
+        const blob = new Blob([data], { type: 'application/octet-stream' });
+        this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     }
 
 }
