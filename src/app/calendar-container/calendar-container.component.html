@@ -19,7 +19,7 @@
             <i class="fa fa-caret-right" (click)="changeDateSpan(1,getCalendarView())" aria-hidden="true"></i>
           </button>
         </div>
-        <div id="mobile-week-number" *ngIf="this.router.url.startsWith('/calendar/week')">
+        <div id="mobile-week-number" *ngIf="(getCalendarView() == CalendarViewState.week) || (getCalendarView() == CalendarViewState.threeday)">
           <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
         </div>
       </div>
