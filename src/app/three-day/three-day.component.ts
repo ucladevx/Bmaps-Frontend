@@ -94,16 +94,7 @@ export class ThreeDayComponent implements OnInit {
       dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1);
     }
 
-    if (dayOfGroup == 0) {
-      firstDay = this.currentDay;
-    }
-    else if (dayOfGroup == 1) {
-      firstDay = this.currentDay.clone().add(-1, 'days');
-    }
-    else { // 2
-      firstDay = this.currentDay.clone().add(-2, 'days');
-    }
-
+    firstDay = this.currentDay.clone().add(-1*dayOfGroup, 'days');
     let lastDay: Moment = firstDay.clone().add(3, 'days');
 
     if(parseInt(lastDay.format('DD')) == 2 && parseInt(lastDay.format('DD')) == 3)

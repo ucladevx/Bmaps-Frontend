@@ -56,15 +56,6 @@ export class ViewService {
         this.changeToMonth.emit(delta);
         break;
     }
-    /*
-    if(delta == 0){
-      if(this.isWeekView()){ this.changeToMonth.emit(delta); }
-      else { this.changeToWeek.emit(delta); }
-    } else {
-      if (this.isThreeDayView()){ this.changeToThreeDay.emit(delta); }
-      else if(this.isWeekView()){ this.changeToWeek.emit(delta); }
-      else if (this.isMonthView()){ this.changeToMonth.emit(delta); }
-    }*/
   }
 
   // VIEW CHECKERS //

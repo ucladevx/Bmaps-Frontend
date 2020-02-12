@@ -113,9 +113,6 @@ export class CalendarContainerComponent implements OnInit {
       //handle zero week
       if(weekCount>=0){ if(i%3 != 0){ weekCount++; } i = -1; }
       if(secondWeekCount>=0){ if(i%3 != 0){ secondWeekCount++; } i = -1; }
-
-      console.log("first week: " + weekCount);
-      console.log("second week: " + secondWeekCount);
     }
     // Week 11 -> Finals Week
     if(weekCount == 11)
