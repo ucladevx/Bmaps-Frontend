@@ -30,14 +30,13 @@ export class ThreeDayComponent implements OnInit {
 
   ngOnInit() {
     this._viewService.changeToThreeDay.subscribe( function(delta) { this.changeThreeDay(delta); }.bind(this));
-    //this._viewService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
 
     this._eventService.currentDate$.subscribe(date => {
       this.ngZone.run( () => { this.showCalendar(date); });
     });
 
-    this._eventService.weekEvents$.subscribe(weekEventCollection => {
-      this.filteredEvents = weekEventCollection.features;
+    this._eventService.threeDayEvents$.subscribe(threeDayEventCollection => {
+      this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
       if(this._viewService.isThreeDayView())
@@ -46,8 +45,8 @@ export class ThreeDayComponent implements OnInit {
           this._eventService.setDateFilterFromDays(this._eventService.getDays());
     });
 
-    this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
-      this.filteredEvents = weekEventCollection.features;
+    this._eventService.filteredThreeDayEvents$.subscribe(threeDayEventCollection => {
+      this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
     });
@@ -194,6 +193,7 @@ export class ThreeDayComponent implements OnInit {
     if(this._viewService.isThreeDayView())
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
     this._eventService.updateDayEvents(viewDate);
+    this._eventService.updateThreeDayEvents(viewDate);
     this._eventService.updateWeekEvents(viewDate);
     this._eventService.updateMonthEvents(viewDate);
   }
