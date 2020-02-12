@@ -465,10 +465,12 @@ export class EventService {
       let dayMap = this.getCategoryMap(this._dayEvents.features);
       let monthMap = this.getCategoryMap(this._monthEvents.features);
       let weekMap = this.getCategoryMap(this._weekEvents.features);
+      let threeDayMap = this.getCategoryMap(this._threeDayEvents.features);
       // initialize tempHash by building the all category container
       let tempHash = { 'all': {
           formattedCategory: 'all',
           numEventsDay: dayMap['all'],
+          numEventsThreeDay: threeDayMap['all'],
           numEventsMonth: monthMap['all'],
           numEventsWeek: weekMap['all'],
           selected: true }
@@ -482,6 +484,7 @@ export class EventService {
         tempHash[categName] = {
           formattedCategory: categStr,
           numEventsDay: dayMap[categName],
+          numEventsThreeDay: threeDayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
           selected: false
@@ -497,12 +500,14 @@ export class EventService {
     this.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
+      let threeDayMap = this.getCategoryMap(this._threeDayEvents.features);
       let monthMap = this.getCategoryMap(this._monthEvents.features);
       let weekMap = this.getCategoryMap(this._weekEvents.features);
       // initialize tempHash by building the all category container
       let tempHash = { 'all': {
            formattedCategory: 'all',
            numEventsDay: dayMap['all'],
+           numEventsThreeDay: threeDayMap['all'],
            numEventsMonth: monthMap['all'],
            numEventsWeek: weekMap['all'],
            selected: this._categHash ? this._categHash['all'].selected : true }
@@ -515,6 +520,7 @@ export class EventService {
         tempHash[categName] = {
           formattedCategory: categStr,
           numEventsDay: dayMap[categName],
+          numEventsThreeDay: threeDayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
           selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
@@ -580,10 +586,13 @@ export class EventService {
       map = this.getCategoryMap(this._monthEvents.features);
     else if(this._viewService.isWeekView())
       map = this.getCategoryMap(this._weekEvents.features);
-    for (let categ in this._categHash)
+    else if(this._viewService.isThreeDayView())
+      map = this.getCategoryMap(this._threeDayEvents.features);
+    for (let categ in this._categHash) {
       if (categ.toLowerCase() == 'all' ||
       (this._categHash.hasOwnProperty(categ.toLowerCase()) && map[categ.toLowerCase()] > 0))
         this._categHash[categ.toLowerCase()].selected = true;
+    }
     this.categHashSource.next(this._categHash);
   }
 
@@ -592,6 +601,8 @@ export class EventService {
   // Apply filters to day, week, and month
   applyAllFilters() {
     this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+    if(this._viewService.isThreeDayView())
+      this.applyFiltersToSelection(this._threeDayEvents.features,this.filteredThreeDayEventsSource);
     if(this._viewService.isWeekView())
       this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
     if(this._viewService.isMonthView())
