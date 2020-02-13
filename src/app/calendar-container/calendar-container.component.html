@@ -7,7 +7,10 @@
       <ng-template #emptyBlock>
         <div id="empty-selector-block"></div>
       </ng-template>
-      <span id="mobile-week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.week)">Week</span>
+      <div id="mobile-calendar-view-switch">
+        <span id="mobile-three-day-switch" class="navbar-text"  routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.threeday)">3 Day</span>
+        <span id="mobile-week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.week)">Week</span>
+      </div>
       <!-- month and year label -->
       <div id="calendar-controls-wrapper">
         <div id="calendar-controls">

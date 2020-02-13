@@ -74,6 +74,13 @@ router-outlet.router-flex + * {
     margin-left: 5px;
 }
 
+#mobile-calendar-view-switch {
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: none;
+    //margin-left: 5px;
+}
+
 #week-number {
   font-size: 20px;
   width: 110px;
@@ -148,10 +155,24 @@ router-outlet.router-flex + * {
 }
 
 #mobile-week-switch {
-    display: none;
+    //display: none;
+    display: inline-block;
     border-radius: 4px;
     border: $default_border_width solid $default_border_color;
-    padding: 8px 10px;
+    //padding: 8px 10px;
+    font-size: 18px;
+    margin: 0;
+}
+
+#mobile-three-day-switch.active {
+    background: #656565;
+    color: #fff;
+}
+
+#mobile-three-day-switch {
+    display: inline-block;
+    border-radius: 4px;
+    border: $default_border_width solid $default_border_color;
     font-size: 18px;
     margin: 0;
 }
@@ -181,15 +202,23 @@ router-outlet.router-flex + * {
     #empty-selector-block {
         display: none;
     }
-    #mobile-week-switch {
-        display: block;
-        width: 20%;
+    #mobile-three-day-switch {
+        width: 11%;
         overflow-x: hidden;
         white-space: nowrap;
         font-size: 14px;
-        align-items: center;
         position: absolute;
         left: 3%;
+        text-align: center;
+    }
+    #mobile-week-switch {
+        display: block;
+        width: 11%;
+        overflow-x: hidden;
+        white-space: nowrap;
+        font-size: 14px;
+        position: absolute;
+        left: 14%;
         text-align: center;
     }
     #mobile-month-switch {
@@ -206,6 +235,10 @@ router-outlet.router-flex + * {
     #mobile-week-number {
         display: block;
         font-size: 12px;
+    }
+    #mobile-calendar-view-switch {
+        display: flex;
+        margin-left: 5px;
     }
     #left-caret {
         float: left;
