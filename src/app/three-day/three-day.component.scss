@@ -102,7 +102,7 @@
   color: black;
 }
 
-.weekview-day .time-of-day tr:not(:last-child) {
+.threedayview-day .time-of-day tr:not(:last-child) {
   border-bottom: 1px solid $default_border_color;
 }
 
@@ -128,7 +128,7 @@
     flex: 1;
 }
 
-.weekview-day {
+.threedayview-day {
     position: relative;
     width: 33.3333%;
     display: block;
@@ -139,11 +139,11 @@
     z-index: 1;
 }
 
-.weekview-day.in-current-month {
+.threedayview-day.in-current-month {
     color: inherit;
 }
 
-.weekview-day.current-day {
+.threedayview-day.current-day {
     background-color: #ececec;
 }
 
@@ -159,7 +159,7 @@
 
 }
 
-.weekview-day-event {
+.threedayview-day-event {
   float: left;
   clear: left;
   position: absolute;
@@ -216,11 +216,11 @@
 /* mobile css */
 @media screen and (max-width: 768px) {
     /* display short day abbreviations */
-    .weekview-header > .short-abbr {
+    .threedayview-header > .short-abbr {
         display: flex;
           font-size: 12px;
     }
-    .weekview-header > .long-abbr {
+    .threedayview-header > .long-abbr {
         display: none;
     }
     #scrollable {

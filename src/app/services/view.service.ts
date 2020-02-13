@@ -44,6 +44,7 @@ export class ViewService {
   changeDateSpan(delta : Number, calendarView : CalendarViewState) {
     switch (calendarView) {
       case CalendarViewState.day:
+        // For when we implement one day view
         console.log("change day span, calendarView = day");
         break;
       case CalendarViewState.threeday:

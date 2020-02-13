@@ -272,7 +272,6 @@ export class EventService {
   }
 
   // Updates events for given three days while persisting the current category
-  // fix this!
   updateThreeDayEvents(date: Date): void {
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
       let noCategs = (this._threeDayEvents.features.length == 0);
@@ -304,7 +303,6 @@ export class EventService {
     return dayEvents;
   }
 
-  // do this!
   // Filter events by three days
   private filterByThreeDays(allEvents: FeatureCollection, date: Date){
     let threeDayEvents = new FeatureCollection([]);
