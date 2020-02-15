@@ -37,9 +37,6 @@ export class SidebarComponent implements OnInit {
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
     fileUrl;
-    msgData1 = "wow";
-    msgData2 = "woe";
-    msgData3 = "hee";
     public mobileSidebarVisible: boolean = false;
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
@@ -146,7 +143,7 @@ DTSTART;TZID=America/Los_Angeles:` + this._dateService.formatEventCalendarStart(
 `\nDTEND;TZID=America/Los_Angeles:` + this._dateService.formatEventCalendarEnd(event) +
 `\nSUMMARY:` + event.properties.name +
 `\nDESCRIPTION:` + event.properties.description +
-`\nLOCATION:` + event.properties.place.location.street + //loc??
+`\nLOCATION:` + event.properties.place.name + //loc??
 `\nEND:VEVENT
 END:VCALENDAR`
         const blob = new Blob([data], { type: 'application/octet-stream' });

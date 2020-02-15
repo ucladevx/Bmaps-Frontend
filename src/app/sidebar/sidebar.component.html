@@ -20,8 +20,8 @@
             <div *ngFor="let event of filteredEvents" #eventList>
                 <div class="sidebar-event"
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
-                    (mouseenter)="onHover(event)"
-                    ng-click="onSelect($event)">
+                    ng-mouseenter="onHover($event)"
+                    (click)="onSelect(event)">
                     <div class="sidebar-event-img-container">
                         <img src="{{
                           event.properties.cover_picture == '<NONE>' ?
@@ -51,12 +51,12 @@ action=TEMPLATE
 &text={{event.properties.name}}
 &dates={{_dateService.formatEventCalendar(event)}}
 &details={{event.properties.description}}
-&location={{event.properties.place.location.street}}
+&location={{event.properties.place.name}}
 &trp=false
 &sprop=
 &sprop=name:"
 target="_blank" title="Add to Google Calendar" rel="nofollow">Add to Google Calendar</a></li>
-<li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a (click)= "createICS(event)" [href]="fileUrl" download="{{event.properties.name}}.ics">Download File</a></li>
+<li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a (click)= "createICS(event)" [href]="fileUrl" download="{{event.properties.name}}.ics">Add to Apple Calendar</a></li>
                           </ul>
                       </div>
                   </div>

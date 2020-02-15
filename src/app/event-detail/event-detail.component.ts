@@ -72,12 +72,11 @@ DTSTART;TZID=America/Los_Angeles:` + this._dateService.formatEventCalendarStart(
 `\nDTEND;TZID=America/Los_Angeles:` + this._dateService.formatEventCalendarEnd(event) +
 `\nSUMMARY:` + event.properties.name +
 `\nDESCRIPTION:` + event.properties.description +
-`\nLOCATION:` + event.properties.place.location.street + //loc??
+`\nLOCATION:` + event.properties.place.names + //loc??
 `\nEND:VEVENT
 END:VCALENDAR`
         const blob = new Blob([data], { type: 'application/octet-stream' });
         this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     }
 
-}
 }
