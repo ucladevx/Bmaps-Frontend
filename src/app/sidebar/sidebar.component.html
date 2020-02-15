@@ -20,7 +20,7 @@
             <div *ngFor="let event of filteredEvents" #eventList>
                 <div class="sidebar-event"
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
-                    ng-mouseenter="onHover($event)"
+                    (mouseenter)="onHover(event)"
                     (click)="onSelect(event)">
                     <div class="sidebar-event-img-container">
                         <img src="{{
@@ -44,7 +44,7 @@
                     </div>
                     <div class="sidebar-event-add">
                       <div  class="dropdown" dropdown>
-                          <a dropdownToggle class="pull-right text-center btn btn-setting"  data-toggle="dropdown" aria-haspopup="true" aria- expanded="true" ng-click="$event.stopPropagation();">+</a>
+                          <a dropdownToggle class="pull-right text-center btn btn-setting"  data-toggle="dropdown" aria-haspopup="true" aria- expanded="true" (click)="$event.stopPropagation();">+</a>
                           <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
                               <li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a href="http://www.google.com/calendar/render?
 action=TEMPLATE

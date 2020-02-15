@@ -67,15 +67,22 @@ export class SidebarComponent implements OnInit {
         this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
     }
 
+    stop(event: any): void {
+        console.log("Child");
+        event.stopPropagation();
+    }
+
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
     // We want to call the function when there is a change to event we're subscribing to
-    onSelect(event: GeoJson): void {
+    onSelect(event: any): void {
+        console.log("Parent");
         this._eventService.updateClickedEvent(event);
         this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
         this._eventService.updateExpandedEvent(event);
     }
 
     onHover(event: GeoJson): void {
+        console.log("Parent hover");
         this.hoveredEvent = event;
         this._eventService.updateHoveredEvent(event);
     }
