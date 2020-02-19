@@ -7,8 +7,8 @@ dev:
 
 # Bundle code for production.
 prod:
-	docker build .
-	
+	docker build . -t mappening_frontend
+
 prod-test:
 	docker build . --build-arg OPTIMIZE_BUILD=0
 
