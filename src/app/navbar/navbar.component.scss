@@ -15,6 +15,10 @@
   color: rgb(120,213,215);
 }
 
+.navbar-text-active {
+  color: rgb(120,213,215);
+}
+
 .navbar-text:hover {
   cursor: pointer;
 }
@@ -145,6 +149,13 @@ button {
   border-bottom: $default_border_width solid $default_border_color;
 }
 
+#mobile-calendar-view-select {
+  //display: none;
+  position: absolute;
+  left: 50%;
+  margin-left: -0px;  // change to half the width later
+}
+
 @media (max-width: 768px){
 
 }
@@ -188,6 +199,13 @@ button {
 
     .d-md-none-important {
       display: none !important;
+    }
+
+    #mobile-calendar-view-select {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
     }
 }
 

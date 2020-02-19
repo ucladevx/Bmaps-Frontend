@@ -2,7 +2,14 @@
     <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-left" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="align-top" alt="">
     </button>
-    <app-date-selector class="d-md-none"></app-date-selector>
+    <div *ngIf="isMapSelected; else calendarViewSelect" class="d-md-none">
+        <app-date-selector></app-date-selector>
+    </div>
+    <ng-template #calendarViewSelect>
+      <div class="d-md-none" id="mobile-calendar-view-select">
+        <span (click)="changeCalendarView(CalendarViewState.week)">Week</span>
+      </div>
+    </ng-template>
     <button (click)="toggleFilterCollapse()" class="navbar-toggler navbar-toggler-right" type="button">
       <i class="fa fa-sliders" id="filter-dropdown-toggle" aria-hidden="true" *ngIf="isFilterCollapsed"></i>
       <i class="fa fa-times" id="filter-dropdown-toggle-2" aria-hidden="true" *ngIf="!isFilterCollapsed"></i>
@@ -28,15 +35,21 @@
               {{temperature}}
           </span>
         <li>
-        <span class="navbar-text"  routerLink="/map" routerLinkActive="active" (click)="emitChangeView('map')">Map View</span>
+        <span [ngClass]="isMapSelected ? 'navbar-text-active' : 'navbar-text'" (click)="toggleViews()">Map View</span>
         </li>
         <li>
-        <span *ngIf="this.isMonth; else weekButton">
+          <span [ngClass]="isMapSelected ? 'navbar-text' : 'navbar-text-active'" (click)="toggleViews()">Calendar View</span>
+          <!--
+        <span *ngIf="this.currentView == CalendarViewState.month; else weekButton">
           <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
         </span>
         <ng-template #weekButton>
-          <span class="navbar-text" routerLink="/calendar/week" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
+          <span *ngIf="this.currentView == CalendarViewState.week; else threeDayButton" class="navbar-text" routerLink="/calendar/week" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
         </ng-template>
+        <ng-template #threeDayButton>
+          <span class="navbar-text" routerLink="/calendar/three-day" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
+        </ng-template>
+      -->
         </li>
         <li>
         <span class="navbar-text" id="install-button">Install</span>

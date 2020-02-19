@@ -30,6 +30,9 @@ export class ViewService {
     this.isMonthView();
     this.isWeekView();
     this.isThreeDayView();
+
+    // Starts with month
+    this.storeLastView('month');
   }
 
   // CHANGE DATE SPAN (dates displayed on screen) //
