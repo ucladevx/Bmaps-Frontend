@@ -56,7 +56,7 @@ router-outlet.router-flex + * {
 }
 
 #calendar-controls-wrapper {
-    width: 220px;
+    width: 200px;
 }
 
 #calendar-controls-wrapper i {
@@ -78,6 +78,7 @@ router-outlet.router-flex + * {
     font-size: 0.8rem;
     cursor: pointer;
     display: none;
+    background: #7B7B7B;
     //margin-left: 5px;
 }
 
@@ -186,23 +187,13 @@ router-outlet.router-flex + * {
         display: block;
         position: absolute;
         left: 27%;
-        margin-top: -1px;
     }
-    .selector {
-      height: 40px;
-      background-color: #7B7B7B;
-    }
-    .custom-btn {
-        color: #fff;
-        transition: color 0.2s ease;
-        margin-top: -4px;
-    }
-    .custom-btn:hover {
-        color: #5dbacd;
-    }
+    // .selector {
+    //   //height: 40px;
+    //   background-color: #7B7B7B;
+    // }
     #calendar-controls {
-        font-size: 14px;
-        color: #fff;
+        font-size: 16px;
     }
     #week-number {
         display: none;
