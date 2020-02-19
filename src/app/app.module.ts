@@ -10,7 +10,6 @@ import { SharedModule } from './shared.module';
 import { AppComponent } from './app.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
@@ -65,7 +64,6 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     SharedModule,
-    AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
