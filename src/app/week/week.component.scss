@@ -217,11 +217,22 @@
 @media screen and (max-width: 768px) {
     /* display short day abbreviations */
     .weekview-header > .short-abbr {
-        display: flex;
-          font-size: 12px;
+      display: flex;
+      font-size: 12px;
     }
     .weekview-header > .long-abbr {
         display: none;
+    }
+    .day-header {
+      height: 5%;
+      background-color: #7B7B7B;
+      color: #fff;
+      font-size: 13px;
+      padding: 2% 0% 2% 0%;
+    }
+    .filler-block {
+      height: 5%;
+      background-color: #7B7B7B;
     }
     #scrollable {
       overflow-x: scroll;
@@ -234,7 +245,7 @@
       overflow-x: hidden;
     }
     .day-of-month {
-      font-size: 20px;
+      font-size: 13px;
     }
 }
 /* end mobile css */

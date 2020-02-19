@@ -217,24 +217,32 @@
 @media screen and (max-width: 768px) {
     /* display short day abbreviations */
     .threedayview-header > .short-abbr {
-        display: flex;
-          font-size: 12px;
+      display: flex;
+      font-size: 12px;
     }
     .threedayview-header > .long-abbr {
         display: none;
+    }
+    .day-header {
+      height: 5%;
+      background-color: #7B7B7B;
+      color: #fff;
+      font-size: 13px;
+      padding: 1% 0% 2% 0%;
+    }
+    .filler-block {
+      height: 5%;
+      background-color: #7B7B7B;
     }
     #scrollable {
       overflow-x: scroll;
       z-index: 1;
     }
-    .weekview-month {
-      width: 200%;
-    }
     .time-of-day td {
       overflow-x: hidden;
     }
     .day-of-month {
-      font-size: 20px;
+      font-size: 13px;
     }
 }
 /* end mobile css */
