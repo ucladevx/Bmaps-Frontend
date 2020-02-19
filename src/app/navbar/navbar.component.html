@@ -6,8 +6,10 @@
         <app-date-selector></app-date-selector>
     </div>
     <ng-template #calendarViewSelect>
-      <div class="d-md-none" id="mobile-calendar-view-select">
-        <span (click)="changeCalendarView(CalendarViewState.week)">Week</span>
+      <div class="d-md-none mobile-calendar-view-switch">
+        <span [ngClass]="currentView == CalendarViewState.threeday ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</span>
+        <span [ngClass]="currentView == CalendarViewState.week ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.week)">Week</span>
+        <span [ngClass]="currentView == CalendarViewState.month ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.month)">Month</span>
       </div>
     </ng-template>
     <button (click)="toggleFilterCollapse()" class="navbar-toggler navbar-toggler-right" type="button">
@@ -35,10 +37,10 @@
               {{temperature}}
           </span>
         <li>
-        <span [ngClass]="isMapSelected ? 'navbar-text-active' : 'navbar-text'" (click)="toggleViews()">Map View</span>
+        <span [ngClass]="isMapSelected ? 'navbar-text active' : 'navbar-text'" (click)="toggleViews()">Map View</span>
         </li>
         <li>
-          <span [ngClass]="isMapSelected ? 'navbar-text' : 'navbar-text-active'" (click)="toggleViews()">Calendar View</span>
+          <span [ngClass]="isMapSelected ? 'navbar-text' : 'navbar-text active'" (click)="toggleViews()">Calendar View</span>
           <!--
         <span *ngIf="this.currentView == CalendarViewState.month; else weekButton">
           <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>

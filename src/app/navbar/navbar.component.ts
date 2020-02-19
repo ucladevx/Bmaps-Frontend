@@ -158,8 +158,8 @@ export class NavbarComponent implements OnInit {
         path += '/calendar/month';
       }
       else if (view == CalendarViewState.threeday) {
-        this.emitChangeView('week');
-        path += '/calendar/week';
+        this.emitChangeView('threeday');
+        path += '/calendar/three-day';
       }
 
       if(ev!=null)
