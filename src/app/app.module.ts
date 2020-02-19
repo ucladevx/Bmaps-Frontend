@@ -14,7 +14,7 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
 import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
 import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
 
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
+// import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
@@ -65,7 +65,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     SharedModule,
-    AngularFontAwesomeModule,
+    // AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
