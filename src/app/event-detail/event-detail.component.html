@@ -21,11 +21,11 @@
       </span>
     </div>
     <span>
-    <div class="event-add" id="event-add-button">
+    <div class="event-add">
                       <div  class="dropdown" dropdown>
-                          <a dropdownToggle class="text-center btn btn-setting dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria- expanded="true">Add to Calendar</a>
+                          <a id="event-add-button" dropdownToggle class="text-center btn btn-setting dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria- expanded="true">Add to Calendar</a>
                           <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                              <li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a href="http://www.google.com/calendar/render?
+                              <li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a class="dd-item" href="http://www.google.com/calendar/render?
 action=TEMPLATE
 &text={{event.properties.name}}
 &dates={{_dateService.formatEventCalendar(event)}}
@@ -35,7 +35,7 @@ action=TEMPLATE
 &sprop=
 &sprop=name:"
 target="_blank" title="Add to Google Calendar" rel="nofollow">Add to Google Calendar</a></li>
-<li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a (click)= "createICS(event)" [href]="fileUrl" download="{{event.properties.name}}.ics">Download File</a></li>
+<li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a class="dd-item" (click)= "createICS(event)" [href]="fileUrl" download="{{event.properties.name}}.ics">Add to Apple Calendar</a></li>
                           </ul>
                       </div>
                   </div>

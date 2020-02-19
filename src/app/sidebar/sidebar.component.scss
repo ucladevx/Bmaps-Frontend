@@ -75,11 +75,12 @@
 .sidebar-event-add {
     display: inline-block;
     vertical-align: top;
-    margin-left: 15px;
-    margin-right:20px;
+    margin-left: 5px;
+    margin-right:30px;
+    text-align: center;
 }
 
-/*
+
 #sidebar-event-add-button {
     color: #727272;
     font-size: 3em;
@@ -90,7 +91,26 @@
     //padding-right: 10px;
     //background-color: #53D7D7;
 }
-*/
+
+.dropdown {
+    padding: none;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+}
+
+.dd-item {
+    padding: 5px 30px;
+    text-align: center;
+    color: #484747;
+    display: block;
+}
+
+.dd-item:hover,visited,active {
+    text-decoration: none;
+    background-color: #C6C6C6;
+    padding: auto;
+}
 
 @media only screen and (min-width: 768px) {
   .sidebar-event-img-container {
