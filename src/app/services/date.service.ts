@@ -73,6 +73,49 @@ export class DateService {
     return dates;
   }
 
+  formatGoogleCalendar(event: GeoJson): string {
+    let href = "http://www.google.com/calendar/render?action=TEMPLATE&text=" + event.properties.name + "&dates=" + this.formatEventCalendar(event) + "&details=" + event.properties.description + "&location=" + event.properties.place.name + "&trp=false&sprop=&sprop=name:"
+    return href;
+  }
+
+  // Create string for ICS file format of event
+  formatICS(event: GeoJson): string {
+    let data = `BEGIN:VCALENDAR
+VERSION:2.0
+X-WR-CALNAME:BMaps Events
+NAME:BMaps Events
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:America/Los_Angeles
+TZURL:http://tzurl.org/zoneinfo-outlook/America/Los_Angeles
+X-LIC-LOCATION:America/Los_Angeles
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+TZNAME:PDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+TZNAME:PST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20200207T225053Z
+DTSTART;TZID=America/Los_Angeles:` + this.formatEventCalendarStart(event) +
+`\nDTEND;TZID=America/Los_Angeles:` + this.formatEventCalendarEnd(event) +
+`\nSUMMARY:` + event.properties.name +
+`\nDESCRIPTION:` + event.properties.description +
+`\nLOCATION:` + event.properties.place.names + //loc??
+`\nEND:VEVENT
+END:VCALENDAR`;
+    return data;
+  }
+
   // Test whether given mmt is between start and end (inclusive)
   checkRange(mmt, start, end): boolean {
     let val = mmt.valueOf();
