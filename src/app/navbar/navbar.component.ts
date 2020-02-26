@@ -33,14 +33,6 @@ export class NavbarComponent implements OnInit {
           this.isMapSelected = true;
         else
           this.isMapSelected = false;
-        if(view == 'month')
-          this.currentView = CalendarViewState.month;
-          //this.isMonth = true;
-        if(view == 'week')
-          this.currentView = CalendarViewState.week;
-          //this.isMonth = false;
-        if (view == 'three-day')
-          this.currentView = CalendarViewState.threeday;
       });
       this._viewService.isMapView();
     }
@@ -146,7 +138,9 @@ export class NavbarComponent implements OnInit {
     }
 
     changeCalendarView(view: CalendarViewState): void {
-      this.currentView = view;
+      setTimeout(() => {  // fixes ExpressionChangedAfterItHasBeenCheckedError error for mobile navbar calendar
+        this.currentView = view;
+      });
       let path = "";
       let ev = this._eventService.getExpandedEvent();
       if (view == CalendarViewState.week) {
@@ -167,6 +161,7 @@ export class NavbarComponent implements OnInit {
       else
         path += "(sidebar:list)";
       this._router.navigateByUrl(path);
+      
     }
 
     toggleViews(): void {
