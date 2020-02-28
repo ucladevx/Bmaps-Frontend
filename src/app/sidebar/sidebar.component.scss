@@ -78,6 +78,7 @@
     margin-left: 5px;
     margin-right:30px;
     text-align: center;
+    left: -4.2em;
     /*
     color: #ffffff;
     text-decoration: none;
@@ -98,14 +99,13 @@
 .dropdown {
     padding: none;
     text-align: center;
-    position: relative;
+    position: fixed;
     display: inline-block;
     z-index: auto;
 }
 
-.downdown-menu {
-    overflow: auto;
-    z-index: auto;
+.dropdown-menu {
+    //left: -4.2em;
 }
 
 .dd-item {
