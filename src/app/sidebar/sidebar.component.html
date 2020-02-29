@@ -1,6 +1,6 @@
    <div class="sidebar-outer flex flex-column">
     <div class="move-up d-md-none" (click)="toggleMobileSidebar()">
-        <i aria-hidden="true" id="up" class="fa fa-lg" [ngClass]="mobileSidebarVisible ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+        <i class="icon-lg" aria-hidden="true" id="up" [ngClass]="mobileSidebarVisible ? 'icon-chevron-down' : 'icon-chevron-up'"></i>
         <span class="up-text">Events List</span>
     </div>
     <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
@@ -14,7 +14,7 @@
         </ng-template>
         <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
           <div *ngIf="filteredEvents.length == 0" id="no-events-section">
-            <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
+            <div><i id="no-events-icon" class="icon-calendar-times" aria-hidden="true"></i></div>
             <div id="no-events-label">No Events</div>
           </div>
             <div *ngFor="let event of filteredEvents" #eventList>
