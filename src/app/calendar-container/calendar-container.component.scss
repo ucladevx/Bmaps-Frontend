@@ -14,6 +14,18 @@ $selector-padding: 9.7px;
     padding: $selector-padding;
 }
 
+.mobile-selector {
+    background-color: #fff;
+    color: #484747;
+    text-align: center;
+    border-bottom: $default_border_width solid $default_border_color;
+    position: relative;
+    font-size: 26px;
+    display: none;
+    justify-content: space-between;
+    padding: $selector-padding;
+}
+
 #empty-selector-block {
     width: 100px;
 }
@@ -191,6 +203,12 @@ router-outlet.router-flex + * {
     .selector {
       height: 40px;
       background-color: #7B7B7B;
+      display: none;
+    }
+    .mobile-selector {
+      height: 40px;
+      background-color: #7B7B7B;
+      display: flex;
     }
     .custom-btn {
         color: #fff;
