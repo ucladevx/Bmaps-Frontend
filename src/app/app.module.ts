@@ -29,6 +29,7 @@ import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { ThreeDayComponent } from './three-day/three-day.component';
+import { WeekMobileComponent } from './week-mobile/week-mobile.component';
 
 
 const appRoutes: Routes = [
@@ -38,7 +39,8 @@ const appRoutes: Routes = [
     children: [
       {path: 'month', component: MonthComponent},
       {path: 'week', component: WeekComponent},
-      {path: 'three-day', component: ThreeDayComponent}
+      {path: 'three-day', component: ThreeDayComponent},
+      {path: 'week-mobile', component: WeekMobileComponent}
     ]
   },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
@@ -60,7 +62,8 @@ const appRoutes: Routes = [
     WeekComponent,
     CalendarContainerComponent,
     SearchBarComponent,
-    ThreeDayComponent
+    ThreeDayComponent, 
+    WeekMobileComponent
   ],
   imports: [
     BrowserModule,

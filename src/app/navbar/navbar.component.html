@@ -10,6 +10,7 @@
         <span [ngClass]="currentView == CalendarViewState.threeday ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</span>
         <span [ngClass]="currentView == CalendarViewState.week ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.week)">Week</span>
         <span [ngClass]="currentView == CalendarViewState.month ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.month)">Month</span>
+        <span [ngClass]="currentView == CalendarViewState.weekmobile ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.weekmobile)">Week Mobile</span>
       </div>
     </ng-template>
     <button (click)="toggleFilterCollapse()" class="navbar-toggler navbar-toggler-right" type="button">

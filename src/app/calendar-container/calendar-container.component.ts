@@ -4,6 +4,7 @@ import { ContentChild } from '@angular/core';
 import { MonthComponent } from '../month/month.component';
 import { WeekComponent } from '../week/week.component';
 import { ThreeDayComponent } from '../three-day/three-day.component';
+import { WeekMobileComponent } from '../week-mobile/week-mobile.component';
 import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import * as moment from 'moment';
@@ -14,7 +15,7 @@ import { CalendarViewState } from '../calendar-view-enum';
   selector: 'app-calendar-container',
   templateUrl: './calendar-container.component.html',
   styleUrls: ['./calendar-container.component.scss'],
-  providers: [WeekComponent, MonthComponent, ThreeDayComponent]
+  providers: [WeekComponent, MonthComponent, ThreeDayComponent, WeekMobileComponent]
 })
 
 export class CalendarContainerComponent implements OnInit {
@@ -31,6 +32,9 @@ export class CalendarContainerComponent implements OnInit {
 
   @ContentChild(ThreeDayComponent)
   private threeDayComponent: ThreeDayComponent;
+
+  @ContentChild(WeekMobileComponent)
+  private WeekMobileComponent: WeekMobileComponent;
 
   // week number
   weekNumber: string;
@@ -74,6 +78,8 @@ export class CalendarContainerComponent implements OnInit {
     else if (this.router.url.startsWith('/calendar/week'))
       return CalendarViewState.week;
     else if (this.router.url.startsWith('/calendar/month'))
+      return CalendarViewState.month;
+    else if (this.router.url.startsWith('/calendar/week-mobile'))
       return CalendarViewState.month;
 
     console.log("getCalendarView() called not in Calendar View?");

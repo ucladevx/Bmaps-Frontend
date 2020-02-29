@@ -30,6 +30,7 @@ export class ViewService {
     this.isMonthView();
     this.isWeekView();
     this.isThreeDayView();
+    this.isWeekMobileView();
 
     // Starts with month
     this.storeLastView('month');
@@ -37,6 +38,8 @@ export class ViewService {
 
   // CHANGE DATE SPAN (dates displayed on screen) //
 
+  // emit when transitioning to 3 day
+  @Output() changeToWeekMobile: EventEmitter<Number> = new EventEmitter();
   // emit when transitioning to 3 day
   @Output() changeToThreeDay: EventEmitter<Number> = new EventEmitter();
   // emit when transitioning within week or month to week
@@ -49,6 +52,9 @@ export class ViewService {
       case CalendarViewState.day:
         // For when we implement one day view
         console.log("change day span, calendarView = day");
+        break;
+      case CalendarViewState.weekmobile:
+        this.changeToWeekMobile.emit(delta);
         break;
       case CalendarViewState.threeday:
         this.changeToThreeDay.emit(delta);
@@ -98,6 +104,14 @@ export class ViewService {
       this.currentViewSource.next('three-day');
       this.storeLastView('three-day');
     } return this.router.url.startsWith("/calendar/three-day");
+  }
+
+  // test if app is currently in week mobile view
+  isWeekMobileView() {
+    if(this.router.url.startsWith("/calendar/week-mobile")){
+      this.currentViewSource.next('week-mobile');
+      this.storeLastView('week-mobile');
+    } return this.router.url.startsWith("/calendar/week-mobile");
   }
 
   // currently displayed view
