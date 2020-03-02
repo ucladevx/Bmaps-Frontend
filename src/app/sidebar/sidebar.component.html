@@ -22,6 +22,12 @@
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
                     (mouseenter)="onHover(event)"
                     (click)="onSelect(event)">
+                    <ng-template #modal_1>
+              <modal id="modal_1" class="hhidden">
+                  Dialog Header
+                  <button (click)="closeDialog()">Close Dialog</button>
+              </modal>
+          </ng-template>
                     <div class="sidebar-event-img-container">
                         <img src="{{
                           event.properties.cover_picture == '<NONE>' ?
@@ -43,14 +49,7 @@
                       </div>
                     </div>
                     <div class="event-add">
-                      <div  class="dropdown" dropdown>
-                          <a id="sidebar-event-add-button" dropdownToggle class="text-center btn btn-setting we popupContainer"  data-toggle="dropdown" aria-haspopup="true" aria- expanded="true" (click)="$event.stopPropagation();">+</a>
-                          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                              <li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a class="dd-item" href="{{this._dateService.formatGoogleCalendar(event)}}"
-target="_blank" title="Add to Google Calendar" rel="nofollow">Add to Google Calendar</a></li>
-<li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a class="dd-item" (click)= "createICS(event)" [href]="fileUrl" download="{{event.properties.name}}.ics">Add to Apple Calendar</a></li>
-                          </ul>
-                      </div>
+                          <a id="sidebar-event-add-button" data-toggle="dropdown" aria-haspopup="true" aria- expanded="true" (click)="createDialogue($event);">+</a>
                   </div>
                 <div class="separator"></div>
             </div>

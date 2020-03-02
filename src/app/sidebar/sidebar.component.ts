@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@an
 import { DateService } from '../services/date.service';
 import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
-import { AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
+import { AfterViewInit, ViewChildren, ElementRef, QueryList, TemplateRef, ViewContainerRef } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
@@ -10,6 +10,7 @@ import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 import { ICalendar } from 'datebook';
+import {}
 
 @Component({
     selector: 'app-sidebar',
@@ -41,6 +42,8 @@ export class SidebarComponent implements OnInit {
     @Input() onPress: () => void;
     @Input() pressed$: Observable<boolean>;
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
+    @ViewChildren('modal_1') modal_1: TemplateRef<any>;
+    @ViewChildren('vc') vc: ViewContainerRef;
 
     constructor(private sanitizer: DomSanitizer, private router: Router, public _eventService: EventService, private _dateService: DateService, public _viewService: ViewService) {}
 
@@ -121,6 +124,17 @@ export class SidebarComponent implements OnInit {
         const data = this._dateService.formatICS(event);
         const blob = new Blob([data], { type: 'application/octet-stream' });
         this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+    }
+
+    showDialog(){
+        let view = this.modal_1.createEmbeddedView(null);
+        this.vc.insert(view);
+        this.modal_1.elementRef.nativeElement.previousElementSibling.classList.remove('hhidden');
+        this.modal_1.elementRef.nativeElement.previousElementSibling.classList.add('sshow');
+    }
+    
+    closeDialog() {
+        this.vc.clear()
     }
 
 }
