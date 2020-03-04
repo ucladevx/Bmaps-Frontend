@@ -214,7 +214,19 @@ export class WeekMobileComponent implements OnInit {
     return p;
   }
 
+  styleEvent(event: GeoJson, events: GeoJson[]){
+    let style = {
+      /*
+      'top' : top+"%", 'height' : height+"%",
+      'left' : left+"%", 'width' : width+"%",
+      'zIndex' : z, 'fontWeight' : font
+      */
+    }
+    return style;
+  }
+
   // position and size event to match actual start time and duration
+  /*
   styleEvent(event: GeoJson, events: GeoJson[]) {
     // CALCULATE TOP //
     let start = moment(event.properties.start_time);
@@ -270,5 +282,6 @@ export class WeekMobileComponent implements OnInit {
     }
     return style;
   }
+  */
 
 }
