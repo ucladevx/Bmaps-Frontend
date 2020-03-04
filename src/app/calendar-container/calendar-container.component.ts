@@ -80,7 +80,7 @@ export class CalendarContainerComponent implements OnInit {
     else if (this.router.url.startsWith('/calendar/month'))
       return CalendarViewState.month;
     else if (this.router.url.startsWith('/calendar/week-mobile'))
-      return CalendarViewState.month;
+      return CalendarViewState.weekmobile;
 
     console.log("getCalendarView() called not in Calendar View?");
   }

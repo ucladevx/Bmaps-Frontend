@@ -113,8 +113,6 @@ router-outlet.router-flex + * {
 }
 
 #week-switch {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
     border: $default_border_width solid $default_border_color;
     padding: 4px 10px;
     font-size: 18px;
@@ -124,6 +122,13 @@ router-outlet.router-flex + * {
 #three-day-switch {
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
+    border: $default_border_width solid $default_border_color;
+    padding: 4px 10px;
+    font-size: 18px;
+    margin: 0;
+}
+
+#week-mobile-switch {
     border: $default_border_width solid $default_border_color;
     padding: 4px 10px;
     font-size: 18px;
