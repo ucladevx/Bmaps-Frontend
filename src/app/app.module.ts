@@ -9,6 +9,7 @@ import { SharedModule } from './shared.module';
 
 import { AppComponent } from './app.component';
 import { MapBoxComponent } from './map-box/map-box.component';
+import { GoogleMapsComponent } from './google-maps/google-maps.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
@@ -28,10 +29,13 @@ import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { CommonModule } from '@angular/common';
 
 
 const appRoutes: Routes = [
-  { path: 'map', component: MapBoxComponent },
+  // { path: 'map', component: MapBoxComponent },
+  { path: 'map', component: GoogleMapsComponent },
   { path: 'calendar',
     component: CalendarContainerComponent,
     children: [
@@ -57,7 +61,8 @@ const appRoutes: Routes = [
     MonthComponent,
     WeekComponent,
     CalendarContainerComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    GoogleMapsComponent
   ],
   imports: [
     BrowserModule,
@@ -66,11 +71,13 @@ const appRoutes: Routes = [
     HttpClientModule,
     SharedModule,
     AngularFontAwesomeModule,
+    GoogleMapsModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
     ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
+    CommonModule
   ],
   providers: [
     ViewService,

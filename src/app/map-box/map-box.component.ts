@@ -195,7 +195,7 @@ export class MapBoxComponent implements OnInit {
   buildMap() {
     this.map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/trinakat/cjasrg0ui87hc2rmsomilefe3',
+      style: 'mapbox://styles/mapbox/outdoors-v10?optimize=true',
       center: [this.lng, this.lat],
       maxBounds: [
         [-118.46, 34.056],
