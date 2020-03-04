@@ -30,6 +30,9 @@ import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.com
 import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 
+import { GoogleMapsModule } from '@angular/google-maps';
+import { GoogleMapComponent } from './google-map/google-map.component'
+
 const appRoutes: Routes = [
   { path: 'map', component: MapBoxComponent  },
   { path: 'calendar',
@@ -57,7 +60,8 @@ const appRoutes: Routes = [
     EventDetailComponent,
     MapBoxComponent,
     MonthComponent,
-    WeekComponent
+    WeekComponent,
+    GoogleMapComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +69,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     SharedModule,
+    GoogleMapsModule,
     // AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),

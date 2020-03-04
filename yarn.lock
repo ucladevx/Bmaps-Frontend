@@ -212,6 +212,14 @@
   resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-9.0.1.tgz#e95daa336ea93c6236fdc8863d01eaabc4070004"
   integrity sha512-yzzlCslWp7IiFSYjSGNqexPmnKn9xhpT8FKzxNT0qEpQ+SieQ7apsjvMfR3TCip0Nnfus2qTh3kz1ZCaawAcjQ==
 
+"@angular/google-maps@^9.1.0":
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@angular/google-maps/-/google-maps-9.1.0.tgz#2e9eff34db858d031d32e24b132dfc4c962e7e84"
+  integrity sha512-0laZvjJNiZGiJoCmNT8o7Xc1QU+FFidXUbvZpoDhyLbNnzlXjLetYCdfijhcxyqxydKRbqT6unnOZZbo48QvsA==
+  dependencies:
+    "@types/googlemaps" "^3.37.0"
+    tslib "^1.9.0"
+
 "@angular/language-service@^9.0.1":
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-9.0.1.tgz#297f5f43ce5e843559a44ab81a89d42c0682b566"
@@ -1044,6 +1052,11 @@
     "@types/events" "*"
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/googlemaps@^3.37.0":
+  version "3.39.3"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.39.3.tgz#8664e424f335802c8aa46a94676666b0a0f31d97"
+  integrity sha512-L8O9HAVFZj0TuiS8h5ORthiMsrrhjxTC8XUusp5k47oXCst4VTm+qWKvrAvmYMybZVokbp4Udco1mNwJrTNZPQ==
 
 "@types/jasmine@*":
   version "3.4.6"
