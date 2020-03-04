@@ -10,7 +10,7 @@ import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 import { ICalendar } from 'datebook';
-import {}
+import { ModalComponent } from './sidebar-popup.component';
 
 @Component({
     selector: 'app-sidebar',

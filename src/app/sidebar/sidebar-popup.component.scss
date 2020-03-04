@@ -1,0 +1,36 @@
+// this makes the .modal visible
+.sshow {
+    display: block;
+}
+// this makes the element hidden/invisible
+.hhidden {
+    display: none;
+}
+// this holds the CSS display of the modal
+.mmodal {
+    // makes it hover above all elements
+    z-index: 1000;
+    position: fixed;
+    top: 30px;
+    bottom: 0;
+    left: 300px;
+    width: 500px;
+}
+.mmodal-body {
+    background: #fff;
+    margin: 40px;
+    padding: 20px;
+}
+// backdrop color
+.mmodal-background {
+    // should be below the .modal but above all other elements
+    z-index: 900;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    // makes the below elements visible to a degree.
+    opacity: 0.95;
+}
