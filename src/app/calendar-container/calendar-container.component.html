@@ -12,11 +12,11 @@
       <div id="calendar-controls-wrapper">
         <div id="calendar-controls">
           <button id="left-caret" class="custom-btn">
-            <i class="fa fa-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
+            <i class="icon-caret-left" (click)="changeDateSpan(-1)" aria-hidden="true"></i>
           </button>
           <span>{{viewDate}}</span>
           <button id="right-caret" class="custom-btn">
-            <i class="fa fa-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
+            <i class="icon-caret-right" (click)="changeDateSpan(1)" aria-hidden="true"></i>
           </button>
         </div>
         <div id="mobile-week-number" *ngIf="this.router.url.startsWith('/calendar/week')">
