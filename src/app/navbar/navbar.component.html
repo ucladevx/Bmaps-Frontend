@@ -7,7 +7,9 @@
     </div>
     <ng-template #calendarViewSelect>
       <div class="d-md-none mobile-calendar-view-switch">
-        <span [ngClass]="currentView == CalendarViewState.threeday ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</span>
+        <!--<a routerLink="/user/bob" routerLinkActive="active-link">Bob</a> -->
+        <a class="mobile-calendar-view-button" routerLink="/calendar/three-day" routerLinkActive="active" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</a>
+        <!--<span [ngClass]="currentView == CalendarViewState.threeday ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</span>-->
         <span [ngClass]="currentView == CalendarViewState.week ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.week)">Week</span>
         <span [ngClass]="currentView == CalendarViewState.month ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.month)">Month</span>
       </div>

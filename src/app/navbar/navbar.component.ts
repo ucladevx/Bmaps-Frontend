@@ -24,19 +24,36 @@ export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
     isMapSelected: boolean = true;
-    currentView: CalendarViewState = CalendarViewState.month;
+    currentView: CalendarViewState; //= CalendarViewState.month;
     isMonth: boolean = false;
 
     constructor(private _eventService: EventService, public _viewService: ViewService, private _router: Router, private http: HttpClient) {
       this._viewService.currentView$.subscribe( view => {
         if(view == 'map')
           this.isMapSelected = true;
-        else
+        else {
           this.isMapSelected = false;
+          
+          if (view == 'month')
+            this.currentView = CalendarViewState.month;
+          else if (view == 'week') 
+            this.currentView = CalendarViewState.week;
+          else if (view == 'three-day')
+            this.currentView = CalendarViewState.threeday;
+        }
+
+
       });
       this._viewService.isMapView();
+      this._viewService.isMonthView();
+      this._viewService.isWeekView();
+      this._viewService.isThreeDayView();
+      //console.log(this.currentView);
     }
+
     ngOnInit() {
+      //this.currentView = this._viewService.getCurrentView();
+      //console.log(this.currentView);
       this.getCurrentDay();
       this.getTemperature();
       setInterval(() => this.getTemperature(), 9000000);
@@ -138,9 +155,6 @@ export class NavbarComponent implements OnInit {
     }
 
     changeCalendarView(view: CalendarViewState): void {
-      setTimeout(() => {  // fixes ExpressionChangedAfterItHasBeenCheckedError error for mobile navbar calendar
-        this.currentView = view;
-      });
       let path = "";
       let ev = this._eventService.getExpandedEvent();
       if (view == CalendarViewState.week) {
@@ -155,6 +169,8 @@ export class NavbarComponent implements OnInit {
         this.emitChangeView('threeday');
         path += '/calendar/three-day';
       }
+
+      this.currentView = view;
 
       if(ev!=null)
         path += "(sidebar:detail/"+ev.id+")";
