@@ -122,11 +122,13 @@ export class SidebarComponent implements OnInit {
 
     createICS(event: GeoJson){
         const data = this._dateService.formatICS(event);
+        console.log(data);
         const blob = new Blob([data], { type: 'application/octet-stream' });
         this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     }
 
-    openModal(id: string) {
+    openModal(event: any, id: string) {
+        event.stopPropagation();
         this.modalService.open(id);
     }
 

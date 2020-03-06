@@ -19,11 +19,14 @@ jw-modal {
         overflow: auto;
 
         .jw-modal-body {
-            padding: 20px;
+            padding: 1em;
             background: #fff;
+            border-radius: 10px;
+            /* margin exposes part of the modal background */
+            margin: 10em auto;
+            width: 15em;
 
             /* margin exposes part of the modal background */
-            margin: 40px;
         }
     }
 
