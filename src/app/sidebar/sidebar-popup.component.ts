@@ -3,8 +3,15 @@ import { ElementRef } from '@angular/core';
 
 @Component({
     selector: 'modal',
-    templateUrl: './sidebar-popup.html',
-  styleUrls: ['./sidebar-popup.scss']
+    template: `
+        <div class="mmodal">
+            <div class="mmodal-body">
+                <ng-content></ng-content>
+            </div>
+        </div>
+        <div class="mmodal-background"></div>
+    `,
+  styleUrls: ['./sidebar-popup.component.scss']
 })
 export class ModalComponent implements OnInit {
     constructor(private el: ElementRef) { }
