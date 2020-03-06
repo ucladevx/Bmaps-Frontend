@@ -10,7 +10,8 @@ import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 import { ICalendar } from 'datebook';
-import { ModalComponent } from './sidebar-popup.component';
+import { ModalComponent } from '../sidebar-popup/sidebar-popup.component';
+import { ModalService } from '../sidebar-popup/modal.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -44,8 +45,7 @@ export class SidebarComponent implements OnInit {
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
     @ViewChildren('modal_1') modal_1: TemplateRef<any>;
     @ViewChildren('vc') vc: ViewContainerRef;
-
-    constructor(private sanitizer: DomSanitizer, private router: Router, public _eventService: EventService, private _dateService: DateService, public _viewService: ViewService) {}
+    constructor(private sanitizer: DomSanitizer, private router: Router, public _eventService: EventService, private _dateService: DateService, public _viewService: ViewService, private modalService: ModalService) {}
 
     ngOnInit() {
         // TODO: unsubscribe on destroy
@@ -126,15 +126,12 @@ export class SidebarComponent implements OnInit {
         this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     }
 
-    showDialog(){
-        let view = this.modal_1.createEmbeddedView(null);
-        this.vc.insert(view);
-        this.modal_1.elementRef.nativeElement.previousElementSibling.classList.remove('hhidden');
-        this.modal_1.elementRef.nativeElement.previousElementSibling.classList.add('sshow');
+    openModal(id: string) {
+        this.modalService.open(id);
     }
-    
-    closeDialog() {
-        this.vc.clear()
+
+    closeModal(id: string) {
+        this.modalService.close(id);
     }
 
 }
