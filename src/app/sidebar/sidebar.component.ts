@@ -111,7 +111,7 @@ export class SidebarComponent implements OnInit {
     }
 
   // check whether an image source exists
-  checkImage(imageSrc) {
+    checkImage(imageSrc) {
       let img = new Image();
       try {
         img.src = imageSrc;
