@@ -38,6 +38,7 @@ export class SidebarComponent implements OnInit {
     public filteredEvents: GeoJson[];
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
+    public calendarEvent: GeoJson;
     public fileUrl;
     public mobileSidebarVisible: boolean = false;
     @Input() onPress: () => void;
@@ -121,15 +122,17 @@ export class SidebarComponent implements OnInit {
     }
 
     createICS(event: GeoJson){
-        const data = this._dateService.formatICS(event);
+        console.log(this.calendarEvent);
+        const data = this._dateService.formatICS(this.calendarEvent);
         console.log(data);
         const blob = new Blob([data], { type: 'application/octet-stream' });
         this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     }
 
-    openModal(event: any, id: string) {
+    openModal(event: any, geoEvent: GeoJson, id: string) {
         event.stopPropagation();
         this.modalService.open(id);
+        this.calendarEvent = <GeoJson> geoEvent;
     }
 
     closeModal(id: string) {
