@@ -24,9 +24,6 @@
   padding: 5% 0% 5% 0%;
   display: block;
   border-top: 0px solid $default_border_color;
-  //border-bottom: 1px solid $default_border_color;
-  //border-left: 1px solid #7B7B7B;
-  //border-right: 1px solid #7B7B7B;
   float: left;
   clear: left;
   text-align: center;
@@ -65,7 +62,6 @@
   background-color: white;
   align-items: flex-start;
   float: left;
-  //border-right: 1px solid $default_border_color;
   position: -webkit-sticky;
   position: sticky;
   left: 0;
@@ -82,7 +78,6 @@
   z-index: 300;
   top: 0;
   overflow: visible;
-  //border-right: 1px solid #7B7B7B;
 }
 
 .time-of-day {

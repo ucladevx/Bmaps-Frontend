@@ -7,9 +7,7 @@
     </div>
     <ng-template #calendarViewSelect>
       <div class="d-md-none mobile-calendar-view-switch">
-        <!--<a routerLink="/user/bob" routerLinkActive="active-link">Bob</a> -->
-        <a class="mobile-calendar-view-button" routerLink="/calendar/three-day" routerLinkActive="active" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</a>
-        <!--<span [ngClass]="currentView == CalendarViewState.threeday ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</span>-->
+        <span [ngClass]="currentView == CalendarViewState.threeday ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</span>
         <span [ngClass]="currentView == CalendarViewState.week ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.week)">Week</span>
         <span [ngClass]="currentView == CalendarViewState.month ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.month)">Month</span>
       </div>
@@ -43,25 +41,9 @@
         </li>
         <li>
           <span [ngClass]="isMapSelected ? 'navbar-text' : 'navbar-text active'" (click)="toggleViews()">Calendar View</span>
-          <!--
-        <span *ngIf="this.currentView == CalendarViewState.month; else weekButton">
-          <span class="navbar-text"  routerLink="/calendar/month" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
-        </span>
-        <ng-template #weekButton>
-          <span *ngIf="this.currentView == CalendarViewState.week; else threeDayButton" class="navbar-text" routerLink="/calendar/week" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
-        </ng-template>
-        <ng-template #threeDayButton>
-          <span class="navbar-text" routerLink="/calendar/three-day" routerLinkActive="active" (click)="toggleViews()">Calendar View</span>
-        </ng-template>
-      -->
         </li>
         <li>
         <span class="navbar-text" id="install-button">Install</span>
-        </li>
-        <li>
-        </li>
-        <!-- <span class="navbar-text"  routerLink="/week" routerLinkActive="active">Week View</span> -->
-        <li>
         <span class="navbar-text">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">Feedback</a>
         </span>

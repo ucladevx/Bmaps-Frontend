@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
     @Output() changeView: EventEmitter<string> = new EventEmitter();
 
     isMapSelected: boolean = true;
-    currentView: CalendarViewState; //= CalendarViewState.month;
+    currentView: CalendarViewState;
     isMonth: boolean = false;
 
     constructor(private _eventService: EventService, public _viewService: ViewService, private _router: Router, private http: HttpClient) {
@@ -41,19 +41,15 @@ export class NavbarComponent implements OnInit {
           else if (view == 'three-day')
             this.currentView = CalendarViewState.threeday;
         }
-
-
       });
+
       this._viewService.isMapView();
       this._viewService.isMonthView();
       this._viewService.isWeekView();
       this._viewService.isThreeDayView();
-      //console.log(this.currentView);
     }
 
     ngOnInit() {
-      //this.currentView = this._viewService.getCurrentView();
-      //console.log(this.currentView);
       this.getCurrentDay();
       this.getTemperature();
       setInterval(() => this.getTemperature(), 9000000);
@@ -193,17 +189,14 @@ export class NavbarComponent implements OnInit {
         if (this._viewService.retrieveLastView() == 'week') {
           this.emitChangeView('week');
           path += '/calendar/week';
-          //this.currentView = CalendarViewState.week;
         }
         else if (this._viewService.retrieveLastView() == 'month') {
           this.emitChangeView('month');
           path += '/calendar/month';
-          //this.currentView = CalendarViewState.month;
         }
         else if (this._viewService.retrieveLastView() == 'three-day') {
           this.emitChangeView('three-day');
           path += '/calendar/three-day';
-          //this.currentView = CalendarViewState.threeday;
         }
 
       }

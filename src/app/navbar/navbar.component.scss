@@ -150,7 +150,6 @@ button {
   position: absolute;
   left: 50%;
   transform: translate(-48%, 0%);
-  //margin-left: -0px;  // change to half the width later
   justify-content: center;
   align-items: center;
 }
@@ -158,15 +157,8 @@ button {
 .mobile-calendar-view-button {
   color: white;
   padding: 2px 7px 2px 7px;
-  //padding-left: 7px;
-  //padding-right: 7px;
   margin: 0px 10px 0px 10px;
-  //margin-left: 10px;
-  //margin-right: 10px;
   border-radius: 7px;
-  //width: 60px;
-  //align-items: center;
-  //background: rgb(120,213,215);
 }
 
 .mobile-calendar-view-button.active {
@@ -178,51 +170,49 @@ button {
 }
 
 @media (min-width: 768px){
-    .navbar-toggler {
-        display: none !important;
-    }
-
-    .navbar-nav {
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-        flex-direction: row;
-    }
-
-    .navbar-collapse {
-        display: flex !important;
-        width: 100%;
-        margin: 0;
-    }
-
-    .navbar-collapse.menu {
-        padding: 0;
-        position: static;
-        top: 0;
-        flex-direction: right;
-    }
-
-    .navbar-toggleable-md{
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-        flex-direction: row;
-        -ms-flex-wrap: nowrap;
-        flex-wrap: nowrap;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-    }
-
-    .d-md-none-important {
+  .navbar-toggler {
       display: none !important;
-    }
+  }
 
-    .mobile-calendar-view-switch {
-      display: flex;
-      //justify-content: center;
-      //align-items: center;
-    }
+  .navbar-nav {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+  }
+
+  .navbar-collapse {
+      display: flex !important;
+      width: 100%;
+      margin: 0;
+  }
+
+  .navbar-collapse.menu {
+      padding: 0;
+      position: static;
+      top: 0;
+      flex-direction: right;
+  }
+
+  .navbar-toggleable-md{
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+  }
+
+  .d-md-none-important {
+    display: none !important;
+  }
+
+  .mobile-calendar-view-switch {
+    display: flex;
+  }
 }
 
 ul li {
