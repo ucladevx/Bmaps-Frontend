@@ -205,7 +205,9 @@ export class WeekComponent implements OnInit {
 
   //convert time to top percentage in css
   convertTimeToPercent(time: Moment) {
-    let increment = 3.55; let p = 11;
+    let increment = 3.55;  
+    let p = 11;
+    if (window.outerHeight <= 768) p = 5;  // mobile view
     if(time.format("A") == "PM"){ p += 42.8; increment = 3.58; }
     p += (parseInt(time.format("H"))%12)*increment;
     p += (parseInt(time.format("mm"))/15)*(increment/4);
