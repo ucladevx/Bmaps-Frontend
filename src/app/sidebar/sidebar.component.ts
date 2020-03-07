@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 import { ICalendar } from 'datebook';
 import { ModalComponent } from '../modal/modal.component';
-import { ModalService } from '../modal/modal.service';
+import { ModalService } from '../services/modal.service';
 
 @Component({
     selector: 'app-sidebar',
