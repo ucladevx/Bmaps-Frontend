@@ -10,8 +10,8 @@ import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 import { ICalendar } from 'datebook';
-import { ModalComponent } from '../sidebar-popup/sidebar-popup.component';
-import { ModalService } from '../sidebar-popup/modal.service';
+import { ModalComponent } from '../modal/modal.component';
+import { ModalService } from '../modal/modal.service';
 
 @Component({
     selector: 'app-sidebar',
