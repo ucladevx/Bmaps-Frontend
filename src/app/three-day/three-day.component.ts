@@ -266,7 +266,7 @@ export class ThreeDayComponent implements OnInit {
       p = 5;
       increment = 3.84;
       if(time.format("A") == "PM"){
-        p += 46; increment = 3.74;
+        p += 46; increment = 3.77;
       }
     }  // mobile view
     else {

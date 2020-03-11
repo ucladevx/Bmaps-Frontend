@@ -224,20 +224,27 @@
         display: none;
     }
     .threedayview-day {
+      border-right: 0px solid $default_border_color;
+    }
+    .threedayview-day tr {
       border-right: 1px solid $default_border_color;
+    }
+    .threedayview-day:first-child {
+      border-right: 0px solid $default_border_color;
     }
     .day-header {
       height: 5%;
       background-color: #7B7B7B;
+      vertical-align: middle;
+      line-height: 200%;
       color: #fff;
       font-size: 13px;
       padding: 1% 0% 2% 0%;
-      border-right: 1px solid #7B7B7B;
     }
     .filler-block {
       height: 5%;
       background-color: #7B7B7B;
-      border-right: 1px solid #7B7B7B;
+      border-right: 5px solid #7B7B7B;
     }
     #scrollable {
       overflow-x: scroll;
@@ -254,6 +261,13 @@
     }
     .timebar {
       height: 150%;
+      border-right: 0px solid $default_border_color;
+    }
+    .timebar tr {
+      border-right: 1px solid $default_border_color;
+    }
+    .timebar:first-child {
+      border-right: 0px solid $default_border_color;
     }
 }
 /* end mobile css */

@@ -224,13 +224,21 @@
         display: none;
     }
     .weekview-day {
+      border-right: 0px solid $default_border_color;
+    }
+    .weekview-day tr {
       border-right: 1px solid $default_border_color;
+    }
+    .weekview-day:first-child {
+      border-right: 0px solid $default_border_color;
     }
     .day-header {
       height: 5%;
       background-color: #7B7B7B;
       color: #fff;
       font-size: 13px;
+      line-height: 200%;
+      vertical-align: middle;
       padding: 2% 0% 2% 0%;
       border-right: 1px solid #7B7B7B;
     }
@@ -258,6 +266,13 @@
     }
     .timebar {
       height: 150%;
+      border-right: 0px solid $default_border_color;
+    }
+    .timebar tr {
+      border-right: 1px solid $default_border_color;
+    }
+    .timebar:first-child {
+      border-right: 0px solid $default_border_color;
     }
 }
 /* end mobile css */
