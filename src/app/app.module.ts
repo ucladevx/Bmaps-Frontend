@@ -28,6 +28,7 @@ import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { ModalComponent } from './modal/modal.component';
 
 
 const appRoutes: Routes = [
@@ -57,7 +58,8 @@ const appRoutes: Routes = [
     MonthComponent,
     WeekComponent,
     CalendarContainerComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

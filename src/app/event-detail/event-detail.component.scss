@@ -82,19 +82,39 @@
 }
 
 .event-add {
-	display: block;
 	text-align: center;
-	margin-top: 15px;
+	display: block;
+	margin: auto;
 }
 
 #event-add-button {
-	margin-top: 10px;
+	margin: auto;
 	color: #ffffff;
-	padding: 5px;
 	text-decoration: none;
 	background-color: #53D7D7;
 	text-align: center;
-	border-radius: 10px;
+	border-radius: 5px;
+	font: 3em;
+	padding: 5px 50px;
+}
+
+.dropdown {
+	text-align: center;
+	position: relative;
+  	display: inline-block;
+}
+
+.dd-item {
+	padding: 5px 30px;
+	text-align: center;
+	color: #484747;
+	display: block;
+}
+
+.dd-item:hover,visited,active {
+	text-decoration: none;
+	background-color: #C6C6C6;
+	padding: auto;
 }
 
 @media (max-width: 992px) {
