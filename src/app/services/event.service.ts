@@ -35,6 +35,8 @@ export class EventService {
   private _filteredMonthEvents;       // holds all events stored for the current month view, filtered
   private _weekEvents;                // holds all events stored for the current week view
   private _filteredWeekEvents;        // holds all events stored for the current week view, filtered
+  private _threeDayEvents;            // holds all events stored for the current three days view
+  private _filteredThreeDayEvents;    // holds all events stored for the current three days view, filtered
   private _dayEvents;                 // holds all events stored for the exact current date
   private _filteredDayEvents;         // holds all events stored for the exact current date, filtered
 
@@ -59,6 +61,8 @@ export class EventService {
   private filteredMonthEventsSource: BehaviorSubject <FeatureCollection>;
   private weekEventsSource: BehaviorSubject <FeatureCollection>;
   private filteredWeekEventsSource: BehaviorSubject <FeatureCollection>;
+  private threeDayEventsSource: BehaviorSubject <FeatureCollection>;
+  private filteredThreeDayEventsSource: BehaviorSubject <FeatureCollection>;
   private dayEventsSource: BehaviorSubject <FeatureCollection>;
   private filteredDayEventsSource: BehaviorSubject <FeatureCollection>;
   private clickedEventSource: Subject <GeoJson>;
@@ -73,8 +77,9 @@ export class EventService {
 
   // OBSERVABLES
   currentDate$; calendarDays$; selectedDay$; clickedEvent$; expandedEvent$; hoveredEvent$;
-  monthEvents$; filteredMonthEvents$; weekEvents$; filteredWeekEvents$; dayEvents$; filteredDayEvents$;
-  categHash$; tagHash$; locationFilter$; dateFilter$; timeFilter$; universalSearch$;
+  monthEvents$; filteredMonthEvents$; weekEvents$; filteredWeekEvents$; threeDayEvents$; 
+  filteredThreeDayEvents$; dayEvents$; filteredDayEvents$; categHash$; tagHash$; locationFilter$; 
+  dateFilter$; timeFilter$; universalSearch$;
 
   // Filters in the same group should be mutually exclusive
   private _filterGroups = [
@@ -123,6 +128,8 @@ export class EventService {
     this.filteredMonthEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
     this.weekEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
     this.filteredWeekEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.threeDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.filteredThreeDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
     this.dayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
     this.filteredDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
     this.clickedEventSource = new Subject <GeoJson> ();
@@ -142,6 +149,8 @@ export class EventService {
     this.filteredMonthEvents$  = this.filteredMonthEventsSource.asObservable();
     this.weekEvents$  = this.weekEventsSource.asObservable();
     this.filteredWeekEvents$ = this.filteredWeekEventsSource.asObservable();
+    this.threeDayEvents$ = this.threeDayEventsSource.asObservable();
+    this.filteredThreeDayEvents$ = this.filteredThreeDayEventsSource.asObservable();
     this.dayEvents$ = this.dayEventsSource.asObservable();
     this.filteredDayEvents$ = this.filteredDayEventsSource.asObservable();
     this.clickedEvent$ = this.clickedEventSource.asObservable();
@@ -159,9 +168,11 @@ export class EventService {
     this.selectedDay$.subscribe(day => { this._selectedDay = day; this._currentDate = day.date; });
     this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
     this.weekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
+    this.threeDayEvents$.subscribe(threeDayEvents => this._threeDayEvents = threeDayEvents);
     this.dayEvents$.subscribe(dayEvents => this._dayEvents = dayEvents);
     this.filteredMonthEvents$.subscribe(filteredMonthEvents => this._filteredMonthEvents = filteredMonthEvents);
     this.filteredWeekEvents$.subscribe(filteredWeekEvents => this._filteredWeekEvents = filteredWeekEvents);
+    this.filteredThreeDayEvents$.subscribe(filteredThreeDayEvents => this._filteredThreeDayEvents = filteredThreeDayEvents);
     this.filteredDayEvents$.subscribe(filteredDayEvents => this._filteredDayEvents = filteredDayEvents);
     this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
     this.expandedEvent$.subscribe(expandedEventInfo => this._expandedEvent = expandedEventInfo);
@@ -175,6 +186,7 @@ export class EventService {
     this.universalSearch$.subscribe(universalSearch => { this._universalSearch = universalSearch; this.applyAllFilters(); })
     // Populate event containers
     this.updateDayEvents(new Date());
+    this.updateThreeDayEvents(new Date());
     this.updateMonthEvents(new Date());
     this.updateWeekEvents(new Date());
     // Initialize filters to defaults
@@ -208,6 +220,8 @@ export class EventService {
     let newDate = this._currentDate;
     newDate.setDate(newDate.getDate() + days);
     this.updateDayEvents(newDate);
+    this.updateThreeDayEvents(newDate);
+    this.updateWeekEvents(newDate);
     this.updateMonthEvents(newDate);
     this.updateCategories();
   }
@@ -257,6 +271,18 @@ export class EventService {
     });
   }
 
+  // Updates events for given three days while persisting the current category
+  updateThreeDayEvents(date: Date): void {
+    this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
+      let noCategs = (this._threeDayEvents.features.length == 0);
+      this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
+      this.updateCategories();
+      if(noCategs || this._categHash['all'].selected)
+        this.allCategories();
+      this.applyAllFilters();
+    });
+  }
+
   // Updates events for given day while persisting the current category
   updateDayEvents(date: Date): void {
   this.currentDateSource.next(date);
@@ -275,6 +301,26 @@ export class EventService {
       }
     });
     return dayEvents;
+  }
+
+  // Filter events by three days
+  private filterByThreeDays(allEvents: FeatureCollection, date: Date){
+    let threeDayEvents = new FeatureCollection([]);
+    let firstDay;
+    // first day should be first of group
+    
+    let numDaysDiff = moment(date).startOf('day').diff(moment().startOf('day'), 'days');
+    // 0 means first day of group, 1 - second, 2 - third
+    let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
+    firstDay = moment(date).clone().startOf('day').add(-1*dayOfGroup, 'days');
+
+    if(new Date() > date){ firstDay = moment(new Date()); }
+    let lastDay = firstDay.clone().add(3, 'days');
+    allEvents.features.forEach(el => {
+      let d = moment(el.properties.start_time).toDate();
+      if (d >= firstDay.toDate() && d <= lastDay.toDate()){ threeDayEvents.features.push(el); }
+    });
+    return threeDayEvents;
   }
 
   // Filter events by week
@@ -417,10 +463,12 @@ export class EventService {
       let dayMap = this.getCategoryMap(this._dayEvents.features);
       let monthMap = this.getCategoryMap(this._monthEvents.features);
       let weekMap = this.getCategoryMap(this._weekEvents.features);
+      let threeDayMap = this.getCategoryMap(this._threeDayEvents.features);
       // initialize tempHash by building the all category container
       let tempHash = { 'all': {
           formattedCategory: 'all',
           numEventsDay: dayMap['all'],
+          numEventsThreeDay: threeDayMap['all'],
           numEventsMonth: monthMap['all'],
           numEventsWeek: weekMap['all'],
           selected: true }
@@ -434,6 +482,7 @@ export class EventService {
         tempHash[categName] = {
           formattedCategory: categStr,
           numEventsDay: dayMap[categName],
+          numEventsThreeDay: threeDayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
           selected: false
@@ -449,12 +498,14 @@ export class EventService {
     this.getCategories().subscribe(categs => {
       // maps store counts of events that fulfill each category
       let dayMap = this.getCategoryMap(this._dayEvents.features);
+      let threeDayMap = this.getCategoryMap(this._threeDayEvents.features);
       let monthMap = this.getCategoryMap(this._monthEvents.features);
       let weekMap = this.getCategoryMap(this._weekEvents.features);
       // initialize tempHash by building the all category container
       let tempHash = { 'all': {
            formattedCategory: 'all',
            numEventsDay: dayMap['all'],
+           numEventsThreeDay: threeDayMap['all'],
            numEventsMonth: monthMap['all'],
            numEventsWeek: weekMap['all'],
            selected: this._categHash ? this._categHash['all'].selected : true }
@@ -467,6 +518,7 @@ export class EventService {
         tempHash[categName] = {
           formattedCategory: categStr,
           numEventsDay: dayMap[categName],
+          numEventsThreeDay: threeDayMap[categName],
           numEventsMonth: monthMap[categName],
           numEventsWeek: weekMap[categName],
           selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
@@ -532,10 +584,13 @@ export class EventService {
       map = this.getCategoryMap(this._monthEvents.features);
     else if(this._viewService.isWeekView())
       map = this.getCategoryMap(this._weekEvents.features);
-    for (let categ in this._categHash)
+    else if(this._viewService.isThreeDayView())
+      map = this.getCategoryMap(this._threeDayEvents.features);
+    for (let categ in this._categHash) {
       if (categ.toLowerCase() == 'all' ||
       (this._categHash.hasOwnProperty(categ.toLowerCase()) && map[categ.toLowerCase()] > 0))
         this._categHash[categ.toLowerCase()].selected = true;
+    }
     this.categHashSource.next(this._categHash);
   }
 
@@ -544,6 +599,8 @@ export class EventService {
   // Apply filters to day, week, and month
   applyAllFilters() {
     this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
+    if(this._viewService.isThreeDayView())
+      this.applyFiltersToSelection(this._threeDayEvents.features,this.filteredThreeDayEventsSource);
     if(this._viewService.isWeekView())
       this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
     if(this._viewService.isMonthView())

@@ -111,6 +111,22 @@
             </ng-template>
             {{categHash[categKey].formattedCategory}}</a>
             </span>
+            <span *ngIf="this._viewService.isThreeDayView()">
+            <a *ngIf="categHash[categKey].numEventsThreeDay != undefined && categHash[categKey].numEventsThreeDay > 0"
+               [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+               (click)="categoryClicked(categKey)">
+            <div class="checkbox-container">
+              <div *ngIf="categHash[categKey].selected; else unchecked">
+                <img class="checkbox" width="16px" src="assets/images/check.svg"/>
+              </div>
+            </div>
+            <ng-template #unchecked>
+                <div>
+                  <img class="checkbox" width="16px" src="assets/images/box.svg" />
+                </div>
+            </ng-template>
+            {{categHash[categKey].formattedCategory}}</a>
+            </span>
           </li>
         </ul>
       </div>

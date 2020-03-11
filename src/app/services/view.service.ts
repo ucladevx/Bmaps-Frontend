@@ -5,14 +5,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { FeatureCollection, GeoJson } from '../map';
+import { CalendarViewState } from '../calendar-view-enum';
 import * as moment from 'moment';
+
 
 @Injectable()
 export class ViewService {
-
   // VIEW VARIABLES
-  private _currentView;               // stores either 'month' 'week' or 'map'
-  private _lastCalendarView;          // stores either 'month' or 'week'
+  private _currentView;               // stores either 'three-day' month' 'week' or 'map'
+  private _lastCalendarView;          // stores either 'three-day' month' or 'week'
 
   // SOURCES
   private currentViewSource: Subject <string>; currentView$;
@@ -28,22 +29,36 @@ export class ViewService {
     this.isCalendarView();
     this.isMonthView();
     this.isWeekView();
+    this.isThreeDayView();
+
+    // Starts with month
+    this.storeLastView('month');
   }
 
   // CHANGE DATE SPAN (dates displayed on screen) //
 
+  // emit when transitioning to 3 day
+  @Output() changeToThreeDay: EventEmitter<Number> = new EventEmitter();
   // emit when transitioning within week or month to week
   @Output() changeToWeek: EventEmitter<Number> = new EventEmitter();
   // emit when transitioning within month or week to month
   @Output() changeToMonth: EventEmitter<Number> = new EventEmitter();
   // call when date span should be changed
-  changeDateSpan(delta : Number) {
-    if(delta == 0){
-      if(this.isWeekView()){ this.changeToMonth.emit(delta); }
-      else { this.changeToWeek.emit(delta); }
-    } else {
-      if(this.isWeekView()){ this.changeToWeek.emit(delta); }
-      else{ this.changeToMonth.emit(delta); }
+  changeDateSpan(delta : Number, calendarView : CalendarViewState) {
+    switch (calendarView) {
+      case CalendarViewState.day:
+        // For when we implement one day view
+        console.log("change day span, calendarView = day");
+        break;
+      case CalendarViewState.threeday:
+        this.changeToThreeDay.emit(delta);
+        break;
+      case CalendarViewState.week:
+        this.changeToWeek.emit(delta);
+        break;
+      case CalendarViewState.month:
+        this.changeToMonth.emit(delta);
+        break;
     }
   }
 
@@ -75,6 +90,14 @@ export class ViewService {
       this.currentViewSource.next('week');
       this.storeLastView('week');
     } return this.router.url.startsWith("/calendar/week");
+  }
+
+  // test if app is currently in three-day view
+  isThreeDayView() {
+    if(this.router.url.startsWith("/calendar/three-day")){
+      this.currentViewSource.next('three-day');
+      this.storeLastView('three-day');
+    } return this.router.url.startsWith("/calendar/three-day");
   }
 
   // currently displayed view

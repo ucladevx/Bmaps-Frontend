@@ -9,15 +9,16 @@ import { CalendarDay } from '../services/event.service';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-week',
-  templateUrl: './week.component.html',
-  styleUrls: ['./week.component.scss']
+  selector: 'app-three-day',
+  templateUrl: './three-day.component.html',
+  styleUrls: ['./three-day.component.scss']
 })
 
-export class WeekComponent implements OnInit {
+export class ThreeDayComponent implements OnInit {
   public days: CalendarDay[] = [];
   public currentMonth: Moment;
   private currentWeek: Moment;
+  private currentDay: Moment;
   private filteredEvents: GeoJson[];
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
@@ -28,25 +29,24 @@ export class WeekComponent implements OnInit {
   constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
   ngOnInit() {
-
-    this._viewService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
+    this._viewService.changeToThreeDay.subscribe( function(delta) { this.changeThreeDay(delta); }.bind(this));
 
     this._eventService.currentDate$.subscribe(date => {
       this.ngZone.run( () => { this.showCalendar(date); });
     });
 
-    this._eventService.weekEvents$.subscribe(weekEventCollection => {
-      this.filteredEvents = weekEventCollection.features;
+    this._eventService.threeDayEvents$.subscribe(threeDayEventCollection => {
+      this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
-      if(this._viewService.isWeekView())
+      if(this._viewService.isThreeDayView())
         document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      if(this._viewService.isWeekView() && this._eventService.getDays())
+      if(this._viewService.isThreeDayView() && this._eventService.getDays())
           this._eventService.setDateFilterFromDays(this._eventService.getDays());
     });
 
-    this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
-      this.filteredEvents = weekEventCollection.features;
+    this._eventService.filteredThreeDayEvents$.subscribe(threeDayEventCollection => {
+      this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
     });
@@ -61,7 +61,7 @@ export class WeekComponent implements OnInit {
 
     this._eventService.setDateFilterFromDays(this._eventService.getDays());
     this.currentMonth = moment();
-    this._viewService.isWeekView();
+    this._viewService.isThreeDayView();
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
@@ -73,56 +73,112 @@ export class WeekComponent implements OnInit {
 
   //display the calendar
   showCalendar(dateInMonth: Moment | Date | string): void {
-  //set currentMonth and currentWeek
+    //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
-    if(this._viewService.isWeekView() && dateInMonth != undefined){
-    // range of days shown on calendar
-    let firstDay: Moment = moment(dateInMonth).startOf('week');
-    let lastDay: Moment = moment(dateInMonth).endOf('week');
-    if(parseInt(lastDay.format('DD')) > 3 && parseInt(lastDay.format('DD')) < 7)
-      this.currentMonth.add(1,'month');
-    //fill days
-    this.days = [];
-    for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
-      //create CalendarDay object
-      let weekDay: CalendarDay = {
-        date: d.toDate(),
-        dayOfMonth: d.date(),
-        inCurrentMonth: d.isSame(this.currentMonth, 'month'),
-        month: parseInt(d.format('M'))-1,
-        year: parseInt(d.format('YYYY')),
-        events: this.getEventsOnDate(d),
-        selected: d.isSame(dateInMonth, 'day'),
-        dayOfWeek: d.format('ddd'),
-        isToday: this._dateService.isToday(d.toDate())
-      };
-      //add weekDay to display days array
-      this.days.push(weekDay);
-      // set selected day to the date provided
-      if (d.isSame(dateInMonth, 'day')) {
-        this._eventService.setSelectedDay(weekDay);
+    this.currentDay = moment(dateInMonth);
+
+    if(this._viewService.isThreeDayView() && dateInMonth != undefined){
+      // range of days shown on calendar
+      let firstDay: Moment;
+      // first day should be first of group
+
+      let numDaysDiff = this.currentDay.startOf('day').diff(moment().startOf('day'), 'days');
+      // 0 means first day of group, 1 - second, 2 - third
+      let dayOfGroup;
+      if (numDaysDiff >= 0) {
+        dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
       }
-    }
-    this._eventService.setDays(this.days);
+      else {
+        numDaysDiff *= -1;
+        dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1);
+      }
+
+      firstDay = this.currentDay.clone().add(-1*dayOfGroup, 'days');
+      let lastDay: Moment = firstDay.clone().add(3, 'days');
+
+      if(parseInt(lastDay.format('DD')) == 2 && parseInt(lastDay.format('DD')) == 3)
+        this.currentMonth.add(1,'month');
+
+      //fill days
+      this.days = [];
+      for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
+        //create CalendarDay object
+        let weekDay: CalendarDay = {
+          date: d.toDate(),
+          dayOfMonth: d.date(),
+          inCurrentMonth: d.isSame(this.currentMonth, 'month'),
+          month: parseInt(d.format('M'))-1,
+          year: parseInt(d.format('YYYY')),
+          events: this.getEventsOnDate(d),
+          selected: d.isSame(dateInMonth, 'day'),
+          dayOfWeek: d.format('ddd'),
+          isToday: this._dateService.isToday(d.toDate())
+        };
+        //add weekDay to display days array
+        this.days.push(weekDay);
+        // set selected day to the date provided
+        if (d.isSame(dateInMonth, 'day')) {
+          this._eventService.setSelectedDay(weekDay);
+        }
+      }
+      this._eventService.setDays(this.days);
     }
   }
 
-  //increment or decrement week
-  changeWeek(delta: number): void {
-    // 1 means advance one week, -1 means go back one week
-    let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
-    // if selected day is in month, that is first option
+  //increment or decrement day
+  changeThreeDay(delta: number): void {
+    // 1 means advance three days, -1 means go back three days
+    let newDay: Moment = this.currentDay.clone().add(delta*3, 'days');
+    let selectedDay = moment(this._eventService.getSelectedDay());
+
     let viewDate;
-    if (newWeek.isSame(moment(this._eventService.getCurrentDate()), 'week'))
+
+    // today is always the first day in a group of three, so calculate the groups of three based off this!
+
+    // Days to check if newDay is in today's group of 3
+    let tomorrow = moment().add(1, 'days');
+    // third day is the day after tomorrow
+    let thirdDay = tomorrow.clone().add(1, 'days');
+
+    // To check if newDay is in selected day's group of 3
+    let numDaysDiff = selectedDay.startOf('day').diff(moment().startOf('day'), 'days');  // gets # of days diff from selected and today
+    // 0 means first day of group, 1 - second, 2 - third
+    let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
+
+    let selectedDayGroupDayTwo;
+    let selectedDayGroupDayThree;
+    if (dayOfGroup == 0) {
+      // selectedDay is first day of group of 3 --> check next 2 days
+      selectedDayGroupDayTwo = selectedDay.clone().add(1, 'days');
+      selectedDayGroupDayThree = selectedDay.clone().add(2, 'days');
+    }
+    else if (dayOfGroup == 1) {
+      // selectedDay is second day of group --> check prev and next day
+      selectedDayGroupDayTwo = selectedDay.clone().add(-1, 'days');
+      selectedDayGroupDayThree = selectedDay.clone().add(1, 'days');
+    }
+    else {
+      // selectedDay is third day of group --> check prev 2 days
+      selectedDayGroupDayTwo = selectedDay.add(-2, 'days');
+      selectedDayGroupDayThree = selectedDay.add(-1, 'days');
+    }
+
+
+    if (newDay.isSame(moment(this._eventService.getCurrentDate()), 'day') ||
+        newDay.isSame(selectedDayGroupDayTwo, 'day') || newDay.isSame(selectedDayGroupDayThree, 'day'))
+      // newDay same as selected day's group of 3
       viewDate = this._eventService.getCurrentDate();
-    else if (newWeek.isSame(moment(), 'week'))
+    // if same group as today
+    else if (newDay.isSame(moment(), 'day') || newDay.isSame(tomorrow, 'day') || newDay.isSame(thirdDay, 'day'))
+      // set selected date to today
       viewDate = new Date();
     else
-      viewDate = newWeek.startOf('week').toDate();
-    if(this._viewService.isWeekView())
+      viewDate = newDay.toDate();
+    if(this._viewService.isThreeDayView())
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
     this._eventService.updateDayEvents(viewDate);
+    this._eventService.updateThreeDayEvents(viewDate);
     this._eventService.updateWeekEvents(viewDate);
     this._eventService.updateMonthEvents(viewDate);
   }

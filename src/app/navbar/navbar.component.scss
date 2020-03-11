@@ -78,7 +78,7 @@
 
 .navbar-toggler-left {
   position: absolute;
-  left: 5%;
+  left: 4%;
 }
 
 .navbar-toggler i {
@@ -145,50 +145,74 @@ button {
   border-bottom: $default_border_width solid $default_border_color;
 }
 
+.mobile-calendar-view-switch {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  transform: translate(-48%, 0%);
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-calendar-view-button {
+  color: white;
+  padding: 2px 7px 2px 7px;
+  margin: 0px 10px 0px 10px;
+  border-radius: 7px;
+}
+
+.mobile-calendar-view-button.active {
+  background: #53D7D7;
+}
+
 @media (max-width: 768px){
 
 }
 
 @media (min-width: 768px){
-    .navbar-toggler {
-        display: none !important;
-    }
-
-    .navbar-nav {
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-        flex-direction: row;
-    }
-
-    .navbar-collapse {
-        display: flex !important;
-        width: 100%;
-        margin: 0;
-    }
-
-    .navbar-collapse.menu {
-        padding: 0;
-        position: static;
-        top: 0;
-        flex-direction: right;
-    }
-
-    .navbar-toggleable-md{
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-        flex-direction: row;
-        -ms-flex-wrap: nowrap;
-        flex-wrap: nowrap;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-    }
-
-    .d-md-none-important {
+  .navbar-toggler {
       display: none !important;
-    }
+  }
+
+  .navbar-nav {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+  }
+
+  .navbar-collapse {
+      display: flex !important;
+      width: 100%;
+      margin: 0;
+  }
+
+  .navbar-collapse.menu {
+      padding: 0;
+      position: static;
+      top: 0;
+      flex-direction: right;
+  }
+
+  .navbar-toggleable-md{
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+  }
+
+  .d-md-none-important {
+    display: none !important;
+  }
+
+  .mobile-calendar-view-switch {
+    display: flex;
+  }
 }
 
 ul li {
