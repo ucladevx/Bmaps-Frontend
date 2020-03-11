@@ -121,12 +121,19 @@ export class SidebarComponent implements OnInit {
       }
     }
 
+    getICSname(){
+        if (typeof this.calendarEvent !== 'undefined') {
+            return this.calendarEvent.properties.name + ".ics";
+        } else {
+            return "";
+        }
+    }
+
     createICS(event: GeoJson){
-        console.log(this.calendarEvent);
         const data = this._dateService.formatICS(this.calendarEvent);
-        console.log(data);
         const blob = new Blob([data], { type: 'application/octet-stream' });
         this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+        this.closeModal('custom-modal-1');
     }
 
     openModal(event: any, geoEvent: GeoJson, id: string) {

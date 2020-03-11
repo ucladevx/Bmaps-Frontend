@@ -49,9 +49,9 @@
                     <jw-modal id="custom-modal-1">
                     <div class="pop-up-content">
                       <h1 class="pop-up-header">Add to Calendar</h1>
-                        <a class="dd-item" href="{{this._dateService.formatGoogleCalendar(this.calendarEvent)}}"
+                        <a class="dd-item" href="{{this._dateService.formatGoogleCalendar(this.calendarEvent)}}" (click)="closeModal('custom-modal-1')"
                     target="_blank" title="Add to Google Calendar" rel="nofollow">Google</a>
-                        <a class="dd-item" (click)= "createICS(event)" [href]="fileUrl" download="{{this.calendarEvent.properties.name}}.ics">Apple</a>
+                        <a class="dd-item" (click)= "createICS(event)" [href]="fileUrl" download="{{getICSname()}}">Apple</a>
                     </div>
                   </jw-modal>
                   </div>

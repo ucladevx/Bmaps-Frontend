@@ -74,12 +74,18 @@ export class DateService {
   }
 
   formatGoogleCalendar(event: GeoJson): string {
+    if (typeof event == 'undefined') {
+      return "";
+    }
     let href = "http://www.google.com/calendar/render?action=TEMPLATE&text=" + event.properties.name + "&dates=" + this.formatEventCalendar(event) + "&details=" + event.properties.description + "&location=" + event.properties.place.name + "&trp=false&sprop=&sprop=name:"
     return href;
   }
 
   // Create string for ICS file format of event
   formatICS(event: GeoJson): string {
+    if (typeof event == 'undefined') {
+      return "";
+    }
     let data = `BEGIN:VCALENDAR
 VERSION:2.0
 X-WR-CALNAME:BMaps Events
