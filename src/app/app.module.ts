@@ -34,7 +34,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { GoogleMapComponent } from './google-map/google-map.component'
 
 const appRoutes: Routes = [
-  { path: 'map', component: MapBoxComponent  },
+  // { path: 'map', component: MapBoxComponent  },
+  { path: 'map', component: GoogleMapComponent },
   { path: 'calendar',
     component: CalendarContainerComponent,
     children: [

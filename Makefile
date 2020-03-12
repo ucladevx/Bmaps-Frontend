@@ -3,7 +3,7 @@
 # Run a dev server. Navigate to http://localhost:4200/
 # The app will automatically reload if you change any of the source files.
 dev:
-	ng serve --proxy-config proxy.conf.json
+	ng serve --proxy-config proxy.conf.json -o
 
 # Bundle code for production.
 prod:
