@@ -110,11 +110,14 @@
 
 .calendar-header > .short-abbr {
     display: none;
+    background-color: #54D8D8;
+    color: #fff;
+    font-size: 13px;
 }
 
 .dot {
-    height: 1rem;
-    width: 1rem;
+    height: 0.5rem;
+    width: 0.5rem;
     background-color: #59dbd6;
     border-radius: 50%;
     display: none;
@@ -123,11 +126,16 @@
 
 /* mobile css */
 @media screen and (max-width: 768px) {
-
     /* display short day abbreviations */
     .calendar-header > .short-abbr {
         display: flex;
+        height: 60px;
     }
+
+    .calendar-header span:not(.last-child) {
+        border-right: 0px solid $default_border_color;
+    }
+
     .calendar-header > .long-abbr {
         display: none;
     }

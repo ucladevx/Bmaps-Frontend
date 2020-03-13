@@ -29,14 +29,17 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
 import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { ThreeDayComponent } from './three-day/three-day.component';
+import { ModalComponent } from './modal/modal.component';
 
 const appRoutes: Routes = [
   { path: 'map', component: MapBoxComponent  },
   { path: 'calendar',
     component: CalendarContainerComponent,
     children: [
-      {path: 'month', component: MonthComponent  },
-      {path: 'week', component: WeekComponent  }
+      {path: 'month', component: MonthComponent},
+      {path: 'week', component: WeekComponent},
+      {path: 'three-day', component: ThreeDayComponent}
     ]
   },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
@@ -57,7 +60,11 @@ const appRoutes: Routes = [
     EventDetailComponent,
     MapBoxComponent,
     MonthComponent,
-    WeekComponent
+    WeekComponent,
+    CalendarContainerComponent,
+    SearchBarComponent,
+    ThreeDayComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
