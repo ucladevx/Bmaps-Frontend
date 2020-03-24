@@ -23,10 +23,10 @@ export class CalendarContainerComponent implements OnInit {
   public viewDate: string;
   currentPath = '';
 
-  @ContentChild(MonthComponent)
+  @ContentChild(MonthComponent, /* TODO: add static flag */ {})
   private monthComponent: MonthComponent;
 
-  @ContentChild(WeekComponent)
+  @ContentChild(WeekComponent, /* TODO: add static flag */ {})
   private weekComponent: WeekComponent;
 
   @ContentChild(ThreeDayComponent)

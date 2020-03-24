@@ -255,7 +255,7 @@ export class MapBoxComponent implements OnInit {
       });
     };
     resetButton.onclick = resetDetails;
-    resetButton.innerHTML = '<i id="resetIcon" class="fa fa-home" aria-hidden="true"></i>';
+    resetButton.innerHTML = '<i id="resetIcon" class="icon-home" aria-hidden="true"></i>';
     mapCanvas.appendChild(resetButton);
   }
 

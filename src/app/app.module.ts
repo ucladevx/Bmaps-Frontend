@@ -8,32 +8,32 @@ import { CustomReuseStrategy } from './router-strategy';
 import { SharedModule } from './shared.module';
 
 import { AppComponent } from './app.component';
-import { MapBoxComponent } from './map-box/map-box.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { EventDetailComponent } from './event-detail/event-detail.component';
-import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
-import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
+import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
+// import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ViewService } from './services/view.service';
 import { EventService } from './services/event.service';
-import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+
+import { MapBoxComponent } from './map-box/map-box.component';
 import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
-import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
+import { EventDetailComponent } from './event-detail/event-detail.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
+import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { ThreeDayComponent } from './three-day/three-day.component';
 import { ModalComponent } from './modal/modal.component';
 
-
 const appRoutes: Routes = [
-  { path: 'map', component: MapBoxComponent },
+  { path: 'map', component: MapBoxComponent  },
   { path: 'calendar',
     component: CalendarContainerComponent,
     children: [
@@ -50,13 +50,15 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    MapBoxComponent,
+    NavbarComponent,
+    CalendarContainerComponent,
     SidebarComponent,
-    EventDetailComponent,
+    DateSelectorComponent,
     CategoryBarMapComponent,
     CategoryBarCalendarComponent,
-    DateSelectorComponent,
-    NavbarComponent,
+    SearchBarComponent,
+    EventDetailComponent,
+    MapBoxComponent,
     MonthComponent,
     WeekComponent,
     CalendarContainerComponent,
@@ -70,12 +72,12 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     SharedModule,
-    AngularFontAwesomeModule,
+    // AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
     ButtonsModule.forRoot(),
-    RouterModule.forRoot(appRoutes, {useHash: true}),
+    RouterModule.forRoot(appRoutes, {useHash: true})
   ],
   providers: [
     ViewService,

@@ -1,6 +1,7 @@
 <nav class="navbar navbar-toggleable-md  navbar-default">
     <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-left" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="align-top" alt="">
+        <i class="icon-bars" aria-hidden="true" *ngIf="isCollapsed"></i>
+        <i class="icon-times" aria-hidden="true" *ngIf="!isCollapsed"></i>
     </button>
     <div *ngIf="isMapSelected; else calendarViewSelect" class="d-md-none">
         <app-date-selector></app-date-selector>
@@ -13,12 +14,12 @@
       </div>
     </ng-template>
     <button (click)="toggleFilterCollapse()" class="navbar-toggler navbar-toggler-right" type="button">
-      <i class="fa fa-sliders" id="filter-dropdown-toggle" aria-hidden="true" *ngIf="isFilterCollapsed"></i>
-      <i class="fa fa-times" id="filter-dropdown-toggle-2" aria-hidden="true" *ngIf="!isFilterCollapsed"></i>
+      <i class="icon-filter" id="filter-dropdown-toggle" aria-hidden="true" *ngIf="isFilterCollapsed"></i>
+      <i class="icon-times" id="filter-dropdown-toggle-2" aria-hidden="true" *ngIf="!isFilterCollapsed"></i>
     </button>
     <div class="navbar-brand">
       <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
-          <img class="nav-logo" src="/assets/images/map-icon.png" width="" height="30" class="align-top" alt="">
+          <img class="nav-logo" src="/assets/images/map-icon-small.png" width="" height="30" class="align-top" alt="">
           <span id="brand-name">bmaps</span>
       </a>
     </div>

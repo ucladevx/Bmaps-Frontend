@@ -6,6 +6,7 @@
  */
 
 import { ActivatedRouteSnapshot, RouteReuseStrategy, DetachedRouteHandle } from '@angular/router';
+import { Injectable } from "@angular/core";
 
 /** Interface for object which can store both:
  * An ActivatedRouteSnapshot, which is useful for determining whether or not you should attach a route (see this.shouldAttach)
@@ -16,6 +17,7 @@ interface RouteStorageObject {
     handle: DetachedRouteHandle;
 }
 
+@Injectable()
 export class CustomReuseStrategy implements RouteReuseStrategy {
 
     /**

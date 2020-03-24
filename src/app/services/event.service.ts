@@ -188,7 +188,7 @@ export class EventService {
     this.updateDayEvents(new Date());
     this.updateThreeDayEvents(new Date());
     this.updateMonthEvents(new Date());
-    this.updateWeekEvents(new Date());
+    // this.updateWeekEvents(new Date());
     // Initialize filters to defaults
     this.initCategories();
     this.resetFilters(this._viewService.getCurrentView());
