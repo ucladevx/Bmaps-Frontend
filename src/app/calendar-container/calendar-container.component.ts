@@ -125,7 +125,7 @@ export class CalendarContainerComponent implements OnInit {
           this.weekNumber = "Week " + secondWeekCount;
         }
       }
-      
+
     }
     // Week 0-12 -> Within Quarter
     else {

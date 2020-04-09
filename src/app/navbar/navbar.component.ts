@@ -33,20 +33,14 @@ export class NavbarComponent implements OnInit {
           this.isMapSelected = true;
         else {
           this.isMapSelected = false;
-          
           if (view == 'month')
             this.currentView = CalendarViewState.month;
-          else if (view == 'week') 
+          else if (view == 'week')
             this.currentView = CalendarViewState.week;
           else if (view == 'three-day')
             this.currentView = CalendarViewState.threeday;
         }
       });
-
-      this._viewService.isMapView();
-      this._viewService.isMonthView();
-      this._viewService.isWeekView();
-      this._viewService.isThreeDayView();
     }
 
     ngOnInit() {
@@ -96,6 +90,7 @@ export class NavbarComponent implements OnInit {
       this._eventService.resetFilters(newView);
       if(newView == 'map')
           this._eventService.allCategories();
+      this._viewService.setCurrentView(newView);
     }
 
     public isFilterCollapsed: boolean = true;
@@ -165,15 +160,12 @@ export class NavbarComponent implements OnInit {
         this.emitChangeView('threeday');
         path += '/calendar/three-day';
       }
-
       this.currentView = view;
-
       if(ev!=null)
         path += "(sidebar:detail/"+ev.id+")";
       else
         path += "(sidebar:list)";
       this._router.navigateByUrl(path);
-      
     }
 
     toggleViews(): void {
@@ -186,19 +178,20 @@ export class NavbarComponent implements OnInit {
       }
       else {
         this.isMapSelected = false;
-        if (this._viewService.retrieveLastView() == 'week') {
-          this.emitChangeView('week');
-          path += '/calendar/week';
+        switch(this._viewService.retrieveLastView()) {
+          case 'week':
+            this.emitChangeView('week');
+            path += '/calendar/week';
+            break;
+          case 'month':
+            this.emitChangeView('month');
+            path += '/calendar/month';
+            break;
+          case 'three-day':
+            this.emitChangeView('three-day');
+            path += '/calendar/three-day';
+            break;
         }
-        else if (this._viewService.retrieveLastView() == 'month') {
-          this.emitChangeView('month');
-          path += '/calendar/month';
-        }
-        else if (this._viewService.retrieveLastView() == 'three-day') {
-          this.emitChangeView('three-day');
-          path += '/calendar/three-day';
-        }
-
       }
       if(ev!=null)
         path += "(sidebar:detail/"+ev.id+")";

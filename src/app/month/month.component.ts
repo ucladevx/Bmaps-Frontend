@@ -24,6 +24,7 @@ export class MonthComponent implements OnInit {
   constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
   ngOnInit() {
+    this._viewService.determineView();
 
     this._viewService.changeToMonth.subscribe( function(delta) { this.changeMonth(delta); }.bind(this));
 
@@ -55,7 +56,6 @@ export class MonthComponent implements OnInit {
 
     this._eventService.setDateFilterFromDays(this._eventService.getDays());
     this.currentMonth = moment();
-    this._viewService.isMonthView();
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }

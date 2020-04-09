@@ -51,7 +51,11 @@ export class SidebarComponent implements OnInit {
     ngOnInit() {
         // TODO: unsubscribe on destroy
         this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-        this._eventService.dayEvents$.subscribe(eventCollection => {
+        this._viewService.currentView$.subscribe(view => {
+          console.log(view);
+          this.updateSidebarEvents(view);
+        });
+        /* this._eventService.dayEvents$.subscribe(eventCollection => {
           eventCollection.features.sort(function(a,b){
               return moment(a.properties.start_time).diff(moment(b.properties.start_time),'seconds');
           });
@@ -59,7 +63,7 @@ export class SidebarComponent implements OnInit {
         });
         this._eventService.filteredDayEvents$.subscribe(eventCollection => {
             this.filteredEvents = eventCollection.features;
-        });
+        }); */
         this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
             this.clickedEvent = clickedEventInfo;
             this.scrollToEvent(clickedEventInfo);
@@ -69,11 +73,31 @@ export class SidebarComponent implements OnInit {
             this.scrollToEvent(hoveredEventInfo);
         });
         this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
+        this._viewService.determineView();
+        this.updateSidebarEvents(this._viewService.getCurrentView());
     }
 
     stop(event: any): void {
         console.log("Child");
         event.stopPropagation();
+    }
+
+    updateSidebarEvents(view: string): void {
+      switch(view) {
+        case 'map':
+          this.filteredEvents = this._eventService.getDayEvents().features;
+          break;
+        case 'month':
+          this.filteredEvents = this._eventService.getMonthEvents().features;
+          console.log(this.filteredEvents);
+          break;
+        case 'week':
+          this.filteredEvents = this._eventService.getWeekEvents().features;
+          break;
+        case 'three-day':
+          this.filteredEvents = this._eventService.getThreeDayEvents().features;
+          break;
+      }
     }
 
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.

@@ -77,8 +77,8 @@ export class EventService {
 
   // OBSERVABLES
   currentDate$; calendarDays$; selectedDay$; clickedEvent$; expandedEvent$; hoveredEvent$;
-  monthEvents$; filteredMonthEvents$; weekEvents$; filteredWeekEvents$; threeDayEvents$; 
-  filteredThreeDayEvents$; dayEvents$; filteredDayEvents$; categHash$; tagHash$; locationFilter$; 
+  monthEvents$; filteredMonthEvents$; weekEvents$; filteredWeekEvents$; threeDayEvents$;
+  filteredThreeDayEvents$; dayEvents$; filteredDayEvents$; categHash$; tagHash$; locationFilter$;
   dateFilter$; timeFilter$; universalSearch$;
 
   // Filters in the same group should be mutually exclusive
@@ -228,6 +228,15 @@ export class EventService {
 
   // EVENT RETRIEVAL //
 
+  getMonthEvents() { return this._monthEvents; }
+  getFilteredMonthEvents() { return this._filteredMonthEvents; }
+  getWeekEvents() { return this._weekEvents; }
+  getFilteredWeekEvents() { return this._filteredWeekEvents; }
+  getThreeDayEvents() { return this._threeDayEvents; }
+  getFilteredThreeDayEvents() { return this._filteredThreeDayEvents; }
+  getDayEvents() { return this._dayEvents; }
+  getFilteredDayEvents() { return this._filteredDayEvents; }
+
   // Retrieve eventsURL
   private getEventsURL(): string {
     return `${this.eventsUrl}/`;
@@ -308,7 +317,7 @@ export class EventService {
     let threeDayEvents = new FeatureCollection([]);
     let firstDay;
     // first day should be first of group
-    
+
     let numDaysDiff = moment(date).startOf('day').diff(moment().startOf('day'), 'days');
     // 0 means first day of group, 1 - second, 2 - third
     let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
@@ -578,14 +587,20 @@ export class EventService {
   // reset all categories (in range) to be true
   allCategories() {
     let map;
-    if(this._viewService.isMapView())
-      map = this.getCategoryMap(this._dayEvents.features);
-    else if(this._viewService.isMonthView())
-      map = this.getCategoryMap(this._monthEvents.features);
-    else if(this._viewService.isWeekView())
-      map = this.getCategoryMap(this._weekEvents.features);
-    else if(this._viewService.isThreeDayView())
-      map = this.getCategoryMap(this._threeDayEvents.features);
+    switch(this._viewService.getCurrentView()) {
+      case 'map':
+        map = this.getCategoryMap(this._dayEvents.features);
+        break;
+      case 'month':
+        map = this.getCategoryMap(this._monthEvents.features);
+        break;
+      case 'week':
+        map = this.getCategoryMap(this._weekEvents.features);
+        break;
+      case 'three-day':
+        map = this.getCategoryMap(this._threeDayEvents.features);
+        break;
+    }
     for (let categ in this._categHash) {
       if (categ.toLowerCase() == 'all' ||
       (this._categHash.hasOwnProperty(categ.toLowerCase()) && map[categ.toLowerCase()] > 0))
@@ -599,12 +614,17 @@ export class EventService {
   // Apply filters to day, week, and month
   applyAllFilters() {
     this.applyFiltersToSelection(this._dayEvents.features,this.filteredDayEventsSource);
-    if(this._viewService.isThreeDayView())
-      this.applyFiltersToSelection(this._threeDayEvents.features,this.filteredThreeDayEventsSource);
-    if(this._viewService.isWeekView())
-      this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
-    if(this._viewService.isMonthView())
-      this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
+    switch(this._viewService.getCurrentView()) {
+      case 'three-day':
+        this.applyFiltersToSelection(this._threeDayEvents.features,this.filteredThreeDayEventsSource);
+        break;
+      case 'week':
+        this.applyFiltersToSelection(this._weekEvents.features,this.filteredWeekEventsSource);
+        break;
+      case 'month':
+        this.applyFiltersToSelection(this._monthEvents.features,this.filteredMonthEventsSource);
+        break;
+    }
   }
 
   // Apply filters to inputFeatures

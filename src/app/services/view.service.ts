@@ -23,14 +23,12 @@ export class ViewService {
     // Subscribe to current view
     this.currentViewSource = new Subject <string> ();
     this.currentView$ = this.currentViewSource.asObservable();
-    this.currentView$.subscribe(view => this._currentView = view);
+    this.currentView$.subscribe(view => {
+      this._currentView = view;
+      console.log(view);
+    });
     // Determine current view settings
-    this.isMapView();
-    this.isCalendarView();
-    this.isMonthView();
-    this.isWeekView();
-    this.isThreeDayView();
-
+    this.determineView();
     // Starts with month
     this.storeLastView('month');
   }
@@ -43,7 +41,8 @@ export class ViewService {
   @Output() changeToWeek: EventEmitter<Number> = new EventEmitter();
   // emit when transitioning within month or week to month
   @Output() changeToMonth: EventEmitter<Number> = new EventEmitter();
-  // call when date span should be changed
+
+  // call whenever date span should be changed
   changeDateSpan(delta : Number, calendarView : CalendarViewState) {
     switch (calendarView) {
       case CalendarViewState.day:
@@ -52,56 +51,48 @@ export class ViewService {
         break;
       case CalendarViewState.threeday:
         this.changeToThreeDay.emit(delta);
+        this.currentViewSource.next('three-day');
+        this.storeLastView('three-day');
         break;
       case CalendarViewState.week:
         this.changeToWeek.emit(delta);
+        this.currentViewSource.next('week');
+        this.storeLastView('week');
         break;
       case CalendarViewState.month:
         this.changeToMonth.emit(delta);
+        this.currentViewSource.next('month');
+        this.storeLastView('month');
         break;
     }
   }
 
   // VIEW CHECKERS //
 
-  // test if app is currently in map view
-  isMapView() {
+  determineView() {
     if(this.router.url.startsWith("/map")){
       this.currentViewSource.next('map');
-    } return this.router.url.startsWith("/map");
-  }
-
-  // test if app is currently in calendar view
-  isCalendarView() {
-    return this.router.url.startsWith("/calendar");
-  }
-
-  // test if app is currently in month view
-  isMonthView() {
-    if(this.router.url.startsWith("/calendar/month")){
+    } else if(this.router.url.startsWith("/calendar/month")) {
       this.currentViewSource.next('month');
       this.storeLastView('month');
-    } return this.router.url.startsWith("/calendar/month");
-  }
-
-  // test if app is currently in week view
-  isWeekView() {
-    if(this.router.url.startsWith("/calendar/week")){
+    } else if(this.router.url.startsWith("/calendar/week")) {
       this.currentViewSource.next('week');
       this.storeLastView('week');
-    } return this.router.url.startsWith("/calendar/week");
-  }
-
-  // test if app is currently in three-day view
-  isThreeDayView() {
-    if(this.router.url.startsWith("/calendar/three-day")){
+    } else if(this.router.url.startsWith("/calendar/three-day")) {
       this.currentViewSource.next('three-day');
       this.storeLastView('three-day');
-    } return this.router.url.startsWith("/calendar/three-day");
+    }
   }
+
+  isMapView() { return this._currentView == 'map' }
+  isCalendarView() { return this.isMonthView() || this.isWeekView() || this.isThreeDayView() }
+  isMonthView() { return this._currentView == 'month' }
+  isWeekView() { return this._currentView == 'week' }
+  isThreeDayView() { return this._currentView == 'three-day' }
 
   // currently displayed view
   getCurrentView() { return this._currentView; }
+  setCurrentView(view: string) { this.currentViewSource.next(view); }
   // store the most recents view
   storeLastView(view: string){ this._lastCalendarView = view; }
   retrieveLastView(){ return this._lastCalendarView; }
