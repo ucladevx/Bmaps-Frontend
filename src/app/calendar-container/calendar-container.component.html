@@ -1,7 +1,7 @@
 <div class="calendar">
   <div class="selector">
       <!-- if current route is week -->
-      <div id="week-number" *ngIf="(getCalendarView() == CalendarViewState.week) || (getCalendarView() == CalendarViewState.threeday || getCalendarView() == CalendarViewState.weekmobile); else emptyBlock">
+      <div id="week-number" *ngIf="((getCalendarView() == CalendarViewState.week) || (getCalendarView() == CalendarViewState.threeday) || (getCalendarView() == CalendarViewState.weekmobile)); else emptyBlock">
         <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
       </div>
       <ng-template #emptyBlock>

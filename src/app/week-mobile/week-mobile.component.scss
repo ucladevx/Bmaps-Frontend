@@ -15,6 +15,12 @@
 
 table {
 	height: 100%;
+  table-layout: fixed;
+}
+
+col {
+  width: 400px;
+  background-color: yellow;
 }
 
 .filler-block {
@@ -32,11 +38,12 @@ table {
 	text-align: center;
   font-size: 10px;
   font-weight: bold;
+  padding: 2em;
 }
 
 #far-left {
   overflow-x: hidden;
-  table-layout: fixed;
+  //table-layout: fixed;
 }
 
 .day-of-week tr {
@@ -45,10 +52,6 @@ table {
   margin: 0;
   color: black;
   border-bottom: 1px solid black;
-}
-
-td {
-	padding: 2em;
 }
 
 .week-summary {

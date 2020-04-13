@@ -5,26 +5,24 @@
 	<div class="timebar">
       <div class="filler-block"></div>
       <table class="day-of-week" id="far-left">
-		<div *ngFor="let day of days">
-      		<tr>
-      			<td id="day-slot">
-	      			<span class="day-name">{{day.dayOfWeek}}</span>
-	      			<br/>
-	      			<span class="day-month">{{day.dayOfMonth}}</span>
-      			</td>
-      			<div class="day-blocks">
-       			<div class="weekview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{'event-' + event.id}}"
-        		*ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event,day.events)">
-          			<div class="event-details">
-          				<td>
-	            			<div class="event-name">{{eventName(event)}}</div>
-	            			<div class="event-time">{{eventTime(event)}}</div>
-	            		</td>
-          			</div>
-        		</div>
-  			</div>
-      		</tr>
-  		</div>
+         <colgroup>
+          <col class="weekday-col">
+          <col class="second">
+        </colgroup>
+        <tbody>
+      		<tr *ngFor="let day of days">
+            			<td id="day-slot">
+      	      			<span class="day-name">{{day.dayOfWeek}}</span>
+      	      			<br/>
+      	      			<span class="day-month">{{day.dayOfMonth}}</span>
+            			</td>
+             			<td class="weekview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{'event-' + event.id}}"
+              		*ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event,day.events)">
+      	            	<div class="event-name">{{eventName(event)}}</div>
+      	            	<div class="event-time">{{eventTime(event)}}</div>
+      	           </td>
+            	</tr>
+        </tbody>
       </table>
   </div>
 </div>
