@@ -1,8 +1,8 @@
-<div class="week-mobile-container">
+<!--div class="week-mobile-container">
 	<div class="week-summary">
 		{{this.currentDay.startOf('week').format("MMMM D")}} - {{this.currentDay.startOf('week').clone().add(6, 'day').format("MMMM D, YYYY")}}
 	</div>
-      <!--div class="filler-block"></div-->
+      <div class="filler-block"></div>
       <table class="day-of-week" id="far-left">
          <colgroup>
           <col class="weekday-col">
@@ -28,4 +28,26 @@
             	</tr>
         </tbody>
       </table>
+</div-->
+<div class="week-mobile-container">
+  <div class="week-summary">
+    {{this.currentDay.startOf('week').format("MMMM D")}} - {{this.currentDay.startOf('week').clone().add(6, 'day').format("MMMM D, YYYY")}}
+  </div>
+  <div class="day-of-week">
+    <div class="row" *ngFor="let day of days">
+          <div class="day-slot col">
+              <span class="day-name">{{day.dayOfWeek}}</span>
+              <span class="day-month">{{day.dayOfMonth}}</span>
+          </div>
+          <div class="weekview-day-event col" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{'event-' + event.id}}"
+          *ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event,day.events)">
+            <div class="event-details">
+              <div class="event-name">{{eventName(event)}}</div>
+              <div class="event-time">{{eventTime(event)}}</div>
+            </div>
+          </div>
+          <div class="filler-col">
+          </div>
+      </div>
+  </div>
 </div>
