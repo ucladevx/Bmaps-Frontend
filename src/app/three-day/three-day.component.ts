@@ -312,19 +312,19 @@ export class ThreeDayComponent implements OnInit {
     else if (!category.localeCompare("FILM"))
       return '#78E6E6';
     else if (!category.localeCompare("DRINKS"))
-      return '#78E6E6';
+      return '#9FC0FF';
     else if (!category.localeCompare("FITNESS"))
-      return '#78E6E6';
+      return '#BBA4FF';
     else if (!category.localeCompare("GAMES"))
-      return '#78E6E6';
+      return '#9FC0FF';
     else if (!category.localeCompare("LITERATURE"))
       return '#78E6E6';
     else if (!category.localeCompare("RELIGION"))
-      return '#78E6E6';
+      return '#FFB5F8';
     else if (!category.localeCompare("SHOPPING"))
-      return '#78E6E6';
+      return '#FFB5F8';
     else if (!category.localeCompare("WELLNESS"))
-      return '#78E6E6';
+      return '#9FC0FF';
     else
       return '#FFB5F8';
   }

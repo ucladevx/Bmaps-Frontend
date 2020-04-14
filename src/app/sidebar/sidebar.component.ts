@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
-import { ICalendar } from 'datebook';
+//import { ICalendar } from 'datebook';
 import { ModalComponent } from '../modal/modal.component';
 import { ModalService } from '../services/modal.service';
 
