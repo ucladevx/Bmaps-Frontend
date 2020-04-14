@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { GeoJson, FeatureCollection } from './map';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { ViewService } from './services/view.service'
 
 @Component({
   selector: 'app-root',
@@ -14,7 +13,7 @@ export class AppComponent {
 
   title = 'bmaps';
 
-  constructor(public _viewService: ViewService){}
+  constructor(){}
 
   public pressed: boolean;
   public pressed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
