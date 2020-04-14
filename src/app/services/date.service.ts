@@ -57,12 +57,69 @@ export class DateService {
       return `${this.formatDate(start)} \u2022 ${this.formatTime(start)}`;
   }
 
+  formatEventCalendarStart(event: GeoJson): string {
+    let start: string = event.properties.start_time;
+    return moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS');
+  }
+
+  formatEventCalendarEnd(event: GeoJson): string {
+    let end: string = event.properties.end_time;
+    return moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
+  }
+
   // For a given event, format the start and end date for Google calendar export (as an array)    i.e.  ["20201231T193000", "20201231T223000"]
   formatEventCalendar(event: GeoJson): string {
-    let start: string = event.properties.start_time;
-    let end: string = event.properties.end_time;
-    let dates = moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS') + "/" + moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
+    let dates = this.formatEventCalendarStart(event) + "/" + this.formatEventCalendarEnd(event);
     return dates;
+  }
+
+  formatGoogleCalendar(event: GeoJson): string {
+    if (typeof event == 'undefined') {
+      return "";
+    }
+    let href = "http://www.google.com/calendar/render?action=TEMPLATE&text=" + event.properties.name + "&dates=" + this.formatEventCalendar(event) + "&details=" + event.properties.description + "&location=" + event.properties.place.name + "&trp=false&sprop=&sprop=name:"
+    return href;
+  }
+
+  // Create string for ICS file format of event
+  formatICS(event: GeoJson): string {
+    if (typeof event == 'undefined') {
+      return "";
+    }
+    let data = `BEGIN:VCALENDAR
+VERSION:2.0
+X-WR-CALNAME:BMaps Events
+NAME:BMaps Events
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:America/Los_Angeles
+TZURL:http://tzurl.org/zoneinfo-outlook/America/Los_Angeles
+X-LIC-LOCATION:America/Los_Angeles
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+TZNAME:PDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+TZNAME:PST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20200207T225053Z
+DTSTART;TZID=America/Los_Angeles:` + this.formatEventCalendarStart(event) +
+`\nDTEND;TZID=America/Los_Angeles:` + this.formatEventCalendarEnd(event) +
+`\nSUMMARY:` + event.properties.name +
+`\nDESCRIPTION:` + event.properties.description +
+`\nLOCATION:` + event.properties.place.names + //loc??
+`\nEND:VEVENT
+END:VCALENDAR`;
+    return data;
   }
 
   // Test whether given mmt is between start and end (inclusive)

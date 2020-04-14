@@ -20,20 +20,18 @@
         {{event.properties.place.name}}
       </span>
     </div>
-    <div class="event-add" id="event-add">
-      <span>
-       <a id="event-add-button" href="http://www.google.com/calendar/render?
-action=TEMPLATE
-&text={{event.properties.name}}
-&dates={{_dateService.formatEventCalendar(event)}}
-&details={{event.properties.description}}
-&location={{event.properties.place.location.street}}
-&trp=false
-&sprop=
-&sprop=name:"
-target="_blank" rel="nofollow">Add to Calendar</a>
-</span>
-    </div>
+    <span>
+    <div class="event-add">
+                      <div  class="dropdown" dropdown>
+                          <a id="event-add-button" dropdownToggle class="text-center btn btn-setting dropdown-toggle popupContainer"  data-toggle="dropdown" aria-haspopup="true" aria- expanded="true">Add to Calendar</a>
+                          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                              <li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a class="dd-item" href="{{this._dateService.formatGoogleCalendar(event)}}"
+target="_blank" title="Add to Google Calendar" rel="nofollow">Add to Google Calendar</a></li>
+<li role="presentation">  <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a><a class="dd-item" (click)= "createICS(event)" [href]="fileUrl" download="{{event.properties.name}}.ics">Add to Apple Calendar</a></li>
+                          </ul>
+                      </div>
+                  </div>
+                </span>
     <ng-template #venue_street>
       {{event.properties.place.location.street}}
     </ng-template>

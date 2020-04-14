@@ -24,7 +24,7 @@
   padding: 5% 0% 5% 0%;
   display: block;
   border-top: 0px solid $default_border_color;
-  //border-bottom: 1px solid $default_border_color;
+  border-bottom: 1px solid $default_border_color;
   float: left;
   clear: left;
   text-align: center;
@@ -63,7 +63,7 @@
   background-color: white;
   align-items: flex-start;
   float: left;
-  //border-right: 1px solid $default_border_color;
+  border-right: 1px solid $default_border_color;
   position: -webkit-sticky;
   position: sticky;
   left: 0;
@@ -112,7 +112,6 @@
 
 .time-of-day td {
   vertical-align: top;
-  border-right: 1px solid $default_border_color;
 }
 
 .day-blocks {
@@ -227,11 +226,19 @@
     .weekview-day {
       border-right: 0px solid $default_border_color;
     }
+    .weekview-day tr {
+      border-right: 1px solid $default_border_color;
+    }
+    .weekview-day:first-child {
+      border-right: 0px solid $default_border_color;
+    }
     .day-header {
       height: 5%;
       background-color: #7B7B7B;
       color: #fff;
       font-size: 13px;
+      line-height: 200%;
+      vertical-align: middle;
       padding: 2% 0% 2% 0%;
       border-right: 1px solid #7B7B7B;
     }
@@ -248,10 +255,24 @@
       width: 200%;
     }
     .time-of-day td {
+      height: 4%;
       overflow-x: hidden;
     }
     .day-of-month {
       font-size: 13px;
+    }
+    .time-of-day {
+      height: 95%;
+    }
+    .timebar {
+      height: 150%;
+      border-right: 0px solid $default_border_color;
+    }
+    .timebar tr {
+      border-right: 1px solid $default_border_color;
+    }
+    .timebar:first-child {
+      border-right: 0px solid $default_border_color;
     }
 }
 /* end mobile css */

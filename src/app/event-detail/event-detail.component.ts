@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FeatureCollection, GeoJson } from '../map';
 import { EventService } from '../services/event.service';
 import { DateService } from '../services/date.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-event-detail',
@@ -12,8 +13,9 @@ import { DateService } from '../services/date.service';
 
 export class EventDetailComponent implements OnInit {
   public event: GeoJson;
+  fileUrl;
 
-  constructor( private route: ActivatedRoute, private _eventService: EventService, private _dateService: DateService) {}
+  constructor(private sanitizer: DomSanitizer, private route: ActivatedRoute, private _eventService: EventService, private _dateService: DateService) {}
 
   ngOnInit() {
       this.route.params.subscribe(() => {
@@ -37,6 +39,12 @@ export class EventDetailComponent implements OnInit {
       } catch(err) {
         return false;
       }
+    }
+
+      createICS(event: GeoJson){
+        const data = this._dateService.formatICS(event);
+        const blob = new Blob([data], { type: 'application/octet-stream' });
+        this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     }
 
 }
