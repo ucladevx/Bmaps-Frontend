@@ -36,7 +36,7 @@ import { ViewState } from '../view-enum';
 })
 
 export class SidebarComponent implements OnInit {
-    public filteredEvents: GeoJson[];
+    public filteredEvents: GeoJson[] = [];
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
     public calendarEvent: GeoJson;
@@ -78,7 +78,6 @@ export class SidebarComponent implements OnInit {
             this.scrollToEvent(hoveredEventInfo);
         });
         this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
-        this._eventService.determineView();
         this.updateSidebarEvents(this._eventService.getCurrentView());
     }
 

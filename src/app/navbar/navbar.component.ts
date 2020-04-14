@@ -38,6 +38,7 @@ export class NavbarComponent implements OnInit {
             this.currentView = ViewState.threeday;
         }
       });
+      this.isMapSelected = this._eventService.isMapView();
     }
 
     ngOnInit() {
@@ -134,14 +135,15 @@ export class NavbarComponent implements OnInit {
         this.changeView(ViewState.map);
       } else {
         this.isMapSelected = false;
+        console.log(this._eventService.retrieveLastView());
         switch(this._eventService.retrieveLastView()) {
-          case 'week':
+          case ViewState.week:
             this.changeView(ViewState.week);
             break;
-          case 'month':
+          case ViewState.month:
             this.changeView(ViewState.month);
             break;
-          case 'three-day':
+          case ViewState.threeday:
             this.changeView(ViewState.threeday);
             break;
         }
@@ -149,9 +151,30 @@ export class NavbarComponent implements OnInit {
     }
 
     changeView(newView: ViewState): void {
+      let path = "";
+      let e = this._eventService.getSidebarEvent();
+      switch(newView) {
+        case ViewState.map:
+          path += '/map';
+          break;
+        case ViewState.week:
+          path += '/calendar/week';
+          break;
+        case ViewState.month:
+          path += '/calendar/month';
+          break;
+        case ViewState.threeday:
+          path += '/calendar/three-day';
+          break;
+      }
+      if(e != null)
+        path += "(sidebar:detail/"+e.id+")";
+      else
+        path += "(sidebar:list)";
       let d = this._eventService.getSelectedDate();
       if (d == null) d = new Date();
       this._eventService.changeDateSpan(d, newView);
+      this._router.navigateByUrl(path);
     }
 
 }

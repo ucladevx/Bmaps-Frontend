@@ -50,7 +50,7 @@ export class DateSelectorComponent implements OnInit {
 
     public incrementDay(delta: number) {
       // 1 means advance one day, -1 means go back one day
-      let newDate;
+      let newDate = new Date();
       newDate.setDate(this._eventService.getSelectedDate().getDate() + delta);
       this._eventService.changeDateSpan(newDate, this._eventService.getCurrentView());
       if(this._eventService.isMapView())

@@ -171,6 +171,7 @@ export class EventService {
     this.initCategories();
     // Initiailize view variables
     this.determineView();
+    this.storeLastView(ViewState.month);
     // Populate event containers
     this.updateEvents(new Date());
   }
@@ -178,29 +179,29 @@ export class EventService {
   // View Getters and Setters //
 
   determineView() {
+    let prev = this._currentView;
+    let next = this._currentView;
     if(this.router.url.startsWith("/map")){
-      this.currentViewSource.next(ViewState.map);
-      this.storeLastView(ViewState.map)
+      next = ViewState.map;
     } else if(this.router.url.startsWith("/calendar/month")) {
-      this.currentViewSource.next(ViewState.month);
-      this.storeLastView(ViewState.month);
+      next = ViewState.month;
     } else if(this.router.url.startsWith("/calendar/week")) {
-      this.currentViewSource.next(ViewState.week);
-      this.storeLastView(ViewState.week);
+      next = ViewState.week;
     } else if(this.router.url.startsWith("/calendar/three-day")) {
-      this.currentViewSource.next(ViewState.threeday);
-      this.storeLastView(ViewState.threeday);
+      next = ViewState.threeday;
     }
+    this.setCurrentView(next);
+    if(next != prev) this.storeLastView(prev);
   }
 
-  isMapView() { return this._currentView == ViewState.map }
-  isCalendarView() { return this.isMonthView() || this.isWeekView() || this.isThreeDayView() }
-  isMonthView() { return this._currentView == ViewState.month }
-  isWeekView() { return this._currentView == ViewState.week }
-  isThreeDayView() { return this._currentView == ViewState.threeday }
+  isMapView() { return this.router.url.startsWith("/map") }
+  isCalendarView() { return this.router.url.startsWith("/calendar") }
+  isMonthView() { return this.router.url.startsWith("/calendar/month") }
+  isWeekView() { return this.router.url.startsWith("/calendar/week") }
+  isThreeDayView() { return this.router.url.startsWith("/calendar/three-day") }
   setCurrentView(view: ViewState) { this.currentViewSource.next(view); }
   getCurrentView() { return this._currentView; }
-  storeLastView(view: ViewState){ this._lastView = view; }
+  storeLastView(view: ViewState){ this.lastViewSource.next(view); }
   retrieveLastView(){ return this._lastView; }
 
   // Day Getters and Setters //
@@ -241,6 +242,7 @@ export class EventService {
     this.setCurrentView(newView);
     this.setSelectedDate(newDate);
     this.updateEvents(newDate);
+    this.determineView();
   }
 
   // EVENT RETRIEVAL //
@@ -383,7 +385,7 @@ export class EventService {
           numEventsThreeDay: threeDayMap['all'],
           numEventsWeek: weekMap['all'],
           numEventsMonth: monthMap['all'],
-          selected: this._categHash ? this._categHash['all'].selected : true
+          selected: this._categHash && this._categHash['all'] ? this._categHash['all'].selected : true
         }
       };
       // initialize all other category containers iteratively
@@ -538,7 +540,7 @@ export class EventService {
       let passesCategories = this.passesCategories(event);
       // calendar view checks date, time, location\
       let passesDate = true, passesTime = true, passesLocation = true;
-      if(this.isCalendarView()) {
+      if(this.isCalendarView() && this._dateFilter && this._timeFilter && this._locFilter) {
         passesDate = this.passesDate(event);
         passesTime = this.passesTime(event);
         passesLocation = this.passesLocation(event);

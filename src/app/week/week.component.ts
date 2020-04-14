@@ -28,7 +28,6 @@ export class WeekComponent implements OnInit {
 
   ngOnInit() { }/*
 
-    this._viewService.determineView();
     this._viewService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
 
     this._eventService.currentDate$.subscribe(date => {

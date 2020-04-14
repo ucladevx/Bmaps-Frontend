@@ -28,7 +28,6 @@ export class ThreeDayComponent implements OnInit {
   constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
   ngOnInit() { } /*
-    this._viewService.determineView();
     this._viewService.changeToThreeDay.subscribe( function(delta) { this.changeThreeDay(delta); }.bind(this));
 
     this._eventService.currentDate$.subscribe(date => {

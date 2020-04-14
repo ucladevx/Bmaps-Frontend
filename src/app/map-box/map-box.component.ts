@@ -54,7 +54,6 @@ export class MapBoxComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._eventService.determineView();
 
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;

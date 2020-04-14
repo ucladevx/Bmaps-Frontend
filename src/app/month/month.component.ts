@@ -24,7 +24,6 @@ export class MonthComponent implements OnInit {
   constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
   ngOnInit() {
-    this._eventService.determineView();
 
     this._eventService.selectedDate$.subscribe(date => {
       this.ngZone.run( () => { this.updateCalendar(date); });
@@ -50,17 +49,17 @@ export class MonthComponent implements OnInit {
         this.clickedEvent = clickedEventInfo;
     });
 
-    this._eventService.setDateFilterFromDays(this._eventService.getVisibleDays());
     this.currentMonth = moment().startOf('month');
     if(this._eventService.getSidebarEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
+
   }
 
   updateCalendar(dateInMonth: Moment | Date | string): void {
     this.currentMonth = moment(dateInMonth).startOf('month');
     if(!this._eventService.isMonthView() || dateInMonth == undefined)
-      return
+      return;
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('month').endOf('week');
