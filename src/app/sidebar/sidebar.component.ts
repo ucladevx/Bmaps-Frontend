@@ -54,13 +54,16 @@ export class SidebarComponent implements OnInit {
         this._viewService.currentView$.subscribe(view => {
           this.updateSidebarEvents(view);
         });
+        this._eventService.dayEvents$.subscribe(events => {
+          this.updateSidebarEvents(this._viewService.getCurrentView());
+        });
         this._eventService.threeDayEvents$.subscribe(events => {
           this.updateSidebarEvents(this._viewService.getCurrentView());
         });
         this._eventService.weekEvents$.subscribe(events => {
           this.updateSidebarEvents(this._viewService.getCurrentView());
         });
-        this._eventService.threeDayEvents$.subscribe(events => {
+        this._eventService.monthEvents$.subscribe(events => {
           this.updateSidebarEvents(this._viewService.getCurrentView());
         });
         this._eventService.clickedEvent$.subscribe(clickedEventInfo => {

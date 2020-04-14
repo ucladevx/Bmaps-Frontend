@@ -276,10 +276,8 @@ export class EventService {
   private filterByMonth(allEvents: FeatureCollection, date: Date){
     // determine first day and last day to start displaying events
     let firstDay = moment(date).startOf('month').startOf('week');
-    let tempLastDay = moment(date).startOf('month').add(31, 'days');
-    if(new Date() > date) { firstDay = moment(new Date()); }
-    let daysLeftInWeek = 7-parseInt((tempLastDay).format('d'));
-    let lastDay = tempLastDay.clone().add(daysLeftInWeek, 'days');
+    if(new Date() > firstDay.toDate()) { firstDay = moment(new Date()); }
+    let lastDay = moment(date).endOf('month').endOf('week');
     // filter by day span
     return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
   }
@@ -288,18 +286,19 @@ export class EventService {
   private filterByWeek(allEvents: FeatureCollection, date: Date){
     // determine first day and last day to start displaying events
     let firstDay = moment(date).startOf('week');
-    if(new Date() > date){ firstDay = moment(new Date()); }
-    let daysLeftInWeek = 7-parseInt((firstDay).format('d'));
-    let lastDay = firstDay.clone().add(daysLeftInWeek, 'days');
+    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
+    let lastDay = moment(date).endOf('week');
     // filter by day span
     return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
   }
 
   // Filter events by three days
   private filterByThreeDays(allEvents: FeatureCollection, date: Date){
-    let firstDay = moment(date);
-    if(new Date() > date){ firstDay = moment(new Date()); }
-    let lastDay = firstDay.clone().add(2, 'days');
+    let numDaysDiff = moment(date).startOf('day').diff(moment().startOf('day'), 'days');
+    let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
+    let firstDay = moment(date).clone().startOf('day').add(-1*dayOfGroup, 'days');
+    let lastDay = firstDay.clone().add(3, 'days');
+    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
     return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
   }
 

@@ -227,11 +227,9 @@ export class ThreeDayComponent implements OnInit {
 
   //highlight selected day
   onSelect(day: CalendarDay): void{
-    if(this._eventService.getClickedEvent() && this._eventService.getSelectedDay() != day &&
-      moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
-      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-    }
+    if(this._eventService.getSelectedDay() != day){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
     this._eventService.setSelectedDay(day);
+    this._eventService.setCurrentDate(day.date);
   }
 
   //open event in sidebar

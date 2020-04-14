@@ -154,14 +154,12 @@ export class MonthComponent implements OnInit {
   }
 
   onSelect(day: CalendarDay): void {
-    // this.selectedDay = day;
-    if(this._eventService.getSelectedDay() != day){
-      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-    }
+    let prevMonth = this._eventService.getSelectedDay().month;
+    if(this._eventService.getSelectedDay() != day){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
     this._eventService.setSelectedDay(day);
-    if(!day.inCurrentMonth){
-      this.changeMonth(0);
-    }
+    if(day.month > prevMonth){ this.changeMonth(1); }
+    if(day.month < prevMonth){ this.changeMonth(-1); }
+    else { this.changeMonth(0); }
   }
 
 }
