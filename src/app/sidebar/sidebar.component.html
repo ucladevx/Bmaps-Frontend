@@ -4,13 +4,12 @@
         <span class="up-text">Events List</span>
     </div>
     <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
-        <span *ngIf="this._viewService.isMapView(); else calendarView">
-          <app-date-selector class="d-none d-md-block"></app-date-selector>
-          <app-category-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-map>
+        <app-date-selector class="d-none d-md-block"></app-date-selector>
+        <span *ngIf="this._eventService.isMapView(); else calendarView">
+          <app-filter-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-filter-bar-map>
         </span>
         <ng-template #calendarView>
-          <app-search-bar></app-search-bar>
-          <app-category-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-calendar>
+          <app-filter-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-filter-bar-calendar>
         </ng-template>
         <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
           <div *ngIf="filteredEvents.length == 0" id="no-events-section">

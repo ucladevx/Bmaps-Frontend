@@ -1,5 +1,5 @@
 <div class="selector">
-    <button [style.visibility]="showLeft ? 'visible' : 'hidden'" class="custom-btn" id="left-arrow" (click)="updateDate(-1)">
+    <button [style.visibility]="showLeft ? 'visible' : 'hidden'" class="custom-btn" id="left-arrow" (click)="incrementDay(-1)">
         <i class="icon-caret-left fix-pos-left" aria-hidden="true"></i>
     </button>
     <div id="date-text">
@@ -10,7 +10,7 @@
         Events for {{dateString}}
       </span>
     </div>
-    <button [style.visibility]="showRight ? 'visible' : 'hidden'" class="custom-btn" id="right-arrow" (click)="updateDate(1)">
+    <button [style.visibility]="showRight ? 'visible' : 'hidden'" class="custom-btn" id="right-arrow" (click)="incrementDay(1)">
         <i class="icon-caret-right fix-pos-right" aria-hidden="true"></i>
     </button>
 </div>

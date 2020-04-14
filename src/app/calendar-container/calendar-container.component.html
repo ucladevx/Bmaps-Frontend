@@ -1,7 +1,7 @@
 <div class="calendar">
   <div class="selector">
       <!-- if current route is week -->
-      <div id="week-number" *ngIf="(getCalendarView() == CalendarViewState.week) || (getCalendarView() == CalendarViewState.threeday); else emptyBlock">
+      <div id="week-number" *ngIf="(getCalendarView() == ViewState.week) || (getCalendarView() == ViewState.threeday); else emptyBlock">
         <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
       </div>
       <ng-template #emptyBlock>
@@ -20,14 +20,14 @@
       </div>
       <!-- buttons for changing between three-day, week, and month view -->
       <div id="calendar-view-switch">
-        <span id="three-day-switch" class="navbar-text"  routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.threeday)">3 Day</span>
-        <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.week)">Week</span>
-        <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.month)">Month</span>
+        <span id="three-day-switch" class="navbar-text"  routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.threeday)">3 Day</span>
+        <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.week)">Week</span>
+        <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.month)">Month</span>
       </div>
     </div>
-  <div class="mobile-selector" *ngIf="getCalendarView() == CalendarViewState.month">
+  <div class="mobile-selector" *ngIf="getCalendarView() == ViewState.month">
       <!-- if current route is week -->
-      <div id="week-number" *ngIf="(getCalendarView() == CalendarViewState.week) || (getCalendarView() == CalendarViewState.threeday); else emptyBlock">
+      <div id="week-number" *ngIf="(getCalendarView() == ViewState.week) || (getCalendarView() == ViewState.threeday); else emptyBlock">
         <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
       </div>
       <ng-template #emptyBlock>
@@ -47,9 +47,9 @@
 
       <!-- buttons for changing between three-day, week, and month view -->
       <div id="calendar-view-switch">
-        <span id="three-day-switch" class="navbar-text"  routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.threeday)">3 Day</span>
-        <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.week)">Week</span>
-        <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0,CalendarViewState.month)">Month</span>
+        <span id="three-day-switch" class="navbar-text"  routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.threeday)">3 Day</span>
+        <span id="week-switch" class="navbar-text"  routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.week)">Week</span>
+        <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.month)">Month</span>
       </div>
     </div>
     <!-- where month and week and three-day view appear -->

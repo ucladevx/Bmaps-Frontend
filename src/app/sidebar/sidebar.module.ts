@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { SidebarComponent } from './sidebar.component';
 import { DateSelectorComponent } from '../date-selector/date-selector.component';
-import { CategoryBarMapComponent } from '../category-bar-map/category-bar-map.component';
-import { CategoryBarCalendarComponent } from '../category-bar-calendar/category-bar-calendar.component';
-import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { FilterBarMapComponent } from '../filter-bar-map/filter-bar-map.component';
+import { FilterBarCalendarComponent } from '../filter-bar-calendar/filter-bar-calendar.component';
 
 
 const routes: Routes = [
@@ -16,9 +15,8 @@ const routes: Routes = [
   declarations: [
     SidebarComponent,
     DateSelectorComponent,
-    CategoryBarMapComponent,
-    CategoryBarCalendarComponent,
-    SearchBarComponent
+    FilterBarMapComponent,
+    FilterBarCalendarComponent,
   ],
   imports: [
     CommonModule,
@@ -26,9 +24,8 @@ const routes: Routes = [
   ],
   exports: [
     DateSelectorComponent,
-    CategoryBarMapComponent,
-    CategoryBarCalendarComponent,
-    SearchBarComponent
+    FilterBarMapComponent,
+    FilterBarCalendarComponent,
   ]
 })
 export class SidebarModule { }*/

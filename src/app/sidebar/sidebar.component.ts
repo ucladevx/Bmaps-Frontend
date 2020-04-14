@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { DateService } from '../services/date.service';
-import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import { AfterViewInit, ViewChildren, ElementRef, QueryList, TemplateRef, ViewContainerRef } from '@angular/core';
 import { FeatureCollection, GeoJson } from '../map';
@@ -12,6 +11,8 @@ import * as moment from 'moment';
 import { ICalendar } from 'datebook';
 import { ModalComponent } from '../modal/modal.component';
 import { ModalService } from '../services/modal.service';
+import { ViewState } from '../view-enum';
+
 
 @Component({
     selector: 'app-sidebar',
@@ -39,6 +40,7 @@ export class SidebarComponent implements OnInit {
     public clickedEvent: GeoJson;
     public hoveredEvent: GeoJson;
     public calendarEvent: GeoJson;
+    public view: ViewState;
     public fileUrl;
     public mobileSidebarVisible: boolean = false;
     @Input() onPress: () => void;
@@ -46,25 +48,26 @@ export class SidebarComponent implements OnInit {
     @ViewChildren('eventList') private eventList: QueryList<ElementRef>;
     @ViewChildren('modal_1') modal_1: TemplateRef<any>;
     @ViewChildren('vc') vc: ViewContainerRef;
-    constructor(private sanitizer: DomSanitizer, private router: Router, public _eventService: EventService, private _dateService: DateService, public _viewService: ViewService, private modalService: ModalService) {}
+    constructor(private sanitizer: DomSanitizer, private router: Router, public _eventService: EventService, private _dateService: DateService, private modalService: ModalService) {}
 
     ngOnInit() {
         // TODO: unsubscribe on destroy
         this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-        this._viewService.currentView$.subscribe(view => {
-          this.updateSidebarEvents(view);
+        this._eventService.currentView$.subscribe(view => {
+          this.view = view;
+          this.updateSidebarEvents(this.view);
         });
         this._eventService.dayEvents$.subscribe(events => {
-          this.updateSidebarEvents(this._viewService.getCurrentView());
+          this.updateSidebarEvents(this.view);
         });
         this._eventService.threeDayEvents$.subscribe(events => {
-          this.updateSidebarEvents(this._viewService.getCurrentView());
+          this.updateSidebarEvents(this.view);
         });
         this._eventService.weekEvents$.subscribe(events => {
-          this.updateSidebarEvents(this._viewService.getCurrentView());
+          this.updateSidebarEvents(this.view);
         });
         this._eventService.monthEvents$.subscribe(events => {
-          this.updateSidebarEvents(this._viewService.getCurrentView());
+          this.updateSidebarEvents(this.view);
         });
         this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
             this.clickedEvent = clickedEventInfo;
@@ -75,8 +78,8 @@ export class SidebarComponent implements OnInit {
             this.scrollToEvent(hoveredEventInfo);
         });
         this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
-        this._viewService.determineView();
-        this.updateSidebarEvents(this._viewService.getCurrentView());
+        this._eventService.determineView();
+        this.updateSidebarEvents(this._eventService.getCurrentView());
     }
 
     stop(event: any): void {
@@ -84,19 +87,18 @@ export class SidebarComponent implements OnInit {
         event.stopPropagation();
     }
 
-    updateSidebarEvents(view: string): void {
+    updateSidebarEvents(view: ViewState): void {
       switch(view) {
-        case 'map':
+        case ViewState.map:
           this.filteredEvents = this._eventService.getDayEvents().features;
           break;
-        case 'month':
+        case ViewState.month:
           this.filteredEvents = this._eventService.getMonthEvents().features;
-          console.log(this.filteredEvents);
           break;
-        case 'week':
+        case ViewState.week:
           this.filteredEvents = this._eventService.getWeekEvents().features;
           break;
-        case 'three-day':
+        case ViewState.threeday:
           this.filteredEvents = this._eventService.getThreeDayEvents().features;
           break;
       }
@@ -110,14 +112,15 @@ export class SidebarComponent implements OnInit {
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
     // We want to call the function when there is a change to event we're subscribing to
     onSelect(event: any): void {
-        this._eventService.updateClickedEvent(event);
-        this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-        this._eventService.updateExpandedEvent(event);
+      this._eventService.updateClickedEvent(event);
+      this._eventService.updateSidebarEvent(event);
+      this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
+      this._eventService.updateSidebarEvent(event);
     }
 
     onHover(event: GeoJson): void {
-        this.hoveredEvent = event;
-        this._eventService.updateHoveredEvent(event);
+      this.hoveredEvent = event;
+      this._eventService.updateHoveredEvent(event);
     }
 
     toggleMobileSidebar() { this.onPress(); }
@@ -153,28 +156,28 @@ export class SidebarComponent implements OnInit {
     }
 
     getICSname(){
-        if (typeof this.calendarEvent !== 'undefined') {
-            return this.calendarEvent.properties.name + ".ics";
-        } else {
-            return "";
-        }
+      if (typeof this.calendarEvent !== 'undefined') {
+          return this.calendarEvent.properties.name + ".ics";
+      } else {
+          return "";
+      }
     }
 
     createICS(event: GeoJson){
-        const data = this._dateService.formatICS(this.calendarEvent);
-        const blob = new Blob([data], { type: 'application/octet-stream' });
-        this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-        this.closeModal('custom-modal-1');
+      const data = this._dateService.formatICS(this.calendarEvent);
+      const blob = new Blob([data], { type: 'application/octet-stream' });
+      this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      this.closeModal('custom-modal-1');
     }
 
     openModal(event: any, geoEvent: GeoJson, id: string) {
-        event.stopPropagation();
-        this.modalService.open(id);
-        this.calendarEvent = <GeoJson> geoEvent;
+      event.stopPropagation();
+      this.modalService.open(id);
+      this.calendarEvent = <GeoJson> geoEvent;
     }
 
     closeModal(id: string) {
-        this.modalService.close(id);
+      this.modalService.close(id);
     }
 
 }

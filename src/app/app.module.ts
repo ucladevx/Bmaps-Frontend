@@ -25,9 +25,8 @@ import { WeekComponent } from './week/week.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
-import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
-import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
-import { SearchBarComponent } from './search-bar/search-bar.component';
+import { FilterBarMapComponent } from './filter-bar-map/filter-bar-map.component';
+import { FilterBarCalendarComponent } from './filter-bar-calendar/filter-bar-calendar.component';
 import { ThreeDayComponent } from './three-day/three-day.component';
 import { ModalComponent } from './modal/modal.component';
 
@@ -53,15 +52,13 @@ const appRoutes: Routes = [
     CalendarContainerComponent,
     SidebarComponent,
     DateSelectorComponent,
-    CategoryBarMapComponent,
-    CategoryBarCalendarComponent,
-    SearchBarComponent,
+    FilterBarMapComponent,
+    FilterBarCalendarComponent,
     EventDetailComponent,
     MapBoxComponent,
     MonthComponent,
     WeekComponent,
     CalendarContainerComponent,
-    SearchBarComponent,
     ThreeDayComponent,
     ModalComponent
   ],

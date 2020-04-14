@@ -8,9 +8,9 @@
     </div>
     <ng-template #calendarViewSelect>
       <div class="d-md-none mobile-calendar-view-switch">
-        <span [ngClass]="currentView == CalendarViewState.threeday ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.threeday)">3Day</span>
-        <span [ngClass]="currentView == CalendarViewState.week ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.week)">Week</span>
-        <span [ngClass]="currentView == CalendarViewState.month ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeCalendarView(CalendarViewState.month)">Month</span>
+        <span [ngClass]="currentView == ViewState.threeday ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(ViewState.threeday)">3Day</span>
+        <span [ngClass]="currentView == ViewState.week ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(ViewState.week)">Week</span>
+        <span [ngClass]="currentView == ViewState.month ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(ViewState.month)">Month</span>
       </div>
     </ng-template>
     <button (click)="toggleFilterCollapse()" class="navbar-toggler navbar-toggler-right" type="button">
@@ -38,10 +38,10 @@
               {{temperature}}
           </span>
         <li>
-        <span [ngClass]="isMapSelected ? 'navbar-text active' : 'navbar-text'" (click)="toggleViews()">Map View</span>
+        <span [ngClass]="isMapSelected ? 'navbar-text active' : 'navbar-text'" (click)="toggleView()">Map View</span>
         </li>
         <li>
-          <span [ngClass]="isMapSelected ? 'navbar-text' : 'navbar-text active'" (click)="toggleViews()">Calendar View</span>
+          <span [ngClass]="isMapSelected ? 'navbar-text' : 'navbar-text active'" (click)="toggleView()">Calendar View</span>
         </li>
         <li>
         <span class="navbar-text" id="install-button">Install</span>
@@ -53,11 +53,11 @@
 
     </div>
     <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
-      <span *ngIf="this._viewService.isMapView(); else calendarView">
-        <app-category-bar-map [showToggleButton]="false"></app-category-bar-map>
+      <span *ngIf="this._eventService.isMapView(); else calendarView">
+        <app-filter-bar-map [showToggleButton]="false"></app-filter-bar-map>
       </span>
       <ng-template #calendarView>
-        <app-category-bar-calendar [showToggleButton]="false"></app-category-bar-calendar>
+        <app-filter-bar-calendar [showToggleButton]="false"></app-filter-bar-calendar>
       </ng-template>
     </div>
 </nav>

@@ -1,9 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CalendarViewState } from '../calendar-view-enum';
+import { ViewState } from '../view-enum';
 
 @Component({
     selector: 'app-navbar',
@@ -12,7 +11,7 @@ import { CalendarViewState } from '../calendar-view-enum';
 })
 
 export class NavbarComponent implements OnInit {
-    public CalendarViewState = CalendarViewState;
+    public ViewState = ViewState;
     public currentDate: number = 7;
     public temperature: string;
     public weatherIcon: string;
@@ -21,24 +20,22 @@ export class NavbarComponent implements OnInit {
     isFahrenheit: boolean = true;
     foundWeatherIcon: boolean;
 
-    @Output() changeView: EventEmitter<string> = new EventEmitter();
-
     isMapSelected: boolean = true;
-    currentView: CalendarViewState;
+    currentView: ViewState;
     isMonth: boolean = false;
 
-    constructor(private _eventService: EventService, public _viewService: ViewService, private _router: Router, private http: HttpClient) {
-      this._viewService.currentView$.subscribe( view => {
-        if(view == 'map')
+    constructor(public _eventService: EventService, private _router: Router, private http: HttpClient) {
+      this._eventService.currentView$.subscribe( view => {
+        if(view == ViewState.map)
           this.isMapSelected = true;
         else {
           this.isMapSelected = false;
-          if (view == 'month')
-            this.currentView = CalendarViewState.month;
-          else if (view == 'week')
-            this.currentView = CalendarViewState.week;
-          else if (view == 'three-day')
-            this.currentView = CalendarViewState.threeday;
+          if (view == ViewState.month)
+            this.currentView = ViewState.month;
+          else if (view == ViewState.week)
+            this.currentView = ViewState.week;
+          else if (view == ViewState.threeday)
+            this.currentView = ViewState.threeday;
         }
       });
     }
@@ -77,18 +74,6 @@ export class NavbarComponent implements OnInit {
     getCurrentDay(): void {
       let today = new Date();
       this.currentDate = today.getDate();
-    }
-
-    emitChangeView(newView: string): void {
-      this.changeView.emit(newView);
-      let d = new Date();
-      if(this._eventService.getCurrentDate() != null)
-        d = this._eventService.getCurrentDate();
-      this._eventService.updateAllEvents(d);
-      this._eventService.resetFilters(newView);
-      if(newView == 'map')
-          this._eventService.allCategories();
-      this._viewService.setCurrentView(newView);
     }
 
     public isFilterCollapsed: boolean = true;
@@ -143,59 +128,30 @@ export class NavbarComponent implements OnInit {
       }
     }
 
-    changeCalendarView(view: CalendarViewState): void {
-      let path = "";
-      let ev = this._eventService.getExpandedEvent();
-      if (view == CalendarViewState.week) {
-        this.emitChangeView('week');
-        path += '/calendar/week';
-      }
-      else if (view == CalendarViewState.month) {
-        this.emitChangeView('month');
-        path += '/calendar/month';
-      }
-      else if (view == CalendarViewState.threeday) {
-        this.emitChangeView('threeday');
-        path += '/calendar/three-day';
-      }
-      this.currentView = view;
-      if(ev!=null)
-        path += "(sidebar:detail/"+ev.id+")";
-      else
-        path += "(sidebar:list)";
-      this._router.navigateByUrl(path);
-    }
-
-    toggleViews(): void {
-      let ev = this._eventService.getExpandedEvent();
-      let path = "";
-      if (this._viewService.isCalendarView()) {
-        this.emitChangeView('map');
+    toggleView(): void {
+      if (this._eventService.isCalendarView()) {
         this.isMapSelected = true;
-        path += '/map';
-      }
-      else {
+        this.changeView(ViewState.map);
+      } else {
         this.isMapSelected = false;
-        switch(this._viewService.retrieveLastView()) {
+        switch(this._eventService.retrieveLastView()) {
           case 'week':
-            this.emitChangeView('week');
-            path += '/calendar/week';
+            this.changeView(ViewState.week);
             break;
           case 'month':
-            this.emitChangeView('month');
-            path += '/calendar/month';
+            this.changeView(ViewState.month);
             break;
           case 'three-day':
-            this.emitChangeView('three-day');
-            path += '/calendar/three-day';
+            this.changeView(ViewState.threeday);
             break;
         }
       }
-      if(ev!=null)
-        path += "(sidebar:detail/"+ev.id+")";
-      else
-        path += "(sidebar:list)";
-      this._router.navigateByUrl(path);
+    }
+
+    changeView(newView: ViewState): void {
+      let d = this._eventService.getSelectedDate();
+      if (d == null) d = new Date();
+      this._eventService.changeDateSpan(d, newView);
     }
 
 }

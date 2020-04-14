@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, NgZone } from '@angular/core';
 import { Moment } from 'moment';
 import { Router, NavigationEnd } from '@angular/router';
-import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import { DateService } from '../services/date.service';
 import { GeoJson } from '../map';
@@ -25,9 +24,9 @@ export class WeekComponent implements OnInit {
   private scrollPosition: number = 0;
 
   //constructor statement
-  constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
+  constructor(private _eventService: EventService,private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
-  ngOnInit() {
+  ngOnInit() { }/*
 
     this._viewService.determineView();
     this._viewService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
@@ -39,17 +38,17 @@ export class WeekComponent implements OnInit {
     this._eventService.weekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
+      this.ngZone.run( () => { this.showCalendar(this._eventService.getSelectedDate()); });
       if(this._viewService.isWeekView())
         document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      if(this._viewService.isWeekView() && this._eventService.getDays())
-          this._eventService.setDateFilterFromDays(this._eventService.getDays());
+      if(this._viewService.isWeekView() && this._eventService.getVisibleDays())
+          this._eventService.setDateFilterFromDays(this._eventService.getVisibleDays());
     });
 
     this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
+      this.ngZone.run( () => { this.showCalendar(this._eventService.getSelectedDate()); });
     });
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -60,9 +59,9 @@ export class WeekComponent implements OnInit {
     });
 
 
-    this._eventService.setDateFilterFromDays(this._eventService.getDays());
+    this._eventService.setDateFilterFromDays(this._eventService.getVisibleDays());
     this.currentMonth = moment();
-    if(this._eventService.getExpandedEvent() == null){
+    if(this._eventService.getSidebarEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 
@@ -104,7 +103,7 @@ export class WeekComponent implements OnInit {
         this._eventService.setSelectedDay(weekDay);
       }
     }
-    this._eventService.setDays(this.days);
+    this._eventService.setVisibleDays(this.days);
     }
   }
 
@@ -114,8 +113,8 @@ export class WeekComponent implements OnInit {
     let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
     // if selected day is in month, that is first option
     let viewDate;
-    if (newWeek.isSame(moment(this._eventService.getCurrentDate()), 'week'))
-      viewDate = this._eventService.getCurrentDate();
+    if (newWeek.isSame(moment(this._eventService.getSelectedDate()), 'week'))
+      viewDate = this._eventService.getSelectedDate();
     else if (newWeek.isSame(moment(), 'week'))
       viewDate = new Date();
     else
@@ -181,7 +180,7 @@ export class WeekComponent implements OnInit {
   openEvent(event: GeoJson): void{
     this._eventService.updateClickedEvent(event);
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-    this._eventService.updateExpandedEvent(event);
+    this._eventService.updateSidebarEvent(event);
   }
 
   //retrieve and format event title and event time
@@ -276,5 +275,5 @@ export class WeekComponent implements OnInit {
     }
     return style;
   }
-
+*/
 }

@@ -4,7 +4,6 @@ import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../services/date.service';
-import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import { LocationService } from '../services/location.service';
 
@@ -50,13 +49,13 @@ export class MapBoxComponent implements OnInit {
 
   private events: FeatureCollection;
 
-  constructor(private router: Router, private _dateService: DateService, private _eventService: EventService, private _locationService: LocationService, private _viewService: ViewService) {
+  constructor(private router: Router, private _dateService: DateService, private _eventService: EventService, private _locationService: LocationService) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
   ngOnInit() {
-    this._viewService.determineView();
-    
+    this._eventService.determineView();
+
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
@@ -74,12 +73,12 @@ export class MapBoxComponent implements OnInit {
       }
     });
 
-    this._eventService.expandedEvent$.subscribe(expandedEventInfo => {
-      this.boldPopup(expandedEventInfo);
+    this._eventService.sidebarEvent$.subscribe(sidebarEventInfo => {
+      this.boldPopup(sidebarEventInfo);
     });
 
     this.buildMap();
-    if(this._eventService.getExpandedEvent() == null)
+    if(this._eventService.getSidebarEvent() == null)
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
 
     let _promiseMapLoad = this.promiseMapLoad();
@@ -126,7 +125,7 @@ export class MapBoxComponent implements OnInit {
 
   //bold the popup event title for the given event, while unbolding all other event titles
   boldPopup(event: GeoJson): void {
-    let exEv = this._eventService.getExpandedEvent();
+    let exEv = this._eventService.getSidebarEvent();
     //iterate through popup event titles and unbold
     let popups = document.getElementsByClassName("popupEvent");
     for(let i = 0; i < popups.length; i++){
@@ -265,7 +264,7 @@ export class MapBoxComponent implements OnInit {
       this.selectedEvent = event;
       this.router.navigate(['', {outlets: {sidebar: ['detail', this.selectedEvent.id]}}]);
       this._eventService.updateClickedEvent(event);
-      this._eventService.updateExpandedEvent(event);
+      this._eventService.updateSidebarEvent(event);
     };
     eventPopup.onclick = openDetails;
   }
@@ -366,7 +365,7 @@ export class MapBoxComponent implements OnInit {
       if (this.selectedEvent && this.selectedEvent.id === e.features[0].id) {
         this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
-        this._eventService.updateExpandedEvent(null);
+        this._eventService.updateSidebarEvent(null);
         return;
       }
       //the service then calls selectEvent
@@ -377,7 +376,7 @@ export class MapBoxComponent implements OnInit {
       if (this.selectedEvent && this.lastClickEvent != e.originalEvent) {
         this._eventService.updateClickedEvent(null);
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
-        this._eventService.updateExpandedEvent(null);
+        this._eventService.updateSidebarEvent(null);
         this.boldPopup(null);
       }
     });

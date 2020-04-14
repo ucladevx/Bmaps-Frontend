@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, NgZone } from '@angular/core';
 import { Moment } from 'moment';
 import { Router, NavigationEnd } from '@angular/router';
-import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import { DateService } from '../services/date.service';
 import { GeoJson } from '../map';
@@ -26,9 +25,9 @@ export class ThreeDayComponent implements OnInit {
   private scrollPosition: number = 0;
 
   //constructor statement
-  constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
+  constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
-  ngOnInit() {
+  ngOnInit() { } /*
     this._viewService.determineView();
     this._viewService.changeToThreeDay.subscribe( function(delta) { this.changeThreeDay(delta); }.bind(this));
 
@@ -39,17 +38,17 @@ export class ThreeDayComponent implements OnInit {
     this._eventService.threeDayEvents$.subscribe(threeDayEventCollection => {
       this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
+      this.ngZone.run( () => { this.showCalendar(this._eventService.getSelectedDate()); });
       if(this._viewService.isThreeDayView())
         document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      if(this._viewService.isThreeDayView() && this._eventService.getDays())
-          this._eventService.setDateFilterFromDays(this._eventService.getDays());
+      if(this._viewService.isThreeDayView() && this._eventService.getVisibleDays())
+          this._eventService.setDateFilterFromDays(this._eventService.getVisibleDays());
     });
 
     this._eventService.filteredThreeDayEvents$.subscribe(threeDayEventCollection => {
       this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
+      this.ngZone.run( () => { this.showCalendar(this._eventService.getSelectedDate()); });
     });
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -60,9 +59,9 @@ export class ThreeDayComponent implements OnInit {
     });
 
 
-    this._eventService.setDateFilterFromDays(this._eventService.getDays());
+    this._eventService.setDateFilterFromDays(this._eventService.getVisibleDays());
     this.currentMonth = moment();
-    if(this._eventService.getExpandedEvent() == null){
+    if(this._eventService.getSidebarEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 
@@ -122,7 +121,7 @@ export class ThreeDayComponent implements OnInit {
           this._eventService.setSelectedDay(weekDay);
         }
       }
-      this._eventService.setDays(this.days);
+      this._eventService.setVisibleDays(this.days);
     }
   }
 
@@ -165,10 +164,10 @@ export class ThreeDayComponent implements OnInit {
     }
 
 
-    if (newDay.isSame(moment(this._eventService.getCurrentDate()), 'day') ||
+    if (newDay.isSame(moment(this._eventService.getSelectedDate()), 'day') ||
         newDay.isSame(selectedDayGroupDayTwo, 'day') || newDay.isSame(selectedDayGroupDayThree, 'day'))
       // newDay same as selected day's group of 3
-      viewDate = this._eventService.getCurrentDate();
+      viewDate = this._eventService.getSelectedDate();
     // if same group as today
     else if (newDay.isSame(moment(), 'day') || newDay.isSame(tomorrow, 'day') || newDay.isSame(thirdDay, 'day'))
       // set selected date to today
@@ -236,7 +235,7 @@ export class ThreeDayComponent implements OnInit {
   openEvent(event: GeoJson): void{
     this._eventService.updateClickedEvent(event);
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-    this._eventService.updateExpandedEvent(event);
+    this._eventService.updateSidebarEvent(event);
   }
 
   //retrieve and format event title and event time
@@ -331,5 +330,5 @@ export class ThreeDayComponent implements OnInit {
     }
     return style;
   }
-
+*/
 }
