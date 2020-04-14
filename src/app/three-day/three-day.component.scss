@@ -121,21 +121,21 @@
 }
 
 .weekview-month {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
 }
 
 .threedayview-day {
-    position: relative;
-    width: 33.3333%;
-    display: block;
-    align-items: flex-start;
-    border-right: 1px solid $default_border_color;
-    color: #bebebe;
-    background-color: #fff;
-    z-index: 1;
+  position: relative;
+  width: 33.3333%;
+  display: block;
+  align-items: flex-start;
+  border-right: 1px solid $default_border_color;
+  color: #bebebe;
+  background-color: #fff;
+  z-index: 1;
 }
 
 .threedayview-day.in-current-month {
@@ -162,13 +162,12 @@
   float: left;
   clear: left;
   position: absolute;
-  font-size: 10px;
+  font-size: 13px;
   padding: 1% 3% 1% 3%;
   margin: 0%;
-  border-radius: 2px;
+  border-radius: 6px;
   border: $default_border_width solid white;
   color: white;
-  background-color: #29c2bd;
   cursor: pointer;
   z-index: 2;
   width: 100%;
@@ -192,10 +191,14 @@
 
 .event-name {
   width: 100%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  //text-overflow: ellipsis;
+  white-space: normal;
+  //white-space: nowrap;
   overflow: hidden;
   padding: 0%;
+  //display: -webkit-box;
+  //-webkit-line-clamp: 2;
+  //-webkit-box-orient: vertical;
 }
 
 .current-time {

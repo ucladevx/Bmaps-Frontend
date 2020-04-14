@@ -270,6 +270,54 @@ export class ThreeDayComponent implements OnInit {
     return p;
   }
 
+  // get color of event based off category
+  getEventColor(category: string): string {
+    if (!category.localeCompare("NETWORKING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("GARDENING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("FOOD"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("DANCE"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("ART"))
+      return'#BBA4FF';
+    else if (!category.localeCompare("HEALTH"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("SPORTS"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("MEETUP"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("COMEDY_PERFORMANCE"))
+      return '#78E6E6';
+    else if (!category.localeCompare("MUSIC"))
+      return '#78E6E6';
+    else if (!category.localeCompare("THEATER"))
+      return '#78E6E6';
+    else if (!category.localeCompare("PARTY"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("CAUSE"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("FILM"))
+      return '#78E6E6';
+    else if (!category.localeCompare("DRINKS"))
+      return '#78E6E6';
+    else if (!category.localeCompare("FITNESS"))
+      return '#78E6E6';
+    else if (!category.localeCompare("GAMES"))
+      return '#78E6E6';
+    else if (!category.localeCompare("LITERATURE"))
+      return '#78E6E6';
+    else if (!category.localeCompare("RELIGION"))
+      return '#78E6E6';
+    else if (!category.localeCompare("SHOPPING"))
+      return '#78E6E6';
+    else if (!category.localeCompare("WELLNESS"))
+      return '#78E6E6';
+    else
+      return '#FFB5F8';
+  }
+
   // position and size event to match actual start time and duration
   styleEvent(event: GeoJson, events: GeoJson[]) {
     // CALCULATE TOP //
@@ -318,11 +366,13 @@ export class ThreeDayComponent implements OnInit {
       font = "bold";
       z = 100;
     }
+
     // CREATE STYLE
     let style = {
       'top' : top+"%", 'height' : height+"%",
       'left' : left+"%", 'width' : width+"%",
-      'zIndex' : z, 'fontWeight' : font
+      'zIndex' : z, 'fontWeight' : font,
+      'background-color' : this.getEventColor(event.properties.categories[0]),
     }
     return style;
   }
