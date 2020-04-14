@@ -105,9 +105,7 @@ export class MonthComponent implements OnInit {
       viewDate = new Date();
     else
       viewDate = newMonth.startOf('month').toDate();
-    this._eventService.updateDayEvents(viewDate);
-    this._eventService.updateWeekEvents(viewDate);
-    this._eventService.updateMonthEvents(viewDate);
+    this._eventService.updateAllEvents(viewDate);
   }
 
     //retrieve events for the given month
@@ -161,7 +159,6 @@ export class MonthComponent implements OnInit {
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
     this._eventService.setSelectedDay(day);
-    this._eventService.updateDayEvents(day.date);
     if(!day.inCurrentMonth){
       this.changeMonth(0);
     }

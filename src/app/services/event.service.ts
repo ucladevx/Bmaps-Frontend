@@ -185,10 +185,7 @@ export class EventService {
     this.timeFilter$.subscribe(timeHash => { this._timeFilter = timeHash; this.applyAllFilters(); });
     this.universalSearch$.subscribe(universalSearch => { this._universalSearch = universalSearch; this.applyAllFilters(); })
     // Populate event containers
-    this.updateDayEvents(new Date());
-    this.updateThreeDayEvents(new Date());
-    this.updateMonthEvents(new Date());
-    // this.updateWeekEvents(new Date());
+    this.updateAllEvents(new Date());
     // Initialize filters to defaults
     this.initCategories();
     this.resetFilters(this._viewService.getCurrentView());
@@ -200,33 +197,19 @@ export class EventService {
   setCurrentDate(date: Date){ this.currentDateSource.next(date); }
   getSelectedDay() { return this._selectedDay; }
   setSelectedDay(day: CalendarDay) { this.selectedDaySource.next(day); }
-  setDays(calendarDays: CalendarDay[]){ this.calendarDaysSource.next(calendarDays); }
   getDays(){ return this._calendarDays; }
+  setDays(calendarDays: CalendarDay[]){ this.calendarDaysSource.next(calendarDays); }
 
   // EVENT GETTERS AND SETTERS //
 
   updateHoveredEvent(event: GeoJson): void { this.hoveredEventSource.next(event); }
+  getHoveredEvent() { return this._hoveredEvent; }
   updateClickedEvent(event: GeoJson): void { this.clickedEventSource.next(event); }
   getClickedEvent(){ return this._clickedEvent; }
-  updateExpandedEvent(event: GeoJson): void {
-    this.expandedEventSource.next(event);
-  }
+  updateExpandedEvent(event: GeoJson): void { this.expandedEventSource.next(event); }
   getExpandedEvent(){ return this._expandedEvent; }
 
-  // advance selection to the next day
-  increaseDay(days: number){
-    this.updateClickedEvent(null);
-    this.updateExpandedEvent(null);
-    let newDate = this._currentDate;
-    newDate.setDate(newDate.getDate() + days);
-    this.updateDayEvents(newDate);
-    this.updateThreeDayEvents(newDate);
-    this.updateWeekEvents(newDate);
-    this.updateMonthEvents(newDate);
-    this.updateCategories();
-  }
-
-  // EVENT RETRIEVAL //
+  // EVENT COLLECTION GETTERS AND SETTERS //
 
   getMonthEvents() { return this._monthEvents; }
   getFilteredMonthEvents() { return this._filteredMonthEvents; }
@@ -237,15 +220,22 @@ export class EventService {
   getDayEvents() { return this._dayEvents; }
   getFilteredDayEvents() { return this._filteredDayEvents; }
 
-  // Retrieve eventsURL
-  private getEventsURL(): string {
-    return `${this.eventsUrl}/`;
+  // Advance selection to the next day
+  increaseDay(days: number){
+    this.updateClickedEvent(null);
+    this.updateExpandedEvent(null);
+    let newDate = this._currentDate;
+    newDate.setDate(newDate.getDate() + days);
+    this.currentDateSource.next(newDate);
+    this.updateAllEvents(newDate);
+    this.updateCategories();
   }
 
+  // Retrieve eventsURL
+  private getEventsURL(): string { return `${this.eventsUrl}/`; }
+
   // Retrieve events by event id
-  getEventById(id: string): GeoJson {
-    return this._monthEvents.features.find((e: GeoJson) => e.id == id);
-  }
+  getEventById(id: string): GeoJson { return this._monthEvents.features.find((e: GeoJson) => e.id == id); }
 
   // Retrieve events by date
   getEventsByDate(date: Date): string {
@@ -256,118 +246,68 @@ export class EventService {
 
   // EVENT UPDATES //
 
-  // Updates events for given month while persisting the current category
-  updateMonthEvents(date: Date): void {
+  // Update all event containers
+  updateAllEvents(date: Date): void {
+    this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(dayEvents => { this.dayEventsSource.next(dayEvents); });
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
       let noCategs = (this._monthEvents.features.length == 0);
+      // update all event collections
       this.monthEventsSource.next(this.filterByMonth(allEvents, date));
-      this.updateCategories();
-      if(noCategs || this._categHash['all'].selected)
-        this.allCategories();
-      this.applyAllFilters();
-    });
-  }
-
-  // Updates events for given week while persisting the current category
-  updateWeekEvents(date: Date): void {
-    this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      let noCategs = (this._weekEvents.features.length == 0);
       this.weekEventsSource.next(this.filterByWeek(allEvents, date));
-      this.updateCategories();
-      if(noCategs || this._categHash['all'].selected)
-        this.allCategories();
-      this.applyAllFilters();
-    });
-  }
-
-  // Updates events for given three days while persisting the current category
-  updateThreeDayEvents(date: Date): void {
-    this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      let noCategs = (this._threeDayEvents.features.length == 0);
       this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
-      this.updateCategories();
-      if(noCategs || this._categHash['all'].selected)
-        this.allCategories();
+      // handle filters
+      if(noCategs || this._categHash['all'].selected) { this.allCategories(); }
       this.applyAllFilters();
     });
+    this.currentDateSource.next(date);
   }
 
-  // Updates events for given day while persisting the current category
-  updateDayEvents(date: Date): void {
-  this.currentDateSource.next(date);
-    this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(events => {
-      this.dayEventsSource.next(this.filterByDay(events, date));
-      if(this._viewService.isMapView()){ this.resetFilters('map'); }
-    });
-  }
-
-  private filterByDay(allEvents: FeatureCollection, date: Date){
-    let dayEvents = new FeatureCollection([]);
-    allEvents.features.forEach(el => {
-      let d = moment(el.properties.start_time);
-      if (d.diff(moment(),'minutes') >= 0) {
-        dayEvents.features.push(el);
-      }
-    });
-    return dayEvents;
-  }
-
-  // Filter events by three days
-  private filterByThreeDays(allEvents: FeatureCollection, date: Date){
-    let threeDayEvents = new FeatureCollection([]);
-    let firstDay;
-    // first day should be first of group
-
-    let numDaysDiff = moment(date).startOf('day').diff(moment().startOf('day'), 'days');
-    // 0 means first day of group, 1 - second, 2 - third
-    let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
-    firstDay = moment(date).clone().startOf('day').add(-1*dayOfGroup, 'days');
-
-    if(new Date() > date){ firstDay = moment(new Date()); }
-    let lastDay = firstDay.clone().add(3, 'days');
+  // Filter events by a date span
+  private filterByDateSpan(allEvents: FeatureCollection, startDate: Date, endDate: Date) {
+    let filteredEvents = new FeatureCollection([]);
     allEvents.features.forEach(el => {
       let d = moment(el.properties.start_time).toDate();
-      if (d >= firstDay.toDate() && d <= lastDay.toDate()){ threeDayEvents.features.push(el); }
+      if (d >= startDate && d <= endDate){ filteredEvents.features.push(el); }
     });
-    return threeDayEvents;
-  }
-
-  // Filter events by week
-  private filterByWeek(allEvents: FeatureCollection, date: Date){
-    let weekEvents = new FeatureCollection([]);
-    let firstDay = moment(date).startOf('week');
-    if(new Date() > date){ firstDay = moment(new Date()); }
-    let daysLeftInWeek = 7-parseInt((firstDay).format('d'));
-    let lastDay = firstDay.clone().add(daysLeftInWeek, 'days');
-    allEvents.features.forEach(el => {
-      let d = moment(el.properties.start_time).toDate();
-      if (d >= firstDay.toDate() && d <= lastDay.toDate()){ weekEvents.features.push(el); }
-    });
-    return weekEvents;
+    return filteredEvents;
   }
 
   // Filter events by month
   private filterByMonth(allEvents: FeatureCollection, date: Date){
-      let monthEvents = new FeatureCollection([]);
-      let firstDay = moment(date).startOf('month').startOf('week');
-      if(new Date() > date){ firstDay = moment(new Date()); }
-      let lastTemp = firstDay.clone().add(31, 'days');
-      let daysLeftInWeek = 7-parseInt((lastTemp).format('d'));
-      let lastDay = lastTemp.clone().add(daysLeftInWeek, 'days');
-      allEvents.features.forEach(el => {
-        let d = moment(el.properties.start_time).toDate();
-        if (d >= firstDay.toDate() && d <= lastDay.toDate()){ monthEvents.features.push(el); }
-      });
-      return monthEvents;
-    }
+    // determine first day and last day to start displaying events
+    let firstDay = moment(date).startOf('month').startOf('week');
+    let tempLastDay = moment(date).startOf('month').add(31, 'days');
+    if(new Date() > date) { firstDay = moment(new Date()); }
+    let daysLeftInWeek = 7-parseInt((tempLastDay).format('d'));
+    let lastDay = tempLastDay.clone().add(daysLeftInWeek, 'days');
+    // filter by day span
+    return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
+  }
 
+  // Filter events by week
+  private filterByWeek(allEvents: FeatureCollection, date: Date){
+    // determine first day and last day to start displaying events
+    let firstDay = moment(date).startOf('week');
+    if(new Date() > date){ firstDay = moment(new Date()); }
+    let daysLeftInWeek = 7-parseInt((firstDay).format('d'));
+    let lastDay = firstDay.clone().add(daysLeftInWeek, 'days');
+    // filter by day span
+    return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
+  }
 
+  // Filter events by three days
+  private filterByThreeDays(allEvents: FeatureCollection, date: Date){
+    let firstDay = moment(date);
+    if(new Date() > date){ firstDay = moment(new Date()); }
+    let lastDay = firstDay.clone().add(2, 'days');
+    return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
+  }
 
   // FILTER RELATED FUNCTIONS //
 
   // reset all filters to defaults
   resetFilters(view: string){
-    // rest categories
+    // reset categories
     if(view != 'ignore-categories'){
       this.updateCategories();
       this.allCategories();

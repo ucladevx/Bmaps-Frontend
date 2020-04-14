@@ -52,18 +52,17 @@ export class SidebarComponent implements OnInit {
         // TODO: unsubscribe on destroy
         this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
         this._viewService.currentView$.subscribe(view => {
-          console.log(view);
           this.updateSidebarEvents(view);
         });
-        /* this._eventService.dayEvents$.subscribe(eventCollection => {
-          eventCollection.features.sort(function(a,b){
-              return moment(a.properties.start_time).diff(moment(b.properties.start_time),'seconds');
-          });
-          this.filteredEvents = eventCollection.features;
+        this._eventService.threeDayEvents$.subscribe(events => {
+          this.updateSidebarEvents(this._viewService.getCurrentView());
         });
-        this._eventService.filteredDayEvents$.subscribe(eventCollection => {
-            this.filteredEvents = eventCollection.features;
-        }); */
+        this._eventService.weekEvents$.subscribe(events => {
+          this.updateSidebarEvents(this._viewService.getCurrentView());
+        });
+        this._eventService.threeDayEvents$.subscribe(events => {
+          this.updateSidebarEvents(this._viewService.getCurrentView());
+        });
         this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
             this.clickedEvent = clickedEventInfo;
             this.scrollToEvent(clickedEventInfo);
@@ -98,6 +97,11 @@ export class SidebarComponent implements OnInit {
           this.filteredEvents = this._eventService.getThreeDayEvents().features;
           break;
       }
+      this.filteredEvents.sort(function(a, b) {
+        a = a["properties"]["start_time"];
+        b = b["properties"]["start_time"];
+        return a<b ? -1 : a>b ? 1 : 0;
+      });
     }
 
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.

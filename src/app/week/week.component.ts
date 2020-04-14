@@ -122,9 +122,7 @@ export class WeekComponent implements OnInit {
       viewDate = newWeek.startOf('week').toDate();
     if(this._viewService.isWeekView())
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
-    this._eventService.updateDayEvents(viewDate);
-    this._eventService.updateWeekEvents(viewDate);
-    this._eventService.updateMonthEvents(viewDate);
+    this._eventService.updateAllEvents(viewDate);
   }
 
   //retrieve events for the given week
@@ -179,7 +177,6 @@ export class WeekComponent implements OnInit {
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
     this._eventService.setSelectedDay(day);
-    this._eventService.updateDayEvents(day.date);
   }
 
   //open event in sidebar

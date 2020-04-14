@@ -25,7 +25,6 @@ export class ViewService {
     this.currentView$ = this.currentViewSource.asObservable();
     this.currentView$.subscribe(view => {
       this._currentView = view;
-      console.log(view);
     });
     // Determine current view settings
     this.determineView();

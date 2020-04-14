@@ -84,9 +84,7 @@ export class NavbarComponent implements OnInit {
       let d = new Date();
       if(this._eventService.getCurrentDate() != null)
         d = this._eventService.getCurrentDate();
-      this._eventService.updateDayEvents(d);
-      this._eventService.updateMonthEvents(d);
-      this._eventService.updateWeekEvents(d);
+      this._eventService.updateAllEvents(d);
       this._eventService.resetFilters(newView);
       if(newView == 'map')
           this._eventService.allCategories();
