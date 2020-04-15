@@ -6,6 +6,7 @@ import { DateService } from '../services/date.service';
 import { GeoJson } from '../map';
 import { CalendarDay } from '../services/event.service';
 import * as moment from 'moment';
+import { ViewState } from '../view-enum';
 
 @Component({
   selector: 'app-week',
@@ -24,42 +25,41 @@ export class WeekComponent implements OnInit {
   private scrollPosition: number = 0;
 
   //constructor statement
-  constructor(private _eventService: EventService,private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
+  constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
-  ngOnInit() { }/*
+  ngOnInit() {
 
-    this._viewService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
-
-    this._eventService.currentDate$.subscribe(date => {
-      this.ngZone.run( () => { this.showCalendar(date); });
+    this._eventService.selectedDate$.subscribe(date => {
+      this.ngZone.run( () => { this.updateCalendar(date); });
     });
 
     this._eventService.weekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._eventService.getSelectedDate()); });
-      if(this._viewService.isWeekView())
+      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
+      if(this._eventService.isWeekView())
         document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      if(this._viewService.isWeekView() && this._eventService.getVisibleDays())
-          this._eventService.setDateFilterFromDays(this._eventService.getVisibleDays());
     });
 
     this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._eventService.getSelectedDate()); });
+      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
+      if(this._eventService.isWeekView())
+        document.getElementById("scrollable").scrollTop = this.scrollPosition;
     });
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.clickedEvent = clickedEventInfo;
     });
-    this._eventService.expandedEvent$.subscribe(clickedEventInfo => {
+
+    this._eventService.sidebarEvent$.subscribe(clickedEventInfo => {
       this.clickedEvent = clickedEventInfo;
     });
 
+    this.currentMonth = moment().startOf('month');
+    this.currentMonth = moment().startOf('week');
 
-    this._eventService.setDateFilterFromDays(this._eventService.getVisibleDays());
-    this.currentMonth = moment();
     if(this._eventService.getSidebarEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
@@ -70,11 +70,12 @@ export class WeekComponent implements OnInit {
   }
 
   //display the calendar
-  showCalendar(dateInMonth: Moment | Date | string): void {
-  //set currentMonth and currentWeek
+  updateCalendar(dateInMonth: Moment | Date | string): void {
+    //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
-    if(this._viewService.isWeekView() && dateInMonth != undefined){
+    if(!this._eventService.isWeekView() || dateInMonth == undefined)
+      return;
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('week');
@@ -87,40 +88,18 @@ export class WeekComponent implements OnInit {
       let weekDay: CalendarDay = {
         date: d.toDate(),
         dayOfMonth: d.date(),
-        inCurrentMonth: d.isSame(this.currentMonth, 'month'),
+        dayOfWeek: d.format('ddd'),
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
         events: this.getEventsOnDate(d),
-        selected: d.isSame(dateInMonth, 'day'),
-        dayOfWeek: d.format('ddd'),
-        isToday: this._dateService.isToday(d.toDate())
+        isSelected: d.isSame(moment(dateInMonth), 'day'),
+        isToday: this._dateService.isToday(d.toDate()),
+        inCurrentMonth: d.isSame(this.currentMonth, 'month')
       };
       //add weekDay to display days array
       this.days.push(weekDay);
-      // set selected day to the date provided
-      if (d.isSame(dateInMonth, 'day')) {
-        this._eventService.setSelectedDay(weekDay);
-      }
     }
     this._eventService.setVisibleDays(this.days);
-    }
-  }
-
-  //increment or decrement week
-  changeWeek(delta: number): void {
-    // 1 means advance one week, -1 means go back one week
-    let newWeek: Moment = this.currentWeek.clone().add(delta, 'week');
-    // if selected day is in month, that is first option
-    let viewDate;
-    if (newWeek.isSame(moment(this._eventService.getSelectedDate()), 'week'))
-      viewDate = this._eventService.getSelectedDate();
-    else if (newWeek.isSame(moment(), 'week'))
-      viewDate = new Date();
-    else
-      viewDate = newWeek.startOf('week').toDate();
-    if(this._viewService.isWeekView())
-      document.getElementById("scrollable").scrollTop = this.scrollPosition;
-    this._eventService.updateAllEvents(viewDate);
   }
 
   //retrieve events for the given week
@@ -159,20 +138,16 @@ export class WeekComponent implements OnInit {
         }
         return timeA - timeB;
       });
-      //return sorted list of events
       return eventList;
     }
-    //if no events, return empty array
-    else {
-      return [];
-    }
+    else { return []; }
   }
 
   //highlight selected day
   onSelect(day: CalendarDay): void{
-    if(this._eventService.getSelectedDay() != day){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
-    this._eventService.setSelectedDay(day);
-    this._eventService.setCurrentDate(day.date);
+    if(this._eventService.getSelectedDate() != day.date){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
+    this._eventService.setSelectedDate(day.date);
+    this._eventService.changeDateSpan(day.date, ViewState.week);
   }
 
   //open event in sidebar
@@ -182,21 +157,21 @@ export class WeekComponent implements OnInit {
     this._eventService.updateSidebarEvent(event);
   }
 
-  //retrieve and format event title and event time
+  // EVENT STYLING //
+
   eventName(event: GeoJson): string{
     return event.properties.name;
   }
+
   eventTime(event: GeoJson): string{
     return this._dateService.formatTime(event.properties.start_time) + " - " + this._dateService.formatTime(event.properties.end_time);
   }
 
-  //determine the position of the current time bar
   currentTime() {
     let now = moment();
     return this.convertTimeToPercent(now)+"%";
   }
 
-  //convert time to top percentage in css
   convertTimeToPercent(time: Moment) {
     let increment = 0; let p = 0;
     if (window.outerWidth <= 768){
@@ -205,7 +180,7 @@ export class WeekComponent implements OnInit {
       if(time.format("A") == "PM"){
         p += 46; increment = 3.77;
       }
-    }  // mobile view
+    }
     else {
       p = 11;
       increment = 3.58;
@@ -262,7 +237,7 @@ export class WeekComponent implements OnInit {
     // account for clicked event
     let font = "normal";
     if(this.clickedEvent && this.clickedEvent.id == event.id &&
-      this._eventService.getSelectedDay().dayOfMonth == moment(this.clickedEvent.properties.start_time).date()){
+      this._eventService.getSelectedDate() == moment(this.clickedEvent.properties.start_time).date()){
       font = "bold";
       z = 100;
     }
@@ -274,5 +249,5 @@ export class WeekComponent implements OnInit {
     }
     return style;
   }
-*/
+
 }

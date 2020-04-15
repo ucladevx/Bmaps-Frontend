@@ -1,4 +1,4 @@
-<!-- <div class="threedayview-container" id="threeday-view-indicator">
+<div class="threedayview-container" id="threeday-view-indicator">
   <div id="scrollable">
     <div class="timebar">
       <div class="filler-block"></div>
@@ -13,7 +13,7 @@
     <div class="day-blocks">
       <div class="weekview-month">
         <div *ngFor="let day of days" class="threedayview-day" (click)="onSelect(day)"
-        [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.selected, 'today': day.isToday}">
+        [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.isSelected, 'today': day.isToday}">
           <div class="day-header" id="{{'header'+day.dayOfMonth}}">
             <span class="long-abbr">{{day.dayOfWeek}}</span><span class="short-abbr">S</span>
             <span class="day-of-month" [ngClass]="{'selected': day.selected }">{{day.dayOfMonth}}</span>
@@ -37,4 +37,4 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>

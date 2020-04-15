@@ -47,8 +47,10 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._eventService.selectedDate$.subscribe( date => { this.viewDateChange(date); });
-    this.enumerateWeek(this._eventService.getCurrentView());
+    this._eventService.selectedDate$.subscribe( date => { this.viewDateChange(date); this.enumerateWeek(this._eventService.getCurrentView()) });
+    if(this._eventService.isWeekView()) { this.enumerateWeek(ViewState.week); }
+    if(this._eventService.isThreeDayView()) { this.enumerateWeek(ViewState.threeday); }
+    this._eventService.determineView();
   }
 
   viewDateChange(set : Date) {
@@ -63,14 +65,26 @@ export class CalendarContainerComponent implements OnInit {
     // determine date to display in new view
     let newDate = this._eventService.getSelectedDate();
     switch(calendarView) {
-        case ViewState.month :
-          newDate = moment(newDate).startOf('month').add(delta,'M').toDate();
-          if(moment(new Date()).isSame(moment(newDate), 'month')) newDate = new Date();
-          break;
-        case ViewState.week :
-          newDate = moment(newDate).startOf('week').add(delta*7,'d'); break;
-        case ViewState.threeday :
-          newDate = moment(newDate).add(delta*3,'d'); break;
+      case ViewState.month :
+        newDate = moment(newDate).startOf('month').add(delta,'M').toDate();
+        if(moment(this._eventService.getSelectedDate()).isSame(moment(newDate), 'month')) newDate = this._eventService.getSelectedDate();
+        else if(moment(new Date()).isSame(moment(newDate), 'month')) newDate = new Date();
+        break;
+      case ViewState.week :
+        newDate = moment(newDate).startOf('week').add(delta*7,'d').toDate();
+        if(moment(this._eventService.getSelectedDate()).isSame(moment(newDate), 'week')) newDate = this._eventService.getSelectedDate();
+        else if(moment(new Date()).isSame(moment(newDate), 'week')) newDate = new Date();
+        break;
+      case ViewState.threeday :
+        newDate = moment(newDate).startOf('day').add(delta*3,'d');
+        let numDaysDiff = newDate.startOf('day').diff(moment().startOf('day'), 'days');
+        let dayOfGroup;
+        if (numDaysDiff >= 0) { dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2); }
+        else { numDaysDiff *= -1; dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1); }
+        newDate = newDate.clone().add(-1*dayOfGroup, 'days').toDate();
+        let diff = moment(this._eventService.getSelectedDate()).startOf('day').diff(moment(newDate).startOf('day'), 'days');
+        if(diff < 3 && diff > 0) newDate = this._eventService.getSelectedDate();
+        break;
     }
     this._eventService.changeDateSpan(newDate, calendarView);
     this.enumerateWeek(calendarView);

@@ -82,7 +82,7 @@ export class SidebarComponent implements OnInit {
             this.scrollToEvent(hoveredEventInfo);
         });
         this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
-        this.updateSidebarEvents(this._eventService.getCurrentView());
+        this.updateSidebarEvents();
     }
 
     stop(event: any): void {

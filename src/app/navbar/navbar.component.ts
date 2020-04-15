@@ -38,7 +38,6 @@ export class NavbarComponent implements OnInit {
             this.currentView = ViewState.threeday;
         }
       });
-      this.isMapSelected = this._eventService.isMapView();
     }
 
     ngOnInit() {

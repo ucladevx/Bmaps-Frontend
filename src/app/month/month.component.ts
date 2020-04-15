@@ -50,6 +50,7 @@ export class MonthComponent implements OnInit {
     });
 
     this.currentMonth = moment().startOf('month');
+
     if(this._eventService.getSidebarEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
@@ -127,18 +128,8 @@ export class MonthComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     let prevMonth = parseInt(moment(this._eventService.getSelectedDate()).format('M'))-1;
-    console.log(prevMonth);
-    console.log(day.month);
     if(this._eventService.getSelectedDate() != day.date){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
-    this._eventService.setSelectedDate(day.date);
-    if(day.month > prevMonth){ this.incrementMonth(1); }
-    if(day.month < prevMonth){ this.incrementMonth(-1); }
-    else { this.incrementMonth(0); }
-  }
-
-  incrementMonth(delta: number) {
-    let newDate = this._eventService.getSelectedDate();
-    this._eventService.changeDateSpan(newDate, ViewState.month);
+    this._eventService.changeDateSpan(day.date, ViewState.month);
   }
 
 }
