@@ -53,21 +53,25 @@ export class SidebarComponent implements OnInit {
     ngOnInit() {
         // TODO: unsubscribe on destroy
         this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-        this._eventService.currentView$.subscribe(view => {
-          this.view = view;
-          this.updateSidebarEvents(this.view);
-        });
         this._eventService.dayEvents$.subscribe(events => {
-          this.updateSidebarEvents(this.view);
+          if(this._eventService.isMapView()) {
+            this.view = ViewState.map; this.updateSidebarEvents();
+          }
         });
         this._eventService.threeDayEvents$.subscribe(events => {
-          this.updateSidebarEvents(this.view);
+          if(this._eventService.isThreeDayView()) {
+            this.view = ViewState.threeday; this.updateSidebarEvents();
+          }
         });
         this._eventService.weekEvents$.subscribe(events => {
-          this.updateSidebarEvents(this.view);
+          if(this._eventService.isWeekView()) {
+            this.view = ViewState.week; this.updateSidebarEvents();
+          }
         });
         this._eventService.monthEvents$.subscribe(events => {
-          this.updateSidebarEvents(this.view);
+          if(this._eventService.isMonthView()) {
+            this.view = ViewState.month; this.updateSidebarEvents();
+          }
         });
         this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
             this.clickedEvent = clickedEventInfo;
@@ -86,8 +90,8 @@ export class SidebarComponent implements OnInit {
         event.stopPropagation();
     }
 
-    updateSidebarEvents(view: ViewState): void {
-      switch(view) {
+    updateSidebarEvents(): void {
+      switch(this.view) {
         case ViewState.map:
           this.filteredEvents = this._eventService.getDayEvents().features;
           break;

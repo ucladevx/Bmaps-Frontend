@@ -64,7 +64,9 @@ export class CalendarContainerComponent implements OnInit {
     let newDate = this._eventService.getSelectedDate();
     switch(calendarView) {
         case ViewState.month :
-          newDate = moment(newDate).startOf('month').add(delta,'M'); break;
+          newDate = moment(newDate).startOf('month').add(delta,'M').toDate();
+          if(moment(new Date()).isSame(moment(newDate), 'month')) newDate = new Date();
+          break;
         case ViewState.week :
           newDate = moment(newDate).startOf('week').add(delta*7,'d'); break;
         case ViewState.threeday :

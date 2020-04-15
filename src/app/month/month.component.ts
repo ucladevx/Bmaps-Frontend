@@ -26,7 +26,7 @@ export class MonthComponent implements OnInit {
   ngOnInit() {
 
     this._eventService.selectedDate$.subscribe(date => {
-      this.ngZone.run( () => { this.updateCalendar(date); });
+      this.ngZone.run( () => { console.log(date); this.updateCalendar(date); });
     });
 
     this._eventService.monthEvents$.subscribe(monthEventCollection => {
@@ -74,7 +74,7 @@ export class MonthComponent implements OnInit {
         month: parseInt(d.format('M'))-1,
         year: parseInt(d.format('YYYY')),
         events: this.getEventsOnDate(d),
-        isSelected: d.isSame(dateInMonth, 'day'),
+        isSelected: d.isSame(moment(dateInMonth), 'day'),
         isToday: this._dateService.isToday(d.toDate()),
         inCurrentMonth: d.isSame(this.currentMonth, 'month')
       };
@@ -127,16 +127,17 @@ export class MonthComponent implements OnInit {
 
   onSelect(day: CalendarDay): void {
     let prevMonth = parseInt(moment(this._eventService.getSelectedDate()).format('M'))-1;
+    console.log(prevMonth);
+    console.log(day.month);
     if(this._eventService.getSelectedDate() != day.date){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
+    this._eventService.setSelectedDate(day.date);
     if(day.month > prevMonth){ this.incrementMonth(1); }
     if(day.month < prevMonth){ this.incrementMonth(-1); }
     else { this.incrementMonth(0); }
   }
 
   incrementMonth(delta: number) {
-    let newDate;
-    if(delta == 0) { newDate = this._eventService.getSelectedDate(); }
-    else { newDate = moment(newDate).startOf('month').add(delta,'M'); }
+    let newDate = this._eventService.getSelectedDate();
     this._eventService.changeDateSpan(newDate, ViewState.month);
   }
 

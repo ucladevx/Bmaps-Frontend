@@ -9,7 +9,7 @@
   </div>
   <div class="calendar-month">
     <div *ngFor="let day of days" class="calendar-day" (click)="onSelect(day)"
-    [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.selected, 'today': day.isToday}">
+    [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.isSelected, 'today': day.isToday}">
       <span [ngClass]="{'today': day.isToday}">{{day.dayOfMonth}}</span>
       <ul class="calendar-day-event" >
         <li *ngFor="let event of day.events">
