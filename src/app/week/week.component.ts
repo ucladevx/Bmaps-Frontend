@@ -37,16 +37,12 @@ export class WeekComponent implements OnInit {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
-      if(this._eventService.isWeekView())
-        document.getElementById("scrollable").scrollTop = this.scrollPosition;
     });
 
     this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
-      if(this._eventService.isWeekView())
-        document.getElementById("scrollable").scrollTop = this.scrollPosition;
     });
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -65,7 +61,8 @@ export class WeekComponent implements OnInit {
     }
 
     this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
-    document.getElementById("scrollable").scrollTop = this.scrollPosition;
+
+    this._eventService.setCurrentView(ViewState.week);
 
   }
 
@@ -100,6 +97,8 @@ export class WeekComponent implements OnInit {
       this.days.push(weekDay);
     }
     this._eventService.setVisibleDays(this.days);
+    this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+    document.getElementById("scrollable").scrollTop = this.scrollPosition;
   }
 
   //retrieve events for the given week

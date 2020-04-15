@@ -26,7 +26,7 @@ export class MonthComponent implements OnInit {
   ngOnInit() {
 
     this._eventService.selectedDate$.subscribe(date => {
-      this.ngZone.run( () => { console.log(date); this.updateCalendar(date); });
+      this.ngZone.run( () => { this.updateCalendar(date); });
     });
 
     this._eventService.monthEvents$.subscribe(monthEventCollection => {
@@ -54,6 +54,8 @@ export class MonthComponent implements OnInit {
     if(this._eventService.getSidebarEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
+
+    this._eventService.setCurrentView(ViewState.month);
 
   }
 

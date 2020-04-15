@@ -52,10 +52,9 @@ export class DateSelectorComponent implements OnInit {
       // 1 means advance one day, -1 means go back one day
       let newDate = new Date();
       let prevDate = this._eventService.getSelectedDate();
-      console.log(prevDate);
       newDate = moment(prevDate).add(delta, 'd').toDate();
-      console.log(newDate);
       this._eventService.setSelectedDate(newDate);
+      console.log(this._eventService.getCurrentView());
       this._eventService.changeDateSpan(newDate, this._eventService.getCurrentView());
       if(this._eventService.isMapView())
         document.getElementById("resetButton").click();

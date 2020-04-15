@@ -24,7 +24,9 @@ export class NavbarComponent implements OnInit {
     currentView: ViewState;
     isMonth: boolean = false;
 
-    constructor(public _eventService: EventService, private _router: Router, private http: HttpClient) {
+    constructor(public _eventService: EventService, private _router: Router, private http: HttpClient) { }
+
+    ngOnInit() {
       this._eventService.currentView$.subscribe( view => {
         if(view == ViewState.map)
           this.isMapSelected = true;
@@ -38,9 +40,6 @@ export class NavbarComponent implements OnInit {
             this.currentView = ViewState.threeday;
         }
       });
-    }
-
-    ngOnInit() {
       this.getCurrentDay();
       this.getTemperature();
       setInterval(() => this.getTemperature(), 9000000);
@@ -66,7 +65,6 @@ export class NavbarComponent implements OnInit {
           });
         }
       });
-
     }
 
     isCollapsed: boolean = true;
@@ -134,7 +132,6 @@ export class NavbarComponent implements OnInit {
         this.changeView(ViewState.map);
       } else {
         this.isMapSelected = false;
-        console.log(this._eventService.retrieveLastView());
         switch(this._eventService.retrieveLastView()) {
           case ViewState.week:
             this.changeView(ViewState.week);

@@ -38,16 +38,12 @@ export class ThreeDayComponent implements OnInit {
       this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
-      if(this._eventService.isThreeDayView())
-        document.getElementById("scrollable").scrollTop = this.scrollPosition;
     });
 
     this._eventService.filteredThreeDayEvents$.subscribe(threeDayEventCollection => {
       this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
-      if(this._eventService.isThreeDayView())
-        document.getElementById("scrollable").scrollTop = this.scrollPosition;
     });
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -66,7 +62,8 @@ export class ThreeDayComponent implements OnInit {
     }
 
     this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
-    document.getElementById("scrollable").scrollTop = this.scrollPosition;
+
+    this._eventService.setCurrentView(ViewState.threeday);
 
   }
 
@@ -114,6 +111,8 @@ export class ThreeDayComponent implements OnInit {
       this.days.push(weekDay);
     }
     this._eventService.setVisibleDays(this.days);
+    this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+    document.getElementById("scrollable").scrollTop = this.scrollPosition;
   }
 
   //retrieve events for the given week

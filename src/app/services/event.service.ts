@@ -242,7 +242,6 @@ export class EventService {
     this.setCurrentView(newView);
     this.setSelectedDate(newDate);
     this.updateEvents(newDate);
-    this.determineView();
   }
 
   // EVENT RETRIEVAL //

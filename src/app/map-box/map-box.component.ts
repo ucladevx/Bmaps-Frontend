@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { DateService } from '../services/date.service';
 import { EventService } from '../services/event.service';
 import { LocationService } from '../services/location.service';
+import { ViewState } from '../view-enum';
 
 @Component({
     selector: 'app-map-box',
@@ -119,6 +120,7 @@ export class MapBoxComponent implements OnInit {
 
     // add extra controls
     this.addControls();
+    this._eventService.setCurrentView(ViewState.map);
 
   }
 

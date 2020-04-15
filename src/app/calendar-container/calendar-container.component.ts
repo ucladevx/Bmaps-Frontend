@@ -50,7 +50,6 @@ export class CalendarContainerComponent implements OnInit {
     this._eventService.selectedDate$.subscribe( date => { this.viewDateChange(date); this.enumerateWeek(this._eventService.getCurrentView()) });
     if(this._eventService.isWeekView()) { this.enumerateWeek(ViewState.week); }
     if(this._eventService.isThreeDayView()) { this.enumerateWeek(ViewState.threeday); }
-    this._eventService.determineView();
   }
 
   viewDateChange(set : Date) {
