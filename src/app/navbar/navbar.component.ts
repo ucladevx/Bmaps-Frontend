@@ -1,8 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
-import { EventService } from '../services/event.service';
+import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { EventService } from '../services/event.service';
 import { ViewState } from '../view-enum';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-navbar',
@@ -11,40 +12,41 @@ import { ViewState } from '../view-enum';
 })
 
 export class NavbarComponent implements OnInit {
+
     public ViewState = ViewState;
-    public currentDate: number = 7;
+    public currentView: ViewState;
+    public isMapSelected: boolean = true;
+    public isMenuCollapsed: boolean = true;
+    public isFilterCollapsed: boolean = true;
+
     public temperature: string;
     public weatherIcon: string;
     public celsius: string;
     public fahrenheit: string;
-    isFahrenheit: boolean = true;
-    foundWeatherIcon: boolean;
-
-    isMapSelected: boolean = true;
-    currentView: ViewState;
-    isMonth: boolean = false;
+    public isFahrenheit: boolean = true;
+    public foundWeatherIcon: boolean = false;
 
     constructor(public _eventService: EventService, private _router: Router, private http: HttpClient) { }
 
     ngOnInit() {
+
+      // maintain a current view variable
       this._eventService.currentView$.subscribe( view => {
-        if(view == ViewState.map)
-          this.isMapSelected = true;
+        if(view == ViewState.map) this.isMapSelected = true;
         else {
           this.isMapSelected = false;
-          if (view == ViewState.month)
-            this.currentView = ViewState.month;
-          else if (view == ViewState.week)
-            this.currentView = ViewState.week;
-          else if (view == ViewState.threeday)
-            this.currentView = ViewState.threeday;
+          if (view == ViewState.month) this.currentView = ViewState.month;
+          else if (view == ViewState.week) this.currentView = ViewState.week;
+          else if (view == ViewState.threeday) this.currentView = ViewState.threeday;
         }
       });
-      this.getCurrentDay();
+
+      // initialize temperature
       this.getTemperature();
       setInterval(() => this.getTemperature(), 9000000);
-      let deferredPrompt;
-      let installButton;
+
+      // pwa prompt
+      let deferredPrompt, installButton;
       window.addEventListener('beforeinstallprompt', (e) => {
         console.log('PWA Enabled on this Browser');
         e.preventDefault();
@@ -55,65 +57,89 @@ export class NavbarComponent implements OnInit {
           installButton.addEventListener('click', (e) => {
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('PWA setup accepted');
-              } else {
-                console.log('PWA setup rejected');
-              }
+              if (choiceResult.outcome === 'accepted') { console.log('PWA setup accepted'); }
+              else { console.log('PWA setup rejected'); }
               deferredPrompt = null;
-            });
-          });
-        }
-      });
+      });});}});
+
     }
 
-    isCollapsed: boolean = true;
-
-    getCurrentDay(): void {
-      let today = new Date();
-      this.currentDate = today.getDate();
-    }
-
-    public isFilterCollapsed: boolean = true;
-
+    // collapse menu (mobile)
     toggleMenuCollapse(): void {
-      this.isCollapsed = !this.isCollapsed;
+      this.isMenuCollapsed = !this.isMenuCollapsed;
       this.isFilterCollapsed = true;
     }
 
+    // collapse filter menu (mobile)
     toggleFilterCollapse(): void {
       this.isFilterCollapsed = !this.isFilterCollapsed;
-      this.isCollapsed = true;
+      this.isMenuCollapsed = true;
     }
 
+    // change view span
+    changeView(newView: ViewState): void {
+      // determine new path
+      let path = "";
+      let e = this._eventService.getSidebarEvent();
+      switch(newView) {
+        case ViewState.map:
+          path += '/map'; break;
+        case ViewState.week:
+          path += '/calendar/week'; break;
+        case ViewState.month:
+          path += '/calendar/month'; break;
+        case ViewState.threeday:
+          path += '/calendar/three-day'; break;
+      }
+      if(e != null) path += "(sidebar:detail/"+e.id+")";
+      else path += "(sidebar:list)";
+      // determine selected date
+      let d = this._eventService.getSelectedDate();
+      if (d == null) d = new Date();
+      // change date span
+      this._eventService.changeDateSpan(d, newView);
+      this._router.navigateByUrl(path);
+      // update sidebar view
+      if(newView == ViewState.map && e) {
+        if(moment(d).isSame(moment(e.properties.start_time),'d')) {
+          this._eventService.updateClickedEvent(e);
+          this._eventService.updateSidebarEvent(e);
+        } else {
+          this._eventService.resetEventSelection();
+        }
+      }
+    }
+
+    lastCalendarView(){
+      if(this._eventService.isMapView())
+        return this._eventService.retrieveLastView();
+    }
+
+    // update temperature (default: fahrenheit)
     getTemperature(): void {
       const API_KEY = "bc6a73dfabbd4e6c9006a835d00589f2";
       const zipcode = "90024";
       const baseWeatherUrl = "https://api.openweathermap.org/data/2.5/weather";
       const defaultTemperatureUnits = "imperial";
-
       let weatherQuery = `${baseWeatherUrl}?units=${defaultTemperatureUnits}&zip=${zipcode},us&APPID=${API_KEY}`;
       this.http.get(weatherQuery).subscribe(weatherData => {
         let temp = weatherData['main']['temp'];
         this.fahrenheit = String(Math.round(temp)) + "°F";
         this.celsius = String(Math.round((temp - 32)/1.8) + "°C");
-        //set default temperature to Fahrenheit
-        if (this.isFahrenheit)
-          this.temperature = String(this.fahrenheit);
-        else
-          this.temperature = String(this.celsius);
+        if (this.isFahrenheit) this.temperature = String(this.fahrenheit);
+        else this.temperature = String(this.celsius);
         this.weatherIcon = weatherData['weather'][0]['icon'];
       });
     }
 
+    // switch temperature units
     switchTemperature(): void {
       this.isFahrenheit = !this.isFahrenheit;
-      if (this.isFahrenheit)
-        this.temperature = this.fahrenheit;
-      else
-        this.temperature = this.celsius;
+      if (this.isFahrenheit) this.temperature = this.fahrenheit;
+      else this.temperature = this.celsius;
     }
 
+    // validate image
     checkImage(imageSrc) {
       if(imageSrc.includes("undefined"))
         return false;
@@ -124,53 +150,6 @@ export class NavbarComponent implements OnInit {
       } catch(err) {
         return false;
       }
-    }
-
-    toggleView(): void {
-      if (this._eventService.isCalendarView()) {
-        this.isMapSelected = true;
-        this.changeView(ViewState.map);
-      } else {
-        this.isMapSelected = false;
-        switch(this._eventService.retrieveLastView()) {
-          case ViewState.week:
-            this.changeView(ViewState.week);
-            break;
-          case ViewState.month:
-            this.changeView(ViewState.month);
-            break;
-          case ViewState.threeday:
-            this.changeView(ViewState.threeday);
-            break;
-        }
-      }
-    }
-
-    changeView(newView: ViewState): void {
-      let path = "";
-      let e = this._eventService.getSidebarEvent();
-      switch(newView) {
-        case ViewState.map:
-          path += '/map';
-          break;
-        case ViewState.week:
-          path += '/calendar/week';
-          break;
-        case ViewState.month:
-          path += '/calendar/month';
-          break;
-        case ViewState.threeday:
-          path += '/calendar/three-day';
-          break;
-      }
-      if(e != null)
-        path += "(sidebar:detail/"+e.id+")";
-      else
-        path += "(sidebar:list)";
-      let d = this._eventService.getSelectedDate();
-      if (d == null) d = new Date();
-      this._eventService.changeDateSpan(d, newView);
-      this._router.navigateByUrl(path);
     }
 
 }

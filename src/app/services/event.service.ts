@@ -4,10 +4,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { ViewState } from '../view-enum';
 import { FeatureCollection, GeoJson } from '../map';
-import { DateService } from './date.service';
 import { LocationService } from './location.service';
+import { DateService } from './date.service';
+import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 
 // Calendar Day Interface
@@ -142,31 +142,76 @@ export class EventService {
     this.dateFilter$ = this.dateFilterSource.asObservable();
     this.timeFilter$ = this.timeFilterSource.asObservable();
     // Maintain a set of self-subscribed local values
-    this.currentView$.subscribe(view => { this._currentView = view; this.resetFilters(); });
-    this.lastView$.subscribe(view => this._lastView = view);
-    this.visibleDays$.subscribe(days => this._visibleDays = days);
-    this.selectedDate$.subscribe(date => this._selectedDate = date);
-    this.monthEvents$.subscribe(monthEvents => this._monthEvents = monthEvents);
-    this.weekEvents$.subscribe(weekEvents => this._weekEvents = weekEvents);
-    this.threeDayEvents$.subscribe(threeDayEvents => this._threeDayEvents = threeDayEvents);
-    this.dayEvents$.subscribe(dayEvents => this._dayEvents = dayEvents);
-    this.filteredMonthEvents$.subscribe(filteredMonthEvents => this._filteredMonthEvents = filteredMonthEvents);
-    this.filteredWeekEvents$.subscribe(filteredWeekEvents => this._filteredWeekEvents = filteredWeekEvents);
-    this.filteredThreeDayEvents$.subscribe(filteredThreeDayEvents => this._filteredThreeDayEvents = filteredThreeDayEvents);
-    this.filteredDayEvents$.subscribe(filteredDayEvents => this._filteredDayEvents = filteredDayEvents);
-    this.hoveredEvent$.subscribe(hoveredEventInfo => this._hoveredEvent = hoveredEventInfo);
-    this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
-    this.sidebarEvent$.subscribe(sidebarEventInfo => this._sidebarEvent = sidebarEventInfo);
-    this.categHash$.subscribe(categHash =>
-      { this._categHash = categHash; this.applyAllFilters(); });
-    this.tagHash$.subscribe(filterHash =>
-      { this._tagHash = filterHash; this.applyAllFilters(); });
-    this.locFilter$.subscribe(locSearch =>
-      { this._locFilter = locSearch; this.applyAllFilters(); });
-    this.dateFilter$.subscribe(dateHash =>
-      { this._dateFilter = dateHash; this.applyAllFilters(); });
-    this.timeFilter$.subscribe(timeHash =>
-      { this._timeFilter = timeHash; this.applyAllFilters(); });
+    this.currentView$.subscribe(view => {
+      this._currentView = view;
+      this.resetFilters();
+    });
+    this.lastView$.subscribe(view =>
+      this._lastView = view
+    );
+    this.visibleDays$.subscribe(days =>
+      this._visibleDays = days
+    );
+    this.selectedDate$.subscribe(date =>
+      this._selectedDate = date
+    );
+    this.monthEvents$.subscribe(monthEvents => {
+      this._monthEvents = monthEvents;
+      this.filteredMonthEventsSource.next(monthEvents);
+    });
+    this.filteredMonthEvents$.subscribe(filteredMonthEvents =>
+      this._filteredMonthEvents = filteredMonthEvents
+    );
+    this.weekEvents$.subscribe(weekEvents => {
+      this._weekEvents = weekEvents;
+      this.filteredWeekEventsSource.next(weekEvents);
+    });
+    this.filteredWeekEvents$.subscribe(filteredWeekEvents =>
+      this._filteredWeekEvents = filteredWeekEvents
+    );
+    this.threeDayEvents$.subscribe(threeDayEvents => {
+      this._threeDayEvents = threeDayEvents;
+      this.filteredThreeDayEventsSource.next(threeDayEvents);
+    });
+    this.filteredThreeDayEvents$.subscribe(filteredThreeDayEvents =>
+      this._filteredThreeDayEvents = filteredThreeDayEvents
+    );
+    this.dayEvents$.subscribe(dayEvents => {
+      this._dayEvents = dayEvents;
+      this.filteredDayEventsSource.next(dayEvents);
+    });
+    this.filteredDayEvents$.subscribe(filteredDayEvents =>
+      this._filteredDayEvents = filteredDayEvents
+    );
+    this.hoveredEvent$.subscribe(hoveredEventInfo =>
+      this._hoveredEvent = hoveredEventInfo
+    );
+    this.clickedEvent$.subscribe(clickedEventInfo =>
+      this._clickedEvent = clickedEventInfo
+    );
+    this.sidebarEvent$.subscribe(sidebarEventInfo =>
+      this._sidebarEvent = sidebarEventInfo
+    );
+    this.categHash$.subscribe(categHash => {
+      this._categHash = categHash;
+      this.applyAllFilters();
+    });
+    this.tagHash$.subscribe(filterHash => {
+      this._tagHash = filterHash;
+      this.applyAllFilters();
+    });
+    this.locFilter$.subscribe(locSearch => {
+      this._locFilter = locSearch;
+      this.applyAllFilters();
+    });
+    this.dateFilter$.subscribe(dateHash => {
+      this._dateFilter = dateHash;
+      this.applyAllFilters();
+    });
+    this.timeFilter$.subscribe(timeHash => {
+      this._timeFilter = timeHash;
+      this.applyAllFilters();
+    });
     // Initialize filters
     this.initCategories();
     // Initiailize view variables
@@ -174,6 +219,7 @@ export class EventService {
     this.storeLastView(ViewState.month);
     // Populate event containers
     this.updateEvents(new Date());
+    this.setSelectedDate(new Date());
   }
 
   // View Getters and Setters //
@@ -181,67 +227,99 @@ export class EventService {
   determineView() {
     let prev = this._currentView;
     let next = this._currentView;
-    if(this.router.url.startsWith("/map")){
-      next = ViewState.map;
-    } else if(this.router.url.startsWith("/calendar/month")) {
-      next = ViewState.month;
-    } else if(this.router.url.startsWith("/calendar/week")) {
-      next = ViewState.week;
-    } else if(this.router.url.startsWith("/calendar/three-day")) {
-      next = ViewState.threeday;
-    }
+    if(this.router.url.startsWith("/map"))
+      { next = ViewState.map; }
+    else if(this.router.url.startsWith("/calendar/month"))
+      { next = ViewState.month; }
+    else if(this.router.url.startsWith("/calendar/week"))
+      { next = ViewState.week; }
+    else if(this.router.url.startsWith("/calendar/three-day"))
+      { next = ViewState.threeday; }
+    this._currentView = next;
     this.setCurrentView(next);
-    if(next != prev) this.storeLastView(prev);
+    if(next != prev) {
+      this._lastView = prev
+      this.storeLastView(prev);
+    }
   }
 
-  isMapView() { return this.router.url.startsWith("/map") }
-  isCalendarView() { return this.router.url.startsWith("/calendar") }
-  isMonthView() { return this.router.url.startsWith("/calendar/month") }
-  isWeekView() { return this.router.url.startsWith("/calendar/week") }
-  isThreeDayView() { return this.router.url.startsWith("/calendar/three-day") }
-  setCurrentView(view: ViewState) { this.currentViewSource.next(view); }
-  getCurrentView() { return this._currentView; }
-  storeLastView(view: ViewState){ this.lastViewSource.next(view); }
-  retrieveLastView(){ return this._lastView; }
+  isMapView() {
+    return this.router.url.startsWith("/map")
+  }
+  isCalendarView() {
+    return this.router.url.startsWith("/calendar")
+  }
+  isMonthView() {
+    return this.router.url.startsWith("/calendar/month")
+  }
+  isWeekView() {
+    return this.router.url.startsWith("/calendar/week")
+  }
+  isThreeDayView() {
+    return this.router.url.startsWith("/calendar/three-day")
+  }
+
+  setCurrentView(view: ViewState) {
+    this.currentViewSource.next(view);
+  } getCurrentView() { return this._currentView; }
+
+  storeLastView(view: ViewState){
+    this.lastViewSource.next(view);
+  } retrieveLastView(){ return this._lastView; }
 
   // Day Getters and Setters //
-  getVisibleDays(){ return this._visibleDays; }
-  setVisibleDays(visibleDays: CalendarDay[]){ this.visibleDaysSource.next(visibleDays); }
-  getSelectedDate() { return this._selectedDate; }
-  setSelectedDate(date: Date){ this.selectedDateSource.next(date); }
+  setVisibleDays(visibleDays: CalendarDay[]){
+    this.visibleDaysSource.next(visibleDays);
+  } getVisibleDays(){ return this._visibleDays; }
+
+  setSelectedDate(date: Date){
+    this.selectedDateSource.next(date);
+  } getSelectedDate() { return this._selectedDate; }
 
   // Event Collection Getters and Setters //
+
   getMonthEvents() { return this._monthEvents; }
   getFilteredMonthEvents() { return this._filteredMonthEvents; }
+
   getWeekEvents() { return this._weekEvents; }
   getFilteredWeekEvents() { return this._filteredWeekEvents; }
+
   getThreeDayEvents() { return this._threeDayEvents; }
   getFilteredThreeDayEvents() { return this._filteredThreeDayEvents; }
+
   getDayEvents() { return this._dayEvents; }
   getFilteredDayEvents() { return this._filteredDayEvents; }
 
   // Event Getters and Setters //
-  updateHoveredEvent(event: GeoJson): void { this.hoveredEventSource.next(event); }
-  getHoveredEvent() { return this._hoveredEvent; }
-  updateClickedEvent(event: GeoJson): void { this.clickedEventSource.next(event); }
-  getClickedEvent(){ return this._clickedEvent; }
-  updateSidebarEvent(event: GeoJson): void { this.sidebarEventSource.next(event); }
-  getSidebarEvent(){ return this._sidebarEvent; }
+
+  updateHoveredEvent(event: GeoJson): void {
+    this.hoveredEventSource.next(event);
+  } getHoveredEvent() { return this._hoveredEvent; }
+
+  updateClickedEvent(event: GeoJson): void {
+    this.clickedEventSource.next(event);
+  } getClickedEvent(){ return this._clickedEvent; }
+
+  updateSidebarEvent(event: GeoJson): void {
+    this.sidebarEventSource.next(event);
+  } getSidebarEvent(){ return this._sidebarEvent; }
+
   resetEventSelection() {
     this.updateHoveredEvent(null);
     this.updateClickedEvent(null);
     this.updateSidebarEvent(null);
+    this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
   }
 
   // UPDATE DATE SPAN //
 
   // Call whenever date span of view is changed
   changeDateSpan(newDate: Date, newView : ViewState) {
-    this.storeLastView(this._currentView);
-    this.resetEventSelection();
+    if(newView != this._currentView)
+      this.storeLastView(this._currentView);
     this.setCurrentView(newView);
-    this.setSelectedDate(newDate);
     this.updateEvents(newDate);
+    this.setSelectedDate(newDate);
   }
 
   // EVENT RETRIEVAL //
@@ -271,14 +349,12 @@ export class EventService {
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(dayEvents => {
       this.dayEventsSource.next(dayEvents);
     });
+    // update other event collections
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      // update other event collections
       this.monthEventsSource.next(this.filterByMonth(allEvents, date));
       this.weekEventsSource.next(this.filterByWeek(allEvents, date));
       this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
     });
-    // update date
-    this.selectedDateSource.next(date);
   }
 
   // Filter events by a date span
@@ -313,11 +389,13 @@ export class EventService {
 
   // Filter events by three days
   private filterByThreeDays(allEvents: FeatureCollection, date: Date){
+    // determine first and last day to start displaying events
     let numDaysDiff = moment(date).startOf('day').diff(moment().startOf('day'), 'days');
     let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
     let firstDay = moment(date).clone().startOf('day').add(-1*dayOfGroup, 'days');
     let lastDay = firstDay.clone().add(3, 'days');
     if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
+    // filter by day span
     return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
   }
 

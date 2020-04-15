@@ -34,12 +34,6 @@ export class ThreeDayComponent implements OnInit {
       this.ngZone.run( () => { this.updateCalendar(date); });
     });
 
-    this._eventService.threeDayEvents$.subscribe(threeDayEventCollection => {
-      this.filteredEvents = threeDayEventCollection.features;
-      this.fillEventsByDay();
-      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
-    });
-
     this._eventService.filteredThreeDayEvents$.subscribe(threeDayEventCollection => {
       this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();

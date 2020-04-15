@@ -32,13 +32,7 @@ export class WeekComponent implements OnInit {
     this._eventService.selectedDate$.subscribe(date => {
       this.ngZone.run( () => { this.updateCalendar(date); });
     });
-
-    this._eventService.weekEvents$.subscribe(weekEventCollection => {
-      this.filteredEvents = weekEventCollection.features;
-      this.fillEventsByDay();
-      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
-    });
-
+    
     this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
@@ -152,8 +146,9 @@ export class WeekComponent implements OnInit {
   //open event in sidebar
   openEvent(event: GeoJson): void{
     this._eventService.updateClickedEvent(event);
-    this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
     this._eventService.updateSidebarEvent(event);
+    console.log(event.id);
+    this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
   }
 
   // EVENT STYLING //

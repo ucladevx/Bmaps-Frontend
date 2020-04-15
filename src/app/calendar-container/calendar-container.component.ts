@@ -19,8 +19,6 @@ import { ViewState } from '../view-enum';
 export class CalendarContainerComponent implements OnInit {
   public ViewState = ViewState;
 
-  public viewDate: string;
-  currentPath = '';
 
   @ContentChild(MonthComponent, /* TODO: add static flag */ {})
   private monthComponent: MonthComponent;
@@ -32,7 +30,10 @@ export class CalendarContainerComponent implements OnInit {
   private threeDayComponent: ThreeDayComponent;
 
   // week number
+  public viewDate: string;
+  currentPath = '';
   weekNumber: string;
+  view: ViewState = ViewState.month;
 
   // retrieved from UCLA online academic calendar
   zeroWeeks: Moment[] = [
@@ -48,16 +49,13 @@ export class CalendarContainerComponent implements OnInit {
 
   ngOnInit() {
     this._eventService.selectedDate$.subscribe( date => { this.viewDateChange(date); this.enumerateWeek(this._eventService.getCurrentView()) });
-    if(this._eventService.isWeekView()) { this.enumerateWeek(ViewState.week); }
-    if(this._eventService.isThreeDayView()) { this.enumerateWeek(ViewState.threeday); }
+    this._eventService.currentView$.subscribe( view => { this.view = view; } );
+    if(this._eventService.isWeekView()) { this.view = ViewState.week; this.enumerateWeek(ViewState.week); }
+    if(this._eventService.isThreeDayView()) { this.view = ViewState.threeday; this.enumerateWeek(ViewState.threeday); }
   }
 
   viewDateChange(set : Date) {
     this.viewDate = set.toLocaleDateString("en-US", {month: 'long', year: 'numeric'});
-  }
-
-  getCalendarView() : ViewState {
-    return this._eventService.getCurrentView();
   }
 
   changeDateSpan(delta: number, calendarView: ViewState) : void{

@@ -1,7 +1,7 @@
 <div class="calendar">
   <div class="selector">
       <!-- if current route is week -->
-      <div id="week-number" *ngIf="(getCalendarView() == ViewState.week) || (getCalendarView() == ViewState.threeday); else emptyBlock">
+      <div id="week-number" *ngIf="(view == ViewState.week) || (view == ViewState.threeday); else emptyBlock">
         <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
       </div>
       <ng-template #emptyBlock>
@@ -10,11 +10,11 @@
       <div id="calendar-controls-wrapper">
         <div id="calendar-controls">
           <button id="left-caret" class="custom-btn">
-            <i class="icon-caret-left" (click)="changeDateSpan(-1,getCalendarView())" aria-hidden="true"></i>
+            <i class="icon-caret-left" (click)="changeDateSpan(-1,view)" aria-hidden="true"></i>
           </button>
           <span>{{viewDate}}</span>
           <button id="right-caret" class="custom-btn">
-            <i class="icon-caret-right" (click)="changeDateSpan(1,getCalendarView())" aria-hidden="true"></i>
+            <i class="icon-caret-right" (click)="changeDateSpan(1,view)" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -25,9 +25,9 @@
         <span id="month-switch" class="navbar-text"  routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.month)">Month</span>
       </div>
     </div>
-  <div class="mobile-selector" *ngIf="getCalendarView() == ViewState.month">
+  <div class="mobile-selector" *ngIf="view == ViewState.month">
       <!-- if current route is week -->
-      <div id="week-number" *ngIf="(getCalendarView() == ViewState.week) || (getCalendarView() == ViewState.threeday); else emptyBlock">
+      <div id="week-number" *ngIf="(view == ViewState.week) || (view == ViewState.threeday); else emptyBlock">
         <span *ngIf="this.weekNumber">{{this.weekNumber}}</span>
       </div>
       <ng-template #emptyBlock>
@@ -36,11 +36,11 @@
       <div id="calendar-controls-wrapper">
         <div id="calendar-controls">
           <button id="left-caret" class="custom-btn">
-            <i class="fa fa-caret-left" (click)="changeDateSpan(-1,getCalendarView())" aria-hidden="true"></i>
+            <i class="fa fa-caret-left" (click)="changeDateSpan(-1,view)" aria-hidden="true"></i>
           </button>
           <span>{{viewDate}}</span>
           <button id="right-caret" class="custom-btn">
-            <i class="fa fa-caret-right" (click)="changeDateSpan(1,getCalendarView())" aria-hidden="true"></i>
+            <i class="fa fa-caret-right" (click)="changeDateSpan(1,view)" aria-hidden="true"></i>
           </button>
         </div>
       </div>

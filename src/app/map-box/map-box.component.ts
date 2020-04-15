@@ -56,48 +56,49 @@ export class MapBoxComponent implements OnInit {
 
   ngOnInit() {
 
+    // update view every time the events change
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
     });
 
+    // ease to event pin when event is clicked
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
       if(clickedEventInfo == null){
-        this.map.easeTo({
-          center: [-118.445320, 34.066915],
-          zoom: 15,
-          pitch: 60,
-          bearing: 0
-        });
+        this.map.easeTo({center: [-118.445320, 34.066915], zoom: 15, pitch: 60, bearing: 0 });
       }
     });
 
+    // bold event popup when event is displayed in sidebar
     this._eventService.sidebarEvent$.subscribe(sidebarEventInfo => {
       this.boldPopup(sidebarEventInfo);
     });
 
+    // initialize the map
     this.buildMap();
-    if(this._eventService.getSidebarEvent() == null)
-      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-
     let _promiseMapLoad = this.promiseMapLoad();
     let _promiseGetUserLocation = this.promiseGetUserLocation();
     let _promisePinLoad = this.promiseImageLoad(this.pinUrl);
     let _promiseBluePinLoad = this.promiseImageLoad(this.bluePinPath);
 
-    //Add 3D buildings, on-hover popup, and arrowcontrols
+    // initialize the sidebar
+    if(this._eventService.getSidebarEvent() == null)
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+
+    //Add 3D buildings, arrowcontrols, and on-hover popup
     _promiseMapLoad.then(() => {
       this.threeDDisplay();
-      this.hoverPopup();
       this.addArrowControls();
+      this.hoverPopup();
       this.map.resize();
+      // highlight event when hovered over
       this._eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
         this.hoverEvent(hoveredEventInfo);
       });
     });
 
-    //Add all Events pins
+    // Add events pins
     let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
     promise_map_pin.then((promiseReturns) => {
       let image = promiseReturns[1];
@@ -112,14 +113,14 @@ export class MapBoxComponent implements OnInit {
       this.map.addImage('bluePin', image);
     });
 
-    //Add user location pin
+    // Add user location pin
     let promise_map_userloc_pins = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad, _promiseBluePinLoad]);
-    promise_map_userloc_pins.then(() => {
-      // this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08);
-    });
+    promise_map_userloc_pins.then(() => { /* this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08); */ });
 
     // add extra controls
     this.addControls();
+
+    // initialize view to map
     this._eventService.setCurrentView(ViewState.map);
 
   }

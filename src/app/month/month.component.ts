@@ -29,12 +29,6 @@ export class MonthComponent implements OnInit {
       this.ngZone.run( () => { this.updateCalendar(date); });
     });
 
-    this._eventService.monthEvents$.subscribe(monthEventCollection => {
-      this.filteredEvents = monthEventCollection.features;
-      this.fillEventsByDay();
-      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
-    });
-
     this._eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
       this.filteredEvents = monthEventCollection.features;
       this.fillEventsByDay();

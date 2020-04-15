@@ -1,10 +1,12 @@
 <nav class="navbar navbar-toggleable-md  navbar-default">
-    <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-left" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="icon-bars" aria-hidden="true" *ngIf="isCollapsed"></i>
-        <i class="icon-times" aria-hidden="true" *ngIf="!isCollapsed"></i>
+    <!-- Mobile Navbar -->
+    <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-left" type="button"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="icon-bars" aria-hidden="true" *ngIf="isMenuCollapsed"></i>
+        <i class="icon-times" aria-hidden="true" *ngIf="!isMenuCollapsed"></i>
     </button>
     <div *ngIf="isMapSelected; else calendarViewSelect" class="d-md-none">
-        <app-date-selector></app-date-selector>
+      <app-date-selector></app-date-selector>
     </div>
     <ng-template #calendarViewSelect>
       <div class="d-md-none mobile-calendar-view-switch">
@@ -17,41 +19,37 @@
       <i class="icon-filter" id="filter-dropdown-toggle" aria-hidden="true" *ngIf="isFilterCollapsed"></i>
       <i class="icon-times" id="filter-dropdown-toggle-2" aria-hidden="true" *ngIf="!isFilterCollapsed"></i>
     </button>
+    <!-- Desktop Navbar -->
     <div class="navbar-brand">
       <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
-          <img class="nav-logo" src="/assets/images/map-icon-small.png" width="" height="30" class="align-top" alt="">
-          <span id="brand-name">bmaps</span>
+        <img class="nav-logo" src="/assets/images/map-icon-small.png" width="" height="30" class="align-top" alt="">
+        <span id="brand-name">bmaps</span>
       </a>
     </div>
-    <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isCollapsed">
-        <ul class="navbar-nav mr-auto">
-        </ul>
-        <ul class="navbar-nav ml-auto">
-          <span class="navbar-text" (click)="switchTemperature()">
-              <img class="weather-icon"
-              src="{{
-                  checkImage('/assets/images/weather/'+weatherIcon+'.svg') ?
-                  '/assets/images/weather/'+weatherIcon+'.svg'
-                  : '/assets/images/weather.svg'
-                  }}"
-                  />
-              {{temperature}}
-          </span>
-        <li>
-        <span [ngClass]="isMapSelected ? 'navbar-text active' : 'navbar-text'" (click)="toggleView()">Map View</span>
-        </li>
-        <li>
-          <span [ngClass]="isMapSelected ? 'navbar-text' : 'navbar-text active'" (click)="toggleView()">Calendar View</span>
-        </li>
-        <li>
-        <span class="navbar-text" id="install-button">Install</span>
-        <span class="navbar-text">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">Feedback</a>
+    <div class="collapse navbar-collapse menu" id="navbarSupportedContent" [collapse]="isMenuCollapsed">
+      <ul class="navbar-nav mr-auto">
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <!-- Temperature -->
+        <span class="navbar-text" (click)="switchTemperature()">
+          <img class="weather-icon" src="{{checkImage('/assets/images/weather/'+weatherIcon+'.svg') ? '/assets/images/weather/'+weatherIcon+'.svg' : '/assets/images/weather.svg'}}"/>
+          {{temperature}}
         </span>
+        <!-- Map/Calendar Switch -->
+        <li><span [ngClass]="isMapSelected ? 'navbar-text active' : 'navbar-text'" (click)="changeView(ViewState.map)">Map View</span></li>
+        <li><span [ngClass]="isMapSelected ? 'navbar-text' : 'navbar-text active'" (click)="changeView(lastCalendarView())">Calendar View</span></li>
+        <!-- Install + Feedback -->
+        <li>
+          <span class="navbar-text" id="install-button">Install</span>
+          <span class="navbar-text">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeudgP40DbYuAGnbSEI1FT_ip50aM4VYHQHkqJAfxqOHa5Ecw/viewform?usp=sf_link" style="color: white;">
+            Feedback
+            </a>
+          </span>
         </li>
-        </ul>
-
+      </ul>
     </div>
+    <!-- Mobile Navbar -->
     <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
       <span *ngIf="this._eventService.isMapView(); else calendarView">
         <app-filter-bar-map [showToggleButton]="false"></app-filter-bar-map>

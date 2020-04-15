@@ -118,7 +118,7 @@ export class SidebarComponent implements OnInit {
       this._eventService.updateClickedEvent(event);
       this._eventService.updateSidebarEvent(event);
       this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-      this._eventService.updateSidebarEvent(event);
+      this._eventService.setSelectedDate(moment(event.properties.start_time).toDate());
     }
 
     onHover(event: GeoJson): void {
