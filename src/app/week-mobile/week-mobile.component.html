@@ -35,11 +35,11 @@
   </div>
   <div class="day-of-week">
     <div class="row" *ngFor="let day of days">
-          <div class="day-slot col">
+          <div class="day-slot">
               <span class="day-name">{{day.dayOfWeek}}</span>
               <span class="day-month">{{day.dayOfMonth}}</span>
           </div>
-          <div class="weekview-day-event col" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{'event-' + event.id}}"
+          <div class="weekview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{'event-' + event.id}}"
           *ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event,day.events)">
             <div class="event-details">
               <div class="event-name">{{eventName(event)}}</div>
