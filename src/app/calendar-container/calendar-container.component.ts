@@ -57,6 +57,16 @@ export class CalendarContainerComponent implements OnInit {
       this.view = view;
     });
 
+    this._eventService.visibleDays$.subscribe( days => {
+      let selectedEvent = this._eventService.getSidebarEvent();
+      if(selectedEvent){
+        let eventDate = moment(selectedEvent.properties.start_time);
+        if(eventDate.isBefore(moment(days[0].date)) || eventDate.isAfter(moment(days[days.length-1].date))) {
+          this._eventService.resetEventSelection();
+          this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+      }}
+    });
+
     if(this._eventService.isWeekView()) {
       this.view = ViewState.week;
       this.enumerateWeek(ViewState.week);

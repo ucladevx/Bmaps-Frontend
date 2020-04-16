@@ -20,6 +20,7 @@
                 <div class="sidebar-event"
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
                     (mouseenter)="onHover(event)"
+                    (mouseout)="endHover()"
                     (click)="onSelect(event)">
                     <div class="sidebar-event-img-container">
                         <img src="{{

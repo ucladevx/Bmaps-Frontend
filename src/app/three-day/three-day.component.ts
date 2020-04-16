@@ -152,7 +152,10 @@ export class ThreeDayComponent implements OnInit {
 
   //highlight selected day
   onSelect(day: CalendarDay): void{
-    if(this._eventService.getSelectedDate() != day.date){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
+    if(this._eventService.getClickedEvent() && this._eventService.getSelectedDate() != day.date &&
+      moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
+        this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+    }
     this._eventService.setSelectedDate(day.date);
     this._eventService.changeDateSpan(day.date, ViewState.threeday);
   }
@@ -246,7 +249,7 @@ export class ThreeDayComponent implements OnInit {
     // account for clicked event
     let font = "normal";
     if(this.clickedEvent && this.clickedEvent.id == event.id &&
-      this._eventService.getSelectedDate() == moment(this.clickedEvent.properties.start_time).date()){
+      moment(this._eventService.getSelectedDate()).isSame(moment(this.clickedEvent.properties.start_time), 'd')){
       font = "bold";
       z = 100;
     }

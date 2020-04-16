@@ -32,7 +32,7 @@ export class WeekComponent implements OnInit {
     this._eventService.selectedDate$.subscribe(date => {
       this.ngZone.run( () => { this.updateCalendar(date); });
     });
-    
+
     this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
@@ -138,7 +138,10 @@ export class WeekComponent implements OnInit {
 
   //highlight selected day
   onSelect(day: CalendarDay): void{
-    if(this._eventService.getSelectedDate() != day.date){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
+    if(this._eventService.getClickedEvent() && this._eventService.getSelectedDate() != day.date &&
+      moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
+        this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+    }
     this._eventService.setSelectedDate(day.date);
     this._eventService.changeDateSpan(day.date, ViewState.week);
   }
@@ -147,7 +150,6 @@ export class WeekComponent implements OnInit {
   openEvent(event: GeoJson): void{
     this._eventService.updateClickedEvent(event);
     this._eventService.updateSidebarEvent(event);
-    console.log(event.id);
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
   }
 
@@ -231,7 +233,7 @@ export class WeekComponent implements OnInit {
     // account for clicked event
     let font = "normal";
     if(this.clickedEvent && this.clickedEvent.id == event.id &&
-      this._eventService.getSelectedDate() == moment(this.clickedEvent.properties.start_time).date()){
+      moment(this._eventService.getSelectedDate()).isSame(moment(this.clickedEvent.properties.start_time), 'd')){
       font = "bold";
       z = 100;
     }

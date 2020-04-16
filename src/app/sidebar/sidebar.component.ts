@@ -84,6 +84,10 @@ export class SidebarComponent implements OnInit {
         this.scrollToEvent(hoveredEventInfo);
       });
 
+      this._eventService.selectedDate$.subscribe(date => {
+        this.endHover();
+      });
+
       this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
       this.updateSidebarEvents();
 
@@ -123,6 +127,12 @@ export class SidebarComponent implements OnInit {
     onHover(event: GeoJson): void {
       this.hoveredEvent = event;
       this._eventService.updateHoveredEvent(event);
+    }
+
+    endHover(): void {
+      this.hoveredEvent = null;
+      this.clickedEvent = null;
+      this._eventService.updateHoveredEvent(null);
     }
 
     toggleMobileSidebar() { this.onPress(); }
