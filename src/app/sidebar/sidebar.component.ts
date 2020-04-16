@@ -75,22 +75,22 @@ export class SidebarComponent implements OnInit {
         }
       });
 
-      this._eventService.dayEvents$.subscribe(events => {
+      this._eventService.filteredDayEvents$.subscribe(events => {
         if(this._eventService.isMapView())
           this.view = ViewState.map; this.updateSidebarEvents();
       });
 
-      this._eventService.threeDayEvents$.subscribe(events => {
+      this._eventService.filteredThreeDayEvents$.subscribe(events => {
         if(this._eventService.isThreeDayView())
           this.view = ViewState.threeday; this.updateSidebarEvents();
       });
 
-      this._eventService.weekEvents$.subscribe(events => {
+      this._eventService.filteredWeekEvents$.subscribe(events => {
         if(this._eventService.isWeekView())
           this.view = ViewState.week; this.updateSidebarEvents();
       });
 
-      this._eventService.monthEvents$.subscribe(events => {
+      this._eventService.filteredMonthEvents$.subscribe(events => {
         if(this._eventService.isMonthView())
           this.view = ViewState.month; this.updateSidebarEvents();
       });
@@ -117,16 +117,16 @@ export class SidebarComponent implements OnInit {
     updateSidebarEvents(): void {
       switch(this.view) {
         case ViewState.map:
-          this.filteredEvents = this._eventService.getDayEvents().features;
+          this.filteredEvents = this._eventService.getFilteredDayEvents().features;
           break;
         case ViewState.month:
-          this.filteredEvents = this._eventService.getMonthEvents().features;
+          this.filteredEvents = this._eventService.getFilteredMonthEvents().features;
           break;
         case ViewState.week:
-          this.filteredEvents = this._eventService.getWeekEvents().features;
+          this.filteredEvents = this._eventService.getFilteredWeekEvents().features;
           break;
         case ViewState.threeday:
-          this.filteredEvents = this._eventService.getThreeDayEvents().features;
+          this.filteredEvents = this._eventService.getFilteredThreeDayEvents().features;
           break;
       }
       this.filteredEvents.sort(function(a, b) {

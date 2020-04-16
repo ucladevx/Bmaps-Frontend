@@ -144,7 +144,6 @@ export class EventService {
     // Maintain a set of self-subscribed local values
     this.currentView$.subscribe(view => {
       this._currentView = view;
-      this.resetFilters();
     });
     this.lastView$.subscribe(view =>
       this._lastView = view
@@ -213,7 +212,7 @@ export class EventService {
       this.applyAllFilters();
     });
     // Initialize filters
-    this.initCategories();
+    this.resetFilters();
     // Initiailize view variables
     this.determineView();
     this.storeLastView(ViewState.month);
@@ -329,10 +328,12 @@ export class EventService {
       // updates
       this.updateEvents(newDate,[!sameMonth,!sameWeek,!sameThreeDay]);
       this.setSelectedDate(newDate);
+      this.resetFilters();
     }
     if(newView != this._currentView) {
       this.storeLastView(this._currentView);
       this.setCurrentView(newView);
+      this.resetFilters();
     }
   }
 
@@ -373,6 +374,9 @@ export class EventService {
       if(calendarOpts[1]) this.weekEventsSource.next(this.filterByWeek(allEvents, date));
       if(calendarOpts[2]) this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
     });
+    // categories
+    this.initCategories();
+    this.allCategories();
   }
 
   // Filter events by a date span
@@ -539,13 +543,13 @@ export class EventService {
   allCategories() {
     let categMap = {};
     switch(this._currentView) {
-      case 'map':
+      case ViewState.map:
         categMap = this.getCategoryMap(this._dayEvents.features, Object.keys(this._categHash)); break;
-      case 'month':
+      case ViewState.month:
         categMap = this.getCategoryMap(this._monthEvents.features, Object.keys(this._categHash)); break;
-      case 'week':
+      case ViewState.week:
         categMap = this.getCategoryMap(this._weekEvents.features, Object.keys(this._categHash)); break;
-      case 'three-day':
+      case ViewState.threeday:
         categMap = this.getCategoryMap(this._threeDayEvents.features, Object.keys(this._categHash)); break;
     }
     for (let categ in this._categHash) {
@@ -558,6 +562,8 @@ export class EventService {
 
   // Toggle filter tags
   toggleTag(tag: string) {
+    console.log(tag);
+    console.log(this._tagHash);
     if (this._tagHash[tag] == undefined)
       return
     // apply the tag
