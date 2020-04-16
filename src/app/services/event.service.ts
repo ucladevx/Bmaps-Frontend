@@ -29,6 +29,7 @@ export class EventService {
   // USEFUL URLS
   private eventsUrl = "api/events";
   private categoriesUrl = "api/events/categories";
+  private categs;
 
   // VIEW VARIABLES
   private _currentView;             // ('three-day', month', 'week', 'map')
@@ -148,9 +149,9 @@ export class EventService {
     this.lastView$.subscribe(view =>
       this._lastView = view
     );
-    this.visibleDays$.subscribe(days =>
-      this._visibleDays = days
-    );
+    this.visibleDays$.subscribe(days => {
+      this._visibleDays = days;
+    });
     this.selectedDate$.subscribe(date =>
       this._selectedDate = date
     );
@@ -212,13 +213,17 @@ export class EventService {
       this.applyAllFilters();
     });
     // Initialize filters
-    this.resetFilters();
-    // Initiailize view variables
-    this.determineView();
-    this.storeLastView(ViewState.month);
-    // Populate event containers
-    this.updateEvents(new Date(),[true,true,true]);
-    this.setSelectedDate(new Date());
+    this.getCategories().subscribe(categs => {
+      // initialize categories
+      this.categs = categs;
+      this.resetFilters();
+      // Populate event containers
+      this.updateEvents(new Date(),[true,true,true]);
+      this.setSelectedDate(new Date());
+      // Initiailize view variables
+      this.determineView();
+      this.storeLastView(ViewState.month);
+    });
   }
 
   // View Getters and Setters //
@@ -328,7 +333,6 @@ export class EventService {
       // updates
       this.updateEvents(newDate,[!sameMonth,!sameWeek,!sameThreeDay]);
       this.setSelectedDate(newDate);
-      this.resetFilters();
     }
     if(newView != this._currentView) {
       this.storeLastView(this._currentView);
@@ -367,16 +371,19 @@ export class EventService {
     // update day events
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(dayEvents => {
       this.dayEventsSource.next(dayEvents);
+      // categories
+      this.initCategories();
+      this.allCategories();
     });
     // update other event collections
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
       if(calendarOpts[0]) this.monthEventsSource.next(this.filterByMonth(allEvents, date));
       if(calendarOpts[1]) this.weekEventsSource.next(this.filterByWeek(allEvents, date));
       if(calendarOpts[2]) this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
+      // categories
+      this.initCategories();
+      this.allCategories();
     });
-    // categories
-    this.initCategories();
-    this.allCategories();
   }
 
   // Filter events by a date span
@@ -456,13 +463,30 @@ export class EventService {
 
   // reset to defaults
   resetFilters(){
+    this.clearTags();
     this.initCategories();
     this.allCategories();
-    this.clearTags();
     this.setTimeFilter(0,1439);
     this.setLocationFilter("");
-    if(this.isCalendarView() && this._visibleDays)
-      this.setDateFilterFromDays(this._visibleDays);
+    // date filter
+    let start = new Date(), end = new Date();
+    switch(this._currentView){
+      case ViewState.month:
+        start = moment(this._selectedDate).startOf('month').startOf('week').toDate();
+        end = moment(this._selectedDate).endOf('month').endOf('week').toDate();
+        break;
+      case ViewState.week:
+        start = moment(this._selectedDate).startOf('week').toDate();
+        end = moment(this._selectedDate).endOf('week').toDate();
+        break;
+      case ViewState.threeday:
+        let date = moment(this._selectedDate).startOf('day');
+        let numDaysDiff = date.diff(moment().startOf('day'), 'days') % 3;
+        start = date.clone().subtract(numDaysDiff,'d').toDate();
+        end = moment(start).clone().add(2,'d').toDate();
+        break;
+    }
+    this.setDateFilter(start, end);
   }
 
   // GET categories from the server
@@ -470,40 +494,38 @@ export class EventService {
 
   // Initialize category hash (all selected)
   private initCategories() {
-    this.getCategories().subscribe(categs => {
-      // maps store counts of events that fulfill each category
-      let dayMap = this.getCategoryMap(this._dayEvents.features, categs.categories);
-      let monthMap = this.getCategoryMap(this._monthEvents.features, categs.categories);
-      let weekMap = this.getCategoryMap(this._weekEvents.features, categs.categories);
-      let threeDayMap = this.getCategoryMap(this._threeDayEvents.features, categs.categories);
-      // initialize tempHash by building the all category container
-      this._categHash = {
-        'all': {
-          formattedCategory: 'all',
-          numEventsDay: dayMap['all'],
-          numEventsThreeDay: threeDayMap['all'],
-          numEventsWeek: weekMap['all'],
-          numEventsMonth: monthMap['all'],
-          selected: this._categHash && this._categHash['all'] ? this._categHash['all'].selected : true
-        }
-      };
-      // initialize all other category containers iteratively
-      for (let categ of categs.categories) {
-        let categName = categ.toLowerCase();
-        let categStr = categName.replace('_', ' ');
-        categStr = categStr.charAt(0).toUpperCase() + categStr.slice(1).toLowerCase();
-        this._categHash[categName] = {
-          formattedCategory: categStr,
-          numEventsDay: dayMap[categName],
-          numEventsThreeDay: threeDayMap[categName],
-          numEventsMonth: monthMap[categName],
-          numEventsWeek: weekMap[categName],
-          selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
-        }
+    // maps store counts of events that fulfill each category
+    let dayMap = this.getCategoryMap(this._dayEvents.features, this.categs.categories);
+    let monthMap = this.getCategoryMap(this._monthEvents.features, this.categs.categories);
+    let weekMap = this.getCategoryMap(this._weekEvents.features, this.categs.categories);
+    let threeDayMap = this.getCategoryMap(this._threeDayEvents.features, this.categs.categories);
+    // initialize tempHash by building the all category container
+    this._categHash = {
+      'all': {
+        formattedCategory: 'all',
+        numEventsDay: dayMap['all'],
+        numEventsThreeDay: threeDayMap['all'],
+        numEventsWeek: weekMap['all'],
+        numEventsMonth: monthMap['all'],
+        selected: this._categHash && this._categHash['all'] ? this._categHash['all'].selected : true
       }
-      // update category hash
-      this.categHashSource.next(this._categHash);
-    });
+    };
+    // initialize all other category containers iteratively
+    for (let categ of this.categs.categories) {
+      let categName = categ.toLowerCase();
+      let categStr = categName.replace('_', ' ');
+      categStr = categStr.charAt(0).toUpperCase() + categStr.slice(1).toLowerCase();
+      this._categHash[categName] = {
+        formattedCategory: categStr,
+        numEventsDay: dayMap[categName],
+        numEventsThreeDay: threeDayMap[categName],
+        numEventsMonth: monthMap[categName],
+        numEventsWeek: weekMap[categName],
+        selected: this._categHash && this._categHash[categName] ? this._categHash[categName].selected : false
+      }
+    }
+    // update category hash
+    this.categHashSource.next(this._categHash);
   }
 
   // Map categories to number of events in input featuresList
@@ -562,8 +584,6 @@ export class EventService {
 
   // Toggle filter tags
   toggleTag(tag: string) {
-    console.log(tag);
-    console.log(this._tagHash);
     if (this._tagHash[tag] == undefined)
       return
     // apply the tag
@@ -595,39 +615,37 @@ export class EventService {
 
   setDateFilter(lowerBound: Date, upperBound: Date){
     this._dateFilter = [lowerBound, upperBound];
-    this.dateFilterSource.next([lowerBound, upperBound]); }
-  getDateFilter(){ return this._dateFilter; }
-
-  setDateFilterFromDays(days: CalendarDay[]){
-    if(days.length > 0){
-      let lowerBound = moment([days[0].year, days[0].month, days[0].dayOfMonth]).toDate();
-      let upperBound = moment([days[days.length-1].year, days[days.length-1].month, days[days.length-1].dayOfMonth]).toDate();
-      this.setDateFilter(lowerBound, upperBound);
-    }
-  }
+    this.dateFilterSource.next(this._dateFilter);
+  } getDateFilter(){ return this._dateFilter; }
 
   // Time Filter //
 
   setTimeFilter(lowerBound: number, upperBound: number){
     this._timeFilter = [lowerBound, upperBound];
-    this.timeFilterSource.next([lowerBound, upperBound]); }
-  getTimeFilter(){ return this._timeFilter; }
+    this.timeFilterSource.next(this._timeFilter);
+  } getTimeFilter(){ return this._timeFilter; }
 
   // Location Filter //
 
   setLocationFilter(searchString: string){
     this._locFilter = searchString;
-    this.locFilterSource.next(searchString); }
-  getLocationFilter(){ return this._locFilter; }
+    this.locFilterSource.next(searchString);
+  } getLocationFilter(){ return this._locFilter; }
 
   // Filter Application //
 
   // Apply filters to day, week, and month
   applyAllFilters() {
-    this.applyFiltersToSelection(this._dayEvents.features, this.filteredDayEventsSource);
-    this.applyFiltersToSelection(this._threeDayEvents.features, this.filteredThreeDayEventsSource);
-    this.applyFiltersToSelection(this._weekEvents.features, this.filteredWeekEventsSource);
-    this.applyFiltersToSelection(this._monthEvents.features, this.filteredMonthEventsSource);
+    switch(this._currentView){
+      case ViewState.map:
+        this.applyFiltersToSelection(this._dayEvents.features, this.filteredDayEventsSource); break;
+      case ViewState.threeday:
+        this.applyFiltersToSelection(this._threeDayEvents.features, this.filteredThreeDayEventsSource); break;
+      case ViewState.week:
+        this.applyFiltersToSelection(this._weekEvents.features, this.filteredWeekEventsSource); break;
+      case ViewState.month:
+        this.applyFiltersToSelection(this._monthEvents.features, this.filteredMonthEventsSource); break;
+    }
   }
 
   // Apply filters to inputFeatures
@@ -641,10 +659,10 @@ export class EventService {
       let passesCategories = this.passesCategories(event);
       // calendar view checks date, time, location\
       let passesDate = true, passesTime = true, passesLocation = true;
-      if(this.isCalendarView() && this._dateFilter && this._timeFilter && this._locFilter) {
-        passesDate = this.passesDate(event);
-        passesTime = this.passesTime(event);
-        passesLocation = this.passesLocation(event);
+      if(this.isCalendarView()) {
+        if(this._dateFilter) passesDate = this.passesDate(event);
+        if(this._timeFilter) passesTime = this.passesTime(event);
+        if(this._locFilter) passesLocation = this.passesLocation(event);
       }
       if (passesTags && passesCategories && passesDate && passesTime && passesLocation)
         tempEvents.features.push(event);
@@ -674,7 +692,8 @@ export class EventService {
       for (let tag of tagList) {
         if (this._tagHash[tag]) {
           tagUsed = true;
-        } if (this._tagHash[tag] && this.checkTag(tag, event)) {
+        }
+        if (this._tagHash[tag] && this.checkTag(tag, event)) {
           passesTag = true; break;
         }
       }

@@ -16,6 +16,7 @@ import { ViewState } from '../view-enum';
 
 export class ThreeDayComponent implements OnInit {
   public days: CalendarDay[] = [];
+  public isThreeDayView: boolean = true;
   public currentMonth: Moment;
   private currentWeek: Moment;
   private currentDay: Moment;
@@ -35,6 +36,7 @@ export class ThreeDayComponent implements OnInit {
     });
 
     this._eventService.currentView$.subscribe(view => {
+      this.isThreeDayView = (view == ViewState.threeday);
       this.filteredEvents = this._eventService.getFilteredThreeDayEvents().features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
@@ -73,7 +75,7 @@ export class ThreeDayComponent implements OnInit {
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
     this.currentDay = moment(dateInMonth);
-    if(!this._eventService.isThreeDayView() || dateInMonth == undefined)
+    if(!this.isThreeDayView || dateInMonth == undefined)
       return;
     // range of days shown on calendar
     let firstDay = moment(dateInMonth);

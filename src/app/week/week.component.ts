@@ -16,6 +16,7 @@ import { ViewState } from '../view-enum';
 
 export class WeekComponent implements OnInit {
   public days: CalendarDay[] = [];
+  public isWeekView: boolean = true;
   public currentMonth: Moment;
   private currentWeek: Moment;
   private filteredEvents: GeoJson[];
@@ -34,6 +35,7 @@ export class WeekComponent implements OnInit {
     });
 
     this._eventService.currentView$.subscribe(view => {
+      this.isWeekView = (view == ViewState.week);
       this.filteredEvents = this._eventService.getFilteredWeekEvents().features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
@@ -71,7 +73,7 @@ export class WeekComponent implements OnInit {
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
-    if(!this._eventService.isWeekView() || dateInMonth == undefined)
+    if(!this.isWeekView || dateInMonth == undefined)
       return;
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('week');

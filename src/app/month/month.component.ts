@@ -16,6 +16,7 @@ import * as moment from 'moment';
 
 export class MonthComponent implements OnInit {
   public days: CalendarDay[] = [];
+  public isMonthView: boolean = true;
   public currentMonth: Moment;
   private filteredEvents: GeoJson[];
   private clickedEvent: GeoJson;
@@ -30,6 +31,7 @@ export class MonthComponent implements OnInit {
     });
 
     this._eventService.currentView$.subscribe(view => {
+      this.isMonthView = (view == ViewState.month);
       this.filteredEvents = this._eventService.getFilteredMonthEvents().features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
@@ -62,7 +64,7 @@ export class MonthComponent implements OnInit {
   // display the calendar
   updateCalendar(dateInMonth: Moment | Date | string): void {
     this.currentMonth = moment(dateInMonth).startOf('month');
-    if(!this._eventService.isMonthView() || dateInMonth == undefined)
+    if(!this.isMonthView || dateInMonth == undefined)
       return;
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('month').startOf('week');
