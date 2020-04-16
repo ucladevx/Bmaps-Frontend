@@ -5,9 +5,9 @@ import { MonthComponent } from '../month/month.component';
 import { WeekComponent } from '../week/week.component';
 import { ThreeDayComponent } from '../three-day/three-day.component';
 import { EventService } from '../services/event.service';
-import * as moment from 'moment';
-import { Moment } from 'moment';
 import { ViewState } from '../view-enum';
+import { Moment } from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-calendar-container',
@@ -19,14 +19,13 @@ import { ViewState } from '../view-enum';
 export class CalendarContainerComponent implements OnInit {
   public ViewState = ViewState;
 
-
-  @ContentChild(MonthComponent, /* TODO: add static flag */ {})
+  @ContentChild(MonthComponent, {})
   private monthComponent: MonthComponent;
 
-  @ContentChild(WeekComponent, /* TODO: add static flag */ {})
+  @ContentChild(WeekComponent, {})
   private weekComponent: WeekComponent;
 
-  @ContentChild(ThreeDayComponent, /* TODO: add static flag */ {})
+  @ContentChild(ThreeDayComponent, {})
   private threeDayComponent: ThreeDayComponent;
 
   // week number
@@ -48,34 +47,58 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._eventService.selectedDate$.subscribe( date => { this.viewDateChange(date); this.enumerateWeek(this._eventService.getCurrentView()) });
-    this._eventService.currentView$.subscribe( view => { this.view = view; } );
-    if(this._eventService.isWeekView()) { this.view = ViewState.week; this.enumerateWeek(ViewState.week); }
-    if(this._eventService.isThreeDayView()) { this.view = ViewState.threeday; this.enumerateWeek(ViewState.threeday); }
+
+    this._eventService.selectedDate$.subscribe( date => {
+      this.viewDateChange(date);
+      this.enumerateWeek(this._eventService.getCurrentView())
+    });
+
+    this._eventService.currentView$.subscribe( view => {
+      this.view = view;
+    });
+
+    if(this._eventService.isWeekView()) {
+      this.view = ViewState.week;
+      this.enumerateWeek(ViewState.week);
+    }
+
+    if(this._eventService.isThreeDayView()) {
+      this.view = ViewState.threeday;
+      this.enumerateWeek(ViewState.threeday);
+    }
+
   }
 
   viewDateChange(set : Date) {
     this.viewDate = set.toLocaleDateString("en-US", {month: 'long', year: 'numeric'});
   }
 
+  // change date span based on calendar controls
   changeDateSpan(delta: number, calendarView: ViewState) : void{
     // determine date to display in new view
     let newDate = this._eventService.getSelectedDate();
     switch(calendarView) {
+      // change to month view
       case ViewState.month :
         newDate = moment(newDate).startOf('month').add(delta,'M').toDate();
-        if(moment(this._eventService.getSelectedDate()).isSame(moment(newDate), 'month')) newDate = this._eventService.getSelectedDate();
-        else if(moment(new Date()).isSame(moment(newDate), 'month')) newDate = new Date();
+        if(moment(this._eventService.getSelectedDate()).isSame(moment(newDate), 'month'))
+          newDate = this._eventService.getSelectedDate();
+        else if(moment(new Date()).isSame(moment(newDate), 'month'))
+          newDate = new Date();
         break;
+      // change to week view
       case ViewState.week :
         newDate = moment(newDate).startOf('week').add(delta*7,'d').toDate();
-        if(moment(this._eventService.getSelectedDate()).isSame(moment(newDate), 'week')) newDate = this._eventService.getSelectedDate();
-        else if(moment(new Date()).isSame(moment(newDate), 'week')) newDate = new Date();
+        if(moment(this._eventService.getSelectedDate()).isSame(moment(newDate), 'week'))
+          newDate = this._eventService.getSelectedDate();
+        else if(moment(new Date()).isSame(moment(newDate), 'week'))
+          newDate = new Date();
         break;
+      // change to three day view
       case ViewState.threeday :
         newDate = moment(newDate).startOf('day').add(delta*3,'d');
         let numDaysDiff = newDate.startOf('day').diff(moment().startOf('day'), 'days');
-        let dayOfGroup;
+        let dayOfGroup = 0;
         if (numDaysDiff >= 0) { dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2); }
         else { numDaysDiff *= -1; dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1); }
         newDate = newDate.clone().add(-1*dayOfGroup, 'days').toDate();
@@ -83,6 +106,7 @@ export class CalendarContainerComponent implements OnInit {
         if(diff < 3 && diff > 0) newDate = this._eventService.getSelectedDate();
         break;
     }
+    // update date span
     this._eventService.changeDateSpan(newDate, calendarView);
     this.enumerateWeek(calendarView);
   }
@@ -121,9 +145,7 @@ export class CalendarContainerComponent implements OnInit {
       if (view == ViewState.threeday) {
         if(!(secondWeekCount > 11 || secondWeekCount < 0 || secondWeekCount == undefined)) {
           this.weekNumber = "Week " + secondWeekCount;
-        }
-      }
-    }
+    }}}
     else {
       this.weekNumber = "Week " + weekCount;
       if (view == ViewState.threeday)

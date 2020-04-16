@@ -5,8 +5,8 @@ import { DateService } from '../services/date.service';
 import { GeoJson } from '../map';
 import { Router, NavigationEnd } from '@angular/router';
 import { CalendarDay } from '../services/event.service';
-import * as moment from 'moment';
 import { ViewState } from '../view-enum';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-month',
@@ -53,6 +53,7 @@ export class MonthComponent implements OnInit {
 
   }
 
+  // display the calendar
   updateCalendar(dateInMonth: Moment | Date | string): void {
     this.currentMonth = moment(dateInMonth).startOf('month');
     if(!this._eventService.isMonthView() || dateInMonth == undefined)
@@ -122,9 +123,11 @@ export class MonthComponent implements OnInit {
     else { return []; }
   }
 
+  //highlight selected day
   onSelect(day: CalendarDay): void {
     let prevMonth = parseInt(moment(this._eventService.getSelectedDate()).format('M'))-1;
-    if(this._eventService.getSelectedDate() != day.date){ this.router.navigate( ['', {outlets: {sidebar: ['list']}}]); }
+    if(this._eventService.getSelectedDate() != day.date)
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     this._eventService.changeDateSpan(day.date, ViewState.month);
   }
 

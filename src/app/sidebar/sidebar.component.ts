@@ -51,43 +51,42 @@ export class SidebarComponent implements OnInit {
     constructor(private sanitizer: DomSanitizer, private router: Router, public _eventService: EventService, private _dateService: DateService, private modalService: ModalService) {}
 
     ngOnInit() {
-        // TODO: unsubscribe on destroy
-        this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-        this._eventService.dayEvents$.subscribe(events => {
-          if(this._eventService.isMapView()) {
-            this.view = ViewState.map; this.updateSidebarEvents();
-          }
-        });
-        this._eventService.threeDayEvents$.subscribe(events => {
-          if(this._eventService.isThreeDayView()) {
-            this.view = ViewState.threeday; this.updateSidebarEvents();
-          }
-        });
-        this._eventService.weekEvents$.subscribe(events => {
-          if(this._eventService.isWeekView()) {
-            this.view = ViewState.week; this.updateSidebarEvents();
-          }
-        });
-        this._eventService.monthEvents$.subscribe(events => {
-          if(this._eventService.isMonthView()) {
-            this.view = ViewState.month; this.updateSidebarEvents();
-          }
-        });
-        this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
-            this.clickedEvent = clickedEventInfo;
-            this.scrollToEvent(clickedEventInfo);
-        });
-        this._eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
-            this.hoveredEvent = hoveredEventInfo;
-            this.scrollToEvent(hoveredEventInfo);
-        });
-        this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
-        this.updateSidebarEvents();
-    }
 
-    stop(event: any): void {
-        console.log("Child");
-        event.stopPropagation();
+      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+
+      this._eventService.dayEvents$.subscribe(events => {
+        if(this._eventService.isMapView())
+          this.view = ViewState.map; this.updateSidebarEvents();
+      });
+
+      this._eventService.threeDayEvents$.subscribe(events => {
+        if(this._eventService.isThreeDayView())
+          this.view = ViewState.threeday; this.updateSidebarEvents();
+      });
+
+      this._eventService.weekEvents$.subscribe(events => {
+        if(this._eventService.isWeekView())
+          this.view = ViewState.week; this.updateSidebarEvents();
+      });
+
+      this._eventService.monthEvents$.subscribe(events => {
+        if(this._eventService.isMonthView())
+          this.view = ViewState.month; this.updateSidebarEvents();
+      });
+
+      this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
+        this.clickedEvent = clickedEventInfo;
+        this.scrollToEvent(clickedEventInfo);
+      });
+
+      this._eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
+        this.hoveredEvent = hoveredEventInfo;
+        this.scrollToEvent(hoveredEventInfo);
+      });
+
+      this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
+      this.updateSidebarEvents();
+
     }
 
     updateSidebarEvents(): void {
@@ -147,7 +146,7 @@ export class SidebarComponent implements OnInit {
       }
     }
 
-  // check whether an image source exists
+    // check whether an image source exists
     checkImage(imageSrc) {
       let img = new Image();
       try {

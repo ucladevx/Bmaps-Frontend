@@ -61,7 +61,7 @@ export class ThreeDayComponent implements OnInit {
 
   }
 
-  //display the calendar
+  // display the calendar
   updateCalendar(dateInMonth: Moment | Date | string): void {
     //set currentMonth and currentWeek
     this.currentMonth = moment(dateInMonth).startOf('month');
