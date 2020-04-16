@@ -29,6 +29,12 @@ export class MonthComponent implements OnInit {
       this.ngZone.run( () => { this.updateCalendar(date); });
     });
 
+    this._eventService.currentView$.subscribe(view => {
+      this.filteredEvents = this._eventService.getFilteredMonthEvents().features;
+      this.fillEventsByDay();
+      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
+    });
+
     this._eventService.filteredMonthEvents$.subscribe(monthEventCollection => {
       this.filteredEvents = monthEventCollection.features;
       this.fillEventsByDay();
@@ -36,11 +42,11 @@ export class MonthComponent implements OnInit {
     });
 
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
-        this.clickedEvent = clickedEventInfo;
+      this.clickedEvent = clickedEventInfo;
     });
 
     this._eventService.sidebarEvent$.subscribe(clickedEventInfo => {
-        this.clickedEvent = clickedEventInfo;
+      this.clickedEvent = clickedEventInfo;
     });
 
     this.currentMonth = moment().startOf('month');
@@ -86,6 +92,8 @@ export class MonthComponent implements OnInit {
   fillEventsByDay(){
     //clear events by day for the month
     this.eventsByDay = [];
+    if(this.filteredEvents.length < 1)
+      return;
     //iterate through filteredEvents for the current month
     this.filteredEvents.forEach(el => {
       //determine dayOfYear

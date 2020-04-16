@@ -107,11 +107,8 @@ export class CalendarContainerComponent implements OnInit {
       // change to three day view
       case ViewState.threeday :
         newDate = moment(newDate).startOf('day').add(delta*3,'d');
-        let numDaysDiff = newDate.startOf('day').diff(moment().startOf('day'), 'days');
-        let dayOfGroup = 0;
-        if (numDaysDiff >= 0) { dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2); }
-        else { numDaysDiff *= -1; dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1); }
-        newDate = newDate.clone().add(-1*dayOfGroup, 'days').toDate();
+        let numDaysDiff = newDate.diff(moment().startOf('day'), 'days') % 3;
+        newDate = newDate.clone().subtract(numDaysDiff,'d').toDate();
         let diff = moment(this._eventService.getSelectedDate()).startOf('day').diff(moment(newDate).startOf('day'), 'days');
         if(diff < 3 && diff > 0) newDate = this._eventService.getSelectedDate();
         break;

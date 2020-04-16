@@ -33,6 +33,12 @@ export class WeekComponent implements OnInit {
       this.ngZone.run( () => { this.updateCalendar(date); });
     });
 
+    this._eventService.currentView$.subscribe(view => {
+      this.filteredEvents = this._eventService.getFilteredWeekEvents().features;
+      this.fillEventsByDay();
+      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
+    });
+
     this._eventService.filteredWeekEvents$.subscribe(weekEventCollection => {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
@@ -99,6 +105,8 @@ export class WeekComponent implements OnInit {
   fillEventsByDay(){
     //clear events by day for the week
     this.eventsByDay = [];
+    if(this.filteredEvents.length < 1)
+      return;
     //iterate through filteredEvents for the current month
     this.filteredEvents.forEach(el => {
       //determine dayOfYear
@@ -142,7 +150,6 @@ export class WeekComponent implements OnInit {
       moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
     }
-    this._eventService.setSelectedDate(day.date);
     this._eventService.changeDateSpan(day.date, ViewState.week);
   }
 

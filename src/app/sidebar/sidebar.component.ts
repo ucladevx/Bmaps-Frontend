@@ -54,6 +54,27 @@ export class SidebarComponent implements OnInit {
 
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
 
+      this._eventService.currentView$.subscribe(view => {
+        switch(view) {
+          case ViewState.map:
+            this.view = ViewState.map;
+            this.updateSidebarEvents();
+            break;
+          case ViewState.month:
+            this.view = ViewState.month;
+            this.updateSidebarEvents();
+            break;
+          case ViewState.week:
+            this.view = ViewState.week;
+            this.updateSidebarEvents();
+            break;
+          case ViewState.threeday:
+            this.view = ViewState.threeday;
+            this.updateSidebarEvents();
+            break;
+        }
+      });
+
       this._eventService.dayEvents$.subscribe(events => {
         if(this._eventService.isMapView())
           this.view = ViewState.map; this.updateSidebarEvents();

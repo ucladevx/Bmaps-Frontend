@@ -53,7 +53,6 @@ export class DateSelectorComponent implements OnInit {
       let newDate = new Date();
       let prevDate = this._eventService.getSelectedDate();
       newDate = moment(prevDate).add(delta, 'd').toDate();
-      this._eventService.setSelectedDate(newDate);
       this._eventService.changeDateSpan(newDate, this._eventService.getCurrentView());
       if(this._eventService.isMapView())
         document.getElementById("resetButton").click();

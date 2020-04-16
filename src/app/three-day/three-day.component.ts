@@ -34,6 +34,12 @@ export class ThreeDayComponent implements OnInit {
       this.ngZone.run( () => { this.updateCalendar(date); });
     });
 
+    this._eventService.currentView$.subscribe(view => {
+      this.filteredEvents = this._eventService.getFilteredThreeDayEvents().features;
+      this.fillEventsByDay();
+      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
+    });
+
     this._eventService.filteredThreeDayEvents$.subscribe(threeDayEventCollection => {
       this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
@@ -72,17 +78,8 @@ export class ThreeDayComponent implements OnInit {
     // range of days shown on calendar
     let firstDay = moment(dateInMonth);
     // first day should be first of group
-    let numDaysDiff = firstDay.startOf('day').diff(moment().startOf('day'), 'days');
-    // 0 means first day of group, 1 - second, 2 - third
-    let dayOfGroup;
-    if (numDaysDiff >= 0) {
-      dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
-    }
-    else {
-      numDaysDiff *= -1;
-      dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1);
-    }
-    firstDay = this.currentDay.clone().add(-1*dayOfGroup, 'days');
+    let numDaysDiff = firstDay.diff(moment().startOf('day'), 'days') % 3;
+    firstDay = firstDay.clone().subtract(numDaysDiff,'d');
     let lastDay: Moment = firstDay.clone().add(3, 'days');
     if(parseInt(lastDay.format('DD')) == 2 && parseInt(lastDay.format('DD')) == 3)
       this.currentMonth.add(1,'month');
@@ -113,6 +110,8 @@ export class ThreeDayComponent implements OnInit {
   fillEventsByDay(){
     //clear events by day for the week
     this.eventsByDay = [];
+    if(this.filteredEvents.length < 1)
+      return;
     //iterate through filteredEvents for the current month
     this.filteredEvents.forEach(el => {
       //determine dayOfYear
@@ -156,7 +155,6 @@ export class ThreeDayComponent implements OnInit {
       moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
     }
-    this._eventService.setSelectedDate(day.date);
     this._eventService.changeDateSpan(day.date, ViewState.threeday);
   }
 

@@ -218,7 +218,7 @@ export class EventService {
     this.determineView();
     this.storeLastView(ViewState.month);
     // Populate event containers
-    this.updateEvents(new Date());
+    this.updateEvents(new Date(),[true,true,true]);
     this.setSelectedDate(new Date());
   }
 
@@ -315,11 +315,25 @@ export class EventService {
 
   // Call whenever date span of view is changed
   changeDateSpan(newDate: Date, newView : ViewState) {
-    if(newView != this._currentView)
+    if(newDate != this._selectedDate) {
+      // month
+      let sameMonth = moment(this._selectedDate).isSame(moment(newDate),'month');
+      // week
+      let sameWeek = moment(this._selectedDate).isSame(moment(newDate),'week');
+      // three day
+      let prevDate = moment(this._selectedDate).startOf('day');
+      let numDaysDiff = prevDate.diff(moment().startOf('day'), 'days') % 3;
+      let threeDayStart = prevDate.clone().subtract(numDaysDiff,'d');
+      let threeDayEnd = threeDayStart.clone().add(3,'d');
+      let sameThreeDay = moment(newDate).isSameOrAfter(threeDayStart) && moment(newDate).isBefore(threeDayEnd);
+      // updates
+      this.updateEvents(newDate,[!sameMonth,!sameWeek,!sameThreeDay]);
+      this.setSelectedDate(newDate);
+    }
+    if(newView != this._currentView) {
       this.storeLastView(this._currentView);
-    this.setCurrentView(newView);
-    this.updateEvents(newDate);
-    this.setSelectedDate(newDate);
+      this.setCurrentView(newView);
+    }
   }
 
   // EVENT RETRIEVAL //
@@ -344,16 +358,20 @@ export class EventService {
   // EVENT UPDATES //
 
   // Update all event containers
-  updateEvents(date: Date): void {
+  updateEvents(date: Date, calendarOpts: boolean[]): void {
+    // reset calendar events
+    if(calendarOpts[0]) this.monthEventsSource.next(new FeatureCollection([]));
+    if(calendarOpts[1]) this.weekEventsSource.next(new FeatureCollection([]));
+    if(calendarOpts[2]) this.threeDayEventsSource.next(new FeatureCollection([]));
     // update day events
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(dayEvents => {
       this.dayEventsSource.next(dayEvents);
     });
     // update other event collections
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      this.monthEventsSource.next(this.filterByMonth(allEvents, date));
-      this.weekEventsSource.next(this.filterByWeek(allEvents, date));
-      this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
+      if(calendarOpts[0]) this.monthEventsSource.next(this.filterByMonth(allEvents, date));
+      if(calendarOpts[1]) this.weekEventsSource.next(this.filterByWeek(allEvents, date));
+      if(calendarOpts[2]) this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
     });
   }
 

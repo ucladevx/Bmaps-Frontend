@@ -58,6 +58,7 @@
 }
 
 .calendar-day {
+    cursor: default;
     position: relative;
     flex-basis: 14.2857%; /* 100/7 */
     display: block;

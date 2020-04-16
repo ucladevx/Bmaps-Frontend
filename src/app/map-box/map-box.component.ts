@@ -62,6 +62,11 @@ export class MapBoxComponent implements OnInit {
       this.updateSource();
     });
 
+    this._eventService.currentView$.subscribe(view => {
+      this.events = this._eventService.getFilteredDayEvents();
+      this.updateSource();
+    });
+
     // ease to event pin when event is clicked
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
