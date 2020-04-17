@@ -676,7 +676,7 @@ export class EventService {
       let passesCategories = this.passesCategories(event);
       // calendar view checks date, time, location\
       let passesDate = true, passesTime = true, passesLocation = true;
-      if(this.isCalendarView()) {
+      if(this._currentView != ViewState.map) {
         if(this._dateFilter) passesDate = this.passesDate(event);
         if(this._timeFilter) passesTime = this.passesTime(event);
         if(this._locFilter) passesLocation = this.passesLocation(event);
@@ -725,7 +725,7 @@ export class EventService {
   private passesDate(event: GeoJson): boolean {
     // compare event date to the date filter being applied
     let eventDate = moment(event.properties.start_time).toDate();
-    return (eventDate >= moment(this._dateFilter[0]).toDate() && eventDate <= moment(this._dateFilter[1]).add('1','days').toDate());
+    return (eventDate >= moment(this._dateFilter[0]).startOf('day').toDate() && eventDate <= moment(this._dateFilter[1]).add('1','days').toDate());
   }
 
   // Filter Check: time

@@ -17,7 +17,7 @@
             <div id="no-events-label">No Events</div>
           </div>
             <div *ngFor="let event of filteredEvents" #eventList>
-              <div *ngIf="event.properties.firstOfDay" class="sidebar-date">
+              <div *ngIf="event.properties.firstOfDay && this._eventService.isCalendarView()" class="sidebar-date">
                 {{eventDateHeader(event)}}
               </div>
                 <div class="sidebar-event"

@@ -97,12 +97,12 @@ export class SidebarComponent implements OnInit {
 
       this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
         this.clickedEvent = clickedEventInfo;
-        this.scrollToEvent(clickedEventInfo);
+        this.scrollToEvent(clickedEventInfo,'nearest');
       });
 
       this._eventService.hoveredEvent$.subscribe(hoveredEventInfo => {
         this.hoveredEvent = hoveredEventInfo;
-        this.scrollToEvent(hoveredEventInfo);
+        this.scrollToEvent(hoveredEventInfo,'nearest');
       });
 
       this._eventService.selectedDate$.subscribe(date => {
@@ -120,8 +120,8 @@ export class SidebarComponent implements OnInit {
         let scrollEv = this.filteredEvents.find(function(e) {
           return moment(e.properties.start_time).startOf('day').isSame(moment(date), 'd');
         });
-        if(scrollEv != undefined) this.scrollToEvent(scrollEv);
-        else this.scrollToEvent(this.filteredEvents[0]);
+        if(scrollEv != undefined) this.scrollToEvent(scrollEv,'start');
+        else this.scrollToEvent(this.filteredEvents[0],'start');
       }
     }
 
@@ -176,12 +176,12 @@ export class SidebarComponent implements OnInit {
     }
 
     // scroll to the DOM element for event
-    scrollToEvent(event: GeoJson): void {
+    scrollToEvent(event: GeoJson, scroll: string): void {
       if (event) {
         const index: number = this.filteredEvents.findIndex((e: GeoJson) => e.id == event.id);
         const element: ElementRef = this.eventList.find((e: ElementRef, i: number) => index == i);
         if (element)
-          element.nativeElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          element.nativeElement.scrollIntoView({ block: scroll, behavior: 'smooth' });
       }
     }
 

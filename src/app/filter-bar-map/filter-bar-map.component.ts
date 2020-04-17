@@ -13,7 +13,7 @@ import { NgClass } from '@angular/common';
 export class FilterBarMapComponent implements OnInit {
   @Input() showToggleButton: boolean;
   private categHash = undefined;
-  private filterHash = undefined;
+  private tagHash = undefined;
   public selectedCategory = 'all categories';
   public showDropdown = false;
   private wasInside = false;
@@ -23,7 +23,7 @@ export class FilterBarMapComponent implements OnInit {
 
   ngOnInit() {
     this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
-    this._eventService.tagHash$.subscribe(filterHash => { this.filterHash = filterHash; });
+    this._eventService.tagHash$.subscribe(tagHash => { this.tagHash = tagHash; });
     this._eventService.dayEvents$.subscribe(events => { this.events = events; });
   }
 
@@ -34,9 +34,7 @@ export class FilterBarMapComponent implements OnInit {
   clearCategories(): void { this._eventService.allCategories(); }
 
   clearFilters(): void {
-    for (let key in this.filterHash)
-      if (this.filterHash[key])
-        this._eventService.toggleTag(key);
+    this._eventService.resetFilters();
   }
 
   @HostListener('click')
