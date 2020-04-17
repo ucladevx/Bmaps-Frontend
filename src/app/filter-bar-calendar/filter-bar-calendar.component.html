@@ -78,7 +78,7 @@
       <div *ngIf="categHash" class="categories-wrapper">
         <ul class="categories-list" role="menu">
           <li *ngFor="let categKey of objectKeys(categHash)">
-            <span *ngIf="this._viewService.isMonthView()">
+            <span *ngIf="this._eventService.isMonthView()">
             <a *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0"
                [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
                (click)="categoryClicked(categKey)">
@@ -95,7 +95,7 @@
             {{categHash[categKey].formattedCategory}}
           </a>
             </span>
-            <span *ngIf="this._viewService.isWeekView()">
+            <span *ngIf="this._eventService.isWeekView()">
             <a *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0"
                [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
                (click)="categoryClicked(categKey)">
@@ -111,7 +111,7 @@
             </ng-template>
             {{categHash[categKey].formattedCategory}}</a>
             </span>
-            <span *ngIf="this._viewService.isThreeDayView()">
+            <span *ngIf="this._eventService.isThreeDayView()">
             <a *ngIf="categHash[categKey].numEventsThreeDay != undefined && categHash[categKey].numEventsThreeDay > 0"
                [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
                (click)="categoryClicked(categKey)">

@@ -204,6 +204,11 @@ export class SidebarComponent implements OnInit {
       }
     }
 
+    eventDateHeader(event: GeoJson){
+      let start: string = event.properties.start_time;
+      return moment(start).format("MMM D");
+    }
+
     createICS(event: GeoJson){
       const data = this._dateService.formatICS(this.calendarEvent);
       const blob = new Blob([data], { type: 'application/octet-stream' });

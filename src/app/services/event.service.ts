@@ -392,12 +392,19 @@ export class EventService {
     let filteredEvents = new FeatureCollection([]);
     allEvents.features.forEach(el => {
       let d = moment(el.properties.start_time).toDate();
-      if (d >= startDate && d <= endDate){ filteredEvents.features.push(el); }
+      if (d >= startDate && d <= endDate)
+        filteredEvents.features.push(el);
     });
     filteredEvents.features.sort(function(a, b) {
       a = a["properties"]["start_time"];
       b = b["properties"]["start_time"];
       return a<b ? -1 : a>b ? 1 : 0;
+    });
+    let prevDate = null;
+    filteredEvents.features.forEach(el => {
+      let d = moment(el.properties.start_time);
+      el.properties.firstOfDay = !(d.isSame(prevDate,'d'));
+      prevDate = d;
     });
     return filteredEvents;
   }

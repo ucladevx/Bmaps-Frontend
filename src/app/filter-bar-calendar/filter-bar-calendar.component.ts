@@ -13,7 +13,7 @@ import * as moment from 'moment';
 export class FilterBarCalendarComponent implements OnInit {
   @Input() showToggleButton: boolean;
   private categHash = {};
-  private filterHash = {};
+  private tagHash = {};
   public showDropdown = false;
   private wasInside = false;
 
@@ -23,8 +23,8 @@ export class FilterBarCalendarComponent implements OnInit {
     this._eventService.categHash$.subscribe(categHash => {
       this.categHash = categHash;
     });
-    this._eventService.tagHash$.subscribe(filterHash => {
-      this.filterHash = filterHash;
+    this._eventService.tagHash$.subscribe(tagHash => {
+      this.tagHash = tagHash;
     });
   }
 
@@ -45,8 +45,14 @@ export class FilterBarCalendarComponent implements OnInit {
     this._eventService.setTimeFilter(start,end);
   }
 
-  getStartTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[0]); }
-  getEndTime(){ return this.convertNumToTime(this._eventService.getTimeFilter()[1]); }
+  getStartTime(){
+    if(this._eventService.getTimeFilter()) return this.convertNumToTime(this._eventService.getTimeFilter()[0]);
+    else return 0;
+  }
+  getEndTime(){
+    if(this._eventService.getTimeFilter()) return this.convertNumToTime(this._eventService.getTimeFilter()[1]);
+    else return 0;
+  }
 
   setLocationFilter(locInput: string){
     this._eventService.setLocationFilter(locInput);
@@ -70,8 +76,8 @@ export class FilterBarCalendarComponent implements OnInit {
     return time;
   }
 
-  tagClicked(filter: string): void {
-    this._eventService.toggleTag(filter);
+  tagClicked(tag: string): void {
+    this._eventService.toggleTag(tag);
   }
 
   categoryClicked(category: string): void {

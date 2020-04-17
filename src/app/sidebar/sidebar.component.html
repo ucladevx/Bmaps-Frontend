@@ -17,6 +17,9 @@
             <div id="no-events-label">No Events</div>
           </div>
             <div *ngFor="let event of filteredEvents" #eventList>
+              <div *ngIf="event.properties.firstOfDay" class="sidebar-date">
+                {{eventDateHeader(event)}}
+              </div>
                 <div class="sidebar-event"
                     [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
                     (mouseenter)="onHover(event)"

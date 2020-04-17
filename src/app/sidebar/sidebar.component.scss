@@ -11,6 +11,13 @@
     flex-basis: 50px; /* Prevents event list from growing too large for the window size */
 }
 
+.sidebar-date{
+  text-align: center;
+  font-size: 20px;
+  padding: 3px;
+  background-color: #C6C6C6;
+}
+
 .search-header{
     border-bottom: 1px solid $default_border_color;
 }
