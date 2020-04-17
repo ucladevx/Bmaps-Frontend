@@ -1,0 +1,79 @@
+<div id="categ-div" class="btn-group">
+  <button *ngIf="showToggleButton" id="categ-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()" [disabled]="events.length == 0">
+    Filters <span class="caret"></span>
+  </button>
+  <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
+    <div *ngIf="tagHash" class="section-header"> Filters
+      <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
+    </div>
+    <div *ngIf="tagHash" class="filters-wrapper">
+      <div *ngIf="this._dateService.isToday()" class="filter-group time-filter-group">
+        <div class="btn-group">
+          <label (click)="filterClicked('happening now')"
+                 class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': tagHash['happening now']}">happening now</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 (click)="filterClicked('upcoming')"
+                 [ngClass]="{'active': tagHash['upcoming']}">upcoming</label>
+        </div>
+      </div>
+      <div class="filter-group tod-filter-group">
+        <div class="btn-group">
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': tagHash['morning']}"
+                 (click)="filterClicked('morning')">morning</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': tagHash['afternoon']}"
+                 (click)="filterClicked('afternoon')">afternoon</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': tagHash['evening']}"
+                 (click)="filterClicked('evening')">evening</label>
+        </div>
+      </div>
+      <div class="filter-group loc-filter-group">
+        <div class="btn-group">
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': tagHash['on-campus']}"
+                 (click)="filterClicked('on-campus')">on-campus</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': tagHash['off-campus']}"
+                 (click)="filterClicked('off-campus')">off-campus</label>
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': tagHash['nearby']}"
+                 (click)="filterClicked('nearby')">nearby</label>
+        </div>
+      </div>
+      <div class="filter-group loc-filter-group">
+        <div class="btn-group">
+          <label class="btn btn-outline-secondary filter-btn"
+                 [ngClass]="{'active': tagHash['free food']}"
+                 (click)="filterClicked('free food')">free food</label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="categHash" class="section-header">
+      Categories
+      <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
+    </div>
+    <div *ngIf="categHash" class="categories-wrapper">
+      <ul class="categories-list" role="menu">
+        <li *ngFor="let categKey of objectKeys(categHash)">
+          <a *ngIf="categKey == 'all' || (categHash[categKey].numEventsDay && categHash[categKey].numEventsDay > 0)"
+             [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}" (click)="categoryClicked(categKey)">
+          <div class="checkbox-container">
+            <div *ngIf="categHash[categKey].selected; else unchecked">
+              <img class="checkbox" width="16px" src="assets/images/check.svg"/>
+            </div>
+          </div>
+          <ng-template #unchecked>
+            <div>
+              <img class="checkbox" width="16px" src="assets/images/box.svg" />
+            </div>
+          </ng-template>
+          {{categHash[categKey].formattedCategory}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
