@@ -329,6 +329,41 @@ export class ThreeDayComponent implements OnInit {
       return '#FFB5F8';
   }
 
+  styleEventName(event: GeoJson) {
+    var height = this.calculateEventHeight(event);
+
+    var oneLineMax = 4.5;    // height percentage max for one line
+    var increment = (window.outerWidth <= 768) ? 2.5 : 2;    // increment percentage per line
+
+    var lines = 5;
+    if (height < oneLineMax) lines = 1;
+    else if (height <= oneLineMax + increment) lines = 2;
+    else if (height <= oneLineMax + 2*increment) lines = 3;
+    else if (height <= oneLineMax + 3*increment) lines = 4;
+
+    let style = { 
+      '-webkit-line-clamp': lines,
+    }
+
+    return style;
+  }
+
+  calculateEventHeight(event: GeoJson) {
+    // CALCULATE TOP //
+    let start = moment(event.properties.start_time);
+    let top = this.convertTimeToPercent(start);
+    // CALCULATE HEIGHT //
+    let temp = moment(event.properties.end_time);
+    let hours = moment.duration(temp.diff(start)).asHours();
+    if(hours>24){ hours = (hours%24)+1; }
+    let end = start.clone().add(hours,"hours");
+    let bottom = this.convertTimeToPercent(end)
+    let height = bottom-top;
+    if(height<0){ height = 100-top; }
+
+    return height;
+  }
+
   // position and size event to match actual start time and duration
   styleEvent(event: GeoJson, events: GeoJson[]) {
     // CALCULATE TOP //
