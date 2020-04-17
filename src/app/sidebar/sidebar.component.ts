@@ -107,11 +107,22 @@ export class SidebarComponent implements OnInit {
 
       this._eventService.selectedDate$.subscribe(date => {
         this.endHover();
+        this.scrollToFirstEventOf(date);
       });
 
       this.pressed$.subscribe(pressed => this.mobileSidebarVisible = pressed);
       this.updateSidebarEvents();
 
+    }
+
+    scrollToFirstEventOf(date: Date) {
+      if(this._eventService.getSidebarEvent() == undefined) {
+        let scrollEv = this.filteredEvents.find(function(e) {
+          return moment(e.properties.start_time).startOf('day').isSame(moment(date), 'd');
+        });
+        if(scrollEv != undefined) this.scrollToEvent(scrollEv);
+        else this.scrollToEvent(this.filteredEvents[0]);
+      }
     }
 
     updateSidebarEvents(): void {
@@ -129,11 +140,8 @@ export class SidebarComponent implements OnInit {
           this.filteredEvents = this._eventService.getFilteredThreeDayEvents().features;
           break;
       }
-      this.filteredEvents.sort(function(a, b) {
-        a = a["properties"]["start_time"];
-        b = b["properties"]["start_time"];
-        return a<b ? -1 : a>b ? 1 : 0;
-      });
+      let _this = this;
+      setTimeout(function(){_this.scrollToFirstEventOf(_this._eventService.getSelectedDate())}, 1000);
     }
 
     // Hides sidebar when event on sidebar is clicked to reveal eventDetail.
@@ -173,7 +181,7 @@ export class SidebarComponent implements OnInit {
         const index: number = this.filteredEvents.findIndex((e: GeoJson) => e.id == event.id);
         const element: ElementRef = this.eventList.find((e: ElementRef, i: number) => index == i);
         if (element)
-          element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          element.nativeElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
       }
     }
 

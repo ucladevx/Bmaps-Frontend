@@ -333,6 +333,7 @@ export class EventService {
       // updates
       this.updateEvents(newDate,[!sameMonth,!sameWeek,!sameThreeDay]);
       this.setSelectedDate(newDate);
+      this.resetDateFilter();
     }
     if(newView != this._currentView) {
       this.storeLastView(this._currentView);
@@ -392,6 +393,11 @@ export class EventService {
     allEvents.features.forEach(el => {
       let d = moment(el.properties.start_time).toDate();
       if (d >= startDate && d <= endDate){ filteredEvents.features.push(el); }
+    });
+    filteredEvents.features.sort(function(a, b) {
+      a = a["properties"]["start_time"];
+      b = b["properties"]["start_time"];
+      return a<b ? -1 : a>b ? 1 : 0;
     });
     return filteredEvents;
   }
@@ -469,6 +475,10 @@ export class EventService {
     this.setTimeFilter(0,1439);
     this.setLocationFilter("");
     // date filter
+    this.resetDateFilter();
+  }
+
+  resetDateFilter() {
     let start = new Date(), end = new Date();
     switch(this._currentView){
       case ViewState.month:
