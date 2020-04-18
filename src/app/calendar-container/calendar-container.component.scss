@@ -2,36 +2,14 @@
 
 $selector-padding: 9.7px;
 
-.selector {
-  background-color: #fff;
-  color: #484747;
-  text-align: center;
-  border-bottom: $default_border_width solid $default_border_color;
-  position: relative;
-  font-size: 26px;
-  display: flex;
-  justify-content: space-between;
-  padding: $selector-padding;
-}
-
-.mobile-selector {
-  background-color: #fff;
-  color: #484747;
-  text-align: center;
-  border-bottom: $default_border_width solid $default_border_color;
-  position: relative;
-  font-size: 26px;
-  display: none;
-  justify-content: space-between;
-  padding: $selector-padding;
-}
-
-#empty-selector-block {
-  width: 100px;
-}
-
 :host {
   flex: 1;
+}
+
+router-outlet.router-flex + * {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
 }
 
 .calendar {
@@ -39,6 +17,41 @@ $selector-padding: 9.7px;
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.selector {
+  display: flex;
+  position: relative;
+  background: #fff;
+  color: #484747;
+  font-size: 26px;
+  text-align: center;
+  justify-content: space-between;
+  padding: $selector-padding;
+  border-bottom: $default_border_width solid $default_border_color;
+}
+
+#week-number {
+  width: 110px;
+  font-size: 20px;
+}
+
+#empty-selector-block {
+  width: 100px;
+}
+
+#calendar-controls-wrapper {
+  width: 260px;
+  font-size: 26px;
+  .custom-btn { line-height: 36px; }
+}
+
+#calendar-controls-wrapper i {
+  font-size: 30px;
+}
+
+#calendar-controls-wrapper span {
+  margin: 0 10px;
 }
 
 .custom-btn {
@@ -57,163 +70,53 @@ $selector-padding: 9.7px;
   float: right;
 }
 
-router-outlet.router-flex + * {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-}
-
-#calendar-controls {
-  font-size: 26px;
-}
-
-#calendar-controls-wrapper {
-  width: 260px;
-
-  .custom-btn {
-    line-height: 36px;
-  }
-}
-
-#calendar-controls-wrapper i {
-  font-size: 30px;
-}
-
-#calendar-controls-wrapper span {
-  margin: 0 10px;
-}
-
 #calendar-view-switch {
+  display: flex;
   font-size: 0.8rem;
   cursor: pointer;
-  display: flex;
   margin-left: 5px;
 }
 
-#mobile-calendar-view-switch {
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: none;
-}
-
-#week-number {
-  font-size: 20px;
-  width: 110px;
-}
-
-#mobile-week-number {
-  display: none;
-  z-index: 1000;
-  font-size: 10px;
-  text-align: center;
-}
-
-#month-switch {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border: $default_border_width solid $default_border_color;
-  padding: 4px 10px;
+.view-switch-text {
   font-size: 18px;
+  padding: 4px 10px;
   margin: 0;
-}
-
-#month-switch.active {
-  background: #656565;
-  color: #fff;
-}
-
-#week-switch.active {
-  background: #656565;
-  color: #fff;
-}
-
-#week-switch {
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   border: $default_border_width solid $default_border_color;
-  padding: 4px 10px;
-  font-size: 18px;
-  margin: 0;
 }
 
-#three-day-switch {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border: $default_border_width solid $default_border_color;
-  padding: 4px 10px;
-  font-size: 18px;
-  margin: 0;
-}
-
-#three-day-switch.active {
+.view-switch-text.active {
   background: #656565;
   color: #fff;
-}
-
-#mobile-month-switch {
-  display: none;
-  border-radius: 4px;
-  border: $default_border_width solid $default_border_color;
-  padding: 8px 10px;
-  font-size: 18px;
-  margin: 0;
-}
-
-#mobile-month-switch.active {
-  background: #656565;
-  color: #fff;
-}
-
-#mobile-week-switch.active {
-  background: #656565;
-  color: #fff;
-}
-
-#mobile-week-switch {
-  //display: none;
-  display: inline-block;
-  border-radius: 4px;
-  border: $default_border_width solid $default_border_color;
-  //padding: 8px 10px;
-  font-size: 18px;
-  margin: 0;
-}
-
-#mobile-three-day-switch.active {
-  background: #656565;
-  color: #fff;
-}
-
-#mobile-three-day-switch {
-  display: inline-block;
-  border-radius: 4px;
-  border: $default_border_width solid $default_border_color;
-  font-size: 18px;
-  margin: 0;
 }
 
 /* mobile css */
 @media screen and (max-width: 768px) {
 
+  .selector {
+    height: 40px;
+    display: none;
+    background: #7B7B7B;
+  }
+
+  #week-number {
+    display: none;
+    font-size: 12px;
+  }
+
+  #empty-selector-block {
+    display: none;
+  }
+
   #calendar-controls-wrapper {
-    width: 150px;
     width: 46%;
     display: block;
     position: absolute;
     left: 27%;
+    color: #fff;
+    font-size: 14px;
     margin-top: -1px;
-  }
-
-  .selector {
-    height: 40px;
-    background-color: #7B7B7B;
-    display: none;
-  }
-
-  .mobile-selector {
-    height: 40px;
-    background-color: #7B7B7B;
-    display: flex;
   }
 
   .custom-btn {
@@ -226,72 +129,42 @@ router-outlet.router-flex + * {
     color: #5dbacd;
   }
 
-  #calendar-controls {
-    font-size: 14px;
-    color: #fff;
-  }
-
-  #week-number {
-    display: none;
-  }
-
-  #calendar-view-switch {
-    display: none;
-  }
-
-  #empty-selector-block {
-    display: none;
-  }
-
-  #mobile-three-day-switch {
-    width: 11%;
-    overflow-x: hidden;
-    white-space: nowrap;
-    font-size: 14px;
-    position: absolute;
-    left: 3%;
-    text-align: center;
-  }
-
-  #mobile-week-switch {
-    display: block;
-    width: 11%;
-    overflow-x: hidden;
-    white-space: nowrap;
-    font-size: 14px;
-    position: absolute;
-    left: 14%;
-    text-align: center;
-  }
-
-  #mobile-month-switch {
-    display: block;
-    width: 20%;
-    overflow-x: hidden;
-    white-space: nowrap;
-    font-size: 14px;
-    align-items: center;
-    position: absolute;
-    right: 3%;
-    text-align: center;
-  }
-
-  #mobile-week-number {
-    display: block;
-    font-size: 12px;
-  }
-
-  #mobile-calendar-view-switch {
-    display: flex;
-    margin-left: 5px;
-  }
-
   #left-caret {
     float: left;
   }
 
   #right-caret {
     float: right;
+  }
+
+  #calendar-view-switch {
+    display: flex;
+    margin-left: 5px;
+  }
+
+  .view-switch-text {
+    display: block;
+    position: absolute;
+    overflow-x: hidden;
+    white-space: nowrap;
+    font-size: 14px;
+    align-items: center;
+    text-align: center;
+  }
+
+  #month-switch {
+    width: 20%;
+    right: 3%;
+  }
+
+  #week-switch {
+    width: 11%;
+    left: 14%;
+  }
+
+  #three-day-switch {
+    width: 11%;
+    left: 3%;
   }
 
 }

@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FilterBarCalendarComponent } from './filter-bar-calendar.component';
 
 describe('FilterBarCalendarComponent', () => {
@@ -23,5 +22,5 @@ describe('FilterBarCalendarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
+
 });

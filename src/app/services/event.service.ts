@@ -407,7 +407,6 @@ export class EventService {
   private filterByThreeDays(allEvents: FeatureCollection, date: Date){
     // determine first and last day to start displaying events
     let bounds = this._dateService.getViewBounds(date, ViewState.threeday);
-    console.log(bounds);
     let firstDay = bounds[0], lastDay = bounds[1];
     if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
     // filter by day span

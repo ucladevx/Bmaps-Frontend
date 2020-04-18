@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ThreeDayComponent } from './three-day.component';
 
 describe('ThreeDayComponent', () => {
@@ -22,4 +21,5 @@ describe('ThreeDayComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });
