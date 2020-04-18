@@ -48,18 +48,18 @@ export class CalendarContainerComponent implements OnInit {
 
   ngOnInit() {
 
-    // whenever the current date changes, update view and week number
+    // whenever current date changes, update view and week number
     this._eventService.selectedDate$.subscribe( date => {
       this.viewDateChange(date);
       this.enumerateWeek(this._eventService.getCurrentView())
     });
 
-    // whenever the current view changes, update local variable
+    // whenever current view changes, update local variable
     this._eventService.currentView$.subscribe( view => {
       this.currentView = view;
     });
 
-    // whenever the visible days changes, maintain sidebar event
+    // whenever visible days changes, maintain sidebar event
     this._eventService.visibleDays$.subscribe( days => {
       let selectedEvent = this._eventService.getSidebarEvent();
       if(selectedEvent){

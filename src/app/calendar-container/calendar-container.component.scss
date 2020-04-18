@@ -95,14 +95,11 @@ router-outlet.router-flex + * {
 @media screen and (max-width: 768px) {
 
   .selector {
-    height: 40px;
     display: none;
-    background: #7B7B7B;
   }
 
   #week-number {
     display: none;
-    font-size: 12px;
   }
 
   #empty-selector-block {
@@ -125,20 +122,7 @@ router-outlet.router-flex + * {
     margin-top: -4px;
   }
 
-  .custom-btn:hover {
-    color: #5dbacd;
-  }
-
-  #left-caret {
-    float: left;
-  }
-
-  #right-caret {
-    float: right;
-  }
-
   #calendar-view-switch {
-    display: flex;
     margin-left: 5px;
   }
 
