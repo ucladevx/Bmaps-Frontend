@@ -28,7 +28,7 @@ router-outlet.router-flex + * {
   text-align: center;
   justify-content: space-between;
   padding: $selector-padding;
-  border-bottom: $default_border_width solid $default_border_color;
+  border-bottom: $default_border_style;
 }
 
 #week-number {
@@ -83,7 +83,7 @@ router-outlet.router-flex + * {
   margin: 0;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
-  border: $default_border_width solid $default_border_color;
+  border: $default_border_style;
 }
 
 .view-switch-text.active {

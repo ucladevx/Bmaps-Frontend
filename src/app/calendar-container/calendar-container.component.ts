@@ -18,7 +18,6 @@ import { Moment } from 'moment';
 })
 
 export class CalendarContainerComponent implements OnInit {
-  public ViewState = ViewState;
 
   @ContentChild(MonthComponent, {})
   private monthComponent: MonthComponent;
@@ -29,12 +28,12 @@ export class CalendarContainerComponent implements OnInit {
   @ContentChild(ThreeDayComponent, {})
   private threeDayComponent: ThreeDayComponent;
 
-  // current date
-  viewDate: string;
   // current view
-  currentView = ViewState.month;
+  public currentView = ViewState.month;
+  // current date
+  public viewDate: string;
   // week number
-  weekNumber: string;
+  public weekNumber: string;
 
   // Hard-coded from UCLA online academic calendar
   zeroWeeks: Moment[] = [
@@ -91,30 +90,27 @@ export class CalendarContainerComponent implements OnInit {
 
   // change date span based on calendar controls
   changeDateSpan(delta: number, calendarView: ViewState) : void{
-    // determine date to display in new view
     let newDate = this._eventService.getSelectedDate();
+    let currDate = this._eventService.getSelectedDate();
+    let today = new Date();
+    // determine date to display in new view
     switch(calendarView) {
       // change to month view
       case ViewState.month :
-        newDate = moment(newDate).startOf('month').add(delta,'M').toDate();
-        if(this._dateService.inSameMonth(newDate, this._eventService.getSelectedDate()))
-          newDate = this._eventService.getSelectedDate();
-        else if(this._dateService.inSameMonth(newDate, new Date()))
-          newDate = new Date();
+        newDate = moment(newDate).startOf('M').add(delta,'M').toDate();
+        if(this._dateService.inSameMonth(newDate, currDate)) newDate = currDate;
+        else if(this._dateService.inSameMonth(newDate, today)) newDate = today;
         break;
       // change to week view
       case ViewState.week :
-        newDate = moment(newDate).startOf('week').add(delta*7,'d').toDate();
-        if(this._dateService.inSameWeek(newDate, this._eventService.getSelectedDate()))
-          newDate = this._eventService.getSelectedDate();
-        else if(this._dateService.inSameWeek(newDate, new Date()))
-          newDate = new Date();
+        newDate = moment(newDate).startOf('w').add(delta,'w').toDate();
+        if(this._dateService.inSameWeek(newDate, currDate)) newDate = currDate;
+        else if(this._dateService.inSameWeek(newDate, today)) newDate = today;
         break;
       // change to three day view
       case ViewState.threeday :
-        newDate = moment(newDate).startOf('day').add(delta*3,'d');
-        if(this._dateService.inSameThreeDay(newDate, this._eventService.getSelectedDate()))
-          newDate = this._eventService.getSelectedDate();
+        newDate = moment(this._dateService.getViewBounds(newDate,calendarView)[0]).startOf('d').add(delta*3,'d');
+        if(this._dateService.inSameThreeDay(newDate, currDate)) newDate = currDate;
         break;
     }
     // update date span and week number

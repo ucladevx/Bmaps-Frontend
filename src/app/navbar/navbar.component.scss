@@ -140,7 +140,7 @@ button {
   margin-bottom: -.5rem;
   margin-top: 0;
   top: var(--navbar-height);
-  border-bottom: $default_border_width solid $default_border_color;
+  border-bottom: $default_border_style;
 }
 
 .mobile-calendar-view-switch {

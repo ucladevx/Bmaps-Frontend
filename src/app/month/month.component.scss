@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  background-color: #7a7a7a;
+  background: #7a7a7a;
   color: #fff;
   text-align: center;
   padding: 10px;
@@ -30,7 +30,7 @@
 .calendar-header {
   width: 100%;
   display: flex;
-  background-color: #fff;
+  background: #fff;
   color: #3c3c3c;
   font-size: 30px;
   font-weight: bold;
@@ -45,7 +45,7 @@
 }
 
 .calendar-header span:not(.last-child) {
-  border-right: $default_border_width solid $default_border_color;
+  border-right: $default_border_style;
 }
 
 .calendar-month {
@@ -54,7 +54,7 @@
   flex-wrap: wrap;
   flex: 1;
   flex-shrink: 0;
-  border-top: $default_border_width solid $default_border_color;
+  border-top: $default_border_style;
 }
 
 .calendar-day {
@@ -62,13 +62,13 @@
   position: relative;
   flex-basis: 14.2857%; /* 100/7 */
   display: block;
-  border-bottom: $default_border_width solid $default_border_color;
+  border-bottom: $default_border_style;
   color: #bebebe;
-  background-color: #fff;
+  background: #fff;
 }
 
 .calendar-day:not(:nth-child(7n)) {
-  border-right: $default_border_width solid $default_border_color;
+  border-right: $default_border_style;
 }
 
 .calendar-day span {
@@ -100,7 +100,7 @@
 }
 
 .calendar-day.current-day {
-  background-color: #ececec;
+  background: #ececec;
 }
 
 .calendar-day.today {
@@ -110,7 +110,7 @@
 
 .calendar-header > .short-abbr {
   display: none;
-  background-color: #54D8D8;
+  background: #54D8D8;
   color: #fff;
   font-size: 13px;
 }
@@ -118,7 +118,7 @@
 .dot {
   height: 0.5rem;
   width: 0.5rem;
-  background-color: #59dbd6;
+  background: #59dbd6;
   border-radius: 50%;
   display: none;
   position: relative;

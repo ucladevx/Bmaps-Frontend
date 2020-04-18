@@ -15,7 +15,7 @@
   text-align: center;
   font-size: 20px;
   padding: 3px;
-  background-color: #C6C6C6;
+  background: #C6C6C6;
 }
 
 .search-header{
@@ -27,7 +27,7 @@
 }
 
 .sidebar-header{
-  background-color: white;
+  background: white;
   box-shadow: -1px 1px 1px rgb(207,207,207);
   text-align: center;
   color: rgb(116,116,116);
@@ -49,11 +49,11 @@
 }
 
 .sidebar-event:hover, .sidebar-event:active{
-  background-color: rgb(219, 219, 219);
+  background: rgb(219, 219, 219);
 }
 
 .selected {
-  background-color: rgb(219, 219, 219);
+  background: rgb(219, 219, 219);
 }
 
 .sidebar-event-img{
@@ -121,7 +121,7 @@
 
 .dd-item:hover,visited,active {
   text-decoration: none;
-  background-color: #C6C6C6;
+  background: #C6C6C6;
   padding: auto;
 }
 
@@ -168,13 +168,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background: white;
   color: rgb(130, 130, 130);
   height: 50px;
   cursor: pointer;
   font-size: 15px;
-  border-top:  $default_border_width solid $default_border_color;
-  border-bottom:  $default_border_width solid $default_border_color;
+  border-top:  $default_border_style;
+  border-bottom:  $default_border_style;
 }
 
 #no-events-section {

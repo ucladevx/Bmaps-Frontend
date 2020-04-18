@@ -2,7 +2,7 @@
   <!-- desktop calendar header -->
   <div class="selector">
     <!-- week enumeration (if week or threeday) -->
-    <div id="week-number" *ngIf="(currentView == ViewState.week) || (currentView == ViewState.threeday); else emptyBlock">
+    <div id="week-number" *ngIf="(currentView == 2) || (currentView == 1); else emptyBlock">
       <span *ngIf="this.weekNumber">{{weekNumber}}</span>
     </div>
     <ng-template #emptyBlock><div id="empty-selector-block"></div></ng-template>
@@ -14,9 +14,9 @@
     </div>
     <!-- buttons for changing between three-day, week, and month view -->
     <div id="calendar-view-switch">
-      <span class="view-switch-text" id="three-day-switch" routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.threeday)">3-Day</span>
-      <span class="view-switch-text" id="week-switch" routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.week)">Week</span>
-      <span class="view-switch-text" id="month-switch" routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0,ViewState.month)">Month</span>
+      <span class="view-switch-text" id="three-day-switch" routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,1)">3-Day</span>
+      <span class="view-switch-text" id="week-switch" routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,2)">Week</span>
+      <span class="view-switch-text" id="month-switch" routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0,3)">Month</span>
     </div>
   </div>
   <!-- where month and week and three-day view appear -->

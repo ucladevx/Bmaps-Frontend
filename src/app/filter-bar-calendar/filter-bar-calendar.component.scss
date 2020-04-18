@@ -33,7 +33,7 @@ a.clear-all-btn:hover {
 }
 
 a.clear-all-btn:active {
-  background-color: inherit;
+  background: inherit;
 }
 
 .categ-bubble {
@@ -41,7 +41,7 @@ a.clear-all-btn:active {
 }
 
 .categ-bubble-selected {
-  background-color: #8cd3d6;
+  background: #8cd3d6;
 }
 
 .zero-events {
@@ -49,7 +49,7 @@ a.clear-all-btn:active {
 }
 
 .dropdown-toggle {
-  border-bottom: $default_border_width solid $default_border_color;
+  border-bottom: $default_border_style;
   color: #656565;
 }
 
@@ -70,9 +70,9 @@ a.clear-all-btn:active {
 
 .dropdown-content {
   top: 42px;
-  background-color: white;
+  background: white;
   width: 100%;
-  border-bottom: $default_border_width solid $default_border_color;
+  border-bottom: $default_border_style;
   z-index: 999;
   overflow-y: scroll;
   display: block;
@@ -91,7 +91,7 @@ a.clear-all-btn:active {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 10px;
-  background-color: #E8E8E8;
+  background: #E8E8E8;
   font-size: 16px;
 }
 
@@ -105,7 +105,7 @@ a.clear-all-btn:active {
 }
 
 .custom-select{
-  background-color: rgb(239,239,239);
+  background: rgb(239,239,239);
   display: inline-block;
   width: 80%;
   border: none;
@@ -113,7 +113,7 @@ a.clear-all-btn:active {
 }
 
 .form-control{
-  background-color: rgb(239,239,239);
+  background: rgb(239,239,239);
   display: inline-block;
   width: 76%;
   border: none;
@@ -121,7 +121,7 @@ a.clear-all-btn:active {
 }
 
 .clear-button{
-  background-color: rgb(239,239,239);
+  background: rgb(239,239,239);
   float: right;
   color: #808080;
   border: none;
@@ -138,7 +138,7 @@ a.clear-all-btn:active {
 }
 
 .short-input{
-  background-color: rgb(239,239,239);
+  background: rgb(239,239,239);
   display: inline-block;
   width: 37%;
 }
@@ -197,7 +197,7 @@ ul {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 10px;
-  background-color: #E8E8E8;
+  background: #E8E8E8;
   font-size: 16px;
 }
 
@@ -227,7 +227,7 @@ ul {
 }
 
 a:active {
-  background-color: #F0F0F0;
+  background: #F0F0F0;
 }
 
 .btn.filter-btn {
@@ -262,11 +262,11 @@ a.clear-all-btn:hover {
 }
 
 a.clear-all-btn:active {
-  background-color: inherit;
+  background: inherit;
 }
 
 .btn.filter-btn:hover {
-  background-color: #59dbd6;
+  background: #59dbd6;
   color: #fff;
 }
 
@@ -279,7 +279,7 @@ a.clear-all-btn:active {
 }
 
 .btn.filter-btn.active {
-  background-color: #4ad3d3;
+  background: #4ad3d3;
   border-color: $default_border_color;
 }
 

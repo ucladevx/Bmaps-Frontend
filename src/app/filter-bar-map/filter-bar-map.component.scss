@@ -18,7 +18,7 @@
 }
 
 .categ-bubble-selected {
-  background-color: #8cd3d6;
+  background: #8cd3d6;
 }
 
 .zero-events {
@@ -26,7 +26,7 @@
 }
 
 .dropdown-toggle {
-  border-bottom: $default_border_width solid $default_border_color;
+  border-bottom: $default_border_style;
   color: #656565;
 }
 
@@ -51,10 +51,10 @@
 
 .dropdown-content {
   top: 50px;
-  background-color: white;
+  background: white;
   width: 100%;
   z-index: 999;
-  border-bottom: $default_border_width solid $default_border_color;
+  border-bottom: $default_border_style;
   overflow-y: scroll;
   display: block;
   flex: 1;
@@ -65,7 +65,7 @@
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 10px;
-  background-color: #E8E8E8;
+  background: #E8E8E8;
   font-size: 16px;
 }
 
@@ -102,7 +102,7 @@ ul {
 }
 
 a:active {
-  background-color: #F0F0F0;
+  background: #F0F0F0;
 }
 
 a.clear-all-btn {
@@ -119,7 +119,7 @@ a.clear-all-btn:hover {
 }
 
 a.clear-all-btn:active {
-  background-color: inherit;
+  background: inherit;
 }
 
 .btn.filter-btn {
@@ -138,7 +138,7 @@ a.clear-all-btn:active {
 }
 
 .btn.filter-btn:hover {
-  background-color: #59dbd6;
+  background: #59dbd6;
   color: #fff;
 }
 
@@ -151,7 +151,7 @@ a.clear-all-btn:active {
 }
 
 .btn.filter-btn.active {
-  background-color: #4ad3d3;
+  background: #4ad3d3;
   border-color: $default_border_color;
 }
 
