@@ -55,21 +55,6 @@
           </div>
         </div>
       </div>
-      <div class="section-container">
-        <div class="section-header"></div>
-        <div *ngIf="tagHash" class="filters-wrapper">
-          <div class="btn-group" id="food-group">
-            <div class="btn btn-outline-secondary filter-btn" id="mobile-exclude"
-                  [ngClass]="{'active': tagHash['free food']}"
-                  (click)="tagClicked('free food')">free food</div>
-          </div>
-          <div class="btn-group" id="food-group-mobile">
-            <div class="btn btn-outline-secondary filter-btn" id="mobile-only"
-                  [ngClass]="{'active': tagHash['free food']}"
-                  (click)="tagClicked('free food')">free food</div>
-          </div>
-        </div>
-      </div>
     </div>
     <div *ngIf="categHash" class="categ-section-header">
         Categories

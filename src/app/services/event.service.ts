@@ -9,6 +9,7 @@ import { LocationService } from './location.service';
 import { DateService } from './date.service';
 import { ViewState } from '../view-enum';
 import * as moment from 'moment';
+import { Moment } from 'moment';
 
 // Calendar Day Interface
 export interface CalendarDay {
@@ -52,9 +53,9 @@ export class EventService {
   // SOLO EVENT VARIABLES
   private _hoveredEvent;              // current hovered event
   private _clickedEvent;              // current clicked event
-  private _sidebarEvent;              // current sidebar event (details expanded)
+  private _sidebarEvent;              // current sidebar event (event expanded in sidebar)
 
-  // FILTER STORAGE VARIABLES
+  // FILTER VARIABLES
   private _categHash;                 // maps event categories to selection status
   private _tagHash;                   // maps filter tags to selection status
   private _locFilter;                 // location string being applied as filter
@@ -62,13 +63,10 @@ export class EventService {
   private _timeFilter;                // range of times being applied as filter
 
   // SOURCES
-
   private currentViewSource: Subject <ViewState>;
   private lastViewSource: Subject <ViewState>;
-
   private visibleDaysSource: Subject <any>;
   private selectedDateSource: BehaviorSubject <Date>;
-
   private monthEventsSource: BehaviorSubject <FeatureCollection>;
   private filteredMonthEventsSource: BehaviorSubject <FeatureCollection>;
   private weekEventsSource: BehaviorSubject <FeatureCollection>;
@@ -77,11 +75,9 @@ export class EventService {
   private filteredThreeDayEventsSource: BehaviorSubject <FeatureCollection>;
   private dayEventsSource: BehaviorSubject <FeatureCollection>;
   private filteredDayEventsSource: BehaviorSubject <FeatureCollection>;
-
   private hoveredEventSource: Subject <GeoJson>;
   private clickedEventSource: Subject <GeoJson>;
   private sidebarEventSource: Subject <GeoJson>;
-
   private categHashSource: BehaviorSubject <any>;
   private tagHashSource: BehaviorSubject <any>;
   private locFilterSource: Subject <string>;
@@ -96,172 +92,154 @@ export class EventService {
   threeDayEvents$; filteredThreeDayEvents$;
   dayEvents$; filteredDayEvents$;
   hoveredEvent$; clickedEvent$; sidebarEvent$;
-  categHash$; tagHash$; locFilter$; dateFilter$; timeFilter$;
+  categHash$; tagHash$;
+  locFilter$; dateFilter$; timeFilter$;
 
   // Constructor
   constructor(private router: Router, private http: HttpClient, private _dateService: DateService, private _locationService: LocationService) {
-    // Observable string sources (BehaviorSubjects have intial state)
+
+    // For each of the following variables:
+    // observable string source, observable string stream, self-subscribed local value
+
+    // currentView
     this.currentViewSource = new Subject <ViewState> ();
-    this.lastViewSource = new Subject <ViewState> ();
-    this.visibleDaysSource = new Subject <CalendarDay[]> ();
-    this.selectedDateSource = new BehaviorSubject <Date> (new Date());
-    this.monthEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
-    this.filteredMonthEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
-    this.weekEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
-    this.filteredWeekEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
-    this.threeDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
-    this.filteredThreeDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
-    this.dayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
-    this.filteredDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
-    this.hoveredEventSource = new Subject <GeoJson> ();
-    this.clickedEventSource = new Subject <GeoJson> ();
-    this.sidebarEventSource = new Subject <GeoJson> ();
-    this.categHashSource = new BehaviorSubject <any> ({});
-    this.tagHashSource = new BehaviorSubject <any> ({});
-    this.locFilterSource = new Subject <string> ();
-    this.dateFilterSource = new Subject <any> ();
-    this.timeFilterSource = new Subject <any> ();
-    // Observable string streams
     this.currentView$ = this.currentViewSource.asObservable();
+    this.currentView$.subscribe(view => this._currentView = view);
+
+    // lastView
+    this.lastViewSource = new Subject <ViewState> ();
     this.lastView$ = this.lastViewSource.asObservable();
+    this.lastView$.subscribe(view => this._lastView = view);
+
+    // visibleDays
+    this.visibleDaysSource = new Subject <CalendarDay[]> ();
     this.visibleDays$ = this.visibleDaysSource.asObservable();
+    this.visibleDays$.subscribe(days => this._visibleDays = days);
+
+    // selectedDate
+    this.selectedDateSource = new BehaviorSubject <Date> (new Date());
     this.selectedDate$ = this.selectedDateSource.asObservable();
-    this.monthEvents$  = this.monthEventsSource.asObservable();
+    this.selectedDate$.subscribe(date => this._selectedDate = date);
+
+    // filteredMonthEvents
+    this.filteredMonthEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
     this.filteredMonthEvents$  = this.filteredMonthEventsSource.asObservable();
-    this.weekEvents$  = this.weekEventsSource.asObservable();
-    this.filteredWeekEvents$ = this.filteredWeekEventsSource.asObservable();
-    this.threeDayEvents$ = this.threeDayEventsSource.asObservable();
-    this.filteredThreeDayEvents$ = this.filteredThreeDayEventsSource.asObservable();
-    this.dayEvents$ = this.dayEventsSource.asObservable();
-    this.filteredDayEvents$ = this.filteredDayEventsSource.asObservable();
-    this.hoveredEvent$ = this.hoveredEventSource.asObservable();
-    this.clickedEvent$ = this.clickedEventSource.asObservable();
-    this.sidebarEvent$ = this.sidebarEventSource.asObservable();
-    this.categHash$ = this.categHashSource.asObservable();
-    this.tagHash$ = this.tagHashSource.asObservable();
-    this.locFilter$ = this.locFilterSource.asObservable();
-    this.dateFilter$ = this.dateFilterSource.asObservable();
-    this.timeFilter$ = this.timeFilterSource.asObservable();
-    // Maintain a set of self-subscribed local values
-    this.currentView$.subscribe(view => {
-      this._currentView = view;
-    });
-    this.lastView$.subscribe(view =>
-      this._lastView = view
-    );
-    this.visibleDays$.subscribe(days => {
-      this._visibleDays = days;
-    });
-    this.selectedDate$.subscribe(date =>
-      this._selectedDate = date
-    );
+    this.filteredMonthEvents$.subscribe(filteredMonthEvents => this._filteredMonthEvents = filteredMonthEvents);
+
+    // monthEvents
+    this.monthEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.monthEvents$  = this.monthEventsSource.asObservable();
     this.monthEvents$.subscribe(monthEvents => {
       this._monthEvents = monthEvents;
       this.filteredMonthEventsSource.next(monthEvents);
     });
-    this.filteredMonthEvents$.subscribe(filteredMonthEvents =>
-      this._filteredMonthEvents = filteredMonthEvents
-    );
+
+    // filteredWeekEvents
+    this.filteredWeekEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.filteredWeekEvents$ = this.filteredWeekEventsSource.asObservable();
+    this.filteredWeekEvents$.subscribe(filteredWeekEvents => this._filteredWeekEvents = filteredWeekEvents);
+
+    // weekEvents
+    this.weekEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.weekEvents$  = this.weekEventsSource.asObservable();
     this.weekEvents$.subscribe(weekEvents => {
       this._weekEvents = weekEvents;
       this.filteredWeekEventsSource.next(weekEvents);
     });
-    this.filteredWeekEvents$.subscribe(filteredWeekEvents =>
-      this._filteredWeekEvents = filteredWeekEvents
-    );
+
+    // filteredThreeDayEvents
+    this.filteredThreeDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.filteredThreeDayEvents$ = this.filteredThreeDayEventsSource.asObservable();
+    this.filteredThreeDayEvents$.subscribe(filteredThreeDayEvents => this._filteredThreeDayEvents = filteredThreeDayEvents);
+
+    // threeDayEvents
+    this.threeDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.threeDayEvents$ = this.threeDayEventsSource.asObservable();
     this.threeDayEvents$.subscribe(threeDayEvents => {
       this._threeDayEvents = threeDayEvents;
       this.filteredThreeDayEventsSource.next(threeDayEvents);
     });
-    this.filteredThreeDayEvents$.subscribe(filteredThreeDayEvents =>
-      this._filteredThreeDayEvents = filteredThreeDayEvents
-    );
+
+    // filteredDayEvents
+    this.filteredDayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.filteredDayEvents$ = this.filteredDayEventsSource.asObservable();
+    this.filteredDayEvents$.subscribe(filteredDayEvents => this._filteredDayEvents = filteredDayEvents);
+
+    // dayEvents
+    this.dayEventsSource = new BehaviorSubject <FeatureCollection> (new FeatureCollection([]));
+    this.dayEvents$ = this.dayEventsSource.asObservable();
     this.dayEvents$.subscribe(dayEvents => {
       this._dayEvents = dayEvents;
       this.filteredDayEventsSource.next(dayEvents);
     });
-    this.filteredDayEvents$.subscribe(filteredDayEvents =>
-      this._filteredDayEvents = filteredDayEvents
-    );
-    this.hoveredEvent$.subscribe(hoveredEventInfo =>
-      this._hoveredEvent = hoveredEventInfo
-    );
-    this.clickedEvent$.subscribe(clickedEventInfo =>
-      this._clickedEvent = clickedEventInfo
-    );
-    this.sidebarEvent$.subscribe(sidebarEventInfo =>
-      this._sidebarEvent = sidebarEventInfo
-    );
-    this.categHash$.subscribe(categHash => {
-      this._categHash = categHash;
-      this.applyAllFilters();
-    });
-    this.tagHash$.subscribe(filterHash => {
-      this._tagHash = filterHash;
-      this.applyAllFilters();
-    });
-    this.locFilter$.subscribe(locSearch => {
-      this._locFilter = locSearch;
-      this.applyAllFilters();
-    });
-    this.dateFilter$.subscribe(dateHash => {
-      this._dateFilter = dateHash;
-      this.applyAllFilters();
-    });
-    this.timeFilter$.subscribe(timeHash => {
-      this._timeFilter = timeHash;
-      this.applyAllFilters();
-    });
-    // Initialize filters
+
+    // hoveredEvent
+    this.hoveredEventSource = new Subject <GeoJson> ();
+    this.hoveredEvent$ = this.hoveredEventSource.asObservable();
+    this.hoveredEvent$.subscribe(hoveredEventInfo => this._hoveredEvent = hoveredEventInfo);
+
+    // clickedEvent
+    this.clickedEventSource = new Subject <GeoJson> ();
+    this.clickedEvent$ = this.clickedEventSource.asObservable();
+    this.clickedEvent$.subscribe(clickedEventInfo => this._clickedEvent = clickedEventInfo);
+
+    // sidebarEvent
+    this.sidebarEventSource = new Subject <GeoJson> ();
+    this.sidebarEvent$ = this.sidebarEventSource.asObservable();
+    this.sidebarEvent$.subscribe(sidebarEventInfo => this._sidebarEvent = sidebarEventInfo);
+
+    // categHash
+    this.categHashSource = new BehaviorSubject <any> ({});
+    this.categHash$ = this.categHashSource.asObservable();
+    this.categHash$.subscribe(categHash => { this._categHash = categHash; this.applyAllFilters(); });
+
+    // tagHash
+    this.tagHashSource = new BehaviorSubject <any> ({});
+    this.tagHash$ = this.tagHashSource.asObservable();
+    this.tagHash$.subscribe(filterHash => { this._tagHash = filterHash; this.applyAllFilters(); });
+
+    // locFilter
+    this.locFilterSource = new Subject <string> ();
+    this.locFilter$ = this.locFilterSource.asObservable();
+    this.locFilter$.subscribe(locSearch => { this._locFilter = locSearch; this.applyAllFilters(); });
+
+    // dateFilter
+    this.dateFilterSource = new Subject <any> ();
+    this.dateFilter$ = this.dateFilterSource.asObservable();
+    this.dateFilter$.subscribe(dateHash => { this._dateFilter = dateHash; this.applyAllFilters(); });
+
+    // timeFilter
+    this.timeFilterSource = new Subject <any> ();
+    this.timeFilter$ = this.timeFilterSource.asObservable();
+    this.timeFilter$.subscribe(timeHash => { this._timeFilter = timeHash; this.applyAllFilters(); });
+
+    // Initialize variables
     this.getCategories().subscribe(categs => {
-      // initialize categories
+      // initialize filters
       this.categs = categs;
       this.resetFilters();
-      // Populate event containers
-      this.updateEvents(new Date(),[true,true,true]);
+      // populate event containers
+      this.updateEvents(new Date(),true,true,true);
+      // set current date
       this.setSelectedDate(new Date());
-      // Initiailize view variables
-      this.determineView();
+      // initiailize view variables
+      let view; if(this.isMapView()) { view = ViewState.map; }
+      else if(this.isMonthView()) { view = ViewState.month; }
+      else if(this.isWeekView()) { view = ViewState.week; }
+      else if(this.isThreeDayView()) { view = ViewState.threeday; }
+      this.setCurrentView(view);
       this.storeLastView(ViewState.month);
     });
+
   }
 
   // View Getters and Setters //
 
-  determineView() {
-    let prev = this._currentView;
-    let next = this._currentView;
-    if(this.router.url.startsWith("/map"))
-      { next = ViewState.map; }
-    else if(this.router.url.startsWith("/calendar/month"))
-      { next = ViewState.month; }
-    else if(this.router.url.startsWith("/calendar/week"))
-      { next = ViewState.week; }
-    else if(this.router.url.startsWith("/calendar/three-day"))
-      { next = ViewState.threeday; }
-    this._currentView = next;
-    this.setCurrentView(next);
-    if(next != prev) {
-      this._lastView = prev
-      this.storeLastView(prev);
-    }
-  }
-
-  isMapView() {
-    return this.router.url.startsWith("/map")
-  }
-  isCalendarView() {
-    return this.router.url.startsWith("/calendar")
-  }
-  isMonthView() {
-    return this.router.url.startsWith("/calendar/month")
-  }
-  isWeekView() {
-    return this.router.url.startsWith("/calendar/week")
-  }
-  isThreeDayView() {
-    return this.router.url.startsWith("/calendar/three-day")
-  }
+  isMapView() { return this.router.url.startsWith("/map") }
+  isCalendarView() { return this.router.url.startsWith("/calendar") }
+  isMonthView() { return this.router.url.startsWith("/calendar/month") }
+  isWeekView() { return this.router.url.startsWith("/calendar/week") }
+  isThreeDayView() { return this.router.url.startsWith("/calendar/three-day") }
 
   setCurrentView(view: ViewState) {
     this.currentViewSource.next(view);
@@ -272,6 +250,7 @@ export class EventService {
   } retrieveLastView(){ return this._lastView; }
 
   // Day Getters and Setters //
+
   setVisibleDays(visibleDays: CalendarDay[]){
     this.visibleDaysSource.next(visibleDays);
   } getVisibleDays(){ return this._visibleDays; }
@@ -315,29 +294,29 @@ export class EventService {
     this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
   }
 
-  // UPDATE DATE SPAN //
+  // UPDATE DATE SPAN - Call whenever the visible days change!! //
 
-  // Call whenever date span of view is changed
+  // Change the span of visible dates (provide post-update date and view)
   changeDateSpan(newDate: Date, newView : ViewState) {
+    // if date changed
     if(newDate != this._selectedDate) {
-      // month
-      let sameMonth = moment(this._selectedDate).isSame(moment(newDate),'month');
-      // week
-      let sameWeek = moment(this._selectedDate).isSame(moment(newDate),'week');
-      // three day
-      let prevDate = moment(this._selectedDate).startOf('day');
-      let numDaysDiff = prevDate.diff(moment().startOf('day'), 'days') % 3;
-      let threeDayStart = prevDate.clone().subtract(numDaysDiff,'d');
-      let threeDayEnd = threeDayStart.clone().add(3,'d');
-      let sameThreeDay = moment(newDate).isSameOrAfter(threeDayStart) && moment(newDate).isBefore(threeDayEnd);
-      // updates
-      this.updateEvents(newDate,[!sameMonth,!sameWeek,!sameThreeDay]);
+      // determine whether new date is in the same view spans as current date
+      let sameMonth = this._dateService.inSameMonth(newDate,this._selectedDate);
+      let sameWeek = this._dateService.inSameWeek(newDate,this._selectedDate);
+      let sameThreeDay = this._dateService.inSameThreeDay(newDate,this._selectedDate);
+      // update the event collections (only if new event collections are needed)
+      this.updateEvents(newDate, !sameMonth, !sameWeek, !sameThreeDay);
+      // update current date
       this.setSelectedDate(newDate);
+      // reset date span filters
       this.resetDateFilter();
     }
+    // if view changed
     if(newView != this._currentView) {
+      // update view variables
       this.storeLastView(this._currentView);
       this.setCurrentView(newView);
+      // reset all filters
       this.resetFilters();
     }
   }
@@ -345,61 +324,56 @@ export class EventService {
   // EVENT RETRIEVAL //
 
   // Retrieve eventsURL
-  private getEventsURL(): string {
-    return `${this.eventsUrl}/`;
-  }
-
-  // Retrieve events by event id
-  getEventById(id: string): GeoJson {
-    return this._monthEvents.features.find((e: GeoJson) => e.id == id);
-  }
+  private getEventsURL(): string { return `${this.eventsUrl}/`; }
 
   // Retrieve events by date
-  getEventsByDate(date: Date): string {
+  private getEventsByDate(date: Date): string {
     let dt = moment(date);
     const d = dt.format('D'), m = dt.format('MMM'), y = dt.format('YYYY');
     return `${this.eventsUrl}/search?date=${d}%20${m}%20${y}`;
   }
 
+  // Retrieve events by event id
+  getEventById(id: string): GeoJson { return this._monthEvents.features.find((e: GeoJson) => e.id == id); }
+
   // EVENT UPDATES //
 
   // Update all event containers
-  updateEvents(date: Date, calendarOpts: boolean[]): void {
-    // reset calendar events
-    if(calendarOpts[0]) this.monthEventsSource.next(new FeatureCollection([]));
-    if(calendarOpts[1]) this.weekEventsSource.next(new FeatureCollection([]));
-    if(calendarOpts[2]) this.threeDayEventsSource.next(new FeatureCollection([]));
-    // update day events
+  private updateEvents(date: Date, updateMonth: boolean, updateWeek: boolean, updateThreeDay: boolean): void {
+    // temporarily reset calendar events (avoid confusing users with incorrect events displayed)
+    if(updateMonth) this.monthEventsSource.next(new FeatureCollection([]));
+    if(updateWeek) this.weekEventsSource.next(new FeatureCollection([]));
+    if(updateThreeDay) this.threeDayEventsSource.next(new FeatureCollection([]));
+    // update day events (map)
     this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(dayEvents => {
       this.dayEventsSource.next(dayEvents);
-      // categories
-      this.initCategories();
-      this.allCategories();
+      this.updateCategories(); this.allCategories();
     });
-    // update other event collections
+    // update other events (calendar)
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      if(calendarOpts[0]) this.monthEventsSource.next(this.filterByMonth(allEvents, date));
-      if(calendarOpts[1]) this.weekEventsSource.next(this.filterByWeek(allEvents, date));
-      if(calendarOpts[2]) this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
-      // categories
-      this.initCategories();
-      this.allCategories();
+      if(updateMonth) this.monthEventsSource.next(this.filterByMonth(allEvents, date));
+      if(updateWeek) this.weekEventsSource.next(this.filterByWeek(allEvents, date));
+      if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
+      this.updateCategories(); this.allCategories();
     });
   }
 
   // Filter events by a date span
-  private filterByDateSpan(allEvents: FeatureCollection, startDate: Date, endDate: Date) {
+  private filterByDateSpan(allEvents: FeatureCollection, startDate: Moment, endDate: Moment) {
+    // filter according to start and end dates
     let filteredEvents = new FeatureCollection([]);
     allEvents.features.forEach(el => {
-      let d = moment(el.properties.start_time).toDate();
-      if (d >= startDate && d <= endDate)
+      let d = moment(el.properties.start_time);
+      if (this._dateService.isBetween(d,startDate,endDate))
         filteredEvents.features.push(el);
     });
+    // sort filtered events by start time
     filteredEvents.features.sort(function(a, b) {
       a = a["properties"]["start_time"];
       b = b["properties"]["start_time"];
       return a<b ? -1 : a>b ? 1 : 0;
     });
+    // add a property checking whether event is first on a given day
     let prevDate = null;
     filteredEvents.features.forEach(el => {
       let d = moment(el.properties.start_time);
@@ -413,32 +387,31 @@ export class EventService {
   private filterByMonth(allEvents: FeatureCollection, date: Date){
     // determine first day and last day to start displaying events
     let firstDay = moment(date).startOf('month').startOf('week');
-    if(new Date() > firstDay.toDate()) { firstDay = moment(new Date()); }
     let lastDay = moment(date).endOf('month').endOf('week');
+    if(new Date() > firstDay.toDate()) { firstDay = moment(new Date()); }
     // filter by day span
-    return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
+    return this.filterByDateSpan(allEvents, firstDay, lastDay);
   }
 
   // Filter events by week
   private filterByWeek(allEvents: FeatureCollection, date: Date){
     // determine first day and last day to start displaying events
     let firstDay = moment(date).startOf('week');
-    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
     let lastDay = moment(date).endOf('week');
+    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
     // filter by day span
-    return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
+    return this.filterByDateSpan(allEvents, firstDay, lastDay);
   }
 
   // Filter events by three days
   private filterByThreeDays(allEvents: FeatureCollection, date: Date){
     // determine first and last day to start displaying events
-    let numDaysDiff = moment(date).startOf('day').diff(moment().startOf('day'), 'days');
-    let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
-    let firstDay = moment(date).clone().startOf('day').add(-1*dayOfGroup, 'days');
-    let lastDay = firstDay.clone().add(3, 'days');
+    let bounds = this._dateService.getViewBounds(date, ViewState.threeday);
+    console.log(bounds);
+    let firstDay = bounds[0], lastDay = bounds[1];
     if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
     // filter by day span
-    return this.filterByDateSpan(allEvents, firstDay.toDate(), lastDay.toDate());
+    return this.filterByDateSpan(allEvents, firstDay, lastDay);
   }
 
   // REST OF THIS FILE HANDLES FILTERS //
@@ -472,45 +445,26 @@ export class EventService {
     'in','it','its','place','places','room','rooms','that',
     'the','hall','building','ucla', '•', '-' ];
 
+  // get categories from the server
+  private getCategories(): Observable<any> {
+    return this.http.get<any>(this.categoriesUrl);
+  }
+
   // Filter Getters and Setters //
 
   // reset to defaults
   resetFilters(){
     this.clearTags();
-    this.initCategories();
+    this.updateCategories();
     this.allCategories();
-    this.setTimeFilter(0,1439);
     this.setLocationFilter("");
-    // date filter
+    // 12:00 AM - 11:59 PM
+    this.setTimeFilter(0,1439);
     this.resetDateFilter();
   }
 
-  resetDateFilter() {
-    let start = new Date(), end = new Date();
-    switch(this._currentView){
-      case ViewState.month:
-        start = moment(this._selectedDate).startOf('month').startOf('week').toDate();
-        end = moment(this._selectedDate).endOf('month').endOf('week').toDate();
-        break;
-      case ViewState.week:
-        start = moment(this._selectedDate).startOf('week').toDate();
-        end = moment(this._selectedDate).endOf('week').toDate();
-        break;
-      case ViewState.threeday:
-        let date = moment(this._selectedDate).startOf('day');
-        let numDaysDiff = date.diff(moment().startOf('day'), 'days') % 3;
-        start = date.clone().subtract(numDaysDiff,'d').toDate();
-        end = moment(start).clone().add(2,'d').toDate();
-        break;
-    }
-    this.setDateFilter(start, end);
-  }
-
-  // GET categories from the server
-  getCategories(): Observable<any> { return this.http.get<any>(this.categoriesUrl); }
-
-  // Initialize category hash (all selected)
-  private initCategories() {
+  // Update category hash
+  private updateCategories() {
     // maps store counts of events that fulfill each category
     let dayMap = this.getCategoryMap(this._dayEvents.features, this.categs.categories);
     let monthMap = this.getCategoryMap(this._monthEvents.features, this.categs.categories);
@@ -561,15 +515,6 @@ export class EventService {
     return eventMap;
   }
 
-  // reset all tags to be false
-  clearTags() {
-    this._tagHash = {
-      'happening now': false, 'upcoming': false,
-      'on-campus': false, 'off-campus': false, 'nearby': false,
-      'morning': false, 'afternoon': false, 'evening': false, 'free food': false };
-    this.tagHashSource.next(this._tagHash);
-  }
-
   // reset all categories to be false
   clearCategories() {
     for (let categ in this._categHash)
@@ -580,6 +525,7 @@ export class EventService {
 
   // reset all categories (in range) to be true
   allCategories() {
+    // get category mappings
     let categMap = {};
     switch(this._currentView) {
       case ViewState.map:
@@ -591,12 +537,39 @@ export class EventService {
       case ViewState.threeday:
         categMap = this.getCategoryMap(this._threeDayEvents.features, Object.keys(this._categHash)); break;
     }
+    // update categHash accordinglys
     for (let categ in this._categHash) {
       let categName = categ.toLowerCase();
       if (categName == 'all' || categMap[categName] > 0)
         this._categHash[categName].selected = true;
     }
+    // update categ hash
     this.categHashSource.next(this._categHash);
+  }
+
+  // Toggle category
+  toggleCategory(categ: string) {
+    if (this._categHash[categ] == undefined)
+      return
+    // apply the category
+    if(categ == 'all'){
+      if(this._categHash['all'].selected) this.clearCategories();
+      else this.allCategories();
+    } else {
+      this._categHash['all'].selected = false;
+      this._categHash[categ].selected = !this._categHash[categ].selected;
+    }
+    // update category hash
+    this.categHashSource.next(this._categHash);
+  }
+
+  // reset all tags to be false
+  clearTags() {
+    this._tagHash = {
+      'happening now': false, 'upcoming': false,
+      'on-campus': false, 'off-campus': false, 'nearby': false,
+      'morning': false, 'afternoon': false, 'evening': false, 'free food': false };
+    this.tagHashSource.next(this._tagHash);
   }
 
   // Toggle filter tags
@@ -605,27 +578,11 @@ export class EventService {
       return
     // apply the tag
     this._tagHash[tag] = !this._tagHash[tag];
-    // unselect selected tags in the same group
+    // unselect tags in the same group
     for (let t of this._tagGroups[this._tagGroupMap[tag]]) {
     if (t != tag && this._tagHash[t]) { this._tagHash[t] = false; } }
     // update tag hash
     this.tagHashSource.next(this._tagHash)
-  }
-
-  // Toggle category
-  toggleCategory(categ: string) {
-    if (this._categHash[categ] == undefined)
-      return
-    if(categ == 'all'){
-      if(this._categHash['all'].selected) this.clearCategories();
-      else this.allCategories();
-    }
-    else {
-      this._categHash['all'].selected = false;
-      this._categHash[categ].selected = !this._categHash[categ].selected;
-    }
-    // update category hash
-    this.categHashSource.next(this._categHash);
   }
 
   // Date Filter //
@@ -634,6 +591,12 @@ export class EventService {
     this._dateFilter = [lowerBound, upperBound];
     this.dateFilterSource.next(this._dateFilter);
   } getDateFilter(){ return this._dateFilter; }
+
+  // reset date filter on date change
+  private resetDateFilter() {
+    let bounds = this._dateService.getViewBounds(this._selectedDate, this._currentView);
+    this.setDateFilter(bounds[0].toDate(), bounds[1].toDate());
+  }
 
   // Time Filter //
 
@@ -651,8 +614,8 @@ export class EventService {
 
   // Filter Application //
 
-  // Apply filters to day, week, and month
-  applyAllFilters() {
+  // Apply filters to day, week, three day, or month
+  private applyAllFilters() {
     switch(this._currentView){
       case ViewState.map:
         this.applyFiltersToSelection(this._dayEvents.features, this.filteredDayEventsSource); break;
@@ -671,19 +634,21 @@ export class EventService {
     let tempEvents = new FeatureCollection([]);
     // iterate through events
     for (let event of inputFeatures) {
-      // both map and calendar check tags and categories
+      // both map and calendar view check tags and categories
       let passesTags = this.passesTags(event);
       let passesCategories = this.passesCategories(event);
-      // calendar view checks date, time, location\
+      // calendar view checks date, time, location
       let passesDate = true, passesTime = true, passesLocation = true;
       if(this._currentView != ViewState.map) {
         if(this._dateFilter) passesDate = this.passesDate(event);
         if(this._timeFilter) passesTime = this.passesTime(event);
         if(this._locFilter) passesLocation = this.passesLocation(event);
       }
+      // ensure event has passed all checks
       if (passesTags && passesCategories && passesDate && passesTime && passesLocation)
         tempEvents.features.push(event);
     }
+    // update provided outputSource
     outputSource.next(tempEvents);
   }
 
@@ -701,22 +666,16 @@ export class EventService {
     return categoryCheck;
   }
 
-  // Filter Check: tags/buttons
+  // Filter Check: tag buttons
   private passesTags(event: GeoJson): boolean {
     let tagCheck = true;
     for (let tagList of this._tagLists) {
       let passesTag = false, tagUsed = false;
       for (let tag of tagList) {
-        if (this._tagHash[tag]) {
-          tagUsed = true;
-        }
-        if (this._tagHash[tag] && this.checkTag(tag, event)) {
-          passesTag = true; break;
-        }
+        if (this._tagHash[tag]) tagUsed = true;
+        if (this._tagHash[tag] && this.checkTag(tag, event)) passesTag = true; break;
       }
-      if (tagUsed && !passesTag) {
-        tagCheck = false; break;
-      }
+      if (tagUsed && !passesTag) { tagCheck = false; break; }
     }
     return tagCheck;
   }
@@ -724,8 +683,8 @@ export class EventService {
   // Filter Check: date
   private passesDate(event: GeoJson): boolean {
     // compare event date to the date filter being applied
-    let eventDate = moment(event.properties.start_time).toDate();
-    return (eventDate >= moment(this._dateFilter[0]).startOf('day').toDate() && eventDate <= moment(this._dateFilter[1]).add('1','days').toDate());
+    let eventDate = moment(event.properties.start_time);
+    return this._dateService.isBetween(eventDate, moment(this._dateFilter[0]).startOf('day'), moment(this._dateFilter[1]).add(1,'days'));
   }
 
   // Filter Check: time

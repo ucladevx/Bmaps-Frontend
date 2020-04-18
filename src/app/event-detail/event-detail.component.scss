@@ -36,7 +36,7 @@
 	word-break: break-word;
 	overflow-y: scroll;
 	flex: 1;
-  flex-basis: 100px; /* doesn't matter the amount, somehow prevents vertical stretching of the page */
+  flex-basis: 100px;
 }
 
 .event-image {
@@ -101,7 +101,7 @@
 .dropdown {
 	text-align: center;
 	position: relative;
-  	display: inline-block;
+  display: inline-block;
 }
 
 .dd-item {
@@ -141,7 +141,9 @@
 	background: #7c7c7c;
 }
 
+/* mobile css */
 @media only screen and (min-width: 768px) {
+
 	.event-details {
 		position: unset;
 	}
@@ -158,4 +160,5 @@
 	#left-arrow {
 		color: #656565;
 	}
+
 }

@@ -1,50 +1,52 @@
 @import url("https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css");
 
 :host {
-    display: flex;
-    flex: 1;
+  display: flex;
+  flex: 1;
 }
 
 /*Override*/
-/* It wont apply the CSS properly to a text injected through innerHTML, so https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling */
 :host ::ng-deep .mapboxgl-popup-content {
-    position: relative;
-    background: #fff;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-    padding: 0;
-    pointer-events: auto;
-    cursor: pointer;
-    text-align: center;
-    max-width: 14em;
+  position: relative;
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+  padding: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  text-align: center;
+  max-width: 14em;
 }
 
 /*Override*/
 :host ::ng-deep .mapboxgl-popup {
-    font-family: 'Lato', sans-serif;
-    max-width: 150;
-    line-height: 150%;
-    text-align: center;
-    padding: inherit;
+  font-family: 'Lato', sans-serif;
+  max-width: 150;
+  line-height: 150%;
+  text-align: center;
+  padding: inherit;
 }
 
 #map {
+  width: 100%;
+  bottom: 0;
+  top: 0;
+  height: 100%;
+  padding-left: 0;
+}
+
+/* mobile css */
+@media only screen and (min-width: 768px) {
+
+  #map {
+    position: absolute;
     width: 100%;
     bottom: 0;
     top: 0;
     height: 100%;
     padding-left: 0;
-}
+  }
 
-@media only screen and (min-width: 768px) {
-    #map {
-        position: absolute;
-        width: 100%;
-        bottom: 0;
-        top: 0;
-        height: 100%;
-        padding-left: 0;
-    }
 }
 
 :host ::ng-deep .popupContainer, :host ::ng-deep .backupPopupContainer {

@@ -91,8 +91,9 @@ export class SidebarComponent implements OnInit {
       });
 
       this._eventService.filteredMonthEvents$.subscribe(events => {
-        if(this._eventService.isMonthView())
+        if(this._eventService.isMonthView()) {
           this.view = ViewState.month; this.updateSidebarEvents();
+        }
       });
 
       this._eventService.clickedEvent$.subscribe(clickedEventInfo => {

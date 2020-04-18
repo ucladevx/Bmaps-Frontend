@@ -12,13 +12,9 @@ import { DateService } from './services/date.service';
 import { LocationService } from './services/location.service'
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [],
   providers: [DateService, LocationService]
 })
 
-export class SharedModule {
-
-}
+export class SharedModule { }

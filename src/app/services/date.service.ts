@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GeoJson } from '../map';
+import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 
 // Constants used as filter rules
@@ -25,6 +26,7 @@ const EVENING_END = 4;
 
 @Injectable()
 export class DateService {
+
   constructor() {}
 
   // Test whether two dates should be considered equivalent
@@ -37,17 +39,16 @@ export class DateService {
     return moment(date).isSame(moment(), 'day');
   }
 
-  // For a given date, retrieve time formatted i.e.     "9:30 AM"
+  // Various Date Formats //
+
   formatTime(date: Date | string): string {
     return moment(date).format("h:mmA");
   }
 
-  // For a given date, retrieve date formatted i.e.     "October 13, 2022"
   formatDate(date: Date | string): string {
     return moment(date).format("MMMM D, YYYY");
   }
 
-  // For a given event, format the date and time i.e.   "October 13, 2022 9:30 AM - 10:30 AM"
   formatEventDate(event: GeoJson): string {
     let start: string = event.properties.start_time;
     let end: string = event.properties.end_time;
@@ -67,16 +68,101 @@ export class DateService {
     return moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
   }
 
-  // For a given event, format the start and end date for Google calendar export (as an array)    i.e.  ["20201231T193000", "20201231T223000"]
   formatEventCalendar(event: GeoJson): string {
     let dates = this.formatEventCalendarStart(event) + "/" + this.formatEventCalendarEnd(event);
     return dates;
   }
 
-  formatGoogleCalendar(event: GeoJson): string {
-    if (typeof event == 'undefined') {
-      return "";
+  // Checking Date Spans //
+
+  // Test whether given date is between start and end date (inclusive)
+  isBetween(mmt, start, end): boolean {
+    let val = moment(mmt).valueOf();
+    return (val >= moment(start).valueOf() && val <= moment(end).valueOf());
+  }
+
+  // Given a date, return the upper and lower bounds for three day view
+  getViewBounds(date, view: ViewState) {
+    let d = moment(date);
+    let start = moment(date), end = moment(date);
+    switch(view){
+      case ViewState.month:
+        start = d.clone().startOf('month').startOf('week');
+        end = d.clone().endOf('month').endOf('week');
+        break;
+      case ViewState.week:
+        start = d.clone().startOf('week');
+        end = d.clone().endOf('week');
+        break;
+      case ViewState.threeday:
+        start = d.clone().subtract((d.diff(moment().startOf('day'), 'days') % 3), 'd');
+        end = start.clone().add(2, 'd').endOf('day');
+        break;
     }
+    return [start, end];
+  }
+
+  // Test whether given date is in the same three-day range as another date
+  inSameThreeDay(newDate, checkDate) {
+    let check = moment(checkDate).startOf('day');
+    let bounds = this.getViewBounds(check,ViewState.threeday);
+    return this.isBetween(newDate, bounds[0], bounds[1]);
+  }
+
+  // Test whether given date is in the same month as another date
+  inSameMonth(newDate, checkDate) {
+    return moment(newDate).isSame(moment(checkDate),'month');
+  }
+
+  // Test whether given date is in the same week as another date
+  inSameWeek(newDate, checkDate) {
+    return moment(newDate).isSame(moment(checkDate),'week');
+  }
+
+  // Checking Filter Tags //
+
+  // Test whether a given date qualifies as 'happening now'
+  isHappeningNow(dateStr: string): boolean {
+    let range = {
+      start: moment(),
+      end: moment().add(HAPPENINGNOW_LEN, 'hours')
+    };
+    return this.isBetween(moment(dateStr), range.start, range.end);
+  }
+
+  // Test whether a given date qualifies as 'upcoming'
+  isUpcoming(dateStr: string): boolean {
+    let range = {
+      start: moment().add(UPCOMING_START, 'hours'),
+      end: moment().add(UPCOMING_START + UPCOMING_LEN, 'hours')
+    };
+    return this.isBetween(moment(dateStr), range.start, range.end);
+  }
+
+  // Test whether a given date qualifies as 'morning'
+  isMorning(dateStr: string): boolean {
+    let hour = moment(dateStr).hour();
+    return hour >= MORNING_START && hour < MORNING_END;
+  }
+
+  // Test whether a given date qualifies as 'afternoon'
+  isAfternoon(dateStr: string): boolean {
+    let hour = moment(dateStr).hour();
+    return hour >= AFTERNOON_START && hour < AFTERNOON_END;
+  }
+
+  // Test whether a given date qualifies as 'evening'
+  isEvening(dateStr: string): boolean {
+    let hour = moment(dateStr).hour();
+    return (hour >= EVENING_START && hour < 24) || (hour >= 0 && hour < EVENING_END);
+  }
+
+  // Other Formatting //
+
+  // Format Google Calendar
+  formatGoogleCalendar(event: GeoJson): string {
+    if (typeof event == 'undefined')
+      return "";
     let href = "http://www.google.com/calendar/render?action=TEMPLATE&text=" + event.properties.name + "&dates=" + this.formatEventCalendar(event) + "&details=" + event.properties.description + "&location=" + event.properties.place.name + "&trp=false&sprop=&sprop=name:"
     return href;
   }
@@ -120,48 +206,6 @@ DTSTART;TZID=America/Los_Angeles:` + this.formatEventCalendarStart(event) +
 `\nEND:VEVENT
 END:VCALENDAR`;
     return data;
-  }
-
-  // Test whether given mmt is between start and end (inclusive)
-  checkRange(mmt, start, end): boolean {
-    let val = mmt.valueOf();
-    return (val >= start.valueOf() && val <= end.valueOf());
-  }
-
-  // Test whether a given date qualifies as 'happening now'
-  isHappeningNow(dateStr: string): boolean {
-    let range = {
-      start: moment(),
-      end: moment().add(HAPPENINGNOW_LEN, 'hours')
-    };
-    return this.checkRange(moment(dateStr), range.start, range.end);
-  }
-
-  // Test whether a given date qualifies as 'upcoming'
-  isUpcoming(dateStr: string): boolean {
-    let range = {
-      start: moment().add(UPCOMING_START, 'hours'),
-      end: moment().add(UPCOMING_START + UPCOMING_LEN, 'hours')
-    };
-    return this.checkRange(moment(dateStr), range.start, range.end);
-  }
-
-  // Test whether a given date qualifies as 'morning'
-  isMorning(dateStr: string): boolean {
-    let hour = moment(dateStr).hour();
-    return hour >= MORNING_START && hour < MORNING_END;
-  }
-
-  // Test whether a given date qualifies as 'afternoon'
-  isAfternoon(dateStr: string): boolean {
-    let hour = moment(dateStr).hour();
-    return hour >= AFTERNOON_START && hour < AFTERNOON_END;
-  }
-
-  // Test whether a given date qualifies as 'evening'
-  isEvening(dateStr: string): boolean {
-    let hour = moment(dateStr).hour();
-    return (hour >= EVENING_START && hour < 24) || (hour >= 0 && hour < EVENING_END);
   }
 
 }

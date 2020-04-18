@@ -1,8 +1,8 @@
 @import "../../gvars.scss";
 
 .navbar {
-    z-index: 5000;
-    height: var(--navbar-height);
+  z-index: 5000;
+  height: var(--navbar-height);
 }
 
 .navbar-text {
@@ -20,30 +20,28 @@
 }
 
 .navbar-default{
-    background: rgb(71,71,71);
-    border-color: $default_border_color;
+  background: rgb(71,71,71);
+  border-color: $default_border_color;
 }
 
 #install-button{
   display: none;
 }
 
-.navbar-default .navbar-nav > .active{
-    background: rgb(216,216,216);
-}
+.navbar-default .navbar-nav > .active,
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-    background: rgb(216,216,216);
+  background: rgb(216,216,216);
 }
 
 .navbar-default .navbar-nav>li>a {
-    color: rgb(128,128,128);
-    font-weight: 600;
+  color: rgb(128,128,128);
+  font-weight: 600;
 }
 
 .no-display{
-    display: none !important;
+  display: none !important;
 }
 
 .navbar-brand {
@@ -53,8 +51,8 @@
 }
 
 #navbar-brand{
-    color: #59dbd6;
-    font-weight: 600;
+  color: #59dbd6;
+  font-weight: 600;
 }
 
 #brand-name{
@@ -62,13 +60,13 @@
 }
 
 .navbar-toggler {
-    align-items: center;
-    width: 10%;
-    height: 40px;
-    padding: 0;
-    cursor: pointer;
-    position: absolute;
-    top: 8px;
+  align-items: center;
+  width: 10%;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
 }
 
 .navbar-toggler-right {
@@ -82,9 +80,9 @@
 }
 
 .navbar-toggler i {
-    padding: 5px;
-    color: #9d9d9d;
-    font-size: 20px;
+  padding: 5px;
+  color: #9d9d9d;
+  font-size: 20px;
 }
 
 .filter-collapse {
@@ -92,13 +90,13 @@
 }
 
 #filter-dropdown-toggle {
-    color: #9d9d9d;
-    font-size: 25px;
+  color: #9d9d9d;
+  font-size: 25px;
 }
 
 #filter-dropdown-toggle-2 {
-    color: #9d9d9d;
-    font-size: 20px;
+  color: #9d9d9d;
+  font-size: 20px;
 }
 
 .d-md-none{
@@ -110,8 +108,8 @@
 }
 
 .nav-logo{
-    display: inline-block;
-    outline: 0;
+  display: inline-block;
+  outline: 0;
 }
 
 button {
@@ -119,8 +117,8 @@ button {
 }
 
 .weather-icon{
-    height: 20px;
-    display: inline-block;
+  height: 20px;
+  display: inline-block;
 }
 
 .navbar-collapse {
@@ -165,45 +163,122 @@ button {
   background: #53D7D7;
 }
 
-@media (max-width: 768px){
-
+ul li {
+  border-radius: 100px;
 }
 
+li a {
+  border-radius: 100px;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+.views-switch {
+  background: #fff;
+  border: 1px solid $default_border_color;
+  position: relative;
+  display: inline-block;
+  box-sizing: content-box;
+  overflow: visible;
+  width: 92px;
+  height: 30px;
+  padding: 0px;
+  margin: 0px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
+  transition: 0.3s ease-out all;
+  -webkit-transition: 0.3s ease-out all;
+  top: -1px;
+}
+
+.views-switch small {
+  background: rgb(71,71,71);
+  border-radius: 45px;
+  width: 48px;
+  height: 24px;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: 0.3s ease-out all;
+  -webkit-transition: 0.3s ease-out all;
+  z-index: 1000;
+}
+
+.views-switch.checked {
+  background: white;
+  border-color: white;
+}
+
+.views-switch.checked small {
+  left: 41px;
+}
+
+.views-switch .calendar-switch {
+  display:block;
+  position: absolute;
+  right: 10%;
+  top: 4%;
+  z-index: 0;
+  color:#A9A9A9;
+}
+
+.views-switch .map-switch {
+  display:none;
+  z-index: 0;
+  color:#fff;
+  position: absolute;
+  top: 4%;
+  left: 10%;
+}
+
+.views-switch.checked .calendar-switch {
+  display:none;
+}
+
+.views-switch.checked .map-switch {
+  display:block;
+}
+
+/* mobile css */
 @media (min-width: 768px){
+
   .navbar-toggler {
-      display: none !important;
+    display: none !important;
   }
 
   .navbar-nav {
-      -webkit-box-orient: horizontal;
-      -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-      flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
   }
 
   .navbar-collapse {
-      display: flex !important;
-      width: 100%;
-      margin: 0;
+    display: flex !important;
+    width: 100%;
+    margin: 0;
   }
 
   .navbar-collapse.menu {
-      padding: 0;
-      position: static;
-      top: 0;
-      flex-direction: right;
+    padding: 0;
+    position: static;
+    top: 0;
+    flex-direction: right;
   }
 
   .navbar-toggleable-md{
-      -webkit-box-orient: horizontal;
-      -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-      flex-direction: row;
-      -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
   }
 
   .d-md-none-important {
@@ -213,82 +288,5 @@ button {
   .mobile-calendar-view-switch {
     display: flex;
   }
+
 }
-
-ul li {
-    border-radius: 100px;
-}
-
-li a {
-    border-radius: 100px;
-}
-
-a:hover{
-    text-decoration: none;
-}
-
-.views-switch {
-    background: #fff;
-    border: 1px solid $default_border_color;
-    position: relative;
-    display: inline-block;
-    box-sizing: content-box;
-    overflow: visible;
-    width: 92px;
-    height: 30px;
-    padding: 0px;
-    margin: 0px 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
-    transition: 0.3s ease-out all;
-    -webkit-transition: 0.3s ease-out all;
-    top: -1px;
-  }
-
-  .views-switch small {
-    background: rgb(71,71,71);
-    border-radius: 45px;
-    width: 48px;
-    height: 24px;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    transition: 0.3s ease-out all;
-    -webkit-transition: 0.3s ease-out all;
-    z-index: 1000;
-  }
-  .views-switch.checked {
-    background: white;
-    border-color: white;
-  }
-  .views-switch.checked small {
-    left: 41px;
-  }
-
-  .views-switch .calendar-switch {
-    display:block;
-    position: absolute;
-    right: 10%;
-    top: 4%;
-    z-index: 0;
-    color:#A9A9A9;
-  }
-
-  .views-switch .map-switch {
-    display:none;
-     z-index: 0;
-    color:#fff;
-    position: absolute;
-    top: 4%;
-    left: 10%;
-  }
-
-  .views-switch.checked .calendar-switch {
-    display:none;
-  }
-
-  .views-switch.checked .map-switch {
-    display:block;
-
-  }

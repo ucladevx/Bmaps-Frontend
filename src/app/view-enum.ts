@@ -1,6 +1,1 @@
-export enum ViewState {
-  map,
-  threeday,
-  week,
-  month
-}
+export enum ViewState { map, threeday, week, month }

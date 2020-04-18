@@ -23,7 +23,7 @@ export class AppComponent {
   }
 
   onPress(): void {
-      this.pressed$.next(!this.pressed);
+    this.pressed$.next(!this.pressed);
   }
 
   onSidebarRouterActivate(component: any): void {
@@ -32,7 +32,5 @@ export class AppComponent {
       component.pressed$ = this.pressed$.asObservable();
     }
   }
-
-
 
 }
