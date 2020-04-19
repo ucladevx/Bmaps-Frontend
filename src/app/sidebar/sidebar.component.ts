@@ -95,6 +95,12 @@ export class SidebarComponent implements OnInit {
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.clickedEvent = clickedEventInfo;
       this.scrollToEvent(clickedEventInfo,'nearest');
+      if(!clickedEventInfo) {
+        let _this = this;
+        setTimeout(function(){
+          _this.scrollToFirstEventOf(_this._eventService.getSelectedDate())
+        }, 0.1);
+      }
     });
 
     // whenever hovered event changes, scroll to event
@@ -170,7 +176,7 @@ export class SidebarComponent implements OnInit {
 
   // scroll to first event in the given date
   scrollToFirstEventOf(date: Date) {
-    if(this._eventService.getSidebarEvent() == undefined) {
+    if(!this.clickedEvent) {
       let _this = this;
       let scrollEv = this.filteredEvents.find(function(e) {
         return _this._dateService.equalDates(e.properties.start_time, date);
