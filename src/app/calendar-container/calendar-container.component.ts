@@ -48,7 +48,7 @@ export class CalendarContainerComponent implements OnInit {
   ngOnInit() {
 
     // whenever current date changes, update view and week number
-    this._eventService.selectedDate$.subscribe( date => {
+    this._eventService.selectedDate$.subscribe(date => {
       this.viewDateChange(date);
       this.enumerateWeek(this._eventService.getCurrentView())
     });
@@ -109,13 +109,21 @@ export class CalendarContainerComponent implements OnInit {
         break;
       // change to three day view
       case ViewState.threeday :
-        newDate = moment(this._dateService.getViewBounds(newDate,calendarView)[0]).startOf('d').add(delta*3,'d');
+        newDate = this._dateService.getViewBounds(newDate,calendarView).startDate.startOf('d').add(delta*3,'d').toDate();
         if(this._dateService.inSameThreeDay(newDate, currDate)) newDate = currDate;
         break;
     }
     // update date span and week number
     this._eventService.changeDateSpan(newDate, calendarView);
     this.enumerateWeek(calendarView);
+    // update scroll
+    if(calendarView == ViewState.week || calendarView == ViewState.threeday) {
+      let _this = this;
+      setTimeout(function(){
+        this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+        document.getElementById("scrollable").scrollTop = this.scrollPosition;
+      }, 1);
+    }
   }
 
   // calculate the week number

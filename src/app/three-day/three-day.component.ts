@@ -63,7 +63,10 @@ export class ThreeDayComponent implements OnInit {
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 
-    this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+    setTimeout(function(){
+      this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+      document.getElementById("scrollable").scrollTop = this.scrollPosition;
+    }, 1);
 
     this._eventService.setCurrentView(ViewState.threeday);
 
@@ -104,8 +107,6 @@ export class ThreeDayComponent implements OnInit {
       this.days.push(weekDay);
     }
     this._eventService.setVisibleDays(this.days);
-    this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
-    document.getElementById("scrollable").scrollTop = this.scrollPosition;
   }
 
   //retrieve events for the given week

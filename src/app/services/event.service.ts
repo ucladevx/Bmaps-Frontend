@@ -29,6 +29,7 @@ export class EventService {
 
   // USEFUL URLS
   private eventsUrl = "api/events";
+  private allEvents;
   private categoriesUrl = "api/events/categories";
   private categs;
 
@@ -214,21 +215,24 @@ export class EventService {
     this.timeFilter$.subscribe(timeHash => { this._timeFilter = timeHash; this.applyAllFilters(); });
 
     // Initialize variables
-    this.getCategories().subscribe(categs => {
-      // initialize filters
-      this.categs = categs;
-      this.resetFilters();
-      // populate event containers
-      this.updateEvents(new Date(),true,true,true);
-      // set current date
-      this.setSelectedDate(new Date());
-      // initiailize view variables
-      let view; if(this.isMapView()) { view = ViewState.map; }
-      else if(this.isMonthView()) { view = ViewState.month; }
-      else if(this.isWeekView()) { view = ViewState.week; }
-      else if(this.isThreeDayView()) { view = ViewState.threeday; }
-      this.setCurrentView(view);
-      this.storeLastView(ViewState.month);
+    this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
+      this.allEvents = allEvents;
+      this.getCategories().subscribe(categs => {
+        // initialize filters
+        this.categs = categs;
+        this.resetFilters();
+        // populate event containers
+        this.updateEvents(new Date(),true,true,true);
+        // set current date
+        this.setSelectedDate(new Date());
+        // initiailize view variables
+        let view; if(this.isMapView()) { view = ViewState.map; }
+        else if(this.isMonthView()) { view = ViewState.month; }
+        else if(this.isWeekView()) { view = ViewState.week; }
+        else if(this.isThreeDayView()) { view = ViewState.threeday; }
+        this.setCurrentView(view);
+        this.storeLastView(ViewState.month);
+      });
     });
 
   }
@@ -340,22 +344,12 @@ export class EventService {
 
   // Update all event containers
   private updateEvents(date: Date, updateMonth: boolean, updateWeek: boolean, updateThreeDay: boolean): void {
-    // temporarily reset calendar events (avoid confusing users with incorrect events displayed)
-    if(updateMonth) this.monthEventsSource.next(new FeatureCollection([]));
-    if(updateWeek) this.weekEventsSource.next(new FeatureCollection([]));
-    if(updateThreeDay) this.threeDayEventsSource.next(new FeatureCollection([]));
-    // update day events (map)
-    this.http.get <FeatureCollection> (this.getEventsByDate(date)).subscribe(dayEvents => {
-      this.dayEventsSource.next(dayEvents);
-      this.updateCategories(); this.allCategories();
-    });
-    // update other events (calendar)
-    this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
-      if(updateMonth) this.monthEventsSource.next(this.filterByMonth(allEvents, date));
-      if(updateWeek) this.weekEventsSource.next(this.filterByWeek(allEvents, date));
-      if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(allEvents, date));
-      this.updateCategories(); this.allCategories();
-    });
+    // update all events
+    this.dayEventsSource.next(this.filterByDateSpan(this.allEvents, moment(date).startOf('d'), moment(date).endOf('d')));
+    if(updateMonth) this.monthEventsSource.next(this.filterByMonth(this.allEvents, date));
+    if(updateWeek) this.weekEventsSource.next(this.filterByWeek(this.allEvents, date));
+    if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(this.allEvents, date));
+    this.updateCategories(); this.allCategories();
   }
 
   // Filter events by a date span
@@ -602,7 +596,7 @@ export class EventService {
   // Date Filter //
 
   setDateFilter(lowerBound: Date, upperBound: Date){
-    this._dateFilter = [lowerBound, upperBound];
+    this._dateFilter = {start: lowerBound, end: upperBound};
     this.dateFilterSource.next(this._dateFilter);
   } getDateFilter(){ return this._dateFilter; }
 
@@ -615,7 +609,7 @@ export class EventService {
   // Time Filter //
 
   setTimeFilter(lowerBound: number, upperBound: number){
-    this._timeFilter = [lowerBound, upperBound];
+    this._timeFilter = {start: lowerBound, end: upperBound};
     this.timeFilterSource.next(this._timeFilter);
   } getTimeFilter(){ return this._timeFilter; }
 
@@ -698,7 +692,7 @@ export class EventService {
   private passesDate(event: GeoJson): boolean {
     // compare event date to the date filter being applied
     let eventDate = moment(event.properties.start_time);
-    return this._dateService.isBetween(eventDate, moment(this._dateFilter[0]).startOf('day'), moment(this._dateFilter[1]).add(1,'days'));
+    return this._dateService.isBetween(eventDate, moment(this._dateFilter.start).startOf('day'), moment(this._dateFilter.end).add(1,'days'));
   }
 
   // Filter Check: time
@@ -706,7 +700,7 @@ export class EventService {
     // compare event time to the time filter being applied
     let eventTime = moment(event.properties.start_time);
     let minCount = eventTime.hour()*60 + eventTime.minutes();
-    return (minCount >= this._timeFilter[0] && minCount <= this._timeFilter[1]);
+    return (minCount >= this._timeFilter.start && minCount <= this._timeFilter.end);
   }
 
   // Filter Check: location

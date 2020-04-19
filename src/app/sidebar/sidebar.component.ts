@@ -58,6 +58,8 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
 
+    this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+
     // whenever current view changes, update view and sidebar events
     this._eventService.currentView$.subscribe(view => {
       this.view = view;
@@ -112,7 +114,6 @@ export class SidebarComponent implements OnInit {
 
     // initialize sidebar events
     this.updateSidebarEvents();
-    this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
 
   }
 
@@ -133,7 +134,7 @@ export class SidebarComponent implements OnInit {
     let _this = this;
     setTimeout(function(){
       _this.scrollToFirstEventOf(_this._eventService.getSelectedDate())
-    }, 1000);
+    }, 1);
   }
 
   // hides sidebar when event on sidebar is clicked to expand event details
@@ -170,8 +171,9 @@ export class SidebarComponent implements OnInit {
   // scroll to first event in the given date
   scrollToFirstEventOf(date: Date) {
     if(this._eventService.getSidebarEvent() == undefined) {
+      let _this = this;
       let scrollEv = this.filteredEvents.find(function(e) {
-        return this._dateService.equalDates(e.properties.start_time, date);
+        return _this._dateService.equalDates(e.properties.start_time, date);
       });
       if(scrollEv != undefined) this.scrollToEvent(scrollEv,'start');
       else this.scrollToEvent(this.filteredEvents[0],'start');

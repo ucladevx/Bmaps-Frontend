@@ -1,11 +1,16 @@
-<div id="categ-div" class="btn-group">
-  <button *ngIf="showToggleButton" id="categ-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()" [disabled]="events.length == 0">
-    Filters <span class="caret"></span>
+<div id="filter-div" class="btn-group">
+  <!-- dropdown button -->
+  <button *ngIf="showToggleButton" id="toggle-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()" [disabled]="events.length == 0">
+    Filters
+    <span class="caret"></span>
   </button>
+  <!-- filters menu -->
   <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
+    <!-- filters subheader -->
     <div *ngIf="tagHash" class="section-header"> Filters
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
+    <!-- filter tags -->
     <div *ngIf="tagHash" class="filters-wrapper">
       <div *ngIf="this._dateService.isToday()" class="filter-group time-filter-group">
         <div class="btn-group">
@@ -51,10 +56,12 @@
         </div>
       </div>
     </div>
+    <!-- category subheader -->
     <div *ngIf="categHash" class="section-header">
       Categories
       <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
     </div>
+    <!-- category filters -->
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
@@ -65,11 +72,9 @@
               <img class="checkbox" width="16px" src="assets/images/check.svg"/>
             </div>
           </div>
-          <ng-template #unchecked>
-            <div>
-              <img class="checkbox" width="16px" src="assets/images/box.svg" />
-            </div>
-          </ng-template>
+          <ng-template #unchecked><div>
+            <img class="checkbox" width="16px" src="assets/images/box.svg" />
+          </div></ng-template>
           {{categHash[categKey].formattedCategory}}
           </a>
         </li>

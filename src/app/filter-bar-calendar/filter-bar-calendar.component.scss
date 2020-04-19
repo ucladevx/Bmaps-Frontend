@@ -5,7 +5,7 @@
   -webkit-appearance: none;
 }
 
-#categ-btn {
+#toggle-btn {
   width: 100%;
   height: 40px;
   margin: 0 auto;
@@ -13,7 +13,7 @@
   font-size: 20px;
 }
 
-#categ-div {
+#filter-div {
   width: 100%;
   flex-direction: column;
   margin: 0 auto;
@@ -373,5 +373,5 @@ a.clear-all-btn:active {
   #mobile-exclude{
     display: none;
   }
-  
+
 }

@@ -1,33 +1,45 @@
-<div id="categ-div" class="btn-group">
-  <button *ngIf="showToggleButton" id="categ-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()">
+<div id="filter-div" class="btn-group">
+  <!-- dropdown button -->
+  <button *ngIf="showToggleButton" id="toggle-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()">
     Filters <span class="caret"></span>
   </button>
+  <!-- filters menu -->
   <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
+    <!-- filters subheader -->
     <div *ngIf="tagHash" class="filters-header">Filters
       <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
     </div>
     <div class="filters-content">
+      <!-- location filter -->
       <div class="section-container">
         <div class="section-header">Location</div>
-        <input #locationBar class="form-control" type="text" id="location" placeholder="Enter a Location" value={{getLoc()}} autocomplete="off" (input)="setLocationFilter(locationBar.value)">
+        <input #locationBar class="form-control" type="text" id="location" placeholder="Enter a Location"
+          value={{getLoc()}} autocomplete="off" (input)="setLocationFilter(locationBar.value)">
         <input class="clear-button" type="button" value="X" (click)="clearLoc()">
       </div>
+      <!-- date filter -->
       <div class="section-container">
         <div class="section-header">Date</div>
         <div class="section-input">
-          <input #startDate type="date" class="form-control short-input" id="start-date" value="{{getStartDate()}}" (change)="setDateFilter(startDate.value, endDate.value)">
+          <input #startDate type="date" class="form-control short-input" id="start-date"
+            value="{{getStartDate()}}" (change)="setDateFilter(startDate.value, endDate.value)">
           <div class="to">to</div>
-          <input #endDate type="date" class="form-control short-input" id="end-date" value="{{getEndDate()}}" (change)="setDateFilter(startDate.value, endDate.value)">
+          <input #endDate type="date" class="form-control short-input" id="end-date"
+            value="{{getEndDate()}}" (change)="setDateFilter(startDate.value, endDate.value)">
         </div>
       </div>
+      <!-- time filter -->
       <div class="section-container">
         <div class="section-header">Time</div>
         <div class="section-input">
-          <input #startTime type="time" class="form-control short-input" id="start-time" value="{{getStartTime()}}" (change)="setTimeFilter(startTime.value, endTime.value)">
+          <input #startTime type="time" class="form-control short-input" id="start-time"
+            value="{{getStartTime()}}" (change)="setTimeFilter(startTime.value, endTime.value)">
           <div class="to">to</div>
-          <input #endTime type="time" class="form-control short-input" id="end-time" value="{{getEndTime()}}" (change)="setTimeFilter(startTime.value, endTime.value)">
+          <input #endTime type="time" class="form-control short-input" id="end-time"
+            value="{{getEndTime()}}" (change)="setTimeFilter(startTime.value, endTime.value)">
         </div>
       </div>
+      <!-- filter tags -->
       <div class="section-container">
         <div class="section-header">Tags</div>
         <div *ngIf="tagHash" class="filters-wrapper">
@@ -56,64 +68,30 @@
         </div>
       </div>
     </div>
+    <!-- category subheader -->
     <div *ngIf="categHash" class="categ-section-header">
-        Categories
-        <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
-      </div>
-      <div *ngIf="categHash" class="categories-wrapper">
-        <ul class="categories-list" role="menu">
-          <li *ngFor="let categKey of objectKeys(categHash)">
-            <span *ngIf="this._eventService.isMonthView()">
-            <a *ngIf="categHash[categKey].numEventsMonth != undefined && categHash[categKey].numEventsMonth > 0"
-               [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
-               (click)="categoryClicked(categKey)">
-            <div class="checkbox-container">
-              <div *ngIf="categHash[categKey].selected; else unchecked">
-                <img class="checkbox" width="16px" src="assets/images/check.svg"/>
-              </div>
+      Categories
+      <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
+    </div>
+    <!-- category filters -->
+    <div *ngIf="categHash" class="categories-wrapper">
+      <ul class="categories-list" role="menu">
+        <li *ngFor="let categKey of objectKeys(categHash)">
+          <a *ngIf="categHash[categKey].numEventsMonth != undefined && displayCategory(categKey)"
+             [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+             (click)="categoryClicked(categKey)">
+          <div class="checkbox-container">
+            <div *ngIf="categHash[categKey].selected; else unchecked">
+              <img class="checkbox" width="16px" src="assets/images/check.svg"/>
             </div>
-            <ng-template #unchecked>
-                <div>
-                  <img class="checkbox" width="16px" src="assets/images/box.svg" />
-                </div>
-            </ng-template>
-            {{categHash[categKey].formattedCategory}}
+          </div>
+          <ng-template #unchecked><div>
+            <img class="checkbox" width="16px" src="assets/images/box.svg" />
+          </div></ng-template>
+          {{categHash[categKey].formattedCategory}}
           </a>
-            </span>
-            <span *ngIf="this._eventService.isWeekView()">
-            <a *ngIf="categHash[categKey].numEventsWeek != undefined && categHash[categKey].numEventsWeek > 0"
-               [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
-               (click)="categoryClicked(categKey)">
-            <div class="checkbox-container">
-              <div *ngIf="categHash[categKey].selected; else unchecked">
-                <img class="checkbox" width="16px" src="assets/images/check.svg"/>
-              </div>
-            </div>
-            <ng-template #unchecked>
-                <div>
-                  <img class="checkbox" width="16px" src="assets/images/box.svg" />
-                </div>
-            </ng-template>
-            {{categHash[categKey].formattedCategory}}</a>
-            </span>
-            <span *ngIf="this._eventService.isThreeDayView()">
-            <a *ngIf="categHash[categKey].numEventsThreeDay != undefined && categHash[categKey].numEventsThreeDay > 0"
-               [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
-               (click)="categoryClicked(categKey)">
-            <div class="checkbox-container">
-              <div *ngIf="categHash[categKey].selected; else unchecked">
-                <img class="checkbox" width="16px" src="assets/images/check.svg"/>
-              </div>
-            </div>
-            <ng-template #unchecked>
-                <div>
-                  <img class="checkbox" width="16px" src="assets/images/box.svg" />
-                </div>
-            </ng-template>
-            {{categHash[categKey].formattedCategory}}</a>
-            </span>
-          </li>
-        </ul>
-      </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
