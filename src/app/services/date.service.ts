@@ -30,8 +30,8 @@ export class DateService {
   constructor() {}
 
   // Test whether two dates should be considered equivalent
-  equalDates(a: Date | string, b: Date | string): boolean {
-    return moment(a).isSame(b, 'day');
+  equalDates(a, b): boolean {
+    return moment(a).startOf('day').isSame(moment(b), 'day');
   }
 
   // Test whether a given date is today
@@ -99,14 +99,14 @@ export class DateService {
         end = start.clone().add(2, 'd').endOf('day');
         break;
     }
-    return [start, end];
+    return { startDate: start, endDate: end };
   }
 
   // Test whether given date is in the same three-day range as another date
   inSameThreeDay(newDate, checkDate) {
     let check = moment(checkDate).startOf('day');
     let bounds = this.getViewBounds(check,ViewState.threeday);
-    return this.isBetween(newDate, bounds[0], bounds[1]);
+    return this.isBetween(newDate, bounds.startDate, bounds.endDate);
   }
 
   // Test whether given date is in the same month as another date

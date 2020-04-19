@@ -1,14 +1,16 @@
 @import "../../gvars.scss";
 
 .navbar {
-  z-index: 5000;
   height: var(--navbar-height);
+  background: rgb(71,71,71);
+  z-index: 5000;
+  border-color: $default_border_color;
 }
 
 .navbar-text {
   color: white;
-  margin-right: 10px;
   outline: 0;
+  margin-right: 10px;
 }
 
 .navbar-text.active {
@@ -19,54 +21,14 @@
   cursor: pointer;
 }
 
-.navbar-default{
-  background: rgb(71,71,71);
-  border-color: $default_border_color;
-}
-
-#install-button{
-  display: none;
-}
-
-.navbar-default .navbar-nav > .active,
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {
-  background: rgb(216,216,216);
-}
-
-.navbar-default .navbar-nav>li>a {
-  color: rgb(128,128,128);
-  font-weight: 600;
-}
-
-.no-display{
-  display: none !important;
-}
-
-.navbar-brand {
-  padding: 0;
-  margin: 0;
-  margin-left: 5px;
-}
-
-#navbar-brand{
-  color: #59dbd6;
-  font-weight: 600;
-}
-
-#brand-name{
-  margin-left: 9px;
-}
-
 .navbar-toggler {
-  align-items: center;
   width: 10%;
   height: 40px;
-  padding: 0;
-  cursor: pointer;
   position: absolute;
   top: 8px;
+  cursor: pointer;
+  align-items: center;
+  padding: 0;
 }
 
 .navbar-toggler-right {
@@ -80,9 +42,57 @@
 }
 
 .navbar-toggler i {
-  padding: 5px;
   color: #9d9d9d;
   font-size: 20px;
+  padding: 5px;
+}
+
+.navbar .navbar-nav > .active,
+.navbar .navbar-nav > .active > a,
+.navbar .navbar-nav > .active > a:hover,
+.navbar .navbar-nav > .active > a:focus {
+  background: rgb(216,216,216);
+}
+
+.navbar .navbar-nav > li > a {
+  color: rgb(128,128,128);
+  font-weight: 600;
+}
+
+.navbar-brand {
+  padding: 0;
+  margin: 0;
+  margin-left: 5px;
+}
+
+#navbar-brand{
+  color: #59dbd6;
+  font-weight: 600;
+}
+
+.nav-logo{
+  display: inline-block;
+  outline: 0;
+}
+
+#brand-name{
+  margin-left: 9px;
+}
+
+button {
+  outline: 0;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+#install-button {
+  display: none;
+}
+
+#feedback-button a {
+  color: white;
 }
 
 .filter-collapse {
@@ -99,21 +109,12 @@
   font-size: 20px;
 }
 
-.d-md-none{
-  width: 70%;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  left: 15%;
+ul li {
+  border-radius: 100px;
 }
 
-.nav-logo{
-  display: inline-block;
-  outline: 0;
-}
-
-button {
-  outline: 0;
+li a {
+  border-radius: 100px;
 }
 
 .weather-icon{
@@ -122,24 +123,24 @@ button {
 }
 
 .navbar-collapse {
-  margin: .5rem -1rem;
   width: 100%;
+  margin: .5rem -1rem;
 }
 
 .navbar-collapse.menu {
-  padding: 0 1rem .5rem;
   position: absolute;
   top: var(--navbar-height);
-  margin-top: 0;
   background: rgb(71,71,71);
   z-index: 5000;
+  padding: 0 1rem .5rem;
+  margin-top: 0;
 }
 
 .navbar-collapse.filter {
   position: absolute;
+  top: var(--navbar-height);
   margin-bottom: -.5rem;
   margin-top: 0;
-  top: var(--navbar-height);
   border-bottom: $default_border_style;
 }
 
@@ -163,48 +164,36 @@ button {
   background: #53D7D7;
 }
 
-ul li {
-  border-radius: 100px;
-}
-
-li a {
-  border-radius: 100px;
-}
-
-a:hover{
-  text-decoration: none;
-}
-
 .views-switch {
-  background: #fff;
-  border: 1px solid $default_border_color;
-  position: relative;
-  display: inline-block;
-  box-sizing: content-box;
-  overflow: visible;
   width: 92px;
   height: 30px;
+  display: inline-block;
+  position: relative;
+  top: -1px;
+  background: #fff;
+  box-sizing: content-box;
+  overflow: visible;
   padding: 0px;
   margin: 0px 10px;
-  border-radius: 20px;
   cursor: pointer;
+  border-radius: 20px;
+  border: 1px solid $default_border_color;
   box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
   transition: 0.3s ease-out all;
   -webkit-transition: 0.3s ease-out all;
-  top: -1px;
 }
 
 .views-switch small {
-  background: rgb(71,71,71);
-  border-radius: 45px;
   width: 48px;
   height: 24px;
   position: absolute;
   top: 3px;
   left: 3px;
+  background: rgb(71,71,71);
+  border-radius: 45px;
+  z-index: 1000;
   transition: 0.3s ease-out all;
   -webkit-transition: 0.3s ease-out all;
-  z-index: 1000;
 }
 
 .views-switch.checked {
@@ -217,29 +206,37 @@ a:hover{
 }
 
 .views-switch .calendar-switch {
-  display:block;
+  display: block;
   position: absolute;
   right: 10%;
   top: 4%;
-  z-index: 0;
   color:#A9A9A9;
+  z-index: 0;
 }
 
 .views-switch .map-switch {
-  display:none;
-  z-index: 0;
-  color:#fff;
+  display: none;
   position: absolute;
   top: 4%;
   left: 10%;
+  color:#fff;
+  z-index: 0;
 }
 
 .views-switch.checked .calendar-switch {
-  display:none;
+  display: none;
 }
 
 .views-switch.checked .map-switch {
-  display:block;
+  display: block;
+}
+
+.d-md-none{
+  width: 70%;
+  position: relative;
+  left: 15%;
+  margin: 0;
+  padding: 0;
 }
 
 /* mobile css */
@@ -258,15 +255,14 @@ a:hover{
 
   .navbar-collapse {
     display: flex !important;
-    width: 100%;
     margin: 0;
   }
 
   .navbar-collapse.menu {
-    padding: 0;
     position: static;
     top: 0;
     flex-direction: right;
+    padding: 0;
   }
 
   .navbar-toggleable-md{
@@ -283,10 +279,6 @@ a:hover{
 
   .d-md-none-important {
     display: none !important;
-  }
-
-  .mobile-calendar-view-switch {
-    display: flex;
   }
 
 }

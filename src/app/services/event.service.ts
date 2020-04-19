@@ -407,10 +407,25 @@ export class EventService {
   private filterByThreeDays(allEvents: FeatureCollection, date: Date){
     // determine first and last day to start displaying events
     let bounds = this._dateService.getViewBounds(date, ViewState.threeday);
-    let firstDay = bounds[0], lastDay = bounds[1];
+    let firstDay = bounds.startDate, lastDay = bounds.endDate;
     if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
     // filter by day span
     return this.filterByDateSpan(allEvents, firstDay, lastDay);
+  }
+
+  // Helper function to validate images //
+
+  // validate image
+  checkImage(imageSrc) {
+    if(imageSrc.includes("undefined"))
+      return false;
+    var img = new Image();
+    try {
+      img.src = imageSrc;
+      return true;
+    } catch(err) {
+      return false;
+    }
   }
 
   // REST OF THIS FILE HANDLES FILTERS //
@@ -594,7 +609,7 @@ export class EventService {
   // reset date filter on date change
   private resetDateFilter() {
     let bounds = this._dateService.getViewBounds(this._selectedDate, this._currentView);
-    this.setDateFilter(bounds[0].toDate(), bounds[1].toDate());
+    this.setDateFilter(bounds.startDate.toDate(), bounds.endDate.toDate());
   }
 
   // Time Filter //

@@ -125,7 +125,7 @@ export class CalendarContainerComponent implements OnInit {
     let weekCount, secondWeekCount;
     if (view == ViewState.threeday) {
       let bounds = this._dateService.getViewBounds(firstDate,view);
-      firstDate = bounds[0]; lastDate = bounds[1];
+      firstDate = bounds.startDate; lastDate = bounds.endDate;
     }
     for(let i = this.zeroWeeks.length-1; i>=0; i--){
       weekCount = Math.floor(firstDate.diff(this.zeroWeeks[i],'days') / 7);
