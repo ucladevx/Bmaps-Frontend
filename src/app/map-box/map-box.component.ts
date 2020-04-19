@@ -1,18 +1,18 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import * as mapboxgl from 'mapbox-gl';
 import { GeoJson, FeatureCollection } from '../map';
 import { environment } from '../../environments/environment';
 import { DateService } from '../services/date.service';
 import { EventService } from '../services/event.service';
 import { LocationService } from '../services/location.service';
 import { ViewState } from '../view-enum';
+import * as mapboxgl from 'mapbox-gl';
 
 @Component({
-    selector: 'app-map-box',
-    templateUrl: './map-box.component.html',
-    styleUrls: ['./map-box.component.scss'],
-    providers: [ DateService ]
+  selector: 'app-map-box',
+  templateUrl: './map-box.component.html',
+  styleUrls: ['./map-box.component.scss'],
+  providers: [ DateService ]
 })
 
 export class MapBoxComponent implements OnInit {
@@ -29,6 +29,7 @@ export class MapBoxComponent implements OnInit {
   keyUrl: string;
 
   // state
+  private events: FeatureCollection;
   selectedEvent: any = null;
   private lastClickEvent: MouseEvent;
 
@@ -48,26 +49,25 @@ export class MapBoxComponent implements OnInit {
     offset: 20 // offset upward from pin
   }).setHTML('<div id="backupPopupBody"></div>');
 
-  private events: FeatureCollection;
-
   constructor(private router: Router, private _dateService: DateService, private _eventService: EventService, private _locationService: LocationService) {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
   ngOnInit() {
 
-    // update view every time the events change
+    // whenever day events change, update local events
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
       this.events = eventCollection;
       this.updateSource();
     });
 
+    // whenever current view changes, update local events
     this._eventService.currentView$.subscribe(view => {
       this.events = this._eventService.getFilteredDayEvents();
       this.updateSource();
     });
 
-    // ease to event pin when event is clicked
+    // whenever clicked event changes, ease to event pin
     this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
       this.selectEvent(clickedEventInfo);
       if(clickedEventInfo == null){
@@ -80,7 +80,7 @@ export class MapBoxComponent implements OnInit {
       }
     });
 
-    // bold event popup when event is displayed in sidebar
+    // whenever sidebar event changes, bold event popup
     this._eventService.sidebarEvent$.subscribe(sidebarEventInfo => {
       this.boldPopup(sidebarEventInfo);
     });
@@ -96,7 +96,7 @@ export class MapBoxComponent implements OnInit {
     if(this._eventService.getSidebarEvent() == null)
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
 
-    //Add 3D buildings, arrowcontrols, and on-hover popup
+    // add 3D buildings, arrowcontrols, and on-hover popup
     _promiseMapLoad.then(() => {
       this.threeDDisplay();
       this.addArrowControls();
@@ -108,7 +108,7 @@ export class MapBoxComponent implements OnInit {
       });
     });
 
-    // Add events pins
+    // add events pins
     let promise_map_pin = Promise.all([_promiseMapLoad, _promisePinLoad]);
     promise_map_pin.then((promiseReturns) => {
       let image = promiseReturns[1];
@@ -123,7 +123,7 @@ export class MapBoxComponent implements OnInit {
       this.map.addImage('bluePin', image);
     });
 
-    // Add user location pin
+    // add user location pin
     let promise_map_userloc_pins = Promise.all([_promiseMapLoad, _promiseGetUserLocation, _promisePinLoad, _promiseBluePinLoad]);
     promise_map_userloc_pins.then(() => { /* this.addPinToLocation("currloc", this.lat, this.lng, 'redPin', .08); */ });
 

@@ -134,7 +134,7 @@ export class SidebarComponent implements OnInit {
     let _this = this;
     setTimeout(function(){
       _this.scrollToFirstEventOf(_this._eventService.getSelectedDate())
-    }, 1);
+    }, 0.1);
   }
 
   // hides sidebar when event on sidebar is clicked to expand event details

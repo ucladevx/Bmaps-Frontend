@@ -12,21 +12,6 @@
   flex-direction: column;
 }
 
-.selector {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  background: #7a7a7a;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-}
-
-.selector i {
-  font-size: 34px;
-  cursor: pointer;
-}
-
 .calendar-header {
   width: 100%;
   display: flex;
@@ -48,6 +33,13 @@
   border-right: $default_border_style;
 }
 
+.calendar-header > .short-abbr {
+  display: none;
+  background: #54D8D8;
+  color: #fff;
+  font-size: 13px;
+}
+
 .calendar-month {
   width: 100%;
   display: flex;
@@ -58,13 +50,13 @@
 }
 
 .calendar-day {
-  cursor: default;
+  display: block;
   position: relative;
   flex-basis: 14.2857%; /* 100/7 */
-  display: block;
-  border-bottom: $default_border_style;
-  color: #bebebe;
   background: #fff;
+  color: #bebebe;
+  cursor: default;
+  border-bottom: $default_border_style;
 }
 
 .calendar-day:not(:nth-child(7n)) {
@@ -72,27 +64,10 @@
 }
 
 .calendar-day span {
+  float: left;
+  clear: left;
   text-align: center;
   margin: 5%;
-  float: left;
-  clear: left;
-}
-
-.calendar-day-event {
-  float: left;
-  clear: left;
-  position: absolute;
-  top: 30px;
-  font-size: 12px;
-  margin: 1%;
-  padding: 0;
-  list-style-type: none;
-  margin: 5%;
-}
-
-.calendar-day-event li {
-  line-height: 15px;
-  margin-bottom: 5px;
 }
 
 .calendar-day.in-current-month {
@@ -108,20 +83,30 @@
   font-weight: 900;
 }
 
-.calendar-header > .short-abbr {
-  display: none;
-  background: #54D8D8;
-  color: #fff;
-  font-size: 13px;
+.calendar-day-event {
+  position: absolute;
+  float: left;
+  clear: left;
+  top: 30px;
+  font-size: 12px;
+  margin: 1%;
+  padding: 0;
+  margin: 5%;
+  list-style-type: none;
+}
+
+.calendar-day-event li {
+  line-height: 15px;
+  margin-bottom: 5px;
 }
 
 .dot {
   height: 0.5rem;
   width: 0.5rem;
-  background: #59dbd6;
-  border-radius: 50%;
   display: none;
   position: relative;
+  background: #59dbd6;
+  border-radius: 50%;
 }
 
 /* mobile css */
@@ -133,15 +118,14 @@
     height: 60px;
   }
 
-  .calendar-header span:not(.last-child) {
-    border-right: 0px solid $default_border_color;
-  }
-
   .calendar-header > .long-abbr {
     display: none;
   }
 
-  /* make day text centered */
+  .calendar-header span:not(.last-child) {
+    border-right: 0px solid $default_border_color;
+  }
+
   .calendar-day {
     display: flex;
     flex-direction: column;

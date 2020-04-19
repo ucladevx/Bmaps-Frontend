@@ -8,46 +8,33 @@
 
 /*Override*/
 :host ::ng-deep .mapboxgl-popup-content {
+  max-width: 14em;
   position: relative;
   background: #fff;
-  border-radius: 3px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.10);
   padding: 0;
-  pointer-events: auto;
   cursor: pointer;
   text-align: center;
-  max-width: 14em;
+  pointer-events: auto;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.10);
 }
 
 /*Override*/
 :host ::ng-deep .mapboxgl-popup {
-  font-family: $default_font_family;
   max-width: 150;
+  font-family: $default_font_family;
   line-height: 150%;
   text-align: center;
   padding: inherit;
 }
 
 #map {
+  position: absolute;
   width: 100%;
+  height: 100%;
   bottom: 0;
   top: 0;
-  height: 100%;
   padding-left: 0;
-}
-
-/* mobile css */
-@media only screen and (min-width: 768px) {
-
-  #map {
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    top: 0;
-    height: 100%;
-    padding-left: 0;
-  }
-
 }
 
 :host ::ng-deep .popupContainer, :host ::ng-deep .backupPopupContainer {
@@ -61,27 +48,36 @@
 }
 
 :host ::ng-deep .popupDate, :host ::ng-deep .backupPopupDate {
-    color:  #FF3A3A;
-    font-size: 11;
+  color:  #FF3A3A;
+  font-size: 11;
 }
 
 :host ::ng-deep #resetButton {
-  right: 10px;
-  position: absolute;
-  top: 150px;
   width: 31px;
   height: 31px;
-  border-radius: 7px;
-  padding: 0;
-  border-style: none;
-  box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.1);
+  position: absolute;
+  right: 10px;
+  top: 150px;
   background: white;
   font-size: 20px;
   color: #333333;
+  padding: 0;
+  border-radius: 7px;
+  border-style: none;
   outline: none !important;
+  box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.1);
 }
 
 :host ::ng-deep #resetButton:hover {
   background: #F5F5F5;
   cursor: pointer;
+}
+
+/* mobile css */
+@media screen and (max-width: 768px) {
+
+  #map {
+    position: initial;
+  }
+
 }

@@ -363,10 +363,15 @@ export class EventService {
     });
     // sort filtered events by start time
     filteredEvents.features.sort(function(a, b) {
-      a = a["properties"]["start_time"];
-      b = b["properties"]["start_time"];
-      return a<b ? -1 : a>b ? 1 : 0;
+      let timeA = +new Date(a.properties.start_time);
+      let timeB = +new Date(b.properties.start_time);
+      if(timeA-timeB == 0){
+        let timeAA = +new Date(a.properties.end_time);
+        let timeBB = +new Date(b.properties.end_time);
+        return timeBB - timeAA;
+      } return timeA - timeB;
     });
+
     // add a property checking whether event is first on a given day
     let prevDate = null;
     filteredEvents.features.forEach(el => {

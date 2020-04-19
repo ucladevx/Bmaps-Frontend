@@ -79,7 +79,7 @@
 }
 
 .sidebar-event-img-container {
-  width: 70%;
+  width: 50%;
   display: inline-block;
   padding: 5px;
   margin-right: 20px;
@@ -93,7 +93,8 @@
 }
 
 .sidebar-event-details {
-  width: 100%;
+  width: 48%;
+  text-align: left;
   position: relative;
   display: inline-block;
   color: rgb(116,116,116);
@@ -167,15 +168,14 @@
 }
 
 /* mobile css */
-@media only screen and (min-width: 768px) {
+@media screen and (max-width: 768px) {
 
   .sidebar-event-img-container {
-    width: 50%;
+    width: 70%;
   }
 
   .sidebar-event-details {
-    width: 48%;
-    text-align: left;
+    width: 100%;
   }
 
 }

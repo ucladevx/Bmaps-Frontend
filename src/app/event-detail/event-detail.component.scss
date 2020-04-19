@@ -3,7 +3,7 @@
 .event-details {
 	height: 100%;
 	width: 100%;
-	position: fixed;
+	position: unset;
 	top: 0;
 	z-index: 200;
 	border-right: $default_border_style;
@@ -12,8 +12,8 @@
 .event-header {
 	height: 40px;
 	display: flex;
-	position: relative;
-	background: #494949;
+	position: unset;
+	background: #ffffff;
 	z-index: 600;
 	align-items: center;
 	border-bottom: $default_border_style;
@@ -22,7 +22,7 @@
 #left-arrow {
 	position: absolute;
 	left: 20px;
-	color: #d2d2d2;
+	color: #656565;
 	font-size: 24px;
 }
 
@@ -31,12 +31,7 @@
 }
 
 .header-text {
-	color: #e8e8e8;
-	font-size: 22px;
-	font-family: $default_font_family;
-	font-weight: bolder;
-	letter-spacing: 2px;
-	margin: auto;
+	display: none;
 }
 
 .event-body {
@@ -145,23 +140,28 @@
 }
 
 /* mobile css */
-@media only screen and (min-width: 768px) {
+@media screen and (max-width: 768px) {
 
 	.event-details {
-		position: unset;
+		position: fixed;
 	}
 
 	.event-header {
-		position: unset;
-		background: #ffffff;
+		position: relative;
+		background: #494949;
 	}
 
 	#left-arrow {
-		color: #656565;
+		color: #d2d2d2;
 	}
 
 	.header-text {
-		display: none;
+		color: #e8e8e8;
+		font-size: 22px;
+		font-family: $default_font_family;
+		font-weight: bolder;
+		letter-spacing: 2px;
+		margin: auto;
 	}
 
 }

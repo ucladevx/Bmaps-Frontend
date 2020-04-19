@@ -122,7 +122,7 @@ export class CalendarContainerComponent implements OnInit {
       setTimeout(function(){
         this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
         document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      }, 1);
+      }, 0.1);
     }
   }
 
