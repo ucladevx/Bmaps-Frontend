@@ -23,13 +23,22 @@ export class GoogleMapComponent implements OnInit {
     lng: -118.445320
   }
 
+  UCLA_BOUNDS = {
+    north: 34.079,
+    south: 34.056,
+    west: -118.46,
+    east: -118.428,
+  };
+
   options: google.maps.MapOptions = {
     // mapTypeId: 'hybrid',
     // zoomControl: false,
     // scrollwheel: false,
     // disableDoubleClickZoom: true,
-    // maxZoom: 15,
-    // minZoom: 8,
+    restriction: {
+      latLngBounds: this.UCLA_BOUNDS,
+      strictBounds: false,
+    },
   };
 
   markers = [];
@@ -58,21 +67,13 @@ export class GoogleMapComponent implements OnInit {
     // Step 1: just display markers for all the events in the database.
 
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
-      this.events = eventCollection;
-      // this.updateSource();
+
+      // this.events = ;
+      console.log(eventCollection);
+      this.updateSource(eventCollection);
     });
 
-    let eventList = [];
-    //iterate through all events
-    for(let eventIndex in this.events.features){
-      let ev = this.events.features[eventIndex];
-      //capture event location
-      let evLocation = JSON.stringify(ev["properties"]["place"]);
-      //compare event location to provided location
 
-      eventList.push(ev);
-      this.addMarker(ev.geometry.coordinates[1], ev.geometry.coordinates[0]);
-    }
 
 
     // for
@@ -151,7 +152,7 @@ export class GoogleMapComponent implements OnInit {
         text: 'Marker label ' + (this.markers.length + 1),
       },
       title: 'Marker title ' + (this.markers.length + 1),
-      options: { animation: google.maps.Animation.BOUNCE },
+      // options: { animation: google.maps.Animation.BOUNCE },
     })
   }
 
@@ -159,22 +160,38 @@ export class GoogleMapComponent implements OnInit {
     console.log(event)
   }
 
-  // updateSource(): void {
-  //   if (this.map == undefined || this.map.getSource('events') == undefined) return;
-  //   this.map.getSource('events').setData(this.events);
-  //   this.removePinsAndPopups();
-  //   if(this._eventService.getClickedEvent()){
-  //       this.selectEvent(this._eventService.getClickedEvent());
-  //       this.boldPopup(this._eventService.getClickedEvent());
-  //   } else {
-  //     this.map.easeTo({
-  //       center: [-118.445320, 34.066915],
-  //       zoom: 15,
-  //       pitch: 60,
-  //       bearing: 0
-  //     });
-  //   }
-  //   this.selectedEvent = null;
-  // }
+  updateSource(eventCollection : FeatureCollection): void {
+    // if (this.map == undefined || this.map.getSource('events') == undefined) return;
+    // this.map.getSource('events').setData(this.events);
+    this.events = eventCollection;
+
+    this.markers = [];
+
+    let eventList = [];
+    //iterate through all events
+    for(let eventIndex in this.events.features){
+      let ev = this.events.features[eventIndex];
+      //capture event location
+      let evLocation = JSON.stringify(ev["properties"]["place"]);
+      //compare event location to provided location
+
+      eventList.push(ev);
+      this.addMarker(ev.geometry.coordinates[1], ev.geometry.coordinates[0]);
+    }
+
+    // this.removePinsAndPopups();
+    // if(this._eventService.getClickedEvent()){
+    //     this.selectEvent(this._eventService.getClickedEvent());
+    //     this.boldPopup(this._eventService.getClickedEvent());
+    // } else {
+    //   this.map.easeTo({
+    //     center: [-118.445320, 34.066915],
+    //     zoom: 15,
+    //     pitch: 60,
+    //     bearing: 0
+    //   });
+    // }
+    // this.selectedEvent = null;
+  }
 
 }
