@@ -344,12 +344,21 @@ export class EventService {
 
   // Update all event containers
   private updateEvents(date: Date, updateMonth: boolean, updateWeek: boolean, updateThreeDay: boolean): void {
-    // update all events
-    this.dayEventsSource.next(this.filterByDateSpan(this.allEvents, moment(date).startOf('d'), moment(date).endOf('d')));
-    if(updateMonth) this.monthEventsSource.next(this.filterByMonth(this.allEvents, date));
-    if(updateWeek) this.weekEventsSource.next(this.filterByWeek(this.allEvents, date));
-    if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(this.allEvents, date));
-    this.updateCategories(); this.allCategories();
+    if(this.allEvents && this.allEvents.features.length > 0) {
+      // update all events
+      this.dayEventsSource.next(this.filterByDateSpan(this.allEvents, moment(date).startOf('d'), moment(date).endOf('d')));
+      if(updateMonth) this.monthEventsSource.next(this.filterByMonth(this.allEvents, date));
+      if(updateWeek) this.weekEventsSource.next(this.filterByWeek(this.allEvents, date));
+      if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(this.allEvents, date));
+      this.updateCategories(); this.allCategories();
+    }
+  }
+
+  // check if two event spans are equal
+  equalEventLists(e1: FeatureCollection, e2: FeatureCollection) {
+    if(!e1 || !e1.features) { if(!e2 || !e2.features) return true; else return false; }
+    if (e1.features.length != e2.features.length) return false;
+    return JSON.stringify(e1.features) == JSON.stringify(e2.features);
   }
 
   // Filter events by a date span

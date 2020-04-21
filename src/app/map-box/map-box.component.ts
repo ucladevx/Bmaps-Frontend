@@ -57,14 +57,19 @@ export class MapBoxComponent implements OnInit {
 
     // whenever day events change, update local events
     this._eventService.filteredDayEvents$.subscribe(eventCollection => {
-      this.events = eventCollection;
-      this.updateSource();
+      if(!(this.events && this._eventService.equalEventLists(this.events, eventCollection))) {
+        this.events = eventCollection;
+        this.updateSource();
+      }
     });
 
     // whenever current view changes, update local events
     this._eventService.currentView$.subscribe(view => {
-      this.events = this._eventService.getFilteredDayEvents();
-      this.updateSource();
+      let newEvents = this._eventService.getFilteredDayEvents();
+      if(!(this.events && this._eventService.equalEventLists(this.events, newEvents))) {
+        this.events = newEvents;
+        this.updateSource();
+      }
     });
 
     // whenever clicked event changes, ease to event pin
@@ -117,7 +122,6 @@ export class MapBoxComponent implements OnInit {
     });
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
-      this.updateSource();
       this._eventService.allCategories();
       let image = promiseReturns[1];
       this.map.addImage('bluePin', image);
@@ -149,6 +153,7 @@ export class MapBoxComponent implements OnInit {
 
   // update map graphics
   updateSource(): void {
+    console.log(this.events);
     if (this.map == undefined || this.map.getSource('events') == undefined)
       return;
     this.map.getSource('events').setData(this.events);
