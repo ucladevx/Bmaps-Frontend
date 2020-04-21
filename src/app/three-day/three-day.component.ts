@@ -7,6 +7,7 @@ import { DateService } from '../services/date.service';
 import { GeoJson } from '../map';
 import { CalendarDay } from '../services/event.service';
 import * as moment from 'moment';
+import { CalendarViewState } from '../calendar-view-enum';
 
 @Component({
   selector: 'app-three-day',
@@ -257,6 +258,31 @@ export class ThreeDayComponent implements OnInit {
   currentTime() {
     let now = moment();
     return this.convertTimeToPercent(now)+"%";
+  }
+
+
+  // same func as calendar-container component
+  /*changeDateSpan(delta: number, calendarView: CalendarViewState) : void{
+    this._viewService.changeDateSpan(delta, calendarView);
+    this.enumerateWeek(calendarView);
+  }*/
+
+  // on swipe left
+  onPanLeft() {
+    if (window.outerWidth <= 768) {
+      // only on mobile
+      this._viewService.changeDateSpan(1, CalendarViewState.threeday);
+
+    }
+  }
+
+  // on swipe right
+  onPanRight() {
+    if (window.outerWidth <= 768) {
+      // only on mobile
+      this._viewService.changeDateSpan(-1, CalendarViewState.threeday);
+
+    }
   }
 
   //convert time to top percentage in css
