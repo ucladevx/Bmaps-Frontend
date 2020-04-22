@@ -135,5 +135,5 @@ export class NavbarComponent implements OnInit {
     if(this._eventService.isMapView())
       return this._eventService.retrieveLastView();
   }
-  
+
 }

@@ -61,14 +61,17 @@
 .btn.filter-btn:hover {
   background: #59dbd6;
   color: #fff;
+  border: $default_border_style;
 }
 
 .btn.filter-btn.active {
   background: #4ad3d3;
+  border: $default_border_style;
 }
 
 .btn.filter-btn.active:hover {
   color: #ffffff;
+  border: $default_border_style;
 }
 
 .btn.filter-btn.disabled {

@@ -223,7 +223,7 @@ export class EventService {
         this.initCategories();
         this.resetFilters();
         // populate event containers
-        this.updateEvents(new Date(),true,true,true,true);
+        this.updateEvents(new Date(),true,true,true);
         // set current date
         this.setSelectedDate(new Date());
         // initiailize view variables
@@ -310,12 +310,12 @@ export class EventService {
       let sameWeek = this._dateService.inSameWeek(newDate,this._selectedDate);
       let sameThreeDay = this._dateService.inSameThreeDay(newDate,this._selectedDate);
       // update the event collections (only if new event collections are needed)
-      let allCategories = (newView != this._currentView) || this._categHash['all'].selected;
-      this.updateEvents(newDate, !sameMonth, !sameWeek, !sameThreeDay, allCategories);
+      this.updateEvents(newDate, !sameMonth, !sameWeek, !sameThreeDay);
       // update current date
       this.setSelectedDate(newDate);
       // reset date span filters
-      if((newView == ViewState.month && !sameMonth)
+      if(newView == ViewState.map
+        || (newView == ViewState.month && !sameMonth)
         || (newView == ViewState.week && !sameWeek)
         || (newView == ViewState.threeday && !sameThreeDay))
           this.resetDateFilter();
@@ -326,7 +326,9 @@ export class EventService {
       this.storeLastView(this._currentView);
       this.setCurrentView(newView);
       // reset all filters
-      this.resetFilters();
+      this.resetDateFilter();
+      if(newView == ViewState.map)
+        this.resetCalendarFilters();
     }
   }
 
@@ -348,7 +350,7 @@ export class EventService {
   // EVENT UPDATES //
 
   // Update all event containers
-  private updateEvents(date: Date, updateMonth: boolean, updateWeek: boolean, updateThreeDay, resetCategories: boolean): void {
+  private updateEvents(date: Date, updateMonth: boolean, updateWeek: boolean, updateThreeDay): void {
     if(this.allEvents && this.allEvents.features.length > 0) {
       // update all events
       this.dayEventsSource.next(this.filterByDateSpan(this.allEvents, moment(date).startOf('d'), moment(date).endOf('d')));
@@ -356,7 +358,6 @@ export class EventService {
       if(updateWeek) this.weekEventsSource.next(this.filterByWeek(this.allEvents, date));
       if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(this.allEvents, date));
       this.updateCategories();
-      if(resetCategories) this.clearCategories();
     }
   }
 
@@ -476,6 +477,10 @@ export class EventService {
   resetFilters(){
     this.clearTags();
     this.clearCategories();
+    this.resetCalendarFilters();
+  }
+
+  private resetCalendarFilters(){
     this.setLocationFilter("");
     // 12:00 AM - 11:59 PM
     this.setTimeFilter(0,1439);
