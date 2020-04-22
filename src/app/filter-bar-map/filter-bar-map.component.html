@@ -66,7 +66,7 @@
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
           <!-- *ngIf="categKey == 'all' || (categHash[categKey].numEventsDay && categHash[categKey].numEventsDay > 0)" -->
-          <a [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}" (click)="categoryClicked(categKey)">
+          <a *ngIf="categKey != 'all'" [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}" (click)="categoryClicked(categKey)">
           <div class="checkbox-container">
             <div *ngIf="categHash[categKey].selected; else unchecked">
               <img class="checkbox" width="16px" src="assets/images/check.svg"/>

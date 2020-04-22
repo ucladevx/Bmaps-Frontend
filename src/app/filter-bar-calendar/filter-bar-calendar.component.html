@@ -77,8 +77,8 @@
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <!-- *ngIf="categHash[categKey].numEventsMonth != undefined && displayCategory(categKey)" -->
-          <a [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+          <!-- *ngIf="displayCategory(categKey)" -->
+          <a *ngIf="categKey != 'all'" [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
              (click)="categoryClicked(categKey)">
           <div class="checkbox-container">
             <div *ngIf="categHash[categKey].selected; else unchecked">

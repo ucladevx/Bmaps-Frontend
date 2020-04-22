@@ -122,7 +122,7 @@ export class MapBoxComponent implements OnInit {
     });
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
-      this._eventService.resetCategories(true);
+      this._eventService.clearCategories();
       let image = promiseReturns[1];
       this.map.addImage('bluePin', image);
     });

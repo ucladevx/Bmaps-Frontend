@@ -356,7 +356,7 @@ export class EventService {
       if(updateWeek) this.weekEventsSource.next(this.filterByWeek(this.allEvents, date));
       if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(this.allEvents, date));
       this.updateCategories();
-      if(resetCategories) this.resetCategories(true);
+      if(resetCategories) this.clearCategories();
     }
   }
 
@@ -385,14 +385,6 @@ export class EventService {
         let timeBB = +new Date(b.properties.end_time);
         return timeBB - timeAA;
       } return timeA - timeB;
-    });
-
-    // add a property checking whether event is first on a given day
-    let prevDate = null;
-    filteredEvents.features.forEach(el => {
-      let d = moment(el.properties.start_time);
-      el.properties.firstOfDay = !(d.isSame(prevDate,'d'));
-      prevDate = d;
     });
     return filteredEvents;
   }
@@ -483,7 +475,7 @@ export class EventService {
   // reset to defaults
   resetFilters(){
     this.clearTags();
-    this.resetCategories(true);
+    this.clearCategories();
     this.setLocationFilter("");
     // 12:00 AM - 11:59 PM
     this.setTimeFilter(0,1439);
@@ -511,7 +503,7 @@ export class EventService {
         numEventsThreeDay: 0,
         numEventsMonth: 0,
         numEventsWeek: 0,
-        selected: true
+        selected: false
       }
     }
     // update category hash
@@ -561,11 +553,11 @@ export class EventService {
   }
 
   // reset all categories to be false
-  resetCategories(all: boolean) {
-    this._categHash["all"].selected = all
+  clearCategories() {
+    this._categHash["all"].selected = true
     for (let categ of this.categs.categories) {
       if(this._categHash.hasOwnProperty(categ.toLowerCase()))
-        this._categHash[categ.toLowerCase()].selected = all;
+        this._categHash[categ.toLowerCase()].selected = false;
     }
     this.categHashSource.next(this._categHash);
   }
@@ -575,12 +567,13 @@ export class EventService {
     if (this._categHash[categ] == undefined)
       return
     // apply the category
-    if(categ == 'all'){
-      if(this._categHash['all'].selected) this.resetCategories(false);
-      else this.resetCategories(true);
-    } else {
-      this._categHash['all'].selected = false;
-      this._categHash[categ].selected = !this._categHash[categ].selected;
+    this._categHash[categ].selected = !this._categHash[categ].selected;
+    this._categHash['all'].selected = true;
+    for (let categ of this.categs.categories) {
+      if(this._categHash.hasOwnProperty(categ.toLowerCase()) && this._categHash[categ.toLowerCase()].selected) {
+        this._categHash['all'].selected = false;
+        break;
+      }
     }
     // update category hash
     this.categHashSource.next(this._categHash);
@@ -671,6 +664,13 @@ export class EventService {
       if (passesTags && passesCategories && passesDate && passesTime && passesLocation)
         tempEvents.features.push(event);
     }
+    // add a property checking whether event is first on a given day
+    let prevDate = null;
+    tempEvents.features.forEach(el => {
+      let d = moment(el.properties.start_time);
+      el.properties.firstOfDay = !(d.isSame(prevDate,'d'));
+      prevDate = d;
+    });
     // update provided outputSource
     outputSource.next(tempEvents);
   }
@@ -678,11 +678,12 @@ export class EventService {
   // Filter Check: categories
   private passesCategories(event: GeoJson): boolean {
     let categoryCheck = false;
-    let allSelected = (this._categHash && this._categHash['all'].selected);
+    if(this._categHash && this._categHash['all'].selected)
+      return true;
     if(event.properties.categories){
       for (let categ of event.properties.categories) {
         let categObject = this._categHash[categ.toLowerCase()];
-        if (allSelected || (categObject && categObject.selected)) {
+        if (categObject && categObject.selected) {
           categoryCheck = true;
           break;
     }}}

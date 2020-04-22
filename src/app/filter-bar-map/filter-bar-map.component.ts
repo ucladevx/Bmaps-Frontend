@@ -41,7 +41,7 @@ export class FilterBarMapComponent implements OnInit {
   toggleDropdown() { this.showDropdown = !this.showDropdown; }
 
   // clear filters and categories
-  resetCategories(): void { this._eventService.resetCategories(true); }
+  resetCategories(): void { this._eventService.clearCategories(); }
   clearFilters(): void { this._eventService.resetFilters(); }
 
   // click behavior
