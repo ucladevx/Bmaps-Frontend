@@ -173,7 +173,7 @@ li a {
 }
 
 /* exclusively desktop css */
-@media (min-width: 768px){
+@media screen and (min-width: 768px){
 
   .navbar-toggler {
     display: none !important;

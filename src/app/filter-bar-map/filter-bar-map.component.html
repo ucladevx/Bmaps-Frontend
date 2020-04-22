@@ -59,14 +59,14 @@
     <!-- category subheader -->
     <div *ngIf="categHash" class="section-header">
       Categories
-      <a class="clear-all-btn" (click)="clearCategories()">CLEAR ALL</a>
+      <a class="clear-all-btn" (click)="resetCategories()">CLEAR ALL</a>
     </div>
     <!-- category filters -->
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <a *ngIf="categKey == 'all' || (categHash[categKey].numEventsDay && categHash[categKey].numEventsDay > 0)"
-             [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}" (click)="categoryClicked(categKey)">
+          <!-- *ngIf="categKey == 'all' || (categHash[categKey].numEventsDay && categHash[categKey].numEventsDay > 0)" -->
+          <a [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}" (click)="categoryClicked(categKey)">
           <div class="checkbox-container">
             <div *ngIf="categHash[categKey].selected; else unchecked">
               <img class="checkbox" width="16px" src="assets/images/check.svg"/>

@@ -122,7 +122,7 @@ export class MapBoxComponent implements OnInit {
     });
     let promise_map_blue_pin = Promise.all([_promiseMapLoad, _promiseBluePinLoad]);
     promise_map_blue_pin.then((promiseReturns) => {
-      this._eventService.allCategories();
+      this._eventService.resetCategories(true);
       let image = promiseReturns[1];
       this.map.addImage('bluePin', image);
     });
@@ -153,7 +153,6 @@ export class MapBoxComponent implements OnInit {
 
   // update map graphics
   updateSource(): void {
-    console.log(this.events);
     if (this.map == undefined || this.map.getSource('events') == undefined)
       return;
     this.map.getSource('events').setData(this.events);

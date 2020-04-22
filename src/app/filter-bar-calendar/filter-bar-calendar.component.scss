@@ -8,9 +8,9 @@
 #toggle-btn {
   width: 100%;
   height: 40px;
+  font-size: 20px;
   margin: 0 auto;
   border-radius: 0px;
-  font-size: 20px;
 }
 
 #filter-div {
@@ -21,11 +21,11 @@
 
 a.clear-all-btn {
   float: right;
-  margin-right: 15px;
-  cursor: pointer;
   color: #808080;
+  cursor: pointer;
   padding-left: 3px;
   padding-right: 3px;
+  margin-right: 15px;
 }
 
 a.clear-all-btn:hover {
@@ -49,17 +49,17 @@ a.clear-all-btn:active {
 }
 
 .dropdown-toggle {
-  border-bottom: $default_border_style;
   color: #656565;
+  border-bottom: $default_border_style;
 }
 
 .dropdown-item {
-  cursor: pointer;
+  display: flex;
   color: #747473;
   line-height: 0;
   padding-top: 10px;
   padding-bottom: 10px;
-  display: flex;
+  cursor: pointer;
   align-items: center;
   justify-content: flex-start;
 }
@@ -69,30 +69,30 @@ a.clear-all-btn:active {
 }
 
 .dropdown-content {
-  top: 42px;
-  background: white;
   width: 100%;
-  border-bottom: $default_border_style;
-  z-index: 999;
-  overflow-y: scroll;
   display: block;
   flex: 1;
   flex-basis: 300px;
+  top: 42px;
+  background: white;
+  z-index: 999;
+  overflow-y: scroll;
+  border-bottom: $default_border_style;
 }
 
 .section-header {
+  width: 18%;
+  display: inline-block;
   font-size: 16px;
   font-weight: bold;
-  display: inline-block;
-  width: 18%;
 }
 
 .filters-header {
+  background: #E8E8E8;
+  font-size: 16px;
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 10px;
-  background: #E8E8E8;
-  font-size: 16px;
 }
 
 .filters-content {
@@ -105,28 +105,28 @@ a.clear-all-btn:active {
 }
 
 .custom-select{
-  background: rgb(239,239,239);
-  display: inline-block;
   width: 80%;
+  display: inline-block;
+  background: rgb(239,239,239);
   border: none;
   border-radius: 0px;
 }
 
 .form-control{
-  background: rgb(239,239,239);
-  display: inline-block;
   width: 76%;
+  display: inline-block;
+  background: rgb(239,239,239);
   border: none;
   border-radius: 0;
 }
 
 .clear-button{
-  background: rgb(239,239,239);
   float: right;
+  background: rgb(239,239,239);
   color: #808080;
-  border: none;
-  cursor: pointer;
   font-size: 22px;
+  cursor: pointer;
+  border: none;
 }
 
 .clear-button:hover{
@@ -138,9 +138,9 @@ a.clear-all-btn:active {
 }
 
 .short-input{
-  background: rgb(239,239,239);
-  display: inline-block;
   width: 37%;
+  display: inline-block;
+  background: rgb(239,239,239);
 }
 
 .section-container{
@@ -149,12 +149,12 @@ a.clear-all-btn:active {
 
 .to {
   width: 8%;
-  margin: 0%;
+  display: inline-block;
   align-items: center;
   text-align: center;
   justify-content: center;
   padding: 0%;
-  display: inline-block;
+  margin: 0%;
 }
 
 #end-date{
@@ -168,20 +168,20 @@ a.clear-all-btn:active {
 }
 
 .filters-wrapper {
-  text-align: left;
   width: 82%;
-  align-items: left;
   display: inline-block;
+  text-align: left;
+  align-items: left;
 }
 
 #loc-group {
-  margin-right: 3%;
   width: 100%;
+  margin-right: 3%;
 }
 
 #food-group {
+width: 100%;
   margin-right: 3%;
-  width: 100%;
 }
 
 ul {
@@ -194,11 +194,11 @@ ul {
 }
 
 .categ-section-header {
+  background: #E8E8E8;
+  font-size: 16px;
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 10px;
-  background: #E8E8E8;
-  font-size: 16px;
 }
 
 .categories-list {
@@ -231,17 +231,16 @@ a:active {
 }
 
 .btn.filter-btn {
-  border-color: $default_border_color;
-  border-width: $default_border_width;
   height: 40px;
+  width: 34%;
+  display: flex;
   pointer-events: auto;
   transition: unset;
   align-items: center;
   text-align: center;
-  display: flex;
   justify-content: center;
   margin-bottom: 0px;
-  width: 34%;
+  border: $default_border_style;
 }
 
 .filter-group + .filter-group {
@@ -250,11 +249,11 @@ a:active {
 
 a.clear-all-btn {
   float: right;
-  margin-right: 15px;
   cursor: pointer;
   color: #808080;
   padding-left: 3px;
   padding-right: 3px;
+  margin-right: 15px;
 }
 
 a.clear-all-btn:hover {
@@ -359,11 +358,11 @@ a.clear-all-btn:active {
   }
 
   #mobile-only{
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 5px;
-    height: 45px;
   }
 
   #mobile-only p {

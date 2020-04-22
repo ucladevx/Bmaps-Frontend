@@ -125,7 +125,7 @@ export class FilterBarCalendarComponent implements OnInit {
   toggleDropdown() { this.showDropdown = !this.showDropdown; }
 
   // clear categories
-  clearCategories(): void { this._eventService.allCategories(); }
+  resetCategories(): void { this._eventService.resetCategories(true); }
 
   // clear filters
   clearFilters(): void { this._eventService.resetFilters(); }
