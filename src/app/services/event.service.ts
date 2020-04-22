@@ -313,7 +313,7 @@ export class EventService {
       this.updateEvents(newDate, !sameMonth, !sameWeek, !sameThreeDay);
       // update current date
       this.setSelectedDate(newDate);
-      // reset date span filters
+      // reset date span filter
       if(newView == ViewState.map
         || (newView == ViewState.month && !sameMonth)
         || (newView == ViewState.week && !sameWeek)
@@ -321,14 +321,15 @@ export class EventService {
           this.resetDateFilter();
     }
     // if view changed
-    if(newView != this._currentView) {
+    let prevView = this._currentView;
+    if(newView != prevView) {
       // update view variables
-      this.storeLastView(this._currentView);
+      this.storeLastView(prevView);
       this.setCurrentView(newView);
-      // reset all filters
+      // reset certain filters
       this.resetDateFilter();
-      if(newView == ViewState.map)
-        this.resetCalendarFilters();
+      if(newView == ViewState.map || prevView == ViewState.map) this.clearTags();
+      if(newView == ViewState.map) this.resetCalendarFilters();
     }
   }
 
@@ -357,6 +358,7 @@ export class EventService {
       if(updateMonth) this.monthEventsSource.next(this.filterByMonth(this.allEvents, date));
       if(updateWeek) this.weekEventsSource.next(this.filterByWeek(this.allEvents, date));
       if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(this.allEvents, date));
+      // update category counts
       this.updateCategories();
     }
   }
@@ -473,13 +475,14 @@ export class EventService {
 
   // Filter Getters and Setters //
 
-  // reset to defaults
+  // reset all filters to defaults
   resetFilters(){
     this.clearTags();
     this.clearCategories();
     this.resetCalendarFilters();
   }
 
+  // reset all calendar filters to defaults
   private resetCalendarFilters(){
     this.setLocationFilter("");
     // 12:00 AM - 11:59 PM
@@ -487,8 +490,9 @@ export class EventService {
     this.resetDateFilter();
   }
 
-  // Update category hash
+  // Initialize category hash
   private initCategories() {
+    // initialize 'all' category
     this._categHash = { 'all': {
       formattedCategory: 'all',
       numEventsDay: 0,
@@ -497,7 +501,7 @@ export class EventService {
       numEventsMonth: 0,
       selected: true
     }};
-    // initialize all other category containers iteratively
+    // initialize other categories
     for (let categ of this.categs.categories) {
       let categName = categ.toLowerCase();
       let categStr = categName.replace('_', ' ');
@@ -522,13 +526,13 @@ export class EventService {
     let threeDayMap = this.getCategoryMap(this._threeDayEvents.features, this.categs.categories);
     let weekMap = this.getCategoryMap(this._weekEvents.features, this.categs.categories);
     let monthMap = this.getCategoryMap(this._monthEvents.features, this.categs.categories);
-    // initialize tempHash by building the all category container
+    // update 'all' categories
     let categAll = this._categHash['all'];
     categAll.numEventsDay = dayMap['all'];
     categAll.numEventsThreeDay = threeDayMap['all'];
     categAll.numEventsWeek = weekMap['all'];
     categAll.numEventsMonth = monthMap['all'];
-    // initialize all other category containers iteratively
+    // update other categories
     for (let categ of this.categs.categories) {
       let categName = categ.toLowerCase();
       let categCurrent = this._categHash[categName];
@@ -557,13 +561,12 @@ export class EventService {
     return eventMap;
   }
 
-  // reset all categories to be false
+  // clear any selected category filters
   clearCategories() {
     this._categHash["all"].selected = true
-    for (let categ of this.categs.categories) {
+    for (let categ of this.categs.categories)
       if(this._categHash.hasOwnProperty(categ.toLowerCase()))
         this._categHash[categ.toLowerCase()].selected = false;
-    }
     this.categHashSource.next(this._categHash);
   }
 
