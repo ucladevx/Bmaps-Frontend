@@ -328,8 +328,11 @@ export class EventService {
       this.setCurrentView(newView);
       // reset certain filters
       this.resetDateFilter();
-      if(newView == ViewState.map || prevView == ViewState.map) this.clearTags();
-      if(newView == ViewState.map) this.resetCalendarFilters();
+      if(newView == ViewState.map || prevView == ViewState.map) {
+        this.clearTags();
+        this.clearCategories();
+        this.resetCalendarFilters();
+      }
     }
   }
 
