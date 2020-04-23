@@ -175,12 +175,18 @@ export class SidebarComponent implements OnInit {
   }
 
   // scroll to first event in the given date
+  // if no events for the given date, scroll to first event of the nearest prior day with events
   scrollToFirstEventOf(date: Date) {
-    if(!this.clickedEvent) {
+    if(!this.clickedEvent && this.filteredEvents.length > 0) {
       let _this = this;
-      let scrollEv = this.filteredEvents.find(function(e) {
-        return _this._dateService.equalDates(e.properties.start_time, date);
-      });
+      let scrollEv;
+      let searchDate = moment(date);
+      while(scrollEv == undefined && searchDate.isSameOrAfter(moment(this.filteredEvents[0].properties.start_time).startOf('d'))) {
+        scrollEv = this.filteredEvents.find(function(e) {
+          return _this._dateService.equalDates(e.properties.start_time, searchDate);
+        });
+        searchDate = searchDate.clone().add(-1,'d');
+      }
       if(scrollEv != undefined) this.scrollToEvent(scrollEv,'start');
       else this.scrollToEvent(this.filteredEvents[0],'start');
     }
