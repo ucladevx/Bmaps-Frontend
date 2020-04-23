@@ -400,7 +400,7 @@ export class EventService {
     // determine first day and last day to start displaying events
     let firstDay = moment(date).startOf('month').startOf('week');
     let lastDay = moment(date).endOf('month').endOf('week');
-    if(new Date() > firstDay.toDate()) { firstDay = moment(new Date()); }
+    if(new Date() > firstDay.toDate()) { firstDay = moment(new Date()).startOf('d'); }
     // filter by day span
     return this.filterByDateSpan(allEvents, firstDay, lastDay);
   }
@@ -410,7 +410,7 @@ export class EventService {
     // determine first day and last day to start displaying events
     let firstDay = moment(date).startOf('week');
     let lastDay = moment(date).endOf('week');
-    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
+    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()).startOf('d'); }
     // filter by day span
     return this.filterByDateSpan(allEvents, firstDay, lastDay);
   }
@@ -420,7 +420,7 @@ export class EventService {
     // determine first and last day to start displaying events
     let bounds = this._dateService.getViewBounds(date, ViewState.threeday);
     let firstDay = bounds.startDate, lastDay = bounds.endDate;
-    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()); }
+    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()).startOf('d'); }
     // filter by day span
     return this.filterByDateSpan(allEvents, firstDay, lastDay);
   }
