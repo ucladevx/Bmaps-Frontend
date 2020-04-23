@@ -1,11 +1,11 @@
 <app-navbar></app-navbar>
 <div class="main container-fluid flex">
-    <div class="row flex">
-        <div class="col-sm-12 col-md-7 order-sm-first order-md-last map-container" [ngClass]="{'hide-map' : pressed}">
-            <router-outlet></router-outlet>
-        </div>
-        <div class="col-sm-12 col-md-5 order-sm-last order-md-first sidebar-container" [ngClass]="{'hide-map': pressed}">
-            <router-outlet name="sidebar" (activate)="onSidebarRouterActivate($event)"></router-outlet>
-        </div>
+  <div class="row flex">
+    <div class="col-sm-12 col-md-7 order-sm-first order-md-last map-container" [ngClass]="{'hide-map' : pressed}">
+      <router-outlet></router-outlet>
     </div>
+    <div class="col-sm-12 col-md-5 order-sm-last order-md-first sidebar-container" [ngClass]="{'hide-map': pressed}">
+      <router-outlet name="sidebar" (activate)="onSidebarRouterActivate($event)"></router-outlet>
+    </div>
+  </div>
 </div>
