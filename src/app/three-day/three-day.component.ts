@@ -1,12 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, NgZone } from '@angular/core';
-import { Moment } from 'moment';
 import { Router, NavigationEnd } from '@angular/router';
-import { ViewService } from '../services/view.service';
+import { GeoJson } from '../map';
 import { EventService } from '../services/event.service';
 import { DateService } from '../services/date.service';
-import { GeoJson } from '../map';
 import { CalendarDay } from '../services/event.service';
+import { ViewState } from '../view-enum';
 import * as moment from 'moment';
+import { Moment } from 'moment';
 
 @Component({
   selector: 'app-three-day',
@@ -15,266 +15,160 @@ import * as moment from 'moment';
 })
 
 export class ThreeDayComponent implements OnInit {
+
+  // visible days
   public days: CalendarDay[] = [];
-  public currentMonth: Moment;
-  private currentWeek: Moment;
-  private currentDay: Moment;
+  // view check
+  public isThreeDayView: boolean = true;
+  // events to display
   private filteredEvents: GeoJson[];
   private clickedEvent: GeoJson;
   private eventsByDay: { [day: number ] : GeoJson[] } = {};
+  // style variables
   private zIndexArray: { [id: number] : Number } = {};
   private scrollPosition: number = 0;
 
-  //constructor statement
-  constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
+  constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
   ngOnInit() {
-    this._viewService.changeToThreeDay.subscribe( function(delta) { this.changeThreeDay(delta); }.bind(this));
 
-    this._eventService.currentDate$.subscribe(date => {
-      this.ngZone.run( () => { this.showCalendar(date); });
+    // whenever selected date changes, update calendar
+    this._eventService.selectedDate$.subscribe(date => {
+      this.ngZone.run( () => { this.updateCalendar(date); });
     });
 
-    this._eventService.threeDayEvents$.subscribe(threeDayEventCollection => {
-      this.filteredEvents = threeDayEventCollection.features;
+    // whenever current view changes, update calendar
+    this._eventService.currentView$.subscribe(view => {
+      this.isThreeDayView = (view == ViewState.threeday);
+      this.filteredEvents = this._eventService.getFilteredThreeDayEvents().features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
-      if(this._viewService.isThreeDayView())
-        document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      if(this._viewService.isThreeDayView() && this._eventService.getDays())
-          this._eventService.setDateFilterFromDays(this._eventService.getDays());
+      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
     });
 
+    // whenever week events change, update calendar
     this._eventService.filteredThreeDayEvents$.subscribe(threeDayEventCollection => {
       this.filteredEvents = threeDayEventCollection.features;
       this.fillEventsByDay();
-      this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
+      this.ngZone.run( () => { this.updateCalendar(this._eventService.getSelectedDate()); });
     });
 
-    this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
-      this.clickedEvent = clickedEventInfo;
-    });
-    this._eventService.expandedEvent$.subscribe(clickedEventInfo => {
-      this.clickedEvent = clickedEventInfo;
-    });
+    // update clicked event
+    this._eventService.clickedEvent$.subscribe(clickedEventInfo => this.clickedEvent = clickedEventInfo);
+    this._eventService.sidebarEvent$.subscribe(clickedEventInfo => this.clickedEvent = clickedEventInfo);
 
-
-    this._eventService.setDateFilterFromDays(this._eventService.getDays());
-    this.currentMonth = moment();
-    this._viewService.isThreeDayView();
-    if(this._eventService.getExpandedEvent() == null){
+    // update sidebar
+    if(this._eventService.getSidebarEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 
-    this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
-    document.getElementById("scrollable").scrollTop = this.scrollPosition;
-
-  }
-
-  //display the calendar
-  showCalendar(dateInMonth: Moment | Date | string): void {
-    //set currentMonth and currentWeek
-    this.currentMonth = moment(dateInMonth).startOf('month');
-    this.currentWeek = moment(dateInMonth).startOf('week');
-    this.currentDay = moment(dateInMonth);
-
-    if(this._viewService.isThreeDayView() && dateInMonth != undefined){
-      // range of days shown on calendar
-      let firstDay: Moment;
-      // first day should be first of group
-
-      let numDaysDiff = this.currentDay.startOf('day').diff(moment().startOf('day'), 'days');
-      // 0 means first day of group, 1 - second, 2 - third
-      let dayOfGroup;
-      if (numDaysDiff >= 0) {
-        dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
-      }
-      else {
-        numDaysDiff *= -1;
-        dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1);
-      }
-
-      firstDay = this.currentDay.clone().add(-1*dayOfGroup, 'days');
-      let lastDay: Moment = firstDay.clone().add(3, 'days');
-
-      if(parseInt(lastDay.format('DD')) == 2 && parseInt(lastDay.format('DD')) == 3)
-        this.currentMonth.add(1,'month');
-
-      //fill days
-      this.days = [];
-      for (let d: Moment = firstDay.clone(); d.isBefore(lastDay); d.add(1, 'days')) {
-        //create CalendarDay object
-        let weekDay: CalendarDay = {
-          date: d.toDate(),
-          dayOfMonth: d.date(),
-          inCurrentMonth: d.isSame(this.currentMonth, 'month'),
-          month: parseInt(d.format('M'))-1,
-          year: parseInt(d.format('YYYY')),
-          events: this.getEventsOnDate(d),
-          selected: d.isSame(dateInMonth, 'day'),
-          dayOfWeek: d.format('ddd'),
-          isToday: this._dateService.isToday(d.toDate())
-        };
-        //add weekDay to display days array
-        this.days.push(weekDay);
-        // set selected day to the date provided
-        if (d.isSame(dateInMonth, 'day')) {
-          this._eventService.setSelectedDay(weekDay);
-        }
-      }
-      this._eventService.setDays(this.days);
-    }
-  }
-
-  //increment or decrement day
-  changeThreeDay(delta: number): void {
-    // 1 means advance three days, -1 means go back three days
-    let newDay: Moment = this.currentDay.clone().add(delta*3, 'days');
-    let selectedDay = moment(this._eventService.getSelectedDay());
-
-    let viewDate;
-
-    // today is always the first day in a group of three, so calculate the groups of three based off this!
-
-    // Days to check if newDay is in today's group of 3
-    let tomorrow = moment().add(1, 'days');
-    // third day is the day after tomorrow
-    let thirdDay = tomorrow.clone().add(1, 'days');
-
-    // To check if newDay is in selected day's group of 3
-    let numDaysDiff = selectedDay.startOf('day').diff(moment().startOf('day'), 'days');  // gets # of days diff from selected and today
-    // 0 means first day of group, 1 - second, 2 - third
-    let dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
-
-    let selectedDayGroupDayTwo;
-    let selectedDayGroupDayThree;
-    if (dayOfGroup == 0) {
-      // selectedDay is first day of group of 3 --> check next 2 days
-      selectedDayGroupDayTwo = selectedDay.clone().add(1, 'days');
-      selectedDayGroupDayThree = selectedDay.clone().add(2, 'days');
-    }
-    else if (dayOfGroup == 1) {
-      // selectedDay is second day of group --> check prev and next day
-      selectedDayGroupDayTwo = selectedDay.clone().add(-1, 'days');
-      selectedDayGroupDayThree = selectedDay.clone().add(1, 'days');
-    }
-    else {
-      // selectedDay is third day of group --> check prev 2 days
-      selectedDayGroupDayTwo = selectedDay.add(-2, 'days');
-      selectedDayGroupDayThree = selectedDay.add(-1, 'days');
-    }
-
-
-    if (newDay.isSame(moment(this._eventService.getCurrentDate()), 'day') ||
-        newDay.isSame(selectedDayGroupDayTwo, 'day') || newDay.isSame(selectedDayGroupDayThree, 'day'))
-      // newDay same as selected day's group of 3
-      viewDate = this._eventService.getCurrentDate();
-    // if same group as today
-    else if (newDay.isSame(moment(), 'day') || newDay.isSame(tomorrow, 'day') || newDay.isSame(thirdDay, 'day'))
-      // set selected date to today
-      viewDate = new Date();
-    else
-      viewDate = newDay.toDate();
-    if(this._viewService.isThreeDayView())
+    // set scroll
+    setTimeout(function(){
+      this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
-    this._eventService.updateDayEvents(viewDate);
-    this._eventService.updateThreeDayEvents(viewDate);
-    this._eventService.updateWeekEvents(viewDate);
-    this._eventService.updateMonthEvents(viewDate);
+    }, 0.1);
+
+    // set current view
+    this._eventService.setCurrentView(ViewState.threeday);
+
+  }
+
+  // display the calendar
+  updateCalendar(dateInMonth: Moment | Date | string): void {
+    if(!this.isThreeDayView || dateInMonth == undefined)
+      return;
+    // compile calendar days according to range of days to be shown on calendar
+    let bounds = this._dateService.getViewBounds(dateInMonth, ViewState.threeday);
+    this.days = [];
+    for (let d: Moment = bounds.startDate.clone(); d.isBefore(bounds.endDate); d.add(1, 'days')) {
+      //create CalendarDay object
+      let weekDay: CalendarDay = {
+        date: d.toDate(),
+        dayOfMonth: d.date(),
+        dayOfWeek: d.format('ddd'),
+        month: parseInt(d.format('M'))-1,
+        year: parseInt(d.format('YYYY')),
+        events: this.getEventsOnDate(d),
+        isSelected: d.isSame(moment(dateInMonth), 'day'),
+        isToday: this._dateService.isToday(d.toDate()),
+        inCurrentMonth: this._dateService.inSameMonth(d,this._eventService.getSelectedDate())
+      };
+      this.days.push(weekDay);
+    }
+    // update visible days
+    this._eventService.setVisibleDays(this.days);
   }
 
   //retrieve events for the given week
   fillEventsByDay(){
     //clear events by day for the week
     this.eventsByDay = [];
+    if(this.filteredEvents.length < 1)
+      return;
     //iterate through filteredEvents for the current month
     this.filteredEvents.forEach(el => {
       //determine dayOfYear
       let eventDate = moment(el.properties.start_time);
       let dayOfYear = eventDate.dayOfYear();
       //if the dayOfYear is not included, add it
-      if(!this.eventsByDay.hasOwnProperty(dayOfYear)){
+      if(!this.eventsByDay.hasOwnProperty(dayOfYear))
         this.eventsByDay[dayOfYear] = [];
-      }
       //add the current event to that day
       this.eventsByDay[dayOfYear].push(el);
     });
   }
 
-  //retrieve events for a specific day
+  // retrieve events for a specific day
   getEventsOnDate(date: Moment): GeoJson[] {
-    //determine day of year
+    // determine day of year
     let dayOfYear = date.dayOfYear();
-    //retrieve event list from eventsByDay
-    if (this.eventsByDay.hasOwnProperty(dayOfYear)){
-      //sort array by start time, then by duration
-      let eventList = this.eventsByDay[dayOfYear];
-      eventList.sort(function compare(a, b) {
-        let timeA = +new Date(a.properties.start_time);
-        let timeB = +new Date(b.properties.start_time);
-        if(timeA-timeB == 0){
-          let timeAA = +new Date(a.properties.end_time);
-          let timeBB = +new Date(b.properties.end_time);
-          return timeBB - timeAA;
-        }
-        return timeA - timeB;
-      });
-      //return sorted list of events
-      return eventList;
-    }
-    //if no events, return empty array
-    else {
-      return [];
-    }
+    // retrieve event list from eventsByDay
+    if (this.eventsByDay.hasOwnProperty(dayOfYear))
+      return this.eventsByDay[dayOfYear];
+    else return [];
   }
 
-  //highlight selected day
+  // highlight selected day
   onSelect(day: CalendarDay): void{
-    if(this._eventService.getClickedEvent() && this._eventService.getSelectedDay() != day &&
-      moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
-      this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-    }
-    this._eventService.setSelectedDay(day);
-    this._eventService.updateDayEvents(day.date);
+    if(this._eventService.getClickedEvent() && this._eventService.getSelectedDate() != day.date &&
+      moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth)
+        this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
+    this._eventService.changeDateSpan(day.date, ViewState.threeday);
   }
 
-  //open event in sidebar
+  // open event in sidebar
   openEvent(event: GeoJson): void{
     this._eventService.updateClickedEvent(event);
+    this._eventService.updateSidebarEvent(event);
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
-    this._eventService.updateExpandedEvent(event);
   }
 
-  //retrieve and format event title and event time
+  // EVENT STYLING //
+
   eventName(event: GeoJson): string{
     return event.properties.name;
   }
+
   eventTime(event: GeoJson): string{
     return this._dateService.formatTime(event.properties.start_time) + " - " + this._dateService.formatTime(event.properties.end_time);
   }
 
-  //determine the position of the current time bar
+  // determine the position of the current time bar
   currentTime() {
     let now = moment();
     return this.convertTimeToPercent(now)+"%";
   }
 
-  //convert time to top percentage in css
+  // convert time to top percentage in css
   convertTimeToPercent(time: Moment) {
     let increment = 0; let p = 0;
     if (window.outerWidth <= 768){
-      p = 5;
-      increment = 3.84;
-      if(time.format("A") == "PM"){
+      p = 5; increment = 3.84;
+      if(time.format("A") == "PM")
         p += 46; increment = 3.77;
-      }
-    }  // mobile view
-    else {
-      p = 11;
-      increment = 3.58;
-      if(time.format("A") == "PM"){
+    } else {
+      p = 11; increment = 3.58;
+      if(time.format("A") == "PM")
         p += 43; increment = 3.55;
-      }
     }
     p += (parseInt(time.format("H"))%12)*increment;
     p += (parseInt(time.format("mm"))/15)*(increment/4);
@@ -299,21 +193,21 @@ export class ThreeDayComponent implements OnInit {
     let eventIndex = 0;
     //iterate through surrounding events
     for(let j = 0; j < events.length; j++){
-        if(events[j] == event){ eventIndex = overlapped.length; }
-        //retrieve start and end time for new event
-        let s = moment(events[j].properties.start_time);
-        let t = moment(events[j].properties.end_time);
-        let h = moment.duration(t.diff(s)).asHours();
-        if(h>24){ h = (h%24)+1; }
-        let e = s.clone().add(h,"hours");
-        //determine whether events overlap
-        if(!s.isSame(end) && !e.isSame(start) &&
-            ((s.isSame(start) && e.isSame(end)) ||
-            (s.isSameOrAfter(start) && s.isBefore(end)) ||
-            (e.isSameOrAfter(start) && e.isBefore(end)) ||
-            (start.isSameOrAfter(s) && start.isBefore(e)) ||
-            (end.isSameOrAfter(s) && end.isBefore(e))))
-        { overlapped.push(events[j]); }
+      if(events[j] == event){ eventIndex = overlapped.length; }
+      //retrieve start and end time for new event
+      let s = moment(events[j].properties.start_time);
+      let t = moment(events[j].properties.end_time);
+      let h = moment.duration(t.diff(s)).asHours();
+      if(h>24){ h = (h%24)+1; }
+      let e = s.clone().add(h,"hours");
+      //determine whether events overlap
+      if(!s.isSame(end) && !e.isSame(start) &&
+        ((s.isSame(start) && e.isSame(end)) ||
+        (s.isSameOrAfter(start) && s.isBefore(end)) ||
+        (e.isSameOrAfter(start) && e.isBefore(end)) ||
+        (start.isSameOrAfter(s) && start.isBefore(e)) ||
+        (end.isSameOrAfter(s) && end.isBefore(e))))
+      { overlapped.push(events[j]); }
     }
     // CALCULATE LEFT
     let left = 2+((98/overlapped.length)*eventIndex);
@@ -325,7 +219,7 @@ export class ThreeDayComponent implements OnInit {
     // account for clicked event
     let font = "normal";
     if(this.clickedEvent && this.clickedEvent.id == event.id &&
-      this._eventService.getSelectedDay().dayOfMonth == moment(this.clickedEvent.properties.start_time).date()){
+      moment(this._eventService.getSelectedDate()).isSame(moment(this.clickedEvent.properties.start_time), 'd')){
       font = "bold";
       z = 100;
     }

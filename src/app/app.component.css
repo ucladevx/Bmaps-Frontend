@@ -1,15 +1,26 @@
 :host {
-    --navbar-height: 58px;
-    --sidebartoggle-height: 50px;
+  --navbar-height: 58px;
+  --sidebartoggle-height: 50px;
 }
 
 app-navbar {
-    z-index: 100;
-    width: 100%;
+  z-index: 100;
+  width: 100%;
 }
 
 .main {
   height: calc(100% - var(--navbar-height));
+}
+
+.map-container {
+  display: flex;
+  padding-left: 0px;
+  padding-right: 0px;
+  height: calc(100% - var(--sidebartoggle-height));
+}
+
+.map-container.hide-map {
+  display: none;
 }
 
 .sidebar-container {
@@ -18,21 +29,12 @@ app-navbar {
   padding-left: 0px;
   height: var(--sidebartoggle-height);
 }
-.map-container {
-  display: flex;
-  padding-left: 0px;
-  padding-right: 0px;
-  height: calc(100% - var(--sidebartoggle-height));
-}
 
 .sidebar-container.hide-map {
   height: 100%;
 }
 
-.map-container.hide-map {
-  display: none;
-}
-
+/* exclusively desktop css */
 @media only screen and (min-width: 768px) {
   .sidebar-container, .map-container {
     height: auto !important;

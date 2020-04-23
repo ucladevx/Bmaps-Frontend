@@ -1,16 +1,17 @@
 <div class="selector">
-    <button [style.visibility]="showLeft ? 'visible' : 'hidden'" class="custom-btn" id="left-arrow" (click)="updateDate(-1)">
-        <i class="icon-caret-left fix-pos-left" aria-hidden="true"></i>
-    </button>
-    <div id="date-text">
-      <span class="sm-text">
-        displaying events for <br> {{dateString}}
-      </span>
-      <span class="md-text">
-        Events for {{dateString}}
-      </span>
-    </div>
-    <button [style.visibility]="showRight ? 'visible' : 'hidden'" class="custom-btn" id="right-arrow" (click)="updateDate(1)">
-        <i class="icon-caret-right fix-pos-right" aria-hidden="true"></i>
-    </button>
+  <!-- go to previous day -->
+  <button [style.visibility]="showLeft ? 'visible' : 'hidden'"
+    class="custom-btn" id="left-arrow" (click)="incrementDay(-1)">
+    <i class="icon-caret-left fix-pos-left" aria-hidden="true"></i>
+  </button>
+  <!-- current date header -->
+  <div id="date-text">
+    <span class="sm-text">displaying events for <br> {{dateString}}</span>
+    <span class="md-text">Events for {{dateString}}</span>
+  </div>
+  <!-- go to next day -->
+  <button [style.visibility]="showRight ? 'visible' : 'hidden'"
+    class="custom-btn" id="right-arrow" (click)="incrementDay(1)">
+    <i class="icon-caret-right fix-pos-right" aria-hidden="true"></i>
+  </button>
 </div>
