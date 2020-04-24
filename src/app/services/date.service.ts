@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GeoJson } from '../map';
+import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 
 // Constants used as filter rules
@@ -25,11 +26,12 @@ const EVENING_END = 4;
 
 @Injectable()
 export class DateService {
+
   constructor() {}
 
   // Test whether two dates should be considered equivalent
-  equalDates(a: Date | string, b: Date | string): boolean {
-    return moment(a).isSame(b, 'day');
+  equalDates(a, b): boolean {
+    return moment(a).startOf('day').isSame(moment(b), 'day');
   }
 
   // Test whether a given date is today
@@ -37,17 +39,16 @@ export class DateService {
     return moment(date).isSame(moment(), 'day');
   }
 
-  // For a given date, retrieve time formatted i.e.     "9:30 AM"
+  // Various Date Formats //
+
   formatTime(date: Date | string): string {
     return moment(date).format("h:mmA");
   }
 
-  // For a given date, retrieve date formatted i.e.     "October 13, 2022"
   formatDate(date: Date | string): string {
     return moment(date).format("MMMM D, YYYY");
   }
 
-  // For a given event, format the date and time i.e.   "October 13, 2022 9:30 AM - 10:30 AM"
   formatEventDate(event: GeoJson): string {
     let start: string = event.properties.start_time;
     let end: string = event.properties.end_time;
@@ -57,19 +58,68 @@ export class DateService {
       return `${this.formatDate(start)} \u2022 ${this.formatTime(start)}`;
   }
 
-  // For a given event, format the start and end date for Google calendar export (as an array)    i.e.  ["20201231T193000", "20201231T223000"]
-  formatEventCalendar(event: GeoJson): string {
+  formatEventCalendarStart(event: GeoJson): string {
     let start: string = event.properties.start_time;
+    return moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS');
+  }
+
+  formatEventCalendarEnd(event: GeoJson): string {
     let end: string = event.properties.end_time;
-    let dates = moment(start).format('YYYYMMDD') + "T" + moment(start).format('HHmmSS') + "/" + moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
+    return moment(end).format('YYYYMMDD') + "T" + moment(end).format('HHmmSS');
+  }
+
+  formatEventCalendar(event: GeoJson): string {
+    let dates = this.formatEventCalendarStart(event) + "/" + this.formatEventCalendarEnd(event);
     return dates;
   }
 
-  // Test whether given mmt is between start and end (inclusive)
-  checkRange(mmt, start, end): boolean {
-    let val = mmt.valueOf();
-    return (val >= start.valueOf() && val <= end.valueOf());
+  // Checking Date Spans //
+
+  // Test whether given date is between start and end date (inclusive)
+  isBetween(mmt, start, end): boolean {
+    let val = moment(mmt).valueOf();
+    return (val >= moment(start).valueOf() && val <= moment(end).valueOf());
   }
+
+  // Given a date, return the upper and lower bounds for three day view
+  getViewBounds(date, view: ViewState) {
+    let d = moment(date);
+    let start = moment(date), end = moment(date);
+    switch(view){
+      case ViewState.month:
+        start = d.clone().startOf('month').startOf('week');
+        end = d.clone().endOf('month').endOf('week');
+        break;
+      case ViewState.week:
+        start = d.clone().startOf('week');
+        end = d.clone().endOf('week');
+        break;
+      case ViewState.threeday:
+        start = d.clone().subtract((d.diff(moment().startOf('day'), 'days') % 3), 'd');
+        end = start.clone().add(2, 'd').endOf('day');
+        break;
+    }
+    return { startDate: start, endDate: end };
+  }
+
+  // Test whether given date is in the same three-day range as another date
+  inSameThreeDay(newDate, checkDate) {
+    let check = moment(checkDate).startOf('day');
+    let bounds = this.getViewBounds(check,ViewState.threeday);
+    return this.isBetween(newDate, bounds.startDate, bounds.endDate);
+  }
+
+  // Test whether given date is in the same month as another date
+  inSameMonth(newDate, checkDate) {
+    return moment(newDate).isSame(moment(checkDate),'month');
+  }
+
+  // Test whether given date is in the same week as another date
+  inSameWeek(newDate, checkDate) {
+    return moment(newDate).isSame(moment(checkDate),'week');
+  }
+
+  // Checking Filter Tags //
 
   // Test whether a given date qualifies as 'happening now'
   isHappeningNow(dateStr: string): boolean {
@@ -77,7 +127,7 @@ export class DateService {
       start: moment(),
       end: moment().add(HAPPENINGNOW_LEN, 'hours')
     };
-    return this.checkRange(moment(dateStr), range.start, range.end);
+    return this.isBetween(moment(dateStr), range.start, range.end);
   }
 
   // Test whether a given date qualifies as 'upcoming'
@@ -86,7 +136,7 @@ export class DateService {
       start: moment().add(UPCOMING_START, 'hours'),
       end: moment().add(UPCOMING_START + UPCOMING_LEN, 'hours')
     };
-    return this.checkRange(moment(dateStr), range.start, range.end);
+    return this.isBetween(moment(dateStr), range.start, range.end);
   }
 
   // Test whether a given date qualifies as 'morning'
@@ -105,6 +155,57 @@ export class DateService {
   isEvening(dateStr: string): boolean {
     let hour = moment(dateStr).hour();
     return (hour >= EVENING_START && hour < 24) || (hour >= 0 && hour < EVENING_END);
+  }
+
+  // Other Formatting //
+
+  // Format Google Calendar
+  formatGoogleCalendar(event: GeoJson): string {
+    if (typeof event == 'undefined')
+      return "";
+    let href = "http://www.google.com/calendar/render?action=TEMPLATE&text=" + event.properties.name + "&dates=" + this.formatEventCalendar(event) + "&details=" + event.properties.description + "&location=" + event.properties.place.name + "&trp=false&sprop=&sprop=name:"
+    return href;
+  }
+
+  // Create string for ICS file format of event
+  formatICS(event: GeoJson): string {
+    if (typeof event == 'undefined') {
+      return "";
+    }
+    let data = `BEGIN:VCALENDAR
+VERSION:2.0
+X-WR-CALNAME:BMaps Events
+NAME:BMaps Events
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:America/Los_Angeles
+TZURL:http://tzurl.org/zoneinfo-outlook/America/Los_Angeles
+X-LIC-LOCATION:America/Los_Angeles
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+TZNAME:PDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+TZNAME:PST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20200207T225053Z
+DTSTART;TZID=America/Los_Angeles:` + this.formatEventCalendarStart(event) +
+`\nDTEND;TZID=America/Los_Angeles:` + this.formatEventCalendarEnd(event) +
+`\nSUMMARY:` + event.properties.name +
+`\nDESCRIPTION:` + event.properties.description +
+`\nLOCATION:` + event.properties.place.names + //loc??
+`\nEND:VEVENT
+END:VCALENDAR`;
+    return data;
   }
 
 }
