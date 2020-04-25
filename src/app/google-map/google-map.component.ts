@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MapInfoWindow } from '@angular/google-maps';
 import { DateService } from '../services/date.service';
-import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
 import { LocationService } from '../services/location.service';
 import { Router } from '@angular/router';
@@ -49,8 +48,7 @@ export class GoogleMapComponent implements OnInit {
   constructor(private router: Router,
               private _dateService: DateService,
               private _eventService: EventService,
-              private _locationService: LocationService,
-              private _viewService: ViewService)
+              private _locationService: LocationService)
   {
   }
 
