@@ -41,7 +41,7 @@
   width: 8.6%;
 }
 
-.corner-block-2{
+.corner-block-2 {
   width: 20px;
   border-left: 1px solid $default_border_color;
 }
@@ -87,6 +87,11 @@
   height: 89%;
 }
 
+.time-of-day-bar {
+  width: 100%;
+  height: 89%;
+}
+
 #far-left {
   overflow-x: hidden;
   table-layout: fixed;
@@ -102,7 +107,25 @@
   color: black;
 }
 
+.time-of-day-bar tr {
+  width: 100%;
+  //height: 4%;
+  margin: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: black;
+}
+
+.timestamp {
+  height: 4%;
+}
+
 .threedayview-day .time-of-day tr:not(:last-child) {
+  border-bottom: 1px solid $default_border_color;
+}
+
+.threedayview-day .time-of-day-bar tr:not(:last-child) {
   border-bottom: 1px solid $default_border_color;
 }
 
@@ -111,6 +134,10 @@
 }
 
 .time-of-day td {
+  vertical-align: top;
+}
+
+.time-of-day-bar td {
   vertical-align: top;
 }
 
@@ -243,6 +270,7 @@
     }
     .filler-block {
       height: 5%;
+      //width: 115%;
       background-color: #7B7B7B;
       border-right: 5px solid #7B7B7B;
     }
@@ -259,15 +287,48 @@
     .time-of-day {
       height: 95%;
     }
+    .time-of-day-bar {
+      //border-collapse: collapse;
+      //width: 115%;
+      height: 95%;
+    }
     .timebar {
       height: 150%;
+      width: 9%;
       border-right: 0px solid $default_border_color;
+      //padding-bottom: 5%;
+    }
+    .day-blocks {
+      width: 91%;
     }
     .timebar tr {
       border-right: 1px solid $default_border_color;
     }
     .timebar:first-child {
       border-right: 0px solid $default_border_color;
+    }
+    .all-day {
+      height: 2.5%;
+    }
+    .timestamp {
+      height: 3%;
+    }
+    .hour {
+      font-size: 15px;
+      padding:-10px;
+      margin:0;
+      //margin-left:-5px;
+      //margin-right:-5px;
+      //margin-bottom: -20px;
+    }
+    .minutes {
+      top: 10px;
+      //padding:0;
+      padding:-10px;
+      margin:0;
+      //margin-left:-5px;
+      //margin-right:-5px;
+      //margin-left: -2px;
     }
 }
 /* end mobile css */
