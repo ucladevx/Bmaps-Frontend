@@ -28,6 +28,7 @@ export class WeekMobileComponent implements OnInit {
   //constructor statement
   constructor(private _eventService: EventService, private _viewService: ViewService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
+  // need to convert to mobile view yikes
   ngOnInit() {
 
     this._viewService.changeToWeek.subscribe( function(delta) { this.changeWeek(delta); }.bind(this));
@@ -40,9 +41,9 @@ export class WeekMobileComponent implements OnInit {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
-      if(this._viewService.isWeekView())
-        document.getElementById("scrollable").scrollTop = this.scrollPosition;
-      if(this._viewService.isWeekView() && this._eventService.getDays())
+      if(this._viewService.isWeekMobileView())
+        document.getElementById("scrollable").scrollTop = this.scrollPosition; //figure this out
+      if(this._viewService.isWeekMobileView() && this._eventService.getDays())
           this._eventService.setDateFilterFromDays(this._eventService.getDays());
     });
 
@@ -62,14 +63,17 @@ export class WeekMobileComponent implements OnInit {
 
     this._eventService.setDateFilterFromDays(this._eventService.getDays());
     this.currentMonth = moment();
-    this._viewService.isWeekView();
+    this._viewService.isWeekMobileView();
     if(this._eventService.getExpandedEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     }
 
-    this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
-    document.getElementById("scrollable").scrollTop = this.scrollPosition;
+    //this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+    //document.getElementById("scrollable").scrollTop = this.scrollPosition;
+  }
 
+  weekString() {
+    return (this.currentDay.startOf('week').format("MMMM D") + " - " + this.currentDay.startOf('week').clone().add(6, 'day').format("MMMM D, YYYY"));
   }
 
   //display the calendar
@@ -78,7 +82,7 @@ export class WeekMobileComponent implements OnInit {
     this.currentMonth = moment(dateInMonth).startOf('month');
     this.currentWeek = moment(dateInMonth).startOf('week');
     this.currentDay = moment(dateInMonth); 
-    if(this._viewService.isWeekView() && dateInMonth != undefined){
+    if(this._viewService.isWeekMobileView() && dateInMonth != undefined){
     // range of days shown on calendar
     let firstDay: Moment = moment(dateInMonth).startOf('week');
     let lastDay: Moment = moment(dateInMonth).endOf('week');
@@ -122,7 +126,7 @@ export class WeekMobileComponent implements OnInit {
       viewDate = new Date();
     else
       viewDate = newWeek.startOf('week').toDate();
-    if(this._viewService.isWeekView())
+    if(this._viewService.isWeekMobileView())
       document.getElementById("scrollable").scrollTop = this.scrollPosition;
     this._eventService.updateDayEvents(viewDate);
     this._eventService.updateWeekEvents(viewDate);
@@ -174,7 +178,7 @@ export class WeekMobileComponent implements OnInit {
     }
   }
 
-  //highlight selected day
+  //highlight selected day // do something with this?
   onSelect(day: CalendarDay): void{
     if(this._eventService.getClickedEvent() && this._eventService.getSelectedDay() != day &&
       moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth){
@@ -196,33 +200,71 @@ export class WeekMobileComponent implements OnInit {
     return event.properties.name;
   }
   eventTime(event: GeoJson): string{
-    return this._dateService.formatTime(event.properties.start_time) + " - " + this._dateService.formatTime(event.properties.end_time);
+
+    return this._dateService.formatTime(event.properties.start_time) //+ "\n" + this._dateService.formatTime(event.properties.end_time);
   }
 
-  //determine the position of the current time bar
-  currentTime() {
-    let now = moment();
-    return this.convertTimeToPercent(now)+"%";
-  }
-
-  //convert time to top percentage in css
-  convertTimeToPercent(time: Moment) {
-    let increment = 3.55; let p = 11;
-    if(time.format("A") == "PM"){ p += 42.8; increment = 3.58; }
-    p += (parseInt(time.format("H"))%12)*increment;
-    p += (parseInt(time.format("mm"))/15)*(increment/4);
-    return p;
-  }
-
-  styleEvent(event: GeoJson, events: GeoJson[]){
+  styleEvent(event: GeoJson){
+    let color = "#ABFFFF"
+    for(let i = 0; i < event.properties.categories.length; i++){
+      if (event.properties.categories[i] != null) {
+        color = this.getEventColor(event.properties.categories[i]);
+        break;
+      }
+    }
     let style = {
-      /*
-      'top' : top+"%", 'height' : height+"%",
-      'left' : left+"%", 'width' : width+"%",
-      'zIndex' : z, 'fontWeight' : font
-      */
+      "background-color" : color + "5F", //"7F" for transparency
+      'border-top' : '5px solid ' + color,
     }
     return style;
+  }
+
+
+  getEventColor(category: string): string {
+    if (!category.localeCompare("NETWORKING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("GARDENING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("FOOD"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("DANCE"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("ART"))
+      return'#BBA4FF';
+    else if (!category.localeCompare("HEALTH"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("SPORTS"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("MEETUP"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("COMEDY_PERFORMANCE"))
+      return '#78E6E6';
+    else if (!category.localeCompare("MUSIC"))
+      return '#78E6E6';
+    else if (!category.localeCompare("THEATER"))
+      return '#78E6E6';
+    else if (!category.localeCompare("PARTY"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("CAUSE"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("FILM"))
+      return '#78E6E6';
+    else if (!category.localeCompare("DRINKS"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("FITNESS"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("GAMES"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("LITERATURE"))
+      return '#78E6E6';
+    else if (!category.localeCompare("RELIGION"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("SHOPPING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("WELLNESS"))
+      return '#9FC0FF';
+    else
+      return '#FFB5F8';
   }
 
   // position and size event to match actual start time and duration
