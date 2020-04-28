@@ -8,7 +8,7 @@
 #scrollable {
   height: 100%;
   margin: 0;
-  //overflow-y: scroll;
+  overflow-y: scroll;
   width: 100%;
 }
 
@@ -69,6 +69,34 @@
 }
 
 .day-slot {
+  background-color: white;
+  text-align: right;
+  height: 100%;
+  //line-height: 1.2em;
+  //height: 2.4em;  
+  //margin-top: auto;
+  //padding-top: auto;
+  //margin-bottom: auto;
+  //padding-bottom: auto;
+  //margin-right: 1%;
+  //padding-right: 1%;
+  padding-right: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 0 0 3rem;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  left: 0;
+  //padding-top: 1rem;
+  //padding-bottom: 1rem;
+  //padding: 2em;
+}
+
+
+.day-text {
+  background-color: white;
   text-align: right;
   height: 100%;
   line-height: 1.2em;
@@ -81,6 +109,9 @@
   flex-direction: column;
   flex-basis: 100%;
   flex: 0 0 3rem;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  left: 0;
   //padding-top: 1rem;
   //padding-bottom: 1rem;
   //padding: 2em;
@@ -95,11 +126,11 @@
   background-color: #ABFFFF;
   cursor: pointer;
   //z-index: 2;
-  width: 10em;
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
-  flex: 0 0 7rem; // shorten for mobile
+  flex: 0 0 11rem; // shorten for mobile //7?
   border-top: 5px solid #29c2bd;
   overflow-x: scroll;
 }
@@ -136,64 +167,6 @@
 .event-time {
   overflow: hidden;
 }
-// /* styles for '...' */ 
-// .block-with-text {
-//   /* hide text if it more than N lines  */
-//   overflow: hidden;
-//   /* for set '...' in absolute position */
-//   position: relative; 
-//   /* use this value to count block height */
-//   line-height: 1.2em;
-//   /* max-height = line-height (1.2) * lines max number (3) */
-//   max-height: 2.4em; 
-//   /* fix problem when last visible word doesn't adjoin right side  */
-//   text-align: justify;  
-//   /* place for '...' */
-//   margin-right: -1em;
-//   padding-right: 1em;
-// }
-// /* create the ... */
-// .block-with-text:before {
-//    points in the end 
-//   content: '...';
-//   /* absolute position */
-//   position: absolute;
-//   /* set position to right bottom corner of block */
-//   right: 0;
-//   bottom: 0;
-// }
-// /* hide ... if we have text, which is less than or equal to max lines */
-// .block-with-text:after {
-//   /* points in the end */
-//   content: '';
-//   /* absolute position */
-//   position: absolute;
-//   /* set position to right bottom corner of text */
-//   right: 0;
-//   /* set width and height */
-//   width: 1em;
-//   height: 1em;
-//   margin-top: 0.2em;
-//   /* bg color = bg color under block */
-//   background: #ABFFFF;
-// }
-
-// ask about fade in meeting!
-// .fade {
-//   position: relative;
-//   height: 2.4em; /* exactly three lines */
-// }
-
-// .fade:after {
-//   content: "";
-//   text-align: right;
-//   position: absolute;
-//   bottom: 0;
-//   right: 0;
-//   width: 70%;
-//   height: 1.2em;
-//   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
-// }
 
 @media screen and (max-width: 768px) {
 	.week-summary {
@@ -206,6 +179,6 @@
     }
 
   .weekview-day-event {   
-    flex: 0 0 5rem;
+    flex: 0 0 7rem; //5
   }
 }
