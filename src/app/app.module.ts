@@ -1,39 +1,34 @@
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';  // replaces previous Http service
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
-import { CustomReuseStrategy } from './router-strategy';
-import { SharedModule } from './shared.module';
-
-import { AppComponent } from './app.component';
-import { MapBoxComponent } from './map-box/map-box.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { EventDetailComponent } from './event-detail/event-detail.component';
-import { CategoryBarMapComponent } from './category-bar-map/category-bar-map.component';
-import { CategoryBarCalendarComponent } from './category-bar-calendar/category-bar-calendar.component';
-
-//import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
-import { NavbarComponent } from './navbar/navbar.component';
-import { ViewService } from './services/view.service';
-import { EventService } from './services/event.service';
-import { DateSelectorComponent } from './date-selector/date-selector.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { CustomReuseStrategy } from './router-strategy';
+import { SharedModule } from './shared.module';
+import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
+import { ServiceWorkerModule } from '@angular/service-worker';
+// import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { EventService } from './services/event.service';
+import { NavbarComponent } from './navbar/navbar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { EventDetailComponent } from './event-detail/event-detail.component';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { MapBoxComponent } from './map-box/map-box.component';
+import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
-import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
-import { SearchBarComponent } from './search-bar/search-bar.component';
 import { ThreeDayComponent } from './three-day/three-day.component';
+import { FilterBarMapComponent } from './filter-bar-map/filter-bar-map.component';
+import { FilterBarCalendarComponent } from './filter-bar-calendar/filter-bar-calendar.component';
 import { ModalComponent } from './modal/modal.component';
 
-
 const appRoutes: Routes = [
-  { path: 'map', component: MapBoxComponent },
+  { path: 'map', component: MapBoxComponent  },
   { path: 'calendar',
     component: CalendarContainerComponent,
     children: [
@@ -50,38 +45,39 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    MapBoxComponent,
+    NavbarComponent,
     SidebarComponent,
     EventDetailComponent,
-    CategoryBarMapComponent,
-    CategoryBarCalendarComponent,
     DateSelectorComponent,
-    NavbarComponent,
+    MapBoxComponent,
+    CalendarContainerComponent,
     MonthComponent,
     WeekComponent,
-    CalendarContainerComponent,
-    SearchBarComponent,
     ThreeDayComponent,
+    FilterBarMapComponent,
+    FilterBarCalendarComponent,
     ModalComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
     HttpClientModule,
+    FormsModule,
     SharedModule,
-    // AngularFontAwesomeModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
-    ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
     ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
     HammerModule,
+    ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
+    // AngularFontAwesomeModule
   ],
   providers: [
-    ViewService,
     EventService,
-    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomReuseStrategy
+    },
   ],
   bootstrap: [AppComponent]
 })

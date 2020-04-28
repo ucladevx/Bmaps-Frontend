@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { CategoryBarMapComponent } from './category-bar-map.component';
+import { FilterBarCalendarComponent } from './filter-bar-calendar.component';
 
-describe('CategoryBarMapComponent', () => {
+describe('FilterBarCalendarComponent', () => {
 
-  let component: CategoryBarMapComponent;
-  let fixture: ComponentFixture<CategoryBarMapComponent>;
+  let component: FilterBarCalendarComponent;
+  let fixture: ComponentFixture<FilterBarCalendarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CategoryBarMapComponent ]
+      declarations: [ FilterBarCalendarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CategoryBarMapComponent);
+    fixture = TestBed.createComponent(FilterBarCalendarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -22,5 +22,5 @@ describe('CategoryBarMapComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
+
 });

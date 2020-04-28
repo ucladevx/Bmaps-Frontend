@@ -7,6 +7,7 @@ const NEARBY_DIST = 0.35;
 
 @Injectable()
 export class LocationService {
+
   constructor() { }
 
   // track user location

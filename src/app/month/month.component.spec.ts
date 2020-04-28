@@ -4,7 +4,7 @@ import { MonthComponent } from './month.component';
 describe('MonthComponent', () => {
 
   let component: MonthComponent;
-  let fixture: MonthFixture<MonthComponent>;
+  let fixture: ComponentFixture<MonthComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -22,5 +22,5 @@ describe('MonthComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
+
 });

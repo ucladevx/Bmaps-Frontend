@@ -1,22 +1,32 @@
 <div class="calendar-container">
+  <!-- month header -->
   <div class="calendar-header">
-    <span class="long-abbr">Sun</span><span class="long-abbr">Mon</span><span class="long-abbr">Tue</span>
-    <span class="long-abbr">Wed</span><span class="long-abbr">Thu</span><span class="long-abbr">Fri</span>
+    <span class="long-abbr">Sun</span>
+    <span class="long-abbr">Mon</span>
+    <span class="long-abbr">Tue</span>
+    <span class="long-abbr">Wed</span>
+    <span class="long-abbr">Thu</span>
+    <span class="long-abbr">Fri</span>
     <span class="long-abbr last-child">Sat</span>
-    <span class="short-abbr">sun</span><span class="short-abbr">mon</span><span class="short-abbr">tue</span>
-    <span class="short-abbr">wed</span><span class="short-abbr">thu</span><span class="short-abbr">fri</span>
+    <span class="short-abbr">sun</span>
+    <span class="short-abbr">mon</span>
+    <span class="short-abbr">tue</span>
+    <span class="short-abbr">wed</span>
+    <span class="short-abbr">thu</span>
+    <span class="short-abbr">fri</span>
     <span class="short-abbr last-child">sat</span>
   </div>
+  <!-- month days -->
   <div class="calendar-month">
     <div *ngFor="let day of days" class="calendar-day" (click)="onSelect(day)"
-    [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.selected, 'today': day.isToday}">
+    [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.isSelected, 'today': day.isToday}">
       <span [ngClass]="{'today': day.isToday}">{{day.dayOfMonth}}</span>
       <ul class="calendar-day-event" >
         <li *ngFor="let event of day.events">
-            {{event.properties.name.length > 30 ? event.properties.name.substring(0,30) + "..." : event.properties.name}}
+          {{event.properties.name.length > 30 ? event.properties.name.substring(0,30) + "..." : event.properties.name}}
         </li>
       </ul>
-      <div class="dot"  *ngIf="day.events.length != 0"></div>
+      <div class="dot" *ngIf="day.events.length != 0"></div>
     </div>
   </div>
 </div>
