@@ -9,12 +9,7 @@
     <!-- date selector -->
     <app-date-selector class="d-none d-md-block"></app-date-selector>
     <!-- filter dropdown -->
-    <span *ngIf="_eventService.isMapView(); else calendarView">
-      <app-filter-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-filter-bar-map>
-    </span>
-    <ng-template #calendarView>
-      <app-filter-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-filter-bar-calendar>
-    </ng-template>
+    <app-filter-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-filter-bar-calendar>
     <!-- event list -->
     <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
       <!-- placeholder if no events -->
