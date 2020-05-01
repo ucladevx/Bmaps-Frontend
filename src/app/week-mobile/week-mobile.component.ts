@@ -41,8 +41,8 @@ export class WeekMobileComponent implements OnInit {
       this.filteredEvents = weekEventCollection.features;
       this.fillEventsByDay();
       this.ngZone.run( () => { this.showCalendar(this._eventService.getCurrentDate()); });
-      if(this._viewService.isWeekMobileView())
-        document.getElementById("scrollable").scrollTop = this.scrollPosition; //figure this out
+      // if(this._viewService.isWeekMobileView())
+      //   document.getElementById("scrollable").scrollTop = this.scrollPosition; //figure this out
       if(this._viewService.isWeekMobileView() && this._eventService.getDays())
           this._eventService.setDateFilterFromDays(this._eventService.getDays());
     });
@@ -126,8 +126,8 @@ export class WeekMobileComponent implements OnInit {
       viewDate = new Date();
     else
       viewDate = newWeek.startOf('week').toDate();
-    if(this._viewService.isWeekMobileView())
-      document.getElementById("scrollable").scrollTop = this.scrollPosition;
+    // if(this._viewService.isWeekMobileView())
+    //   document.getElementById("scrollable").scrollTop = this.scrollPosition;
     this._eventService.updateDayEvents(viewDate);
     this._eventService.updateWeekEvents(viewDate);
     this._eventService.updateMonthEvents(viewDate);
