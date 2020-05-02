@@ -312,6 +312,14 @@
     height: 3.25%;
   }
 
+  .time-of-day-bar tr:nth-last-child(2) {
+    height: 3.25%;
+  }
+
+  .time-of-day-bar tr:last-child {
+    height: 1%
+  }
+
   //.time-of-day-bar tr:not(:first-child) td:first-child { 
   .time-of-day-bar tr td:first-child {  
     font-size: 15px;

@@ -33,8 +33,7 @@
         <tr><td>5</td><td>:00</td></tr><tr><td>6</td><td>:00</td></tr>
         <tr><td>7</td><td>:00</td></tr><tr><td>8</td><td>:00</td></tr>
         <tr><td>9</td><td>:00</td></tr><tr><td>10</td><td>:00</td></tr>
-        <tr><td>11</td><td>:00</td></tr><tr><td>12</td><td>:00</td></tr>
-<!--origin/master-->
+        <tr><td>11</td><td>:00</td></tr><tr><td>12</td><td>AM</td></tr>
       </table>
     </div>
     <!-- threeday days -->
@@ -48,7 +47,7 @@
               <span class="day-of-month" [ngClass]="{'selected': day.selected }">{{day.dayOfMonth}}</span>
           </div>
           <!-- day divided by time -->
-          <table class="time-of-day">
+          <table class="time-of-day" (panleft)="onPanLeft()" (panright)="onPanRight()">
             <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
             <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
             <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>

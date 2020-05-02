@@ -180,7 +180,7 @@ export class ThreeDayComponent implements OnInit {
   onPanLeft() {
     if (window.outerWidth <= 768) {
       // only on mobile
-      this.changeDateSpan(-1);
+      this.changeDateSpan(1);
 
     }
   }
@@ -189,7 +189,7 @@ export class ThreeDayComponent implements OnInit {
   onPanRight() {
     if (window.outerWidth <= 768) {
       // only on mobile
-      this.changeDateSpan(1);
+      this.changeDateSpan(-1);
 
     }
   }
