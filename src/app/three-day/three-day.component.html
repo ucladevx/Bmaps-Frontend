@@ -43,8 +43,8 @@
           [ngClass]="{'in-current-month': day.inCurrentMonth, 'current-day': day.isSelected, 'today': day.isToday}">
           <!-- threeday header -->
           <div class="day-header" id="{{'header'+day.dayOfMonth}}">
-            <span class="long-abbr">{{day.dayOfWeek}}</span><span class="short-abbr">S</span>
-            <span class="day-of-month" [ngClass]="{'selected': day.selected }">{{day.dayOfMonth}}</span>
+              <span class="long-abbr">{{day.dayOfWeek}}</span><span class="short-abbr">{{day.dayOfWeek.toLowerCase()}}</span>
+              <span class="day-of-month" [ngClass]="{'selected': day.selected }">{{day.dayOfMonth}}</span>
           </div>
           <!-- day divided by time -->
           <table class="time-of-day">

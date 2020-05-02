@@ -50,7 +50,7 @@
 
 .timebar {
   width: 8%;
-  height: 150%;
+  height: 200%;
   background: white;
   float: left;
   left: 0;
@@ -134,7 +134,7 @@
 
 .day-blocks {
   width: 92%;
-  height: 150%;
+  height: 200%;
   display: flex;
   flex-direction: column;
 }
@@ -235,13 +235,29 @@
 /* mobile css */
 @media screen and (max-width: 768px) {
   /* display short day abbreviations */
-  .threedayview-header > .short-abbr {
-    display: flex;
-    font-size: 12px;
+  .day-header > .short-abbr {
+    display: block;
+    font-size: 15px;
   }
 
-  .threedayview-header > .long-abbr {
+  .day-header > .long-abbr {
     display: none;
+  }
+
+  .day-header {
+    height: 3.75%;
+    background: #7B7B7B;
+    color: #fff;
+    //vertical-align: middle;
+    line-height: 125%;
+    //font-size: 15px;
+    padding: 3.5% 0% 2% 0%;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .day-of-month {
+    font-size: 13px;
+    padding: 0%;
   }
 
   .threedayview-day {
@@ -256,19 +272,8 @@
     border-right: 0px;
   }
 
-  .day-header {
-    height: 5%;
-    background: #7B7B7B;
-    color: #fff;
-    vertical-align: middle;
-    line-height: 200%;
-    font-size: 15px;
-    padding: 1% 0% 2% 0%;
-    font-family: 'Nunito', sans-serif;
-  }
-
   .filler-block {
-    height: 5%;
+    height: 3.75%;
     background: #7B7B7B;
     border-right: 5px solid #7B7B7B;
   }
@@ -282,25 +287,20 @@
     overflow-x: hidden;
   }
 
-  .day-of-month {
-    font-size: 13px;
-  }
-
   .time-of-day {
     height: 95%;
   }
 
   .timebar {
-    height: 150%;
     width: 9%;
     border-right: 0px;
   }
 
-  .timebar tr {
+  /*.timebar tr {
     border-right: $default_border_style;
-  }
+  }*/
 
-  .timebar:first-child {
+  .timebar {
     border-right: 0px;
   }
 
@@ -312,10 +312,6 @@
 
   .day-blocks {
     width: 91%;
-  }
-
-  .timebar:first-child {
-    border-right: 0px;
   }
 
   .all-day {
