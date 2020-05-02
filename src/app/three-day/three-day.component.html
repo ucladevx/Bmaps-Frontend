@@ -20,13 +20,14 @@
     <div class="timebar">
       <div class="filler-block"></div>
       <table class="time-of-day-bar" id="far-left">
-        <tr><td id="hour-slot">all day</td></tr>
+        <!--<tr><td id="hour-slot"></td></tr>-->
+        <tr><td>12</td><td>AM</td></tr>
         <tr><td>1</td><td>:00</td></tr><tr><td>2</td><td>:00</td></tr>
         <tr><td>3</td><td>:00</td></tr><tr><td>4</td><td>:00</td></tr>
         <tr><td>5</td><td>:00</td></tr><tr><td>6</td><td>:00</td></tr>
         <tr><td>7</td><td>:00</td></tr><tr><td>8</td><td>:00</td></tr>
         <tr><td>9</td><td>:00</td></tr><tr><td>10</td><td>:00</td></tr>
-        <tr><td>11</td><td>:00</td></tr><tr><td>12</td><td>:00</td></tr>
+        <tr><td>11</td><td>:00</td></tr><tr><td>12</td><td>PM</td></tr>
         <tr><td>1</td><td>:00</td></tr><tr><td>2</td><td>:00</td></tr>
         <tr><td>3</td><td>:00</td></tr><tr><td>4</td><td>:00</td></tr>
         <tr><td>5</td><td>:00</td></tr><tr><td>6</td><td>:00</td></tr>
@@ -52,7 +53,7 @@
             <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
             <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
             <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
-            <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+            <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
           </table>
           <!-- current time bar -->
           <div class="current-time" [ngClass]="{'today': day.isToday}" [style.top]="currentTime()"></div>

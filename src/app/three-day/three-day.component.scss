@@ -100,16 +100,12 @@
 
 .time-of-day-bar tr {
   width: 100%;
-  //height: 4%;
+  height: 4%;
   margin: 0;
   text-align: center;
   font-size: 10px;
   font-weight: bold;
   color: black;
-}
-
-.timestamp {
-  height: 4%;
 }
 
 .threedayview-day .time-of-day tr:not(:last-child) {
@@ -253,6 +249,7 @@
     //font-size: 15px;
     padding: 3.5% 0% 2% 0%;
     font-family: 'Nunito', sans-serif;
+    border-bottom: 0px;
   }
 
   .day-of-month {
@@ -288,7 +285,7 @@
   }
 
   .time-of-day {
-    height: 95%;
+    height: 96.25%;
   }
 
   .timebar {
@@ -296,89 +293,38 @@
     border-right: 0px;
   }
 
-  /*.timebar tr {
-    border-right: $default_border_style;
-  }*/
-
   .timebar {
     border-right: 0px;
   }
 
   .time-of-day-bar {
-    height: 95%;
+    height: 96.25%;
     font-family: 'Roboto', sans-serif;
     font-size: 10px;
   }
+
 
   .day-blocks {
     width: 91%;
   }
 
-  .all-day {
-    height: 2.5%;
+  .time-of-day-bar tr:first-child {
+    height: 3.25%;
   }
 
-  .timestamp {
-    height: 3%;
-  }
-
-  .time-of-day-bar tr:first-child td {
-    //vertical-align: top;
-    height: 2.5%;
-  }
-
-  /*.time-of-day-bar tr:not(:first-child):first-child {
+  //.time-of-day-bar tr:not(:first-child) td:first-child { 
+  .time-of-day-bar tr td:first-child {  
     font-size: 15px;
-    padding:-10px;
-    margin:0;
-    text-align: right;
-  }*/
-
-  .time-of-day-bar tr:not(:first-child) td:first-child {  
-    font-size: 15px;
-    padding:-10px;
-    margin:0;
+    padding: -10px;
+    margin: 0;
     text-align: right;
   }
 
-  .time-of-day-bar tr:not(:first-child) td:nth-child(2) {  
+  //.time-of-day-bar tr:not(:first-child) td:nth-child(2) {  
+  .time-of-day-bar tr td:nth-child(2) {  
     top: 10px;
     //padding:0;
     padding:-10px;
     margin:0;
   }
-/*
-  .time-of-day-bar tr:nth-child(2) td {
-    top: 10px;
-    //padding:0;
-    padding:-10px;
-    margin:0;
-  }*/
-  /*
-  .hour {
-    font-size: 15px;
-    padding:-10px;
-    margin:0;
-    text-align: right;
-
-    //margin-left:-5px;
-    //margin-right:-5px;
-    //margin-bottom: -20px;
-    /*padding:0px; 
-    border-width:0px; 
-    margin:0px; 
-  }
-
-  .minutes {
-    top: 10px;
-    //padding:0;
-    padding:-10px;
-    margin:0;
-    //margin-left:-5px;
-    //margin-right:-5px;
-    //margin-left: -2px;
-    /*padding:0px; 
-    border-width:0px; 
-    margin:0px; 
-  }*/
 }
