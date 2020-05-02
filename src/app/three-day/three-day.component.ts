@@ -201,7 +201,7 @@ export class ThreeDayComponent implements OnInit {
       p = 3.75;  // p is height % of day-header
       increment = 4.05;    // about height % of an hour block = (time-of-day height %)/24
       if(time.format("A") == "PM")
-        p += 48.8;    // about 12*increment
+        p += 48.6;    // about 12*increment
     } else {
       p = 11; 
       increment = 3.77;
@@ -264,7 +264,7 @@ export class ThreeDayComponent implements OnInit {
   styleEventName(event: GeoJson) {
     var height = this.calculateEventHeight(event);
 
-    var oneLineMax = 4.5;    // height percentage max for one line
+    var oneLineMax = 2.25;    // height percentage max for one line
     var increment = (window.outerWidth <= 768) ? 2.5 : 2;    // increment percentage per line
 
     var lines = 5;

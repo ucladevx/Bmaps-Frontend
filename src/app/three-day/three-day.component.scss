@@ -37,7 +37,7 @@
   background-clip: padding-box;
 }
 
-.short-abbr {
+.lower-case {
   display: none;
 }
 
@@ -81,6 +81,7 @@
 .time-of-day-bar {
   width: 100%;
   height: 89%;
+  font-family: 'Roboto', sans-serif;
 }
 
 #far-left {
@@ -108,6 +109,7 @@
 .time-of-day-bar tr td:first-child {  
   font-size: 15px;
   text-align: right;
+  font-weight: 500;
 }
 
 .time-of-day-bar tr td:nth-child(2) {  
@@ -250,12 +252,12 @@
 /* mobile css */
 @media screen and (max-width: 768px) {
   /* display short day abbreviations */
-  .day-header > .short-abbr {
+  .day-header > .lower-case {
     display: block;
     font-size: 15px;
   }
 
-  .day-header > .long-abbr {
+  .day-header > .regular {
     display: none;
   }
 
@@ -263,17 +265,15 @@
     height: 3.75%;
     background: #7B7B7B;
     color: #fff;
-    //vertical-align: middle;
-    line-height: 125%;
-    //font-size: 15px;
+    line-height: 125%;  
     padding: 3.5% 0% 2% 0%;
     font-family: 'Nunito', sans-serif;
     border-bottom: 0px;
   }
 
   .day-of-month {
-    font-size: 13px;
     padding: 0%;
+    font-size: 15px;
   }
 
   .threedayview-day {
@@ -318,36 +318,10 @@
 
   .time-of-day-bar {
     height: 96.25%;
-    font-family: 'Roboto', sans-serif;
     font-size: 10px;
   }
-
 
   .day-blocks {
     width: 91%;
   }
-/*
-  .time-of-day-bar tr:first-child {
-    height: 3.25%;
-  }
-
-  .time-of-day-bar tr:nth-last-child(2) {
-    height: 3.25%;
-  }
-
-  .time-of-day-bar tr:last-child {
-    height: 1%
-  }
-*/
-  //.time-of-day-bar tr:not(:first-child) td:first-child { 
-    /*
-  .time-of-day-bar tr td:first-child {  
-    font-size: 15px;
-    text-align: right;
-  }
-
-  //.time-of-day-bar tr:not(:first-child) td:nth-child(2) {  
-  .time-of-day-bar tr td:nth-child(2) {  
-    top: 10px;
-  }*/
 }
