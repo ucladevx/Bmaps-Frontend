@@ -198,13 +198,15 @@ export class ThreeDayComponent implements OnInit {
   convertTimeToPercent(time: Moment) {
     let increment = 0; let p = 0;
     if (window.outerWidth <= 768){
-      p = 5; increment = 3.84;
+      p = 3.75;  // p is height % of day-header
+      increment = 4.05;    // about height % of an hour block = (time-of-day height %)/24
       if(time.format("A") == "PM")
-        p += 46; increment = 3.77;
+        p += 48.8;    // about 12*increment
     } else {
-      p = 11; increment = 3.58;
+      p = 11; 
+      increment = 3.77;
       if(time.format("A") == "PM")
-        p += 43; increment = 3.55;
+        p += 45.25;
     }
     p += (parseInt(time.format("H"))%12)*increment;
     p += (parseInt(time.format("mm"))/15)*(increment/4);
