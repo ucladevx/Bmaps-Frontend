@@ -73,6 +73,18 @@ export class DateService {
     return dates;
   }
 
+  // convert number to equivalent time (via minutes)
+  convertNumToTime(minutes: number){
+    let hours = (Math.floor(minutes / 60))%24;
+    minutes = (minutes-(hours*60))%60;
+    let minString = minutes.toString();
+    if(minString.length == 1) minString = "0"+minString;
+    let hourString = hours.toString();
+    if(hourString.length == 1) hourString = "0"+hourString;
+    let time = hourString+":"+minString;
+    return time;
+  }
+
   // Checking Date Spans //
 
   // Test whether given date is between start and end date (inclusive)

@@ -1,0 +1,134 @@
+<div id="filter-div" class="btn-group">
+  <!-- filter visbility toggle button -->
+  <button *ngIf="showToggleButton" id="toggle-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()">
+    Filters <span class="caret"></span>
+  </button>
+  <!-- filters menu -->
+  <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
+    <!-- filter dropdowns (location, date, time) -->
+    <div class="filters-bar">
+      <!-- clear button -->
+      <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
+      <!-- div to hold the three dropdowns -->
+      <div class="dropdown-bar">
+        <!-- location dropdown -->
+        <div class="dropdown" dropdown id="loc-dropdown">
+          <!-- dropdown button -->
+          <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
+          [ngClass]="{'selected-dropdown' : locFilter != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="locFilter == 'none'">Location</span>
+            <span *ngIf="locFilter != 'none'">{{locFilter}}</span>
+            <span class="caret"></span>
+          </a>
+          <!-- options -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter == 'On Campus'}" (click)="setLocFilter('On Campus')">On Campus</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter == 'Off Campus'}" (click)="setLocFilter('Off Campus')">Off Campus</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter == 'Custom'}" (click)="setLocFilter('Custom')">Custom Location</a>
+            </li>
+          </ul>
+        </div>
+        <!-- date span dropdown -->
+        <div class="dropdown" dropdown id="date-dropdown">
+          <!-- dropdown button -->
+          <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
+          [ngClass]="{'selected-dropdown' : dateFilter != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="dateFilter == 'none'">Date</span>
+            <span *ngIf="dateFilter != 'none'">{{dateFilter}}</span>
+            <span class="caret"></span>
+          </a>
+          <!-- options -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'Today'}" (click)="setDateFilter('Today')">Today</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'Tomorrow'}" (click)="setDateFilter('Tomorrow')">Tomorrow</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'This Week'}" (click)="setDateFilter('This Week')">This Week</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'This Weekend'}" (click)="setDateFilter('This Weekend')">This Weekend</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'This Month'}" (click)="setDateFilter('This Month')">This Month</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'Custom'}" (click)="setDateFilter('Custom')">Custom Date</a>
+            </li>
+          </ul>
+        </div>
+        <!-- time dropdown -->
+        <div class="dropdown" dropdown id="time-dropdown">
+          <!-- dropdown button -->
+          <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
+          [ngClass]="{'selected-dropdown' : timeFilter != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="timeFilter == 'none'">Time</span>
+            <span *ngIf="timeFilter != 'none'">{{timeFilter}}</span>
+            <span class="caret"></span>
+          </a>
+          <!-- options -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Happening Now'}" (click)="setTimeFilter('Happening Now')">Happening Now</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Upcoming'}" (click)="setTimeFilter('Upcoming')">Upcoming</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Morning'}" (click)="setTimeFilter('Morning')">Morning</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Afternoon'}" (click)="setTimeFilter('Afternoon')">Afternoon</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Evening'}" (click)="setTimeFilter('Evening')">Evening</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Custom'}" (click)="setTimeFilter('Custom')">Custom Time</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="categHash" class="categories-wrapper">
+      <ul class="categories-list" role="menu">
+        <li *ngFor="let categKey of objectKeys(categHash)">
+          <a *ngIf="categKey != 'all'" [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
+             (click)="categoryClicked(categKey)">
+          <div class="checkbox-container">
+            <div *ngIf="categHash[categKey].selected; else unchecked">
+              <img class="checkbox" width="16px" src="assets/images/check.svg"/>
+            </div>
+          </div>
+          <ng-template #unchecked><div>
+            <img class="checkbox" width="16px" src="assets/images/box.svg" />
+          </div></ng-template>
+          {{categHash[categKey].formattedCategory}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

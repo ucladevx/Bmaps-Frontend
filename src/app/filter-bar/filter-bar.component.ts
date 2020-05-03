@@ -2,34 +2,39 @@ import { Component, OnInit, HostListener, Input } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FeatureCollection, GeoJson } from '../map';
 import { EventService } from '../services/event.service';
+import { DateService } from '../services/date.service';
 import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-filter-bar-calendar',
-  templateUrl: './filter-bar-calendar.component.html',
-  styleUrls: ['./filter-bar-calendar.component.scss']
+  selector: 'app-filter-bar',
+  templateUrl: './filter-bar.component.html',
+  styleUrls: ['./filter-bar.component.scss']
 })
 
-export class FilterBarCalendarComponent implements OnInit {
+export class FilterBarComponent implements OnInit {
   @Input() showToggleButton: boolean;
   private wasInside = false;
 
   // category hash
   private categHash = {};
   // tag hash
-  private tagHash = {};
+  private locFilter = 'none';
+  private dateFilter = 'none';
+  private timeFilter = 'none';
   // dropdown toggle
   public showDropdown = false;
   // calendar events
   public events = [];
 
-  constructor(private _eventService: EventService) {}
+  constructor(private _eventService: EventService, private _dateService: DateService) {}
 
   ngOnInit() {
     // whenever categories or tags are updated, update local variables
     this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
-    this._eventService.tagHash$.subscribe(tagHash => { this.tagHash = tagHash; });
+    this._eventService.locFilter$.subscribe(locInfo => { this.locFilter = locInfo.tag; });
+    this._eventService.dateFilter$.subscribe(dateInfo => { this.dateFilter = dateInfo.tag; });
+    this._eventService.timeFilter$.subscribe(timeInfo => { this.timeFilter = timeInfo.tag; });
     // whenever calendar events change, update the local events variable
     this._eventService.monthEvents$.subscribe(events => {
       if(this._eventService.getCurrentView() == ViewState.month)
@@ -59,10 +64,11 @@ export class FilterBarCalendarComponent implements OnInit {
   }
 
   // update date filter
-  setDateFilter(startDate: string, endDate: string){
-    let first  = moment(startDate).toDate();
+  setDateFilter(dateInput: string){
+    this._eventService.setDateFilter(dateInput);
+    /* let first  = moment(startDate).toDate();
     let last = moment(endDate).toDate();
-    this._eventService.setDateFilter(first,last);
+    this._eventService.setDateFilter(first,last); */
   }
 
   // retrieve date filter
@@ -76,47 +82,32 @@ export class FilterBarCalendarComponent implements OnInit {
   }
 
   // update time filter
-  setTimeFilter(startTime: string, endTime: string){
-    let starttime = startTime.split(":");
+  setTimeFilter(timeInput: string){
+    this._eventService.setTimeFilter(timeInput);
+    /* let starttime = startTime.split(":");
     let start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
     let endtime = endTime.split(":");
     let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
-    this._eventService.setTimeFilter(start,end);
+    this._eventService.setTimeFilter(start,end); */
   }
 
   // retrieve time filter
   getStartTime(){
     if(this._eventService.getTimeFilter())
-      return this.convertNumToTime(this._eventService.getTimeFilter().start);
+      return this._dateService.convertNumToTime(this._eventService.getTimeFilter().start);
     else return 0;
   }
   getEndTime(){
     if(this._eventService.getTimeFilter())
-      return this.convertNumToTime(this._eventService.getTimeFilter().end);
+      return this._dateService.convertNumToTime(this._eventService.getTimeFilter().end);
     else return 0;
   }
 
-  // convert number to equivalent time (via minutes)
-  convertNumToTime(minutes: number){
-    let hours = (Math.floor(minutes / 60))%24;
-    minutes = (minutes-(hours*60))%60;
-    let minString = minutes.toString();
-    if(minString.length == 1) minString = "0"+minString;
-    let hourString = hours.toString();
-    if(hourString.length == 1) hourString = "0"+hourString;
-    let time = hourString+":"+minString;
-    return time;
-  }
-
   // update location filter
-  setLocationFilter(locInput: string){ this._eventService.setLocationFilter(locInput); }
+  setLocFilter(locInput: string){ this._eventService.setLocFilter(locInput); }
 
   // retrieve location filter
-  getLoc(){ return this._eventService.getLocationFilter(); }
-  clearLoc(){ this._eventService.setLocationFilter(null); }
-
-  // update tag
-  tagClicked(tag: string): void { this._eventService.toggleTag(tag); }
+  clearLoc(){ this._eventService.setLocFilter('none'); }
 
   // update category
   categoryClicked(category: string): void { this._eventService.toggleCategory(category); }

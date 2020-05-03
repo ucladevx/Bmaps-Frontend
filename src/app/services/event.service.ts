@@ -58,7 +58,6 @@ export class EventService {
 
   // FILTER VARIABLES
   private _categHash;                 // maps event categories to selection status
-  private _tagHash;                   // maps filter tags to selection status
   private _locFilter;                 // location string being applied as filter
   private _dateFilter;                // range of dates being applied as filter
   private _timeFilter;                // range of times being applied as filter
@@ -80,10 +79,9 @@ export class EventService {
   private clickedEventSource: Subject <GeoJson>;
   private sidebarEventSource: Subject <GeoJson>;
   private categHashSource: BehaviorSubject <any>;
-  private tagHashSource: BehaviorSubject <any>;
-  private locFilterSource: Subject <string>;
-  private dateFilterSource: Subject <any>;
-  private timeFilterSource: Subject <any>;
+  private locFilterSource: BehaviorSubject <any>;
+  private dateFilterSource: BehaviorSubject <any>;
+  private timeFilterSource: BehaviorSubject <any>;
 
   // OBSERVABLES
   currentView$; lastView$;
@@ -93,8 +91,7 @@ export class EventService {
   threeDayEvents$; filteredThreeDayEvents$;
   dayEvents$; filteredDayEvents$;
   hoveredEvent$; clickedEvent$; sidebarEvent$;
-  categHash$; tagHash$;
-  locFilter$; dateFilter$; timeFilter$;
+  categHash$; locFilter$; dateFilter$; timeFilter$;
 
   // Constructor
   constructor(private router: Router, private http: HttpClient, private _dateService: DateService, private _locationService: LocationService) {
@@ -194,23 +191,18 @@ export class EventService {
     this.categHash$ = this.categHashSource.asObservable();
     this.categHash$.subscribe(categHash => { this._categHash = categHash; this.applyAllFilters(); });
 
-    // tagHash
-    this.tagHashSource = new BehaviorSubject <any> ({});
-    this.tagHash$ = this.tagHashSource.asObservable();
-    this.tagHash$.subscribe(filterHash => { this._tagHash = filterHash; this.applyAllFilters(); });
-
     // locFilter
-    this.locFilterSource = new Subject <string> ();
+    this.locFilterSource = new BehaviorSubject <any> ({});
     this.locFilter$ = this.locFilterSource.asObservable();
     this.locFilter$.subscribe(locSearch => { this._locFilter = locSearch; this.applyAllFilters(); });
 
     // dateFilter
-    this.dateFilterSource = new Subject <any> ();
+    this.dateFilterSource = new BehaviorSubject <any> ({});
     this.dateFilter$ = this.dateFilterSource.asObservable();
     this.dateFilter$.subscribe(dateHash => { this._dateFilter = dateHash; this.applyAllFilters(); });
 
     // timeFilter
-    this.timeFilterSource = new Subject <any> ();
+    this.timeFilterSource = new BehaviorSubject <any> ({});
     this.timeFilter$ = this.timeFilterSource.asObservable();
     this.timeFilter$.subscribe(timeHash => { this._timeFilter = timeHash; this.applyAllFilters(); });
 
@@ -318,7 +310,7 @@ export class EventService {
         || (newView == ViewState.month && !sameMonth)
         || (newView == ViewState.week && !sameWeek)
         || (newView == ViewState.threeday && !sameThreeDay))
-          this.resetDateFilter();
+          this.setDateFilter('none');
     }
     // if view changed
     let prevView = this._currentView;
@@ -327,9 +319,8 @@ export class EventService {
       this.storeLastView(prevView);
       this.setCurrentView(newView);
       // reset certain filters
-      this.resetDateFilter();
+      this.setDateFilter('none');
       if(newView == ViewState.map || prevView == ViewState.map) {
-        this.clearTags();
         this.clearCategories();
         this.resetCalendarFilters();
       }
@@ -442,35 +433,6 @@ export class EventService {
 
   // REST OF THIS FILE HANDLES FILTERS //
 
-  // Hard-Coded Filter Objects //
-
-  // tags in same group should be mutually exclusive
-  private _tagGroups = [
-    ['happening now', 'upcoming', 'morning', 'afternoon', 'evening'],
-    ['on-campus', 'off-campus', 'nearby'],
-    ['morning', 'happening now', 'upcoming'],
-    ['afternoon', 'happening now', 'upcoming'],
-    ['evening', 'happening now', 'upcoming'],
-    ['free food'] ];
-
-  // maps tags to tagsGroups indices for quick access
-  private _tagGroupMap = {
-    'happening now': 0, 'upcoming': 0,
-    'on-campus': 1, 'off-campus': 1, 'nearby': 1,
-    'morning': 2, 'afternoon': 3, 'evening': 4, 'free food': 5 };
-
-  // tags in same group OR'ed, every group AND'ed
-  private _tagLists = [
-    ['happening now'], ['upcoming'],
-    ['on-campus'], ['off-campus'], ['nearby'],
-    ['morning', 'afternoon', 'evening'], ['free food'] ];
-
-  // words excluded from location search matching
-  private _excludedSearchWords = [
-    'a','all','an','and','any','area','areas','at','here',
-    'in','it','its','place','places','room','rooms','that',
-    'the','hall','building','ucla', '•', '-' ];
-
   // get categories from the server
   private getCategories(): Observable<any> {
     return this.http.get<any>(this.categoriesUrl);
@@ -480,18 +442,58 @@ export class EventService {
 
   // reset all filters to defaults
   resetFilters(){
-    this.clearTags();
     this.clearCategories();
     this.resetCalendarFilters();
   }
 
   // reset all calendar filters to defaults
   private resetCalendarFilters(){
-    this.setLocationFilter("");
-    // 12:00 AM - 11:59 PM
-    this.setTimeFilter(0,1439);
-    this.resetDateFilter();
+    this.setLocFilter('none');
+    this.setDateFilter('none');
+    this.setTimeFilter('none');
   }
+
+  setLocFilter(locTag: string){
+    let tempFilter = {
+      tag: 'none',
+      location: ''
+    };
+    if(this._locFilter.hasOwnProperty('tag') && this._locFilter['tag'] == locTag)
+      tempFilter['tag'] = 'none';
+    else
+      tempFilter['tag'] = locTag;
+    this._locFilter = tempFilter;
+    this.locFilterSource.next(this._locFilter);
+  } getLocFilter() { return this._locFilter; }
+
+  setDateFilter(dateTag: string){
+    let bounds = this._dateService.getViewBounds(this._selectedDate, this._currentView);
+    let tempFilter = {
+      tag: 'none',
+      start: bounds.startDate.toDate(),
+      end: bounds.endDate.toDate()
+    };
+    if(this._dateFilter.hasOwnProperty('tag') && this._dateFilter['tag'] == dateTag)
+      tempFilter['tag'] = 'none';
+    else
+      tempFilter['tag'] = dateTag;
+    this._dateFilter = tempFilter;
+    this.dateFilterSource.next(this._dateFilter);
+  } getDateFilter() { return this._dateFilter; }
+
+  setTimeFilter(timeTag: string){
+    let tempFilter = {
+      tag: 'none',
+      start: 0,
+      end: 1439
+    };
+    if(this._timeFilter.hasOwnProperty('tag') && this._timeFilter['tag'] == timeTag)
+      tempFilter['tag'] = 'none';
+    else
+      tempFilter['tag'] = timeTag;
+    this._timeFilter = tempFilter;
+    this.timeFilterSource.next(this._timeFilter);
+  } getTimeFilter() { return this._timeFilter; }
 
   // Initialize category hash
   private initCategories() {
@@ -590,55 +592,6 @@ export class EventService {
     this.categHashSource.next(this._categHash);
   }
 
-  // reset all tags to be false
-  clearTags() {
-    this._tagHash = {
-      'happening now': false, 'upcoming': false,
-      'on-campus': false, 'off-campus': false, 'nearby': false,
-      'morning': false, 'afternoon': false, 'evening': false, 'free food': false };
-    this.tagHashSource.next(this._tagHash);
-  }
-
-  // Toggle filter tags
-  toggleTag(tag: string) {
-    if (this._tagHash[tag] == undefined)
-      return
-    // apply the tag
-    this._tagHash[tag] = !this._tagHash[tag];
-    // unselect tags in the same group
-    for (let t of this._tagGroups[this._tagGroupMap[tag]]) {
-    if (t != tag && this._tagHash[t]) { this._tagHash[t] = false; } }
-    // update tag hash
-    this.tagHashSource.next(this._tagHash)
-  }
-
-  // Date Filter //
-
-  setDateFilter(lowerBound: Date, upperBound: Date){
-    this._dateFilter = {start: lowerBound, end: upperBound};
-    this.dateFilterSource.next(this._dateFilter);
-  } getDateFilter(){ return this._dateFilter; }
-
-  // reset date filter on date change
-  private resetDateFilter() {
-    let bounds = this._dateService.getViewBounds(this._selectedDate, this._currentView);
-    this.setDateFilter(bounds.startDate.toDate(), bounds.endDate.toDate());
-  }
-
-  // Time Filter //
-
-  setTimeFilter(lowerBound: number, upperBound: number){
-    this._timeFilter = {start: lowerBound, end: upperBound};
-    this.timeFilterSource.next(this._timeFilter);
-  } getTimeFilter(){ return this._timeFilter; }
-
-  // Location Filter //
-
-  setLocationFilter(searchString: string){
-    this._locFilter = searchString;
-    this.locFilterSource.next(searchString);
-  } getLocationFilter(){ return this._locFilter; }
-
   // Filter Application //
 
   // Apply filters to day, week, three day, or month
@@ -662,17 +615,13 @@ export class EventService {
     // iterate through events
     for (let event of inputFeatures) {
       // both map and calendar view check tags and categories
-      let passesTags = this.passesTags(event);
       let passesCategories = this.passesCategories(event);
       // calendar view checks date, time, location
-      let passesDate = true, passesTime = true, passesLocation = true;
-      if(this._currentView != ViewState.map) {
-        if(this._dateFilter) passesDate = this.passesDate(event);
-        if(this._timeFilter) passesTime = this.passesTime(event);
-        if(this._locFilter) passesLocation = this.passesLocation(event);
-      }
+      let passesLocation = this.passesLocation(event);
+      let passesDate = this.passesDate(event);
+      let passesTime = this.passesTime(event);
       // ensure event has passed all checks
-      if (passesTags && passesCategories && passesDate && passesTime && passesLocation)
+      if (passesCategories && passesLocation && passesDate && passesTime)
         tempEvents.features.push(event);
     }
     // add a property checking whether event is first on a given day
@@ -685,6 +634,10 @@ export class EventService {
     // update provided outputSource
     outputSource.next(tempEvents);
   }
+
+
+
+
 
   // Filter Check: categories
   private passesCategories(event: GeoJson): boolean {
@@ -701,75 +654,79 @@ export class EventService {
     return categoryCheck;
   }
 
-  // Filter Check: tag buttons
-  private passesTags(event: GeoJson): boolean {
-    let tagCheck = true;
-    for (let tagList of this._tagLists) {
-      let passesTag = false, tagUsed = false;
-      for (let tag of tagList) {
-        if (this._tagHash[tag]) tagUsed = true;
-        if (this._tagHash[tag] && this.checkTag(tag, event)) passesTag = true; break;
-      }
-      if (tagUsed && !passesTag) { tagCheck = false; break; }
-    }
-    return tagCheck;
-  }
-
   // Filter Check: date
   private passesDate(event: GeoJson): boolean {
+    return true;
+    /**
+    if tag == 'custom'
     // compare event date to the date filter being applied
     let eventDate = moment(event.properties.start_time);
     return this._dateService.isBetween(eventDate, moment(this._dateFilter.start).startOf('day'), moment(this._dateFilter.end).add(1,'days'));
+    **/
   }
 
   // Filter Check: time
   private passesTime(event: GeoJson): boolean {
-    // compare event time to the time filter being applied
-    let eventTime = moment(event.properties.start_time);
-    let minCount = eventTime.hour()*60 + eventTime.minutes();
-    return (minCount >= this._timeFilter.start && minCount <= this._timeFilter.end);
+    if(this._timeFilter.hasOwnProperty('tag')) {
+      switch(this._timeFilter['tag']){
+        case 'Happening Now':
+          return this._dateService.isHappeningNow(event.properties.start_time);
+          break;
+        case 'Upcoming':
+          return this._dateService.isUpcoming(event.properties.start_time);
+          break;
+        case 'Morning':
+          return this._dateService.isMorning(event.properties.start_time);
+          break;
+        case 'Afternoon':
+          return this._dateService.isAfternoon(event.properties.start_time);
+          break;
+        case 'Evening':
+          return this._dateService.isEvening(event.properties.start_time);
+          break;
+        case 'Custom':
+          return true;
+          // compare event time to the time filter being applied
+          /* let eventTime = moment(event.properties.start_time);
+          let minCount = eventTime.hour()*60 + eventTime.minutes();
+          return (minCount >= this._timeFilter.start && minCount <= this._timeFilter.end); */
+          break;
+      }
+    }
+    return true;
   }
 
   // Filter Check: location
   private passesLocation(event: GeoJson): boolean {
-    let properLocation = false;
-    if(this._locFilter != ""){
-      // retrieve event location
-      let eventLocation = event.properties.place.name;
-      if(eventLocation){
-        // target words are those in the actual event location string
-        let targetWords = eventLocation.toLowerCase().split(" ");
-        // search words are those in the location search string
-        let searchWords = this._locFilter.toLowerCase().split(" ");
-        // iterate through and check for substring matches
-        for(let searchString of searchWords){
-          for(let matchString of targetWords){
-            if(matchString.indexOf(searchString) != -1 && !this._excludedSearchWords.includes(searchString)){
-              properLocation = true; break;
-    }}}}}
-    return properLocation;
-  }
-
-  // Returns true if event has the given tag
-  private checkTag(tag: string, event): boolean {
-    if (tag == 'happening now')
-      return this._dateService.isHappeningNow(event.properties.start_time);
-    else if (tag == 'upcoming')
-      return this._dateService.isUpcoming(event.properties.start_time);
-    else if (tag == 'on-campus')
-      return this._locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
-    else if (tag == 'off-campus')
-      return !this._locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
-    else if (tag == 'nearby')
-      return this._locationService.isNearby(event.geometry.coordinates[1], event.geometry.coordinates[0]);
-    else if (tag == 'morning')
-      return this._dateService.isMorning(event.properties.start_time);
-    else if (tag == 'afternoon')
-      return this._dateService.isAfternoon(event.properties.start_time);
-    else if (tag == 'evening')
-      return this._dateService.isEvening(event.properties.start_time);
-    else if (tag == 'free food')
-      return event.properties.free_food == 1;
+    if(this._locFilter.hasOwnProperty('tag')) {
+      switch(this._locFilter['tag']){
+        case 'On Campus':
+          return this._locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
+          break;
+        case 'Off Campus':
+          return !this._locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
+          break;
+        case 'Custom':
+          return true;
+          /* let properLocation = false;
+          if(this._locFilter != ""){
+            // retrieve event location
+            let eventLocation = event.properties.place.name;
+            if(eventLocation){
+              // target words are those in the actual event location string
+              let targetWords = eventLocation.toLowerCase().split(" ");
+              // search words are those in the location search string
+              let searchWords = this._locFilter.toLowerCase().split(" ");
+              // iterate through and check for substring matches
+              for(let searchString of searchWords){
+                for(let matchString of targetWords){
+                  if(matchString.indexOf(searchString) != -1 && !this._excludedSearchWords.includes(searchString)){
+                    properLocation = true; break;
+          }}}}}
+          return properLocation; */
+          break;
+      }
+    }
     return true;
   }
 
