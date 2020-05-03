@@ -32,8 +32,24 @@
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter == 'Custom'}" (click)="setLocFilter('Custom')">Custom Location</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter == 'Custom'}" (click)="openModal('custom-modal-2')">Custom Location</a>
             </li>
+            <div>
+              <jw-modal id="custom-modal-2">
+                <div class="pop-up-content">
+                  <h1 class="pop-up-header">Enter Location:</h1>
+                  <div class="selection-content">
+                    <input list="places" name="places" class="places" placeholder="Enter a Location">
+                    <datalist id="places">
+                      <option *ngFor="let loc of locations">
+                        <span>{{loc}}</span>
+                      </option>
+                    </datalist>
+                    <a class="apply-btn">APPLY</a>
+                  </div>
+                </div>
+              </jw-modal>
+            </div>
           </ul>
         </div>
         <!-- date span dropdown -->
@@ -43,7 +59,7 @@
           [ngClass]="{'selected-dropdown' : dateFilter != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             <span *ngIf="dateFilter == 'none'">Date</span>
             <span *ngIf="dateFilter != 'none'">{{dateFilter}}</span>
-            <span class="caret"></span>
+            <span class="caret dropdown-icon"></span>
           </a>
           <!-- options -->
           <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">

@@ -59,6 +59,7 @@ export class EventService {
   // FILTER VARIABLES
   private _categHash;                 // maps event categories to selection status
   private _locFilter;                 // location string being applied as filter
+  private _locations;
   private _dateFilter;                // range of dates being applied as filter
   private _timeFilter;                // range of times being applied as filter
 
@@ -80,6 +81,7 @@ export class EventService {
   private sidebarEventSource: Subject <GeoJson>;
   private categHashSource: BehaviorSubject <any>;
   private locFilterSource: BehaviorSubject <any>;
+  private locationsSource: BehaviorSubject <any>;
   private dateFilterSource: BehaviorSubject <any>;
   private timeFilterSource: BehaviorSubject <any>;
 
@@ -91,7 +93,7 @@ export class EventService {
   threeDayEvents$; filteredThreeDayEvents$;
   dayEvents$; filteredDayEvents$;
   hoveredEvent$; clickedEvent$; sidebarEvent$;
-  categHash$; locFilter$; dateFilter$; timeFilter$;
+  categHash$; locFilter$; locations$; dateFilter$; timeFilter$;
 
   // Constructor
   constructor(private router: Router, private http: HttpClient, private _dateService: DateService, private _locationService: LocationService) {
@@ -196,6 +198,11 @@ export class EventService {
     this.locFilter$ = this.locFilterSource.asObservable();
     this.locFilter$.subscribe(locSearch => { this._locFilter = locSearch; this.applyAllFilters(); });
 
+    // locations
+    this.locationsSource = new BehaviorSubject <any> ([]);
+    this.locations$ = this.locationsSource.asObservable();
+    this.locations$.subscribe(locOptions => { this._locations = locOptions; });
+
     // dateFilter
     this.dateFilterSource = new BehaviorSubject <any> ({});
     this.dateFilter$ = this.dateFilterSource.asObservable();
@@ -209,6 +216,7 @@ export class EventService {
     // Initialize variables
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
       this.allEvents = allEvents;
+      this.initLocations();
       this.getCategories().subscribe(categs => {
         // initialize filters
         this.categs = categs;
@@ -227,7 +235,17 @@ export class EventService {
         this.storeLastView(ViewState.month);
       });
     });
+  }
 
+  private initLocations() {
+    let tempLocs = [];
+    this.allEvents.features.forEach(el => {
+      let loc = el.properties.place.name;
+      if (!tempLocs.includes(loc))
+        tempLocs.push(loc)
+    });
+    this._locations = tempLocs;
+    this.locationsSource.next(this._locations);
   }
 
   // View Getters and Setters //

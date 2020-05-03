@@ -110,6 +110,10 @@ a.clear-all-btn:active {
 .filter-dropdown {
 	margin: auto;
   min-width: 160px;
+  max-width: 160px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 	background: white;
   border: $default_border_style;
 	color: #ffffff;
@@ -269,6 +273,53 @@ a.clear-all-btn:active {
 }
 #food-group-mobile{
   display: none;
+}
+
+.pop-up-header {
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.pop-up-content {
+  width: 100%;
+}
+
+.places {
+  display: inline-block;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  height: 40px;
+  background: #efefef;
+  padding: 5px;
+  padding-left: 15px;
+  vertical-align: center;
+  width: 70%;
+}
+
+a.apply-btn {
+  float: right;
+  color: #808080;
+  cursor: pointer;
+  padding-left: 3px;
+  vertical-align: middle;
+  text-align: center;
+  align-items: center;
+  padding-right: 3px;
+  width: 20%;
+  margin: 0;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+a.apply-btn:hover {
+  color: #BEBEBE;
+}
+
+a.apply-btn:active {
+  background: inherit;
 }
 
 /* mobile css */

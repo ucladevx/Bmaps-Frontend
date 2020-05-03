@@ -1,8 +1,10 @@
-import { Component, OnInit, HostListener, Input } from '@angular/core';
+import { Component, OnInit, HostListener, Input, ViewChildren, TemplateRef, ViewContainerRef } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FeatureCollection, GeoJson } from '../map';
 import { EventService } from '../services/event.service';
 import { DateService } from '../services/date.service';
+import { ModalComponent } from '../modal/modal.component';
+import { ModalService } from '../services/modal.service';
 import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 
@@ -14,25 +16,30 @@ import * as moment from 'moment';
 
 export class FilterBarComponent implements OnInit {
   @Input() showToggleButton: boolean;
+  @ViewChildren('modal_2') modal_2: TemplateRef<any>;
+  @ViewChildren('vc') vc: ViewContainerRef;
   private wasInside = false;
 
   // category hash
   private categHash = {};
   // tag hash
   private locFilter = 'none';
+  private locations = [];
   private dateFilter = 'none';
   private timeFilter = 'none';
   // dropdown toggle
   public showDropdown = false;
+  public showModal = false;
   // calendar events
   public events = [];
 
-  constructor(private _eventService: EventService, private _dateService: DateService) {}
+  constructor(private _eventService: EventService, private _dateService: DateService, private modalService: ModalService) {}
 
   ngOnInit() {
     // whenever categories or tags are updated, update local variables
     this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
     this._eventService.locFilter$.subscribe(locInfo => { this.locFilter = locInfo.tag; });
+    this._eventService.locations$.subscribe(locOptions => { this.locations = locOptions; });
     this._eventService.dateFilter$.subscribe(dateInfo => { this.dateFilter = dateInfo.tag; });
     this._eventService.timeFilter$.subscribe(timeInfo => { this.timeFilter = timeInfo.tag; });
     // whenever calendar events change, update the local events variable
@@ -129,7 +136,7 @@ export class FilterBarComponent implements OnInit {
 
   @HostListener('document:click')
   clickout() {
-    if (!this.wasInside) {
+    if (!this.wasInside && !this.showModal) {
       this.showDropdown = false;
     }
     this.wasInside = false;
@@ -138,6 +145,16 @@ export class FilterBarComponent implements OnInit {
   // helper function for returning object keys
   private objectKeys(obj) {
     return Object.keys(obj);
+  }
+
+  openModal(id: string) {
+    this.modalService.open(id);
+    this.showModal = true;
+  }
+
+  closeModal(id: string) {
+    this.modalService.close(id);
+    this.showModal = false;
   }
 
 }
