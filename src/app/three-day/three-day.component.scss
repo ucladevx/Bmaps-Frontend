@@ -3,6 +3,7 @@
 :host {
   display: flex;
   flex: 1;
+  height: 100%;
 }
 
 .threedayview-container {
@@ -10,11 +11,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.week-number {
-  position: absolute;
-  left: 5%;
 }
 
 .day-header {
@@ -284,10 +280,6 @@
     border-right: $default_border_style;
   }
 
-  .threedayview-day:first-child {
-    border-right: 0px;
-  }
-
   .filler-block {
     height: 3.75%;
     background: #7B7B7B;
@@ -295,8 +287,8 @@
   }
 
   #scrollable {
-    overflow-x: scroll;
-    z-index: 1;
+    //overflow-x: scroll;
+    //z-index: 1;
   }
 
   .time-of-day td {
