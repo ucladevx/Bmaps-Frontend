@@ -468,7 +468,7 @@ export class EventService {
   private resetCalendarFilters(){
     this.setLocFilter('none');
     this.setDateFilter('none');
-    this.setTimeFilter('none');
+    this.setTimeFilter('none',0,1439);
   }
 
   setLocFilter(locTag: string){
@@ -499,16 +499,12 @@ export class EventService {
     this.dateFilterSource.next(this._dateFilter);
   } getDateFilter() { return this._dateFilter; }
 
-  setTimeFilter(timeTag: string){
+  setTimeFilter(timeTag: string, timeStart: number, timeEnd: number){
     let tempFilter = {
-      tag: 'none',
-      start: 0,
-      end: 1439
+      tag: timeTag,
+      start: timeStart,
+      end: timeEnd
     };
-    if(this._timeFilter.hasOwnProperty('tag') && this._timeFilter['tag'] == timeTag)
-      tempFilter['tag'] = 'none';
-    else
-      tempFilter['tag'] = timeTag;
     this._timeFilter = tempFilter;
     this.timeFilterSource.next(this._timeFilter);
   } getTimeFilter() { return this._timeFilter; }
@@ -685,31 +681,10 @@ export class EventService {
 
   // Filter Check: time
   private passesTime(event: GeoJson): boolean {
-    if(this._timeFilter.hasOwnProperty('tag')) {
-      switch(this._timeFilter['tag']){
-        case 'Happening Now':
-          return this._dateService.isHappeningNow(event.properties.start_time);
-          break;
-        case 'Upcoming':
-          return this._dateService.isUpcoming(event.properties.start_time);
-          break;
-        case 'Morning':
-          return this._dateService.isMorning(event.properties.start_time);
-          break;
-        case 'Afternoon':
-          return this._dateService.isAfternoon(event.properties.start_time);
-          break;
-        case 'Evening':
-          return this._dateService.isEvening(event.properties.start_time);
-          break;
-        case 'Custom':
-          return true;
-          // compare event time to the time filter being applied
-          /* let eventTime = moment(event.properties.start_time);
-          let minCount = eventTime.hour()*60 + eventTime.minutes();
-          return (minCount >= this._timeFilter.start && minCount <= this._timeFilter.end); */
-          break;
-      }
+    if(this._timeFilter.hasOwnProperty('tag') && this._timeFilter['tag'] != 'none') {
+      let eventTime = moment(event.properties.start_time);
+      let minCount = eventTime.hour()*60 + eventTime.minutes();
+      return (minCount >= this._timeFilter.start && minCount <= this._timeFilter.end);
     }
     return true;
   }

@@ -8,6 +8,24 @@ import { ModalService } from '../services/modal.service';
 import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 
+const HAPPENINGNOW_LEN = 1;
+// how many hours from now does upcoming start? (inclusive)
+const UPCOMING_START = 1;
+// how many hours after UPCOMING_START does upcoming end? (inclusive)
+const UPCOMING_LEN = 5;
+// what time does morning start? (inclusive)
+const MORNING_START = 4;
+// what time does morning end? (exclusive)
+const MORNING_END = 12;
+// what time does afternoon start? (inclusive)
+const AFTERNOON_START = 12;
+// what time does afternoon end? (exclusive)
+const AFTERNOON_END = 17;
+// what time does evening start? (inclusive)
+const EVENING_START = 17;
+// what time does evening end? (exclusive)
+const EVENING_END = 4;
+
 @Component({
   selector: 'app-filter-bar',
   templateUrl: './filter-bar.component.html',
@@ -23,10 +41,14 @@ export class FilterBarComponent implements OnInit {
   // category hash
   private categHash = {};
   // tag hash
-  private locFilter = 'none';
+  private locFilter = {};
   private locations = [];
-  private dateFilter = 'none';
-  private timeFilter = 'none';
+  private dateFilter = {};
+  private displayStartDate;
+  private displayEndDate;
+  private timeFilter = {};
+  private displayStartTime;
+  private displayEndTime;
   // dropdown toggle
   public showDropdown = false;
   public showModal = false;
@@ -38,10 +60,18 @@ export class FilterBarComponent implements OnInit {
   ngOnInit() {
     // whenever categories or tags are updated, update local variables
     this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
-    this._eventService.locFilter$.subscribe(locInfo => { this.locFilter = locInfo.tag; });
+    this._eventService.locFilter$.subscribe(locInfo => { this.locFilter = locInfo; });
     this._eventService.locations$.subscribe(locOptions => { this.locations = locOptions; });
-    this._eventService.dateFilter$.subscribe(dateInfo => { this.dateFilter = dateInfo.tag; });
-    this._eventService.timeFilter$.subscribe(timeInfo => { this.timeFilter = timeInfo.tag; });
+    this._eventService.dateFilter$.subscribe(dateInfo => {
+      this.dateFilter = dateInfo;
+      this.displayStartDate = moment(dateInfo.start).format('YYYY-MM-DD');
+      this.displayEndDate = moment(dateInfo.end).format('YYYY-MM-DD');
+    });
+    this._eventService.timeFilter$.subscribe(timeInfo => {
+      this.timeFilter = timeInfo;
+      this.displayStartTime = this._dateService.convertNumToTime(timeInfo.start);
+      this.displayEndTime = this._dateService.convertNumToTime(timeInfo.end);
+    });
     // whenever calendar events change, update the local events variable
     this._eventService.monthEvents$.subscribe(events => {
       if(this._eventService.getCurrentView() == ViewState.month)
@@ -90,12 +120,44 @@ export class FilterBarComponent implements OnInit {
 
   // update time filter
   setTimeFilter(timeInput: string){
-    this._eventService.setTimeFilter(timeInput);
-    /* let starttime = startTime.split(":");
+    let tag = timeInput;
+    let start = 0;
+    let end = 1439;
+    if(this.timeFilter.hasOwnProperty('tag') && this.timeFilter['tag'] == timeInput)
+      tag = 'none';
+    else {
+      switch(timeInput) {
+        case 'Happening Now':
+          start = this._dateService.convertTimeToNum(moment());
+          end = this._dateService.convertTimeToNum(moment().add(HAPPENINGNOW_LEN, 'hours'));
+          break;
+        case 'Upcoming':
+          start = this._dateService.convertTimeToNum(moment().add(UPCOMING_START, 'hours'));
+          end = this._dateService.convertTimeToNum(moment().add(UPCOMING_START + UPCOMING_LEN, 'hours'));
+          break;
+        case 'Morning':
+          start = MORNING_START;
+          end = MORNING_END;
+          break;
+        case 'Afternoon':
+          start = AFTERNOON_START;
+          end = AFTERNOON_END;
+          break;
+        case 'Evening':
+          start = EVENING_START;
+          end = EVENING_END;
+          break;
+      }
+    }
+    this._eventService.setTimeFilter(tag,start,end);
+  }
+
+  setCustomTimeFilter(startTime: string, endTime: string) {
+    /** let starttime = startTime.split(":");
     let start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
     let endtime = endTime.split(":");
     let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
-    this._eventService.setTimeFilter(start,end); */
+    this._eventService.setTimeFilter(start,end); **/
   }
 
   // retrieve time filter

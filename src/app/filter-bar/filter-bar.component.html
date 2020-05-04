@@ -15,24 +15,24 @@
         <div class="dropdown" dropdown id="loc-dropdown">
           <!-- dropdown button -->
           <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
-          [ngClass]="{'selected-dropdown' : locFilter != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            <span *ngIf="locFilter == 'none'">Location</span>
-            <span *ngIf="locFilter != 'none'">{{locFilter}}</span>
+          [ngClass]="{'selected-dropdown' : locFilter.tag != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="locFilter.tag == 'none'">Location</span>
+            <span *ngIf="locFilter.tag != 'none'">{{locFilter.tag}}</span>
             <span class="caret"></span>
           </a>
           <!-- options -->
           <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter == 'On Campus'}" (click)="setLocFilter('On Campus')">On Campus</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter.tag == 'On Campus'}" (click)="setLocFilter('On Campus')">On Campus</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter == 'Off Campus'}" (click)="setLocFilter('Off Campus')">Off Campus</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter.tag == 'Off Campus'}" (click)="setLocFilter('Off Campus')">Off Campus</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter == 'Custom'}" (click)="openModal('custom-modal-2')">Custom Location</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter.tag == 'Custom'}" (click)="openModal('custom-modal-2')">Custom Location</a>
             </li>
             <div>
               <jw-modal id="custom-modal-2">
@@ -58,36 +58,36 @@
         <div class="dropdown" dropdown id="date-dropdown">
           <!-- dropdown button -->
           <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
-          [ngClass]="{'selected-dropdown' : dateFilter != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            <span *ngIf="dateFilter == 'none'">Date</span>
-            <span *ngIf="dateFilter != 'none'">{{dateFilter}}</span>
+          [ngClass]="{'selected-dropdown' : dateFilter.tag != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="dateFilter.tag == 'none'">Date</span>
+            <span *ngIf="dateFilter.tag != 'none'">{{dateFilter.tag}}</span>
             <span class="caret dropdown-icon"></span>
           </a>
           <!-- options -->
           <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'Today'}" (click)="setDateFilter('Today')">Today</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Today'}" (click)="setDateFilter('Today')">Today</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'Tomorrow'}" (click)="setDateFilter('Tomorrow')">Tomorrow</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Tomorrow'}" (click)="setDateFilter('Tomorrow')">Tomorrow</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'This Week'}" (click)="setDateFilter('This Week')">This Week</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Week'}" (click)="setDateFilter('This Week')">This Week</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'This Weekend'}" (click)="setDateFilter('This Weekend')">This Weekend</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Weekend'}" (click)="setDateFilter('This Weekend')">This Weekend</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'This Month'}" (click)="setDateFilter('This Month')">This Month</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Month'}" (click)="setDateFilter('This Month')">This Month</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'Custom'}" (click)="openModal('custom-modal-3')">Custom Date</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Custom'}" (click)="openModal('custom-modal-3')">Custom Date</a>
             </li>
             <div>
               <jw-modal id="custom-modal-3">
@@ -95,9 +95,11 @@
                   <h1 class="pop-up-header">Enter Date Span:</h1>
                   <div class="selection-content">
                     <div class="selection-input">
-                      <input type="date" class="short-input" id="start-date">
+                      <input type="date" class="short-input" id="start-date"
+                      value="{{displayStartDate}}">
                       <div class="to">to</div>
-                      <input type="date" class="short-input" id="end-date">
+                      <input type="date" class="short-input" id="end-date"
+                      value="{{displayEndDate}}">
                     </div>
                     <a class="apply-btn">APPLY</a>
                   </div>
@@ -110,36 +112,36 @@
         <div class="dropdown" dropdown id="time-dropdown">
           <!-- dropdown button -->
           <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
-          [ngClass]="{'selected-dropdown' : timeFilter != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            <span *ngIf="timeFilter == 'none'">Time</span>
-            <span *ngIf="timeFilter != 'none'">{{timeFilter}}</span>
+          [ngClass]="{'selected-dropdown' : timeFilter.tag != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="timeFilter.tag == 'none'">Time</span>
+            <span *ngIf="timeFilter.tag != 'none'">{{timeFilter.tag}}</span>
             <span class="caret"></span>
           </a>
           <!-- options -->
           <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Happening Now'}" (click)="setTimeFilter('Happening Now')">Happening Now</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Happening Now'}" (click)="setTimeFilter('Happening Now')">Happening Now</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Upcoming'}" (click)="setTimeFilter('Upcoming')">Upcoming</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Upcoming'}" (click)="setTimeFilter('Upcoming')">Upcoming</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Morning'}" (click)="setTimeFilter('Morning')">Morning</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Morning'}" (click)="setTimeFilter('Morning')">Morning</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Afternoon'}" (click)="setTimeFilter('Afternoon')">Afternoon</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Afternoon'}" (click)="setTimeFilter('Afternoon')">Afternoon</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Evening'}" (click)="setTimeFilter('Evening')">Evening</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Evening'}" (click)="setTimeFilter('Evening')">Evening</a>
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Custom'}" (click)="openModal('custom-modal-4')">Custom Time</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Custom'}" (click)="openModal('custom-modal-4')">Custom Time</a>
             </li>
             <div>
               <jw-modal id="custom-modal-4">
@@ -147,11 +149,13 @@
                   <h1 class="pop-up-header">Enter Time Span:</h1>
                   <div class="selection-content">
                     <div class="selection-input">
-                      <input #startTime type="time" class="short-input" id="start-time">
+                      <input #startTime type="time" class="short-input" id="start-time"
+                      value="{{displayStartTime}}">
                       <div class="to">to</div>
-                      <input #endTime type="time" class="short-input" id="end-time">
+                      <input #endTime type="time" class="short-input" id="end-time"
+                      value="{{displayEndTime}}">
                     </div>
-                    <a class="apply-btn">APPLY</a>
+                    <a class="apply-btn" (click)="setTimeFilter(startTime.value, endTime.value)">APPLY</a>
                   </div>
                 </div>
               </jw-modal>

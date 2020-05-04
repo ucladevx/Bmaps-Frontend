@@ -3,27 +3,6 @@ import { GeoJson } from '../map';
 import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 
-// Constants used as filter rules
-
- // how many hours from now is considered happening now? (inclusive)
-const HAPPENINGNOW_LEN = 2;
-// how many hours from now does upcoming start? (inclusive)
-const UPCOMING_START = 2;
-// how many hours after UPCOMING_START does upcoming end? (inclusive)
-const UPCOMING_LEN = 5;
-// what time does morning start? (inclusive)
-const MORNING_START = 4;
-// what time does morning end? (exclusive)
-const MORNING_END = 12;
-// what time does afternoon start? (inclusive)
-const AFTERNOON_START = 12;
-// what time does afternoon end? (exclusive)
-const AFTERNOON_END = 17;
-// what time does evening start? (inclusive)
-const EVENING_START = 17;
-// what time does evening end? (exclusive)
-const EVENING_END = 4;
-
 @Injectable()
 export class DateService {
 
@@ -84,6 +63,9 @@ export class DateService {
     let time = hourString+":"+minString;
     return time;
   }
+  convertTimeToNum(time){
+    return moment(time).hour()*60 + moment(time).minutes();
+  }
 
   // Checking Date Spans //
 
@@ -129,44 +111,6 @@ export class DateService {
   // Test whether given date is in the same week as another date
   inSameWeek(newDate, checkDate) {
     return moment(newDate).isSame(moment(checkDate),'week');
-  }
-
-  // Checking Filter Tags //
-
-  // Test whether a given date qualifies as 'happening now'
-  isHappeningNow(dateStr: string): boolean {
-    let range = {
-      start: moment(),
-      end: moment().add(HAPPENINGNOW_LEN, 'hours')
-    };
-    return this.isBetween(moment(dateStr), range.start, range.end);
-  }
-
-  // Test whether a given date qualifies as 'upcoming'
-  isUpcoming(dateStr: string): boolean {
-    let range = {
-      start: moment().add(UPCOMING_START, 'hours'),
-      end: moment().add(UPCOMING_START + UPCOMING_LEN, 'hours')
-    };
-    return this.isBetween(moment(dateStr), range.start, range.end);
-  }
-
-  // Test whether a given date qualifies as 'morning'
-  isMorning(dateStr: string): boolean {
-    let hour = moment(dateStr).hour();
-    return hour >= MORNING_START && hour < MORNING_END;
-  }
-
-  // Test whether a given date qualifies as 'afternoon'
-  isAfternoon(dateStr: string): boolean {
-    let hour = moment(dateStr).hour();
-    return hour >= AFTERNOON_START && hour < AFTERNOON_END;
-  }
-
-  // Test whether a given date qualifies as 'evening'
-  isEvening(dateStr: string): boolean {
-    let hour = moment(dateStr).hour();
-    return (hour >= EVENING_START && hour < 24) || (hour >= 0 && hour < EVENING_END);
   }
 
   // Other Formatting //
