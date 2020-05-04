@@ -39,12 +39,14 @@
                 <div class="pop-up-content">
                   <h1 class="pop-up-header">Enter Location:</h1>
                   <div class="selection-content">
-                    <input list="places" name="places" class="places" placeholder="Enter a Location">
-                    <datalist id="places">
-                      <option *ngFor="let loc of locations">
-                        <span>{{loc}}</span>
-                      </option>
-                    </datalist>
+                    <div class="selection-input">
+                      <input list="places" name="places" class="places" placeholder="Enter a Location">
+                      <datalist id="places">
+                        <option *ngFor="let loc of locations">
+                          <span>{{loc}}</span>
+                        </option>
+                      </datalist>
+                    </div>
                     <a class="apply-btn">APPLY</a>
                   </div>
                 </div>
@@ -85,8 +87,23 @@
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'Custom'}" (click)="setDateFilter('Custom')">Custom Date</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter == 'Custom'}" (click)="openModal('custom-modal-3')">Custom Date</a>
             </li>
+            <div>
+              <jw-modal id="custom-modal-3">
+                <div class="pop-up-content">
+                  <h1 class="pop-up-header">Enter Date Span:</h1>
+                  <div class="selection-content">
+                    <div class="selection-input">
+                      <input type="date" class="short-input" id="start-date">
+                      <div class="to">to</div>
+                      <input type="date" class="short-input" id="end-date">
+                    </div>
+                    <a class="apply-btn">APPLY</a>
+                  </div>
+                </div>
+              </jw-modal>
+            </div>
           </ul>
         </div>
         <!-- time dropdown -->
@@ -122,8 +139,23 @@
             </li>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
-              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Custom'}" (click)="setTimeFilter('Custom')">Custom Time</a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter == 'Custom'}" (click)="openModal('custom-modal-4')">Custom Time</a>
             </li>
+            <div>
+              <jw-modal id="custom-modal-4">
+                <div class="pop-up-content">
+                  <h1 class="pop-up-header">Enter Time Span:</h1>
+                  <div class="selection-content">
+                    <div class="selection-input">
+                      <input #startTime type="time" class="short-input" id="start-time">
+                      <div class="to">to</div>
+                      <input #endTime type="time" class="short-input" id="end-time">
+                    </div>
+                    <a class="apply-btn">APPLY</a>
+                  </div>
+                </div>
+              </jw-modal>
+            </div>
           </ul>
         </div>
       </div>
