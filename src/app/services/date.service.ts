@@ -67,6 +67,18 @@ export class DateService {
     return moment(time).hour()*60 + moment(time).minutes();
   }
 
+  convertTo12Hour(time: string) {
+    let splitTime = time.split(":");
+    let hours = parseInt(splitTime[0]);
+    let ap = "AM";
+    if(hours == 0) hours = 12;
+    if(hours > 12) {
+      hours -= 12;
+      ap = "PM";
+    }
+    return hours+":"+splitTime[1]+ap;
+  }
+
   // Checking Date Spans //
 
   // Test whether given date is between start and end date (inclusive)

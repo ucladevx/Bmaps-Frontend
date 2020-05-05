@@ -6,25 +6,8 @@ import { DateService } from '../services/date.service';
 import { ModalComponent } from '../modal/modal.component';
 import { ModalService } from '../services/modal.service';
 import { ViewState } from '../view-enum';
+import { CompleterService, CompleterData } from 'ng2-completer';
 import * as moment from 'moment';
-
-const HAPPENINGNOW_LEN = 1;
-// how many hours from now does upcoming start? (inclusive)
-const UPCOMING_START = 1;
-// how many hours after UPCOMING_START does upcoming end? (inclusive)
-const UPCOMING_LEN = 5;
-// what time does morning start? (inclusive)
-const MORNING_START = 4;
-// what time does morning end? (exclusive)
-const MORNING_END = 12;
-// what time does afternoon start? (inclusive)
-const AFTERNOON_START = 12;
-// what time does afternoon end? (exclusive)
-const AFTERNOON_END = 17;
-// what time does evening start? (inclusive)
-const EVENING_START = 17;
-// what time does evening end? (exclusive)
-const EVENING_END = 4;
 
 @Component({
   selector: 'app-filter-bar',
@@ -37,6 +20,8 @@ export class FilterBarComponent implements OnInit {
   @ViewChildren('modal_2') modal_2: TemplateRef<any>;
   @ViewChildren('vc') vc: ViewContainerRef;
   private wasInside = false;
+
+  private dataService: CompleterData;
 
   // category hash
   private categHash = {};
@@ -85,6 +70,28 @@ export class FilterBarComponent implements OnInit {
       if(this._eventService.getCurrentView() == ViewState.threeday)
         this.events = events;
     });
+
+  }
+
+  autofill() {
+    let search = document.querySelector('#search');
+    let results = document.querySelector('#searchresults');
+    while (results.children.length) results.removeChild(results.firstChild);
+    let inputVal = new RegExp((<HTMLInputElement>search).value.trim(), 'i');
+    let set = Array.prototype.reduce.call(this.locations, function searchFilter(frag, item, i) {
+      if (inputVal.test(item) && frag.children.length < 5){
+        let option = document.createElement('option');
+        let span = document.createElement('span');
+        let abbrev = item.substring(0,35);
+        if(abbrev != item) abbrev = abbrev + "...";
+        span.innerHTML = item;
+        option.value = item;
+        option.appendChild(span);
+        frag.appendChild(option);
+      }
+      return frag;
+    }, document.createDocumentFragment());
+    results.appendChild(set);
   }
 
   // determine whether a category should be displayed
@@ -121,43 +128,30 @@ export class FilterBarComponent implements OnInit {
   // update time filter
   setTimeFilter(timeInput: string){
     let tag = timeInput;
-    let start = 0;
-    let end = 1439;
     if(this.timeFilter.hasOwnProperty('tag') && this.timeFilter['tag'] == timeInput)
       tag = 'none';
-    else {
-      switch(timeInput) {
-        case 'Happening Now':
-          start = this._dateService.convertTimeToNum(moment());
-          end = this._dateService.convertTimeToNum(moment().add(HAPPENINGNOW_LEN, 'hours'));
-          break;
-        case 'Upcoming':
-          start = this._dateService.convertTimeToNum(moment().add(UPCOMING_START, 'hours'));
-          end = this._dateService.convertTimeToNum(moment().add(UPCOMING_START + UPCOMING_LEN, 'hours'));
-          break;
-        case 'Morning':
-          start = MORNING_START;
-          end = MORNING_END;
-          break;
-        case 'Afternoon':
-          start = AFTERNOON_START;
-          end = AFTERNOON_END;
-          break;
-        case 'Evening':
-          start = EVENING_START;
-          end = EVENING_END;
-          break;
-      }
-    }
-    this._eventService.setTimeFilter(tag,start,end);
+    this._eventService.setTimeFilter(tag,tag,0,1439);
   }
 
   setCustomTimeFilter(startTime: string, endTime: string) {
-    /** let starttime = startTime.split(":");
+    let starttime = startTime.split(":");
     let start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
     let endtime = endTime.split(":");
     let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
-    this._eventService.setTimeFilter(start,end); **/
+    let tag = this._dateService.convertTo12Hour(startTime)+" - "+this._dateService.convertTo12Hour(endTime.toLocaleString());
+    this._eventService.setTimeFilter("Custom",tag,start,end);
+  }
+
+  openTimeModal() {
+    if(this.timeFilter['tag'] != 'Custom') {
+      this.displayStartTime = this._dateService.convertNumToTime(0);
+      (<HTMLInputElement>document.getElementById('start-time')).value = this.displayStartTime;
+      this.displayEndTime = this._dateService.convertNumToTime(1439);
+      (<HTMLInputElement>document.getElementById('end-time')).value = this.displayEndTime;
+      this.modalService.open('custom-modal-4');
+    } else {
+      this.setTimeFilter('none');
+    }
   }
 
   // retrieve time filter
@@ -198,8 +192,8 @@ export class FilterBarComponent implements OnInit {
 
   @HostListener('document:click')
   clickout() {
-    if (!this.wasInside && !this.showModal) {
-      this.showDropdown = false;
+    if (!this.wasInside) {
+      //this.showDropdown = false;
     }
     this.wasInside = false;
   }
@@ -209,14 +203,16 @@ export class FilterBarComponent implements OnInit {
     return Object.keys(obj);
   }
 
-  openModal(id: string) {
-    this.modalService.open(id);
-    this.showModal = true;
+  openDateModal() {
+    this.modalService.open('custom-modal-3');
+  }
+
+  openLocModal() {
+    this.modalService.open('custom-modal-2');
   }
 
   closeModal(id: string) {
     this.modalService.close(id);
-    this.showModal = false;
   }
 
 }

@@ -111,17 +111,22 @@ a.clear-all-btn:active {
 	margin: auto;
   min-width: 160px;
   max-width: 160px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 	background: white;
   border: $default_border_style;
 	color: #ffffff;
-	font: 3em;
+	font-size: 14px;
 	text-decoration: none;
 	text-align: center;
-	padding: 5px 30px;
+	padding: 5px 10px;
 	border-radius: 10px;
+}
+
+.filter-dropdown > span {
+  min-width: 110px;
+  max-width: 110px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .selected-dropdown {

@@ -24,6 +24,21 @@ export interface CalendarDay {
   inCurrentMonth: boolean;            // is day in the current month
 }
 
+// how many hours after UPCOMING_START does upcoming end? (inclusive)
+const UPCOMING_LEN = 4;
+// what time does morning start? (inclusive)
+const MORNING_START = 240;
+// what time does morning end? (exclusive)
+const MORNING_END = 719;
+// what time does afternoon start? (inclusive)
+const AFTERNOON_START = 720;
+// what time does afternoon end? (exclusive)
+const AFTERNOON_END = 1019;
+// what time does evening start? (inclusive)
+const EVENING_START = 1020;
+// what time does evening end? (exclusive)
+const EVENING_END = 239;
+
 @Injectable()
 export class EventService {
 
@@ -468,7 +483,7 @@ export class EventService {
   private resetCalendarFilters(){
     this.setLocFilter('none');
     this.setDateFilter('none');
-    this.setTimeFilter('none',0,1439);
+    this.setTimeFilter('none','none',0,1439);
   }
 
   setLocFilter(locTag: string){
@@ -499,9 +514,10 @@ export class EventService {
     this.dateFilterSource.next(this._dateFilter);
   } getDateFilter() { return this._dateFilter; }
 
-  setTimeFilter(timeTag: string, timeStart: number, timeEnd: number){
+  setTimeFilter(timeTag: string, displayName: string, timeStart: number, timeEnd: number){
     let tempFilter = {
       tag: timeTag,
+      displayName: displayName,
       start: timeStart,
       end: timeEnd
     };
@@ -682,9 +698,29 @@ export class EventService {
   // Filter Check: time
   private passesTime(event: GeoJson): boolean {
     if(this._timeFilter.hasOwnProperty('tag') && this._timeFilter['tag'] != 'none') {
-      let eventTime = moment(event.properties.start_time);
-      let minCount = eventTime.hour()*60 + eventTime.minutes();
-      return (minCount >= this._timeFilter.start && minCount <= this._timeFilter.end);
+      let eventStartTime = moment(event.properties.start_time);
+      let minStart = eventStartTime.hour()*60 + eventStartTime.minutes();
+      switch(this._timeFilter['tag']){
+        case 'Happening Now':
+          let eventEndTime = moment(event.properties.start_time);
+          return this._dateService.isBetween(moment(),eventStartTime,eventEndTime);
+          break;
+        case 'Upcoming':
+          return (minStart > this._dateService.convertTimeToNum(moment()) && minStart <= (this._dateService.convertTimeToNum(moment())+UPCOMING_LEN));
+          break;
+        case 'Morning':
+          return (minStart >= MORNING_START && minStart <= MORNING_END);
+          break;
+        case 'Afternoon':
+          return (minStart >= AFTERNOON_START && minStart <= AFTERNOON_END);
+          break;
+        case 'Evening':
+          return (minStart >= EVENING_START || minStart <= EVENING_END);
+          break;
+        default:
+          return (minStart >= this._timeFilter.start && minStart <= this._timeFilter.end);
+          break;
+      }
     }
     return true;
   }
