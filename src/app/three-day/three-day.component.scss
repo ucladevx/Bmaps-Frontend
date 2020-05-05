@@ -240,6 +240,10 @@
   visibility: visible;
 }
 
+.helper-text {
+  display: none;
+}
+
 /* mobile css */
 @media screen and (max-width: 768px) {
   /* display short day abbreviations */
@@ -297,5 +301,11 @@
 
   .day-blocks {
     width: 91%;
+  }
+
+  .helper-text {
+    display: block;
+    text-align: center;
+    color: #7B7B7B;
   }
 }
