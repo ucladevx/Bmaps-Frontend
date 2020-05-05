@@ -6,7 +6,6 @@ import { DateService } from '../services/date.service';
 import { ModalComponent } from '../modal/modal.component';
 import { ModalService } from '../services/modal.service';
 import { ViewState } from '../view-enum';
-import { CompleterService, CompleterData } from 'ng2-completer';
 import * as moment from 'moment';
 
 @Component({
@@ -20,8 +19,6 @@ export class FilterBarComponent implements OnInit {
   @ViewChildren('modal_2') modal_2: TemplateRef<any>;
   @ViewChildren('vc') vc: ViewContainerRef;
   private wasInside = false;
-
-  private dataService: CompleterData;
 
   // category hash
   private categHash = {};
