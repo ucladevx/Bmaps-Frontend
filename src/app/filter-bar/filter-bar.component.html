@@ -17,7 +17,7 @@
           <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
           [ngClass]="{'selected-dropdown' : locFilter.tag != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             <span *ngIf="locFilter.tag == 'none'">Location</span>
-            <span *ngIf="locFilter.tag != 'none'">{{locFilter.tag}}</span>
+            <span *ngIf="locFilter.tag != 'none'">{{locFilter.displayName}}</span>
             <span class="caret"></span>
           </a>
           <!-- options -->
@@ -40,13 +40,13 @@
                   <h1 class="pop-up-header">Enter Location:</h1>
                   <div class="selection-content">
                     <div class="selection-input">
-                      <input id="search" tabindex="1" list="searchresults" name="places" class="places" placeholder="Enter a Location" (keyup)="autofill()" autocomplete="off">
+                      <input #locSearch id="search" tabindex="1" list="searchresults" name="places" class="places" placeholder="Enter a Location" (keyup)="autofill()" autocomplete="off">
                       <template id="resultstemplate">
                         <option *ngFor="let loc of locations">{{loc}}</option>
                       </template>
                       <datalist id="searchresults"></datalist>
                     </div>
-                    <a class="apply-btn">APPLY</a>
+                    <a class="apply-btn" (click)="setCustomLocFilter(locSearch.value)">APPLY</a>
                   </div>
                 </div>
               </jw-modal>
@@ -59,7 +59,7 @@
           <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
           [ngClass]="{'selected-dropdown' : dateFilter.tag != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             <span *ngIf="dateFilter.tag == 'none'">Date</span>
-            <span *ngIf="dateFilter.tag != 'none'">{{dateFilter.tag}}</span>
+            <span *ngIf="dateFilter.tag != 'none'">{{dateFilter.displayName}}</span>
             <span class="caret dropdown-icon"></span>
           </a>
           <!-- options -->
@@ -94,13 +94,13 @@
                   <h1 class="pop-up-header">Enter Date Span:</h1>
                   <div class="selection-content">
                     <div class="selection-input">
-                      <input type="date" class="short-input" id="start-date"
+                      <input #startDate type="date" class="short-input" id="start-date"
                       value="{{displayStartDate}}">
                       <div class="to">to</div>
-                      <input type="date" class="short-input" id="end-date"
+                      <input #endDate type="date" class="short-input" id="end-date"
                       value="{{displayEndDate}}">
                     </div>
-                    <a class="apply-btn">APPLY</a>
+                    <a class="apply-btn" (click)="setCustomDateFilter(startDate.value, endDate.value)">APPLY</a>
                   </div>
                 </div>
               </jw-modal>

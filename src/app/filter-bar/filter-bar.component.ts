@@ -78,12 +78,8 @@ export class FilterBarComponent implements OnInit {
     let set = Array.prototype.reduce.call(this.locations, function searchFilter(frag, item, i) {
       if (inputVal.test(item) && frag.children.length < 5){
         let option = document.createElement('option');
-        let span = document.createElement('span');
-        let abbrev = item.substring(0,35);
-        if(abbrev != item) abbrev = abbrev + "...";
-        span.innerHTML = item;
+        option.text = item;
         option.value = item;
-        option.appendChild(span);
         frag.appendChild(option);
       }
       return frag;
@@ -106,20 +102,55 @@ export class FilterBarComponent implements OnInit {
 
   // update date filter
   setDateFilter(dateInput: string){
-    this._eventService.setDateFilter(dateInput);
-    /* let first  = moment(startDate).toDate();
-    let last = moment(endDate).toDate();
-    this._eventService.setDateFilter(first,last); */
+    let tag = dateInput;
+    if(this.dateFilter.hasOwnProperty('tag') && this.dateFilter['tag'] == dateInput)
+      tag = 'none';
+    let bounds = this._dateService.getViewBounds(this._eventService.getSelectedDate(), this._eventService.getCurrentView());
+    let startDate = bounds.startDate;
+    let endDate = bounds.endDate;
+    switch(tag) {
+      case 'Today':
+        startDate = moment();
+        endDate = moment();
+        break;
+      case 'Tomorrow':
+        startDate = moment().add(1, 'd');
+        endDate = startDate;
+        break;
+      case 'This Weekend':
+        startDate = moment().endOf('week').startOf('day');
+        endDate = startDate.add(1, 'd');
+        break;
+      case 'This Week':
+        startDate = moment().startOf('week').startOf('day');
+        endDate = moment().endOf('week').startOf('day');
+        break;
+      case 'This Month':
+        startDate = moment().startOf('month').startOf('day');
+        endDate = moment().endOf('month').startOf('day');
+        break;
+    }
+    this._eventService.setDateFilter(tag,tag,startDate.toDate(),endDate.toDate());
   }
 
-  // retrieve date filter
-  getStartDate(){
-    if(this._eventService.getDateFilter())
-      return moment(this._eventService.getDateFilter().start).format('YYYY-MM-DD');
+  setCustomDateFilter(startDate: string, endDate: string) {
+    let start = moment(startDate).toDate();
+    let end = moment(endDate).toDate();
+    let tag = moment(start).format("MM/DD")+" - "+moment(end).format("MM/DD");
+    this._eventService.setDateFilter("Custom",tag,start,end);
   }
-  getEndDate(){
-    if(this._eventService.getDateFilter())
-      return moment(this._eventService.getDateFilter().end).format('YYYY-MM-DD');
+
+  openDateModal() {
+    if(this.dateFilter['tag'] != 'Custom') {
+      let bounds = this._dateService.getViewBounds(this._eventService.getSelectedDate(), this._eventService.getCurrentView());
+      this.displayStartDate= bounds.startDate.format('YYYY-MM-DD');
+      (<HTMLInputElement>document.getElementById('start-date')).value = this.displayStartDate;
+      this.displayEndDate= bounds.endDate.format('YYYY-MM-DD');
+      (<HTMLInputElement>document.getElementById('end-date')).value = this.displayEndDate;
+      this.modalService.open('custom-modal-3');
+    } else {
+      this._eventService.resetDateFilter();
+    }
   }
 
   // update time filter
@@ -147,27 +178,27 @@ export class FilterBarComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('end-time')).value = this.displayEndTime;
       this.modalService.open('custom-modal-4');
     } else {
-      this.setTimeFilter('none');
+      this._eventService.resetTimeFilter();
     }
   }
 
-  // retrieve time filter
-  getStartTime(){
-    if(this._eventService.getTimeFilter())
-      return this._dateService.convertNumToTime(this._eventService.getTimeFilter().start);
-    else return 0;
-  }
-  getEndTime(){
-    if(this._eventService.getTimeFilter())
-      return this._dateService.convertNumToTime(this._eventService.getTimeFilter().end);
-    else return 0;
-  }
-
   // update location filter
-  setLocFilter(locInput: string){ this._eventService.setLocFilter(locInput); }
+  setLocFilter(locInput: string){ this._eventService.setLocFilter(locInput,locInput,''); }
+  setCustomLocFilter(locSearch: string){
+    let abbrev = locSearch.substring(0,10);
+    if(locSearch != abbrev) abbrev = abbrev+"...";
+    this._eventService.setLocFilter('Custom', abbrev, locSearch);
+  }
 
-  // retrieve location filter
-  clearLoc(){ this._eventService.setLocFilter('none'); }
+  openLocModal() {
+    if(this.locFilter['tag'] != 'Custom') {
+      (<HTMLInputElement>document.getElementById('search')).value = '';
+      this.modalService.open('custom-modal-2');
+    } else {
+      this._eventService.resetLocFilter();
+    }
+  }
+
 
   // update category
   categoryClicked(category: string): void { this._eventService.toggleCategory(category); }
@@ -198,14 +229,6 @@ export class FilterBarComponent implements OnInit {
   // helper function for returning object keys
   private objectKeys(obj) {
     return Object.keys(obj);
-  }
-
-  openDateModal() {
-    this.modalService.open('custom-modal-3');
-  }
-
-  openLocModal() {
-    this.modalService.open('custom-modal-2');
   }
 
   closeModal(id: string) {
