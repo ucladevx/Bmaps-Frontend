@@ -158,7 +158,6 @@ export class ThreeDayComponent implements OnInit {
     return this.convertTimeToPercent(now)+"%";
   }
 
-  // check that this is working!!!!!!!!!!!!!!!!!!!!!!!!
   changeDateSpan(delta: number) : void {
     let newDate = this._eventService.getSelectedDate();
     let currDate = this._eventService.getSelectedDate();
@@ -181,7 +180,6 @@ export class ThreeDayComponent implements OnInit {
     if (window.outerWidth <= 768) {
       // only on mobile
       this.changeDateSpan(1);
-
     }
   }
 
@@ -190,7 +188,6 @@ export class ThreeDayComponent implements OnInit {
     if (window.outerWidth <= 768) {
       // only on mobile
       this.changeDateSpan(-1);
-
     }
   }
 
@@ -264,8 +261,8 @@ export class ThreeDayComponent implements OnInit {
   styleEventName(event: GeoJson) {
     var height = this.calculateEventHeight(event);
 
-    var oneLineMax = 2.25;    // height percentage max for one line
-    var increment = (window.outerWidth <= 768) ? 2.5 : 2;    // increment percentage per line
+    var oneLineMax = (window.outerWidth <= 768) ? 3.75 : 3.5;    // height percentage max for one line
+    var increment = (window.outerWidth <= 768) ? 1.75 : 1.5;    // increment percentage per line
 
     var lines = 5;
     if (height < oneLineMax) lines = 1;

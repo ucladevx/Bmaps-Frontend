@@ -53,7 +53,6 @@
   left: 0;
   position: -webkit-sticky;
   position: sticky;
-  z-index: 200;
   white-space: nowrap;
   align-items: flex-start;
   border-right: $default_border_style;
@@ -65,7 +64,6 @@
   background: inherit;
   position: -webkit-sticky;
   position: sticky;
-  z-index: 300;
   top: 0;
   overflow: visible;
 }
@@ -262,8 +260,7 @@
     height: 3.75%;
     background: #7B7B7B;
     color: #fff;
-    line-height: 125%;  
-    //padding: 3.5% 0% 2% 0%;
+    line-height: 125%;
     justify-content: center;
     align-items: center;
     font-family: 'Nunito', sans-serif;
@@ -271,7 +268,6 @@
   }
 
   .day-of-month {
-    padding: 0%;
     font-size: 15px;
   }
 
@@ -289,25 +285,12 @@
     border-right: 5px solid #7B7B7B;
   }
 
-  #scrollable {
-    //overflow-x: scroll;
-    //z-index: 1;
-  }
-
-  .time-of-day td {
-    overflow-x: hidden;
-  }
-
   .time-of-day {
     height: 96.25%;
   }
 
   .timebar {
     width: 9%;
-    border-right: 0px;
-  }
-
-  .timebar {
     border-right: 0px;
   }
 
