@@ -16,7 +16,8 @@
 .day-header {
   height: 11%;
   width: 100%;
-  display: block;
+  display: flex;
+  flex-direction: column;
   float: left;
   clear: left;
   background: #fff;
@@ -262,7 +263,9 @@
     background: #7B7B7B;
     color: #fff;
     line-height: 125%;  
-    padding: 3.5% 0% 2% 0%;
+    //padding: 3.5% 0% 2% 0%;
+    justify-content: center;
+    align-items: center;
     font-family: 'Nunito', sans-serif;
     border-bottom: 0px;
   }
