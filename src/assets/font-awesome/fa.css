@@ -1,0 +1,42 @@
+@font-face {
+  font-family: 'fa';
+  src: url('./font/fa.woff');
+  src: url('./font/fa.woff2') format('woff2'),
+       url('./font/fa.woff') format('woff'),
+       url('./font/fa.ttf') format('truetype'),
+       url('./font/fa.svg') format('svg'),
+       url('./font/fa.eot') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fa";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  /* width: 1em; */
+  margin-right: .2em;
+  text-align: center;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1em;
+  margin-left: .2em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-times:before { content: '\f00d'; } /* '' */
+.icon-home:before { content: '\f015'; } /* '' */
+.icon-chevron-left:before { content: '\f053'; } /* '' */
+.icon-chevron-right:before { content: '\f054'; } /* '' */
+.icon-chevron-up:before { content: '\f077'; } /* '' */
+.icon-chevron-down:before { content: '\f078'; } /* '' */
+.icon-filter:before { content: '\f0b0'; } /* '' */
+.icon-bars:before { content: '\f0c9'; } /* '' */
+.icon-caret-left:before { content: '\f0d9'; } /* '' */
+.icon-caret-right:before { content: '\f0da'; } /* '' */
+.icon-calendar-times:before { content: '\f273'; } /* '' */

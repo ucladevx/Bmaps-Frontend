@@ -1,63 +1,79 @@
 <div class="sidebar-outer flex flex-column">
-    <div class="move-up d-md-none" (click)="toggleMobileSidebar()">
-        <i aria-hidden="true" id="up" class="fa fa-lg" [ngClass]="mobileSidebarVisible ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
-        <span class="up-text">Events List</span>
-    </div>
-    <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
-        <span *ngIf="this._viewService.isMapView(); else calendarView">
-          <app-date-selector class="d-none d-md-block"></app-date-selector>
-          <app-category-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-map>
-        </span>
-        <ng-template #calendarView>
-          <app-search-bar></app-search-bar>
-          <app-category-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-category-bar-calendar>
-        </ng-template>
-        <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
-          <div *ngIf="filteredEvents.length == 0" id="no-events-section">
-            <div><i id="no-events-icon" class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
-            <div id="no-events-label">No Events</div>
-          </div>
-            <div *ngFor="let event of filteredEvents" #eventList>
-                <div class="sidebar-event"
-                    [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)"
-                    (mouseenter)="onHover(event)"
-                    (click)="onSelect(event)">
-                    <div class="sidebar-event-img-container">
-                        <img src="{{
-                          event.properties.cover_picture == '<NONE>' ?
-                            checkImage('/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
-                            '/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png'
-                            : '/assets/images/banners/fb-banner-default.png'
-                          : event.properties.cover_picture
-                        }}" class="sidebar-event-img">
-                    </div>
-                    <div class="sidebar-event-details">
-                      <div>
-                        <p class="sidebar-event-name">{{event.properties.name}}</p>
-                        <p class="sidebar-event-date">{{_dateService.formatEventDate(event)}}</p>
-                          <p class="sidebar-event-location" *ngIf="event.properties.place.name;else venue_street">
-                            {{event.properties.place.name}}
-                          </p>
-                        <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
-                        <p class="sidebar-event-category" [innerHTML]="printCategories(event.properties.categories)"></p>
-                      </div>
-                    </div>
-                    <div class="sidebar-event-add">
-                          <!--- need it to not click into the event when adding to calendar!-->
-                        <a id="sidebar-event-add-button" href="http://www.google.com/calendar/render?
-action=TEMPLATE
-&text={{event.properties.name}}
-&dates={{_dateService.formatEventCalendar(event)}}
-&details={{event.properties.description}}
-&location={{event.properties.place.location.street}}
-&trp=false
-&sprop=
-&sprop=name:"
-target="_blank" title="Add to Google Calendar" rel="nofollow">+</a>
-</div>
-                </div>
-                <div class="separator"></div>
-            </div>
+  <!-- mobile sidebar swipe-up header -->
+  <div class="move-up d-md-none" (click)="toggleMobileSidebar()">
+    <i class="icon-lg" id="up" aria-hidden="true" [ngClass]="mobileSidebarVisible ? 'icon-chevron-down' : 'icon-chevron-up'"></i>
+    <span class="up-text">Events List</span>
+  </div>
+  <!-- sidebar itself -->
+  <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
+    <!-- date selector -->
+    <app-date-selector class="d-none d-md-block"></app-date-selector>
+    <!-- filter dropdown -->
+    <span *ngIf="_eventService.isMapView(); else calendarView">
+      <app-filter-bar-map [showToggleButton]="true" class="d-none d-md-block"></app-filter-bar-map>
+    </span>
+    <ng-template #calendarView>
+      <app-filter-bar-calendar [showToggleButton]="true" class="d-none d-md-block"></app-filter-bar-calendar>
+    </ng-template>
+    <!-- event list -->
+    <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
+      <!-- placeholder if no events -->
+      <div *ngIf="filteredEvents.length == 0" id="no-events-section">
+        <div><i id="no-events-icon" class="icon-calendar-times" aria-hidden="true"></i></div>
+        <div id="no-events-label">No Events</div>
+      </div>
+      <!-- iterate through visible events -->
+      <div *ngFor="let event of filteredEvents" #eventList>
+        <!-- subheader separting events by date -->
+        <div *ngIf="event.properties.firstOfDay && _eventService.isCalendarView()" class="sidebar-date">
+          {{eventDateHeader(event)}}
         </div>
+        <!-- event card -->
+        <div class="sidebar-event" (mouseenter)="onHover(event)" (mouseout)="endHover()" (click)="onSelect(event)"
+          [class.selected]="(clickedEvent && event.id == clickedEvent.id) || (hoveredEvent && event.id == hoveredEvent.id)">
+          <!-- event image -->
+          <div class="sidebar-event-img-container">
+            <img class="sidebar-event-img" src="{{ event.properties.cover_picture == '<NONE>' ?
+              _eventService.checkImage('/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png') ?
+              '/assets/images/banners/fb-banner-'+event.properties.categories[0].toLowerCase()+'.png' :
+              '/assets/images/banners/fb-banner-default.png' :
+              event.properties.cover_picture
+            }}">
+          </div>
+          <!-- event details -->
+          <div class="sidebar-event-details">
+            <div>
+              <!-- event name -->
+              <p class="sidebar-event-name">{{event.properties.name}}</p>
+              <!-- event date -->
+              <p class="sidebar-event-date">{{_dateService.formatEventDate(event)}}</p>
+              <!-- event location -->
+              <p class="sidebar-event-location" *ngIf="event.properties.place.name; else venue_street">{{event.properties.place.name}}</p>
+              <ng-template #venue_street>{{event.properties.place.location.street}}</ng-template>
+              <!-- event categories -->
+              <p class="sidebar-event-category" [innerHTML]="printCategories(event.properties.categories)"></p>
+            </div>
+          </div>
+          <!-- add event to personal calendar -->
+          <div class="sidebar-event-add">
+            <a id="sidebar-event-add-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" (click)="openModal($event, event, 'custom-modal-1')">+</a>
+          </div>
+          <div>
+            <jw-modal id="custom-modal-1">
+              <div class="pop-up-content">
+                <h1 class="pop-up-header">Add to Calendar</h1>
+                <!-- google calendar -->
+                <a class="dd-item" target="_blank" title="Add to Google Calendar" rel="nofollow"
+                  href="{{_dateService.formatGoogleCalendar(calendarEvent)}}" (click)="closeModal('custom-modal-1')">Google</a>
+                <!-- apple calendar -->
+                <a class="dd-item" (click)= "createICS(event)" [href]="fileUrl" download="{{getICSname()}}">Apple</a>
+              </div>
+            </jw-modal>
+          </div>
+          <!-- separate events -->
+          <div class="separator"></div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

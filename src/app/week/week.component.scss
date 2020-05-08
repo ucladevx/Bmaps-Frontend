@@ -1,54 +1,9 @@
 @import "../../gvars.scss";
 
 :host {
-    display: flex;
-    flex: 1;
-}
-
-.weekview-container {
     height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
-.week-number {
-    position: absolute;
-    left: 5%;
-}
-
-.day-header {
-  background-color: #fff;
-  height: 11%;
-  width: 100%;
-  padding: 5% 0% 5% 0%;
-  display: block;
-  border-top: 0px solid $default_border_color;
-  border-bottom: 1px solid $default_border_color;
-  float: left;
-  clear: left;
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
-  position: -webkit-sticky;
-  position: sticky;
-  z-index: 150;
-  top: 0;
-  background-clip: padding-box;
-}
-
-.corner-block {
-  width: 8.6%;
-}
-
-.corner-block-2{
-  width: 20px;
-  border-left: 1px solid $default_border_color;
-}
-
-.short-abbr {
-    display: none;
-}
 
 #scrollable {
   height: 100%;
@@ -57,130 +12,53 @@
   width: 100%;
 }
 
-.timebar {
-  width: 8%;
-  height: 150%;
-  background-color: white;
-  align-items: flex-start;
-  float: left;
-  border-right: 1px solid $default_border_color;
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  z-index: 200;
-  white-space: nowrap;
-}
-
-.filler-block {
-  height: 11%;
+.week-mobile-container {
   width: 100%;
-  background-color: inherit;
-  position: -webkit-sticky;
-  position: sticky;
-  z-index: 300;
-  top: 0;
-  overflow: visible;
+  height: 100%;
 }
 
-.time-of-day {
-  width: 100%;
-  height: 89%;
-}
-
-#far-left {
-  overflow-x: hidden;
-  table-layout: fixed;
-}
-
-.time-of-day tr {
-  width: 100%;
-  height: 4%;
-  margin: 0;
+.week-summary {
+  padding: 1em; //adjust later
   text-align: center;
-  font-size: 10px;
-  font-weight: bold;
-  color: black;
+  background-color: #7B7B7B;
+  color: #FFFFFF;
 }
 
-.weekview-day .time-of-day tr:not(:last-child) {
-  border-bottom: 1px solid $default_border_color;
+.day-of-week {
+  width:100%;
+  height:100%;
+  //overflow-y: scroll;
 }
 
-.hidden {
-  visibility: hidden;
-}
-
-.time-of-day td {
-  vertical-align: top;
-}
-
-.day-blocks {
-  width: 92%;
-  height: 150%;
+.row {
   display: flex;
-  flex-direction: column;
-}
-
-.weekview-month {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1;
-}
-
-.weekview-day {
-    position: relative;
-    width: 14.2857%;
-    display: block;
-    align-items: flex-start;
-    border-right: 1px solid $default_border_color;
-    color: #bebebe;
-    background-color: #fff;
-    z-index: 1;
-}
-
-.weekview-day.in-current-month {
-    color: inherit;
-}
-
-.weekview-day.current-day {
-    background-color: #ececec;
-}
-
-.day-of-month {
+  flex-direction: row;
+  //flex-wrap: wrap;
+  flex-wrap: nowrap;
   width: 100%;
-  text-align: center;
-  font-size: 30px;
-  display: block;
-}
-
-.today span {
-  color: #59dbd6;
-
-}
-
-.weekview-day-event {
-  float: left;
-  clear: left;
-  position: absolute;
-  font-size: 10px;
-  padding: 1% 3% 1% 3%;
+  height: 13%; //ask about this!
+  //min-height: 4.5rem;
+  overflow-x: scroll; // where does this go?
   margin: 0%;
-  border-radius: 2px;
-  border: $default_border_width solid white;
-  color: white;
-  background-color: #29c2bd;
-  cursor: pointer;
-  z-index: 2;
-  width: 100%;
+  border-bottom: 1px solid black;
 }
 
 .event-details {
-  width: 100%;
   height: 100%;
   margin: 0%;
   padding: 0%;
-  overflow-y: hidden;
+  overflow-y: hidden; //scroll?
+}
+
+.event-name {
+  width: 100%;
+  //line-height: 1.5em;
+  height: 3em;  
+  //white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px; //convert to rem?
+  font-weight: bold;  
 }
 
 .event-time {
@@ -191,61 +69,112 @@
   padding: 0%;
 }
 
-.event-name {
-  width: 100%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+.day-slot {
+  background-color: white;
+  text-align: right;
+  height: 100%;
+  //line-height: 1.2em;
+  //height: 2.4em;  
+  //margin-top: auto;
+  //padding-top: auto;
+  //margin-bottom: auto;
+  //padding-bottom: auto;
+  //margin-right: 1%;
+  //padding-right: 1%;
+  padding-right: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 0 0 3rem;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  left: 0;
+  //padding-top: 1rem;
+  //padding-bottom: 1rem;
+  //padding: 2em;
+}
+
+
+.day-text {
+  background-color: white;
+  text-align: right;
+  height: 100%;
+  line-height: 1.2em;
+  height: 2.4em;  
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 1%;
+  padding-right: 0;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 0 0 3rem;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  left: 0;
+  //padding-top: 1rem;
+  //padding-bottom: 1rem;
+  //padding: 2em;
+}
+
+.weekview-day-event {     
+  font-size: 10px;
+  font-color: black;
+  margin: 0% 0.2% 0% 0.2%;
   padding: 0%;
-}
-
-.current-time {
+  //border: $default_border_width solid white;
+  background-color: #ABFFFF;
+  cursor: pointer;
+  //z-index: 2;
   width: 100%;
-  height: 2%;
-  border-top: 2px solid black;
-  position: absolute;
-  top: 20%;
-  z-index: 10;
-  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 0 0 11rem; // shorten for mobile //7?
+  border-top: 5px solid #29c2bd;
+  overflow-x: scroll;
 }
 
-.current-time.today {
-  visibility: visible;
+.filler-col {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
 }
 
-/* mobile css */
+.day-name {
+  font-size: 16px; // ask em about font sizes
+}
+
+.day-month {
+  font-size: 20px; //convert to rem?
+  font-weight: 800;
+}
+
+.event-name {
+ // width: 100%;
+  line-height: 1.5em;
+  height: 3em;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px; //convert to rem?
+  font-weight: bold;  
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.event-time {
+  overflow: hidden;
+}
+
 @media screen and (max-width: 768px) {
-    /* display short day abbreviations */
-    .weekview-header > .short-abbr {
-      display: flex;
-      font-size: 12px;
-    }
-    .weekview-header > .long-abbr {
-        display: none;
-    }
-    .day-header {
-      height: 5%;
-      background-color: #7B7B7B;
-      color: #fff;
-      font-size: 13px;
-      padding: 2% 0% 2% 0%;
-    }
-    .filler-block {
-      height: 5%;
-      background-color: #7B7B7B;
-    }
-    #scrollable {
-      overflow-x: scroll;
-      z-index: 1;
-    }
-    .weekview-month {
-      width: 200%;
-    }
-    .time-of-day td {
-      overflow-x: hidden;
-    }
-    .day-of-month {
-      font-size: 13px;
-    }
+  .week-summary {
+    background-color: #979797;
+  }
+
+  .weekview-day-event {   
+    flex: 0 0 7rem; //5
+  }
 }
-/* end mobile css */

@@ -4,142 +4,153 @@ import { ContentChild } from '@angular/core';
 import { MonthComponent } from '../month/month.component';
 import { WeekComponent } from '../week/week.component';
 import { ThreeDayComponent } from '../three-day/three-day.component';
-import { WeekMobileComponent } from '../week-mobile/week-mobile.component';
-import { ViewService } from '../services/view.service';
 import { EventService } from '../services/event.service';
+import { DateService } from '../services/date.service';
+import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { CalendarViewState } from '../calendar-view-enum';
 
 @Component({
   selector: 'app-calendar-container',
   templateUrl: './calendar-container.component.html',
   styleUrls: ['./calendar-container.component.scss'],
-  providers: [WeekComponent, MonthComponent, ThreeDayComponent, WeekMobileComponent]
+  providers: [WeekComponent, MonthComponent, ThreeDayComponent]
 })
 
 export class CalendarContainerComponent implements OnInit {
-  public CalendarViewState = CalendarViewState;
 
-  public viewDate: string;
-  currentPath = '';
-
-  @ContentChild(MonthComponent)
+  @ContentChild(MonthComponent, {})
   private monthComponent: MonthComponent;
 
-  @ContentChild(WeekComponent)
+  @ContentChild(WeekComponent, {})
   private weekComponent: WeekComponent;
 
-  @ContentChild(ThreeDayComponent)
+  @ContentChild(ThreeDayComponent, {})
   private threeDayComponent: ThreeDayComponent;
 
-  @ContentChild(WeekMobileComponent)
-  private WeekMobileComponent: WeekMobileComponent;
-
+  // current view
+  public currentView = ViewState.month;
+  // current date
+  public viewDate: string;
   // week number
-  weekNumber: string;
-  // retrieved from UCLA online academic calendar
+  public weekNumber: string;
+
+  // Hard-coded from UCLA online academic calendar
   zeroWeeks: Moment[] = [
-    //2018-2019
-    moment([2018,8,23]), moment([2019,0,6]), moment([2019,2,30]),
-    //2019-2020
-    moment([2019,8,22]), moment([2020,0,5]), moment([2020,2,29]),
-    //2020-2021
-    moment([2020,8,27]), moment([2021,0,4]), moment([2021,2,29]),
-    //2021-2022
-    moment([2021,8,19]), moment([2022,0,2]), moment([2022,2,28]),
-    //2022-2023
-    moment([2022,8,19]), moment([2023,0,9]), moment([2023,3,2])
+    moment([2019,8,22]), moment([2020,0,5]), moment([2020,2,29]), //2019-2020
+    moment([2020,8,27]), moment([2021,0,4]), moment([2021,2,29]), //2020-2021
+    moment([2021,8,19]), moment([2022,0,2]), moment([2022,2,28]), //2021-2022
+    moment([2022,8,19]), moment([2023,0,9]), moment([2023,3,2])   //2022-2023
   ];
 
-  constructor(public router: Router, private _eventService: EventService, private _viewService: ViewService, route: ActivatedRoute) {
-    this.currentPath = route.snapshot.url.join('');
-  }
+  constructor(public router: Router, private _eventService: EventService, private _dateService: DateService, route: ActivatedRoute) { }
 
   ngOnInit() {
-    this._eventService.currentDate$.subscribe( date => { this.viewDateChange(date); });
-    this.enumerateWeek(CalendarViewState.week);
+
+    // whenever current date changes, update view and week number
+    this._eventService.selectedDate$.subscribe(date => {
+      this.viewDateChange(date);
+      this.enumerateWeek(this._eventService.getCurrentView())
+    });
+
+    // whenever current view changes, update local variable
+    this._eventService.currentView$.subscribe( view => {
+      this.currentView = view;
+    });
+
+    // whenever visible days changes, maintain sidebar event
+    this._eventService.visibleDays$.subscribe( days => {
+      let selectedEvent = this._eventService.getSidebarEvent();
+      if(selectedEvent){
+        let eventDate = selectedEvent.properties.start_time;
+        if(!this._dateService.isBetween(eventDate, days[0].date, days[days.length-1].date)){
+          this._eventService.resetEventSelection();
+          this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
+      }}
+    });
+
+    // initialize week enumeration
+    if(this._eventService.isWeekView()) {
+      this.currentView = ViewState.week;
+      this.enumerateWeek(ViewState.week);
+    }
+
+    // initialize week enumeration
+    if(this._eventService.isThreeDayView()) {
+      this.currentView = ViewState.threeday;
+      this.enumerateWeek(ViewState.threeday);
+    }
+
   }
 
+  // update the currently displayed date
   viewDateChange(set : Date) {
     this.viewDate = set.toLocaleDateString("en-US", {month: 'long', year: 'numeric'});
   }
 
-  changeDateSpan(delta: number, calendarView: CalendarViewState) : void{
-    this._viewService.changeDateSpan(delta, calendarView);
-    this.enumerateWeek(calendarView);
-  }
-
-  getCalendarView(): CalendarViewState {
-    if (this.router.url.startsWith('/calendar/day'))
-      return CalendarViewState.day;
-    else if (this.router.url.startsWith('/calendar/three-day'))
-      return CalendarViewState.threeday;
-    else if (this.router.url.startsWith('/calendar/week'))
-      return CalendarViewState.week;
-    else if (this.router.url.startsWith('/calendar/month'))
-      return CalendarViewState.month;
-    else if (this.router.url.startsWith('/calendar/week-mobile'))
-      return CalendarViewState.weekmobile;
-
-    console.log("getCalendarView() called not in Calendar View?");
-  }
-
-  //set the week number
-  enumerateWeek(view: CalendarViewState){
-    //count weeks
-    let weekCount;
-    let secondWeekCount;
-    let currentDate = moment(this._eventService.getCurrentDate());
-
-    // for three day view
-    let firstDate = currentDate;
-    let lastDate;
-
-    if (view == CalendarViewState.threeday) {
-      let numDaysDiff = currentDate.startOf('day').diff(moment().startOf('day'), 'days');
-      // 0 means first day of group, 1 - second, 2 - third
-      let dayOfGroup;
-      if (numDaysDiff >= 0) {
-        dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 1 : 2);
-      }
-      else {
-        numDaysDiff *= -1;
-        dayOfGroup = (numDaysDiff % 3 == 0) ? 0 : ((numDaysDiff % 3 == 1) ? 2 : 1);
-      }
-      firstDate = currentDate.clone().add(-1*dayOfGroup, 'days');
+  // change date span based on calendar controls
+  changeDateSpan(delta: number, calendarView: ViewState) : void{
+    let newDate = this._eventService.getSelectedDate();
+    let currDate = this._eventService.getSelectedDate();
+    let today = new Date();
+    // determine date to display in new view
+    switch(calendarView) {
+      // change to month view
+      case ViewState.month :
+        newDate = moment(newDate).startOf('M').add(delta,'M').toDate();
+        if(this._dateService.inSameMonth(newDate, currDate)) newDate = currDate;
+        else if(this._dateService.inSameMonth(newDate, today)) newDate = today;
+        break;
+      // change to week view
+      case ViewState.week :
+        newDate = moment(newDate).startOf('w').add(delta,'w').toDate();
+        if(this._dateService.inSameWeek(newDate, currDate)) newDate = currDate;
+        else if(this._dateService.inSameWeek(newDate, today)) newDate = today;
+        break;
+      // change to three day view
+      case ViewState.threeday :
+        newDate = this._dateService.getViewBounds(newDate,calendarView).startDate.startOf('d').add(delta*3,'d').toDate();
+        if(this._dateService.inSameThreeDay(newDate, currDate)) newDate = currDate;
+        break;
     }
-    lastDate = firstDate.clone().add(2, 'days');
+    // update date span and week number
+    this._eventService.changeDateSpan(newDate, calendarView);
+    this.enumerateWeek(calendarView);
+    // update scroll
+    if(calendarView == ViewState.threeday) {
+      let _this = this;
+      setTimeout(function(){
+        this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+        document.getElementById("scrollable").scrollTop = this.scrollPosition;
+      }, 0.1);
+    }
+  }
 
-    //iterate backwards through zeroWeeks array to find the first positive week
+  // calculate the week number
+  enumerateWeek(view: ViewState){
+    let firstDate = moment(this._eventService.getSelectedDate());
+    let lastDate = moment(this._eventService.getSelectedDate());
+    let weekCount, secondWeekCount;
+    if (view == ViewState.threeday) {
+      let bounds = this._dateService.getViewBounds(firstDate,view);
+      firstDate = bounds.startDate; lastDate = bounds.endDate;
+    }
     for(let i = this.zeroWeeks.length-1; i>=0; i--){
-      //determine week count
       weekCount = Math.floor(firstDate.diff(this.zeroWeeks[i],'days') / 7);
       secondWeekCount = Math.floor(lastDate.diff(this.zeroWeeks[i],'days') / 7);
-      //handle zero week
       if(weekCount>=0){ if(i%3 != 0){ weekCount++; } i = -1; }
       if(secondWeekCount>=0){ if(i%3 != 0){ secondWeekCount++; } i = -1; }
     }
-    // Week 11 -> Finals Week
-    if(weekCount == 11)
+    if(weekCount == 11) {
       this.weekNumber = "Finals week";
-    // Week 12+ or Week 0- -> Break
-    else if(weekCount > 11 || weekCount < 0 || weekCount == undefined) {
-      this.weekNumber = "";
-      if (view == CalendarViewState.threeday) {
-        if(!(secondWeekCount > 11 || secondWeekCount < 0 || secondWeekCount == undefined)) {
+    } else if(weekCount > 11 || weekCount < 0 || weekCount == undefined) {
+      if (view == ViewState.threeday && !(secondWeekCount > 11 || secondWeekCount < 0 || secondWeekCount == undefined)) {
           this.weekNumber = "Week " + secondWeekCount;
-        }
-      }
-      
-    }
-    // Week 0-12 -> Within Quarter
-    else {
+    }} else {
       this.weekNumber = "Week " + weekCount;
-      if (view == CalendarViewState.threeday)
-        if(!(secondWeekCount > 11 || secondWeekCount < 0 || secondWeekCount == undefined))
-          if (secondWeekCount != weekCount)
-            this.weekNumber = this.weekNumber + "-" + secondWeekCount;
+      if (view == ViewState.threeday && !(secondWeekCount > 11 || secondWeekCount < 0 || secondWeekCount == undefined) && secondWeekCount != weekCount) {
+        this.weekNumber = this.weekNumber + "-" + secondWeekCount;
+      }
     }
   }
 
