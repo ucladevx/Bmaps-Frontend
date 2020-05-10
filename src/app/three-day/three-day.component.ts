@@ -158,21 +158,132 @@ export class ThreeDayComponent implements OnInit {
     return this.convertTimeToPercent(now)+"%";
   }
 
-  // convert time to top percentage in css
+  changeDateSpan(delta: number) : void {
+    let newDate = this._eventService.getSelectedDate();
+    let currDate = this._eventService.getSelectedDate();
+    let today = new Date();
+    newDate = this._dateService.getViewBounds(newDate,ViewState.threeday).startDate.startOf('d').add(delta*3,'d').toDate();
+    if(this._dateService.inSameThreeDay(newDate, currDate)) newDate = currDate;
+      this._eventService.changeDateSpan(newDate, ViewState.threeday);
+    // update scroll
+    let _this = this;
+    setTimeout(function(){
+      this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
+      document.getElementById("scrollable").scrollTop = this.scrollPosition;
+    }, 0.1);
+  }
+
+  // on swipe left
+  onPanLeft() {
+    if (window.outerWidth <= 768) {
+      // only on mobile
+      this.changeDateSpan(1);
+    }
+  }
+
+  // on swipe right
+  onPanRight() {
+    if (window.outerWidth <= 768) {
+      // only on mobile
+      this.changeDateSpan(-1);
+    }
+  }
+
+  //convert time to top percentage in css
   convertTimeToPercent(time: Moment) {
     let increment = 0; let p = 0;
     if (window.outerWidth <= 768){
-      p = 5; increment = 3.84;
+      p = 3.75;  // p is height % of day-header
+      increment = 4.05;    // about height % of an hour block = (time-of-day height %)/24
       if(time.format("A") == "PM")
-        p += 46; increment = 3.77;
+        p += 48.6;    // about 12*increment
     } else {
-      p = 11; increment = 3.58;
+      p = 11;
+      increment = 3.77;
       if(time.format("A") == "PM")
-        p += 43; increment = 3.55;
+        p += 45.25;
     }
     p += (parseInt(time.format("H"))%12)*increment;
     p += (parseInt(time.format("mm"))/15)*(increment/4);
     return p;
+  }
+
+  // get color of event based off category
+  getEventColor(category: string): string {
+    if (!category.localeCompare("NETWORKING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("GARDENING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("FOOD"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("DANCE"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("ART"))
+      return'#BBA4FF';
+    else if (!category.localeCompare("HEALTH"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("SPORTS"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("MEETUP"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("COMEDY_PERFORMANCE"))
+      return '#78E6E6';
+    else if (!category.localeCompare("MUSIC"))
+      return '#78E6E6';
+    else if (!category.localeCompare("THEATER"))
+      return '#78E6E6';
+    else if (!category.localeCompare("PARTY"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("CAUSE"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("FILM"))
+      return '#78E6E6';
+    else if (!category.localeCompare("DRINKS"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("FITNESS"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("GAMES"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("LITERATURE"))
+      return '#78E6E6';
+    else if (!category.localeCompare("RELIGION"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("SHOPPING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("WELLNESS"))
+      return '#9FC0FF';
+    else
+      return '#FFB5F8';
+  }
+
+  styleEventName(event: GeoJson) {
+    var height = this.calculateEventHeight(event);
+    var oneLineMax = (window.outerWidth <= 768) ? 3.75 : 3.5;    // height percentage max for one line
+    var increment = (window.outerWidth <= 768) ? 1.75 : 1.5;    // increment percentage per line
+    var lines = 5;
+    if (height < oneLineMax) lines = 1;
+    else if (height <= oneLineMax + increment) lines = 2;
+    else if (height <= oneLineMax + 2*increment) lines = 3;
+    else if (height <= oneLineMax + 3*increment) lines = 4;
+    let style = {
+      '-webkit-line-clamp': lines,
+    }
+    return style;
+  }
+
+  calculateEventHeight(event: GeoJson) {
+    // CALCULATE TOP //
+    let start = moment(event.properties.start_time);
+    let top = this.convertTimeToPercent(start);
+    // CALCULATE HEIGHT //
+    let temp = moment(event.properties.end_time);
+    let hours = moment.duration(temp.diff(start)).asHours();
+    if(hours>24){ hours = (hours%24)+1; }
+    let end = start.clone().add(hours,"hours");
+    let bottom = this.convertTimeToPercent(end)
+    let height = bottom-top;
+    if(height<0){ height = 100-top; }
+    return height;
   }
 
   // position and size event to match actual start time and duration
@@ -227,7 +338,8 @@ export class ThreeDayComponent implements OnInit {
     let style = {
       'top' : top+"%", 'height' : height+"%",
       'left' : left+"%", 'width' : width+"%",
-      'zIndex' : z, 'fontWeight' : font
+      'zIndex' : z, 'fontWeight' : font,
+      'background-color' : this.getEventColor(event.properties.categories[0]),
     }
     return style;
   }
