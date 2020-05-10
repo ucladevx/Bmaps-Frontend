@@ -66,6 +66,7 @@ export class WeekComponent implements OnInit {
 
   }
 
+  // return a string for the current week
   weekString() {
     let firstDay = moment(this.days[0].date)
     return (firstDay.startOf('week').format("MMMM D") + " - " + firstDay.startOf('week').clone().add(6, 'day').format("MMMM D, YYYY"));
@@ -141,10 +142,12 @@ export class WeekComponent implements OnInit {
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
   }
 
+  // return event name
   eventName(event: GeoJson): string{
     return event.properties.name;
   }
 
+  // return event time
   eventTime(event: GeoJson): string{
     return this._dateService.formatTime(event.properties.start_time) +
       " - " + this._dateService.formatTime(event.properties.end_time);
@@ -154,8 +157,8 @@ export class WeekComponent implements OnInit {
 
   // color events according to category
   styleEvent(event: GeoJson){
-    let color = "#ABFFFF"
-    // ask about event category sorting
+    let color = "#9FC0FF" // default color
+    // color code by first valid category in array
     for(let i = 0; i < event.properties.categories.length; i++){
       if (event.properties.categories[i] != null) {
         color = this.getEventColor(event.properties.categories[i]);
@@ -163,7 +166,7 @@ export class WeekComponent implements OnInit {
       }
     }
     let style = {
-      "background-color" : color + "5F", //"5F" for transparency
+      "background-color" : color + "5F", 
       'border-top' : '5px solid ' + color,
     }
     return style;
