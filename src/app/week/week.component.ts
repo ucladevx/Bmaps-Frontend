@@ -127,7 +127,7 @@ export class WeekComponent implements OnInit {
     else return [];
   }
 
-  // highlight selected day -- do we still want this?
+  // highlight selected day -- currently not in use
   onSelect(day: CalendarDay): void{
     if(this._eventService.getClickedEvent() && this._eventService.getSelectedDate() != day.date &&
       moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth)

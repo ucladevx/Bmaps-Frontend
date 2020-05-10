@@ -1,30 +1,16 @@
 <div class="week-mobile-container">
   <div id="scrollable">
-    <div class="week-summary">
+    <!--div class="week-summary">
       {{weekString()}}
-    </div>
+    </div-->
     <div class="day-of-week">
       <div class="row" *ngFor="let day of days">
-        <div class="day-slot">
+        <!--div class="day-slot">
           <div class="day-text">
             <span class="day-name">{{day.dayOfWeek}}</span>
             <span class="day-month">{{day.dayOfMonth}}</span>
           </div>
-        </div>
-        <div class="weekview-day-event" id="{{'event-' + event.id}}"
-        *ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event)">
-          <div class="event-details">
-            <div class="event-name block-with-text">{{eventName(event)}}</div>
-            <div class="event-time">{{eventTime(event)}}</div>
-          </div>
-        </div>
-        <div class="weekview-day-event" id="{{'event-' + event.id}}"
-        *ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event)">
-          <div class="event-details">
-            <div class="event-name block-with-text">{{eventName(event)}}</div>
-            <div class="event-time">{{eventTime(event)}}</div>
-          </div>
-        </div>
+        </div-->
         <div class="weekview-day-event" id="{{'event-' + event.id}}"
         *ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event)">
           <div class="event-details">
