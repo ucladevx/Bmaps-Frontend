@@ -10,11 +10,13 @@
   margin: 0;
   overflow-y: scroll;
   width: 100%;
+  overflow-x: hidden; //??
 }
 
-.week-mobile-container {
+.week-container {
   width: 100%;
   height: 100%;
+  overflow: hidden; //??
 }
 
 .week-summary {
@@ -28,6 +30,7 @@
 .day-of-week {
   width:100%;
   height:100%;
+  overflow-x: hidden;
 }
 
 .row {
@@ -67,7 +70,7 @@
 .event-time {
   width: 100%;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  //white-space: nowrap; //problem!
   overflow: hidden;
   padding: 0%;
 }

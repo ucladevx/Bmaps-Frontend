@@ -143,6 +143,7 @@ export class WeekComponent implements OnInit {
   }
 
   // return event name
+  // unnecessary... 
   eventName(event: GeoJson): string{
     return event.properties.name;
   }
