@@ -101,13 +101,13 @@
 }
 
 // Formatting timebar
-.time-of-day-bar tr td:first-child {  
+.time-of-day-bar tr td:first-child {
   font-size: 15px;
   text-align: right;
   font-weight: 500;
 }
 
-.time-of-day-bar tr td:nth-child(2) {  
+.time-of-day-bar tr td:nth-child(2) {
   top: 10px;
   font-size: 10px;
 }
@@ -291,7 +291,6 @@
 
   .timebar {
     width: 9%;
-    border-right: 0px;
   }
 
   .time-of-day-bar {
@@ -304,6 +303,7 @@
   }
 
   .helper-text {
+    border-top: $default_border_style;
     display: block;
     text-align: center;
     color: #7B7B7B;

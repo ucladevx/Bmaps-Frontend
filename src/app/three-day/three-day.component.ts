@@ -164,9 +164,7 @@ export class ThreeDayComponent implements OnInit {
     let today = new Date();
     newDate = this._dateService.getViewBounds(newDate,ViewState.threeday).startDate.startOf('d').add(delta*3,'d').toDate();
     if(this._dateService.inSameThreeDay(newDate, currDate)) newDate = currDate;
-
-    this._eventService.changeDateSpan(newDate, ViewState.threeday);
-
+      this._eventService.changeDateSpan(newDate, ViewState.threeday);
     // update scroll
     let _this = this;
     setTimeout(function(){
@@ -200,7 +198,7 @@ export class ThreeDayComponent implements OnInit {
       if(time.format("A") == "PM")
         p += 48.6;    // about 12*increment
     } else {
-      p = 11; 
+      p = 11;
       increment = 3.77;
       if(time.format("A") == "PM")
         p += 45.25;
@@ -260,20 +258,16 @@ export class ThreeDayComponent implements OnInit {
 
   styleEventName(event: GeoJson) {
     var height = this.calculateEventHeight(event);
-
     var oneLineMax = (window.outerWidth <= 768) ? 3.75 : 3.5;    // height percentage max for one line
     var increment = (window.outerWidth <= 768) ? 1.75 : 1.5;    // increment percentage per line
-
     var lines = 5;
     if (height < oneLineMax) lines = 1;
     else if (height <= oneLineMax + increment) lines = 2;
     else if (height <= oneLineMax + 2*increment) lines = 3;
     else if (height <= oneLineMax + 3*increment) lines = 4;
-
-    let style = { 
+    let style = {
       '-webkit-line-clamp': lines,
     }
-
     return style;
   }
 
@@ -289,7 +283,6 @@ export class ThreeDayComponent implements OnInit {
     let bottom = this.convertTimeToPercent(end)
     let height = bottom-top;
     if(height<0){ height = 100-top; }
-
     return height;
   }
 
@@ -341,7 +334,6 @@ export class ThreeDayComponent implements OnInit {
       font = "bold";
       z = 100;
     }
-
     // CREATE STYLE
     let style = {
       'top' : top+"%", 'height' : height+"%",
