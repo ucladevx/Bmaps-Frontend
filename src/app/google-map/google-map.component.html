@@ -7,11 +7,17 @@
   [options]="options"
   (mapClick)="click($event)">
   <map-marker
+    #markerElem
     *ngFor="let marker of markers"
     [position]="marker.position"
     [label]="marker.label"
     [title]="marker.title"
     [options]="marker.options"
+    (mapClick)="openInfo(markerElem, marker.info)"
+    (mapMouseover)="mouseoverMarker(markerElem, marker.info)"
+    (mapMouseout)="mouseoutMarker(markerElem)"
   >
   </map-marker>
+
+  <map-info-window [innerHTML]="infoContent"></map-info-window>
 </google-map>
