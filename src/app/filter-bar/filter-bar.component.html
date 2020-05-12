@@ -166,17 +166,18 @@
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
-          <a *ngIf="categKey != 'all'" [ngClass]="{'dropdown-item': true, 'selected': categHash[categKey].selected}"
-             (click)="categoryClicked(categKey)">
-          <div class="checkbox-container">
-            <div *ngIf="categHash[categKey].selected; else unchecked">
-              <img class="checkbox" width="16px" src="assets/images/check.svg"/>
+          <a (click)="categoryClicked(categKey)">
+            <div class="icon-container">
+              <div *ngIf="categHash[categKey].selected; else unchecked">
+                <img class="categ-icon" width="60px" src="assets/images/categories/{{categKey}}-1.png"/>
+              </div>
+              <ng-template #unchecked class="icon-container selected-icon"><div>
+                <img class="categ-icon" width="60px" src="assets/images/categories/{{categKey}}.png"/>
+              </div></ng-template>
             </div>
-          </div>
-          <ng-template #unchecked><div>
-            <img class="checkbox" width="16px" src="assets/images/box.svg" />
-          </div></ng-template>
-          {{categHash[categKey].formattedCategory}}
+            <div class="icon-label">
+              {{categHash[categKey].formattedCategory}}
+            </div>
           </a>
         </li>
       </ul>

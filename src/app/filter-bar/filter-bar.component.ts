@@ -233,7 +233,11 @@ export class FilterBarComponent implements OnInit {
 
   // helper function for returning object keys
   private objectKeys(obj) {
-    return Object.keys(obj);
+    let keys = [];
+    Object.keys(obj).forEach(k => {
+      if(k != 'all') keys.push(k);
+    });
+    return keys;
   }
 
   closeModal(id: string) {
