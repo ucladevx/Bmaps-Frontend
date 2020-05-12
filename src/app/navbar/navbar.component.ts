@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
 
-    // whenever current vuew changes, maintain locla view variable
+    // whenever current vuew changes, maintain local view variable
     this._eventService.currentView$.subscribe( view => {
       this.isMapSelected = (view == ViewState.map);
       this.currentView = view;
