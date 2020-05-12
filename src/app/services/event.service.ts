@@ -506,7 +506,6 @@ export class EventService {
     };
     this._dateFilter = tempFilter;
     this.dateFilterSource.next(this._dateFilter);
-    console.log(this._dateFilter);
   } getDateFilter() { return this._dateFilter; }
   resetDateFilter() {
     let bounds = this._dateService.getViewBounds(this._selectedDate, this._currentView);

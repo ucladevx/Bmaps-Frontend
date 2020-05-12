@@ -183,7 +183,12 @@ export class FilterBarComponent implements OnInit {
   }
 
   // update location filter
-  setLocFilter(locInput: string){ this._eventService.setLocFilter(locInput,locInput,''); }
+  setLocFilter(locInput: string){
+    let tag = locInput;
+    if(this.locFilter.hasOwnProperty('tag') && this.locFilter['tag'] == locInput)
+      tag = 'none';
+    this._eventService.setLocFilter(tag,tag,'');
+  }
   setCustomLocFilter(locSearch: string){
     let abbrev = locSearch.substring(0,10);
     if(locSearch != abbrev) abbrev = abbrev+"...";

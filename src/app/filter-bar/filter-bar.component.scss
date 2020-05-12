@@ -19,7 +19,7 @@
   margin: 0 auto;
 }
 
-a.clear-all-btn {
+.clear-all-btn {
   float: right;
   color: #808080;
   cursor: pointer;
@@ -28,11 +28,11 @@ a.clear-all-btn {
   margin-right: 15px;
 }
 
-a.clear-all-btn:hover {
+.clear-all-btn:hover {
   color: #BEBEBE;
 }
 
-a.clear-all-btn:active {
+.clear-all-btn:active {
   background: inherit;
 }
 
@@ -89,14 +89,15 @@ a.clear-all-btn:active {
   vertical-align: middle;
   font-size: 16px;
   line-height: 50px;
-  padding-left: 24px;
-  padding-right: 24px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
+  overflow: visible;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .dropdown {
-	position: relative;
 	text-align: center;
   float: left;
   display: inline-block;
@@ -170,7 +171,7 @@ ul {
 }
 
 .categories-list {
-  width: 100%;
+  max-width: 100%;
   padding: 0 0 0 0;
   margin-bottom: 0px;
 }
@@ -215,30 +216,15 @@ a:active {
   margin-top: 10px;
 }
 
-a.clear-all-btn {
-  float: left;
-  width: 18%;
-  cursor: pointer;
+.clear-all-btn {
   color: #808080;
-  padding-left: 3px;
-  margin: 0%;
-  padding-right: 3px;
 }
 
-.dropdown-bar {
-  float: right;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 60%;
-  margin-right: 10%;
-}
-
-a.clear-all-btn:hover {
+.clear-all-btn:hover {
   color: #BEBEBE;
 }
 
-a.clear-all-btn:active {
+.clear-all-btn:active {
   background: inherit;
 }
 

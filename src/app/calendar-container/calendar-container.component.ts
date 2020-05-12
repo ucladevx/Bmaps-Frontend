@@ -89,7 +89,7 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   // change date span based on calendar controls
-  changeDateSpan(delta: number, calendarView: ViewState) : void{
+  changeDateSpan(delta: number, calendarView: ViewState) : void {
     let newDate = this._eventService.getSelectedDate();
     let currDate = this._eventService.getSelectedDate();
     let today = new Date();

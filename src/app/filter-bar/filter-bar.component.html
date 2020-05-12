@@ -7,10 +7,11 @@
   <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
     <!-- filter dropdowns (location, date, time) -->
     <div class="filters-bar">
-      <!-- clear button -->
-      <a class="clear-all-btn" (click)="clearFilters()">CLEAR ALL</a>
-      <!-- div to hold the three dropdowns -->
-      <div class="dropdown-bar">
+      <div class="dropdown clear-all-btn" dropdown id="clear-dropdown">
+        <a class="filter-dropdown text-center btn btn-setting" (click)="clearFilters()">
+          CLEAR ALL
+        </a>
+      </div>
         <!-- location dropdown -->
         <div class="dropdown" dropdown id="loc-dropdown">
           <!-- dropdown button -->
@@ -160,7 +161,6 @@
               </jw-modal>
             </div>
           </ul>
-        </div>
       </div>
     </div>
     <div *ngIf="categHash" class="categories-wrapper">

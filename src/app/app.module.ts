@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 // import { AngularFontAwesomeModule } from 'angular-font-awesome';
-
 import { EventService } from './services/event.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -67,6 +66,7 @@ const appRoutes: Routes = [
     BsDropdownModule.forRoot(),
     ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
+    HammerModule,
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
     // AngularFontAwesomeModule
   ],
