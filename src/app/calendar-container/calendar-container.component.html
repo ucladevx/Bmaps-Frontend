@@ -14,11 +14,12 @@
     </div>
     <!-- buttons for changing between three-day, week, and month view -->
     <div id="calendar-view-switch">
+      <span class="view-switch-text" id="day-switch" routerLink="day" routerLinkActive="active" (click)="changeDateSpan(0,4)">Day</span>
       <span class="view-switch-text" id="three-day-switch" routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,1)">3-Day</span>
       <span class="view-switch-text" id="week-switch" routerLink="week" routerLinkActive="active" (click)="changeDateSpan(0,2)">Week</span>
       <span class="view-switch-text" id="month-switch" routerLink="month" routerLinkActive="active" (click)="changeDateSpan(0,3)">Month</span>
     </div>
   </div>
-  <!-- where month and week and three-day view appear -->
+  <!-- where month and week and three-day and day view appear -->
   <router-outlet class="router-flex"></router-outlet>
 </div>

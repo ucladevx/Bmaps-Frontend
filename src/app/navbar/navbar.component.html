@@ -13,6 +13,7 @@
   <!-- calendar view select -->
   <ng-template #calendarViewSelect>
     <div class="d-md-none mobile-calendar-view-switch">
+      <span [ngClass]="currentView == 4 ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(4)">Day</span>
       <span [ngClass]="currentView == 1 ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(1)">3-Day</span>
       <span [ngClass]="currentView == 2 ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(2)">Week</span>
       <span [ngClass]="currentView == 3 ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(3)">Month</span>

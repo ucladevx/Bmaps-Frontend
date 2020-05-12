@@ -128,6 +128,7 @@ export class SidebarComponent implements OnInit {
     // update events
     switch(this.view) {
       case ViewState.map:
+      case ViewState.day:
         this.filteredEvents = this._eventService.getFilteredDayEvents().features; break;
       case ViewState.month:
         this.filteredEvents = this._eventService.getFilteredMonthEvents().features; break;

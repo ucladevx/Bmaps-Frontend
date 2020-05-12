@@ -223,7 +223,7 @@ export class EventService {
         this.initCategories();
         this.resetFilters();
         // populate event containers
-        this.updateEvents(new Date(),true,true,true);
+        this.updateEvents(new Date(),true,true,true,true);
         // set current date
         this.setSelectedDate(new Date());
         // initiailize view variables
@@ -231,6 +231,7 @@ export class EventService {
         else if(this.isMonthView()) { view = ViewState.month; }
         else if(this.isWeekView()) { view = ViewState.week; }
         else if(this.isThreeDayView()) { view = ViewState.threeday; }
+        else if(this.isDayView()) { view = ViewState.day; }
         this.setCurrentView(view);
         this.storeLastView(ViewState.month);
       });
@@ -245,6 +246,7 @@ export class EventService {
   isMonthView() { return this.router.url.startsWith("/calendar/month") }
   isWeekView() { return this.router.url.startsWith("/calendar/week") }
   isThreeDayView() { return this.router.url.startsWith("/calendar/three-day") }
+  isDayView() { return this.router.url.startsWith("/calendar/day") }
 
   setCurrentView(view: ViewState) {
     this.currentViewSource.next(view);
@@ -309,15 +311,17 @@ export class EventService {
       let sameMonth = this._dateService.inSameMonth(newDate,this._selectedDate);
       let sameWeek = this._dateService.inSameWeek(newDate,this._selectedDate);
       let sameThreeDay = this._dateService.inSameThreeDay(newDate,this._selectedDate);
+      let sameDay = this._dateService.equalDates(newDate,this._selectedDate);
       // update the event collections (only if new event collections are needed)
-      this.updateEvents(newDate, !sameMonth, !sameWeek, !sameThreeDay);
+      this.updateEvents(newDate, !sameMonth, !sameWeek, !sameThreeDay, !sameDay);
       // update current date
       this.setSelectedDate(newDate);
       // reset date span filter
       if(newView == ViewState.map
         || (newView == ViewState.month && !sameMonth)
         || (newView == ViewState.week && !sameWeek)
-        || (newView == ViewState.threeday && !sameThreeDay))
+        || (newView == ViewState.threeday && !sameThreeDay)
+        || (newView == ViewState.day && !sameDay))
           this.resetDateFilter();
     }
     // if view changed
@@ -354,13 +358,14 @@ export class EventService {
   // EVENT UPDATES //
 
   // Update all event containers
-  private updateEvents(date: Date, updateMonth: boolean, updateWeek: boolean, updateThreeDay): void {
+  private updateEvents(date: Date, updateMonth: boolean, updateWeek: boolean, updateThreeDay: boolean, updateDay: boolean): void {
     if(this.allEvents && this.allEvents.features.length > 0) {
       // update all events
       this.dayEventsSource.next(this.filterByDateSpan(this.allEvents, moment(date).startOf('d'), moment(date).endOf('d')));
       if(updateMonth) this.monthEventsSource.next(this.filterByMonth(this.allEvents, date));
       if(updateWeek) this.weekEventsSource.next(this.filterByWeek(this.allEvents, date));
       if(updateThreeDay) this.threeDayEventsSource.next(this.filterByThreeDays(this.allEvents, date));
+      if(updateDay) this.dayEventsSource.next(this.filterByDay(this.allEvents, date));
       // update category counts
       this.updateCategories();
     }
@@ -419,6 +424,16 @@ export class EventService {
   private filterByThreeDays(allEvents: FeatureCollection, date: Date){
     // determine first and last day to start displaying events
     let bounds = this._dateService.getViewBounds(date, ViewState.threeday);
+    let firstDay = bounds.startDate, lastDay = bounds.endDate;
+    if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()).startOf('d'); }
+    // filter by day span
+    return this.filterByDateSpan(allEvents, firstDay, lastDay);
+  }
+
+  // Filter events by day
+  private filterByDay(allEvents: FeatureCollection, date: Date){
+    // determine first and last day to start displaying events
+    let bounds = this._dateService.getViewBounds(date, ViewState.day);
     let firstDay = bounds.startDate, lastDay = bounds.endDate;
     if(new Date() > firstDay.toDate()){ firstDay = moment(new Date()).startOf('d'); }
     // filter by day span
@@ -645,6 +660,7 @@ export class EventService {
   private applyAllFilters() {
     switch(this._currentView){
       case ViewState.map:
+      case ViewState.day:
         this.applyFiltersToSelection(this._dayEvents.features, this.filteredDayEventsSource); break;
       case ViewState.threeday:
         this.applyFiltersToSelection(this._threeDayEvents.features, this.filteredThreeDayEventsSource); break;

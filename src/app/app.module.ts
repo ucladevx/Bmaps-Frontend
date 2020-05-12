@@ -26,6 +26,7 @@ import { ThreeDayComponent } from './three-day/three-day.component';
 import { FilterBarMapComponent } from './filter-bar-map/filter-bar-map.component';
 import { FilterBarCalendarComponent } from './filter-bar-calendar/filter-bar-calendar.component';
 import { ModalComponent } from './modal/modal.component';
+import { DayComponent } from './day/day.component';
 
 const appRoutes: Routes = [
   { path: 'map', component: MapBoxComponent  },
@@ -34,7 +35,8 @@ const appRoutes: Routes = [
     children: [
       {path: 'month', component: MonthComponent},
       {path: 'week', component: WeekComponent},
-      {path: 'three-day', component: ThreeDayComponent}
+      {path: 'three-day', component: ThreeDayComponent},
+      {path: 'day', component: DayComponent}
     ]
   },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },
@@ -56,7 +58,8 @@ const appRoutes: Routes = [
     ThreeDayComponent,
     FilterBarMapComponent,
     FilterBarCalendarComponent,
-    ModalComponent
+    ModalComponent,
+    DayComponent
   ],
   imports: [
     BrowserModule,

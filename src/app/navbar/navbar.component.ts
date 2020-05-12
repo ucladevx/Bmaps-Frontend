@@ -110,6 +110,8 @@ export class NavbarComponent implements OnInit {
         path += '/calendar/month'; break;
       case ViewState.threeday:
         path += '/calendar/three-day'; break;
+      case ViewState.day:
+        path += '/calendar/day'; break;
     }
     if(e != null) path += "(sidebar:detail/"+e.id+")";
     else path += "(sidebar:list)";

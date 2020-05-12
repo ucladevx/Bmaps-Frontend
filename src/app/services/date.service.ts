@@ -98,6 +98,9 @@ export class DateService {
         start = d.clone().subtract((d.diff(moment().startOf('day'), 'days') % 3), 'd');
         end = start.clone().add(2, 'd').endOf('day');
         break;
+      case ViewState.day:
+        start = d.clone().startOf('day');
+        end = start;
     }
     return { startDate: start, endDate: end };
   }

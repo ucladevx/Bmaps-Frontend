@@ -4,6 +4,7 @@ import { ContentChild } from '@angular/core';
 import { MonthComponent } from '../month/month.component';
 import { WeekComponent } from '../week/week.component';
 import { ThreeDayComponent } from '../three-day/three-day.component';
+import { DayComponent } from '../day/day.component';
 import { EventService } from '../services/event.service';
 import { DateService } from '../services/date.service';
 import { ViewState } from '../view-enum';
@@ -14,7 +15,7 @@ import { Moment } from 'moment';
   selector: 'app-calendar-container',
   templateUrl: './calendar-container.component.html',
   styleUrls: ['./calendar-container.component.scss'],
-  providers: [WeekComponent, MonthComponent, ThreeDayComponent]
+  providers: [WeekComponent, MonthComponent, ThreeDayComponent, DayComponent]
 })
 
 export class CalendarContainerComponent implements OnInit {
@@ -27,6 +28,9 @@ export class CalendarContainerComponent implements OnInit {
 
   @ContentChild(ThreeDayComponent, {})
   private threeDayComponent: ThreeDayComponent;
+
+  @ContentChild(DayComponent, {})
+  private dayComponent: DayComponent;
 
   // current view
   public currentView = ViewState.month;
@@ -81,6 +85,12 @@ export class CalendarContainerComponent implements OnInit {
       this.enumerateWeek(ViewState.threeday);
     }
 
+    // initialize week enumeration
+    if(this._eventService.isDayView()) {
+      this.currentView = ViewState.day;
+      this.enumerateWeek(ViewState.day);
+    }
+
   }
 
   // update the currently displayed date
@@ -111,6 +121,11 @@ export class CalendarContainerComponent implements OnInit {
       case ViewState.threeday :
         newDate = this._dateService.getViewBounds(newDate,calendarView).startDate.startOf('d').add(delta*3,'d').toDate();
         if(this._dateService.inSameThreeDay(newDate, currDate)) newDate = currDate;
+        break;
+      // change to day view
+      case ViewState.day :
+        newDate = this._dateService.getViewBounds(newDate,calendarView).startDate.startOf('d').add(delta,'d').toDate();
+        if(this._dateService.equalDates(newDate, currDate)) newDate = currDate;
         break;
     }
     // update date span and week number
