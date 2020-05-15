@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -70,6 +70,7 @@ const appRoutes: Routes = [
     BsDropdownModule.forRoot(),
     ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true}),
+    HammerModule,
     ServiceWorkerModule.register('../ngsw-worker.js', {enabled: environment.production}),
     // AngularFontAwesomeModule
   ],
