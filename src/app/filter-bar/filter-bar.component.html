@@ -73,7 +73,7 @@
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
               <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Tomorrow'}" (click)="setDateFilter('Tomorrow')">Tomorrow</a>
             </li>
-            <li role="presentation">
+            <li *ngIf="!isMap" role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
               <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Week'}" (click)="setDateFilter('This Week')">This Week</a>
             </li>
@@ -81,11 +81,11 @@
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
               <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Weekend'}" (click)="setDateFilter('This Weekend')">This Weekend</a>
             </li>
-            <li role="presentation">
+            <li *ngIf="!isMap" role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
               <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Month'}" (click)="setDateFilter('This Month')">This Month</a>
             </li>
-            <li role="presentation">
+            <li *ngIf="!isMap" role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
               <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Custom'}" (click)="openDateModal()">Custom Date</a>
             </li>

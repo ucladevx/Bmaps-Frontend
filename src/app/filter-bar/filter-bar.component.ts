@@ -35,6 +35,7 @@ export class FilterBarComponent implements OnInit {
   public showDropdown = false;
   public showModal = false;
   // calendar events
+  public isMap = false;
   public events = [];
 
   constructor(private _eventService: EventService, private _dateService: DateService, private modalService: ModalService) {}
@@ -44,6 +45,7 @@ export class FilterBarComponent implements OnInit {
     this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
     this._eventService.locFilter$.subscribe(locInfo => { this.locFilter = locInfo; });
     this._eventService.locations$.subscribe(locOptions => { this.locations = locOptions; });
+    this._eventService.currentView$.subscribe(view => { this.isMap = (view == ViewState.map); });
     this._eventService.dateFilter$.subscribe(dateInfo => {
       this.dateFilter = dateInfo;
       this.displayStartDate = moment(dateInfo.start).format('YYYY-MM-DD');
@@ -118,7 +120,7 @@ export class FilterBarComponent implements OnInit {
         endDate = startDate;
         break;
       case 'This Weekend':
-        startDate = moment().endOf('week').startOf('day');
+        startDate = moment().endOf('week').startOf('day').add(-1, 'd');
         endDate = startDate.add(1, 'd');
         break;
       case 'This Week':
@@ -138,6 +140,7 @@ export class FilterBarComponent implements OnInit {
     let end = moment(endDate).toDate();
     let tag = moment(start).format("MM/DD")+" - "+moment(end).format("MM/DD");
     this._eventService.setDateFilter("Custom",tag,start,end);
+    this.closeModal('custom-modal-3');
   }
 
   openDateModal() {
@@ -148,6 +151,7 @@ export class FilterBarComponent implements OnInit {
       this.displayEndDate= bounds.endDate.format('YYYY-MM-DD');
       (<HTMLInputElement>document.getElementById('end-date')).value = this.displayEndDate;
       this.modalService.open('custom-modal-3');
+      this.showModal = true;
     } else {
       this._eventService.resetDateFilter();
     }
@@ -168,6 +172,7 @@ export class FilterBarComponent implements OnInit {
     let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
     let tag = this._dateService.convertTo12Hour(startTime)+" - "+this._dateService.convertTo12Hour(endTime.toLocaleString());
     this._eventService.setTimeFilter("Custom",tag,start,end);
+    this.closeModal('custom-modal-4');
   }
 
   openTimeModal() {
@@ -177,6 +182,7 @@ export class FilterBarComponent implements OnInit {
       this.displayEndTime = this._dateService.convertNumToTime(1439);
       (<HTMLInputElement>document.getElementById('end-time')).value = this.displayEndTime;
       this.modalService.open('custom-modal-4');
+      this.showModal = true;
     } else {
       this._eventService.resetTimeFilter();
     }
@@ -193,12 +199,14 @@ export class FilterBarComponent implements OnInit {
     let abbrev = locSearch.substring(0,10);
     if(locSearch != abbrev) abbrev = abbrev+"...";
     this._eventService.setLocFilter('Custom', abbrev, locSearch);
+    this.closeModal('custom-modal-2');
   }
 
   openLocModal() {
     if(this.locFilter['tag'] != 'Custom') {
       (<HTMLInputElement>document.getElementById('search')).value = '';
       this.modalService.open('custom-modal-2');
+      this.showModal = true;
     } else {
       this._eventService.resetLocFilter();
     }
@@ -225,8 +233,8 @@ export class FilterBarComponent implements OnInit {
 
   @HostListener('document:click')
   clickout() {
-    if (!this.wasInside) {
-      //this.showDropdown = false;
+    if (!this.wasInside && !document.body.classList.contains('jw-modal-open')) {
+      this.showDropdown = false;
     }
     this.wasInside = false;
   }
@@ -242,6 +250,10 @@ export class FilterBarComponent implements OnInit {
 
   closeModal(id: string) {
     this.modalService.close(id);
+    let _this = this;
+    setTimeout(function(){
+      _this.showModal = false;
+    }, 0.1);
   }
 
 }

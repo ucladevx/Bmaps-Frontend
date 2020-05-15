@@ -228,6 +228,8 @@ export class EventService {
     this.timeFilter$ = this.timeFilterSource.asObservable();
     this.timeFilter$.subscribe(timeHash => { this._timeFilter = timeHash; this.applyAllFilters(); });
 
+
+    this._selectedDate = new Date();
     // Initialize variables
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
       this.allEvents = allEvents;
@@ -329,7 +331,7 @@ export class EventService {
   // Change the span of visible dates (provide post-update date and view)
   changeDateSpan(newDate: Date, newView : ViewState) {
     // if date changed
-    if(newDate != this._selectedDate) {
+    if(!(moment(newDate).isSame(moment(this._selectedDate), 'day'))) {
       // determine whether new date is in the same view spans as current date
       let sameMonth = this._dateService.inSameMonth(newDate,this._selectedDate);
       let sameWeek = this._dateService.inSameWeek(newDate,this._selectedDate);
@@ -339,11 +341,12 @@ export class EventService {
       // update current date
       this.setSelectedDate(newDate);
       // reset date span filter
-      if(newView == ViewState.map
+      if(this._dateFilter.tag == 'none' && (newView == ViewState.map
         || (newView == ViewState.month && !sameMonth)
         || (newView == ViewState.week && !sameWeek)
-        || (newView == ViewState.threeday && !sameThreeDay))
+        || (newView == ViewState.threeday && !sameThreeDay))) {
           this.resetDateFilter();
+      }
     }
     // if view changed
     let prevView = this._currentView;
@@ -506,6 +509,11 @@ export class EventService {
     };
     this._dateFilter = tempFilter;
     this.dateFilterSource.next(this._dateFilter);
+    if(this._dateFilter && this._dateFilter.start) {
+      let date = this._dateFilter.start;
+      if(moment().isAfter(moment(date))) date = new Date();
+      this.changeDateSpan(date,this._currentView);
+    }
   } getDateFilter() { return this._dateFilter; }
   resetDateFilter() {
     let bounds = this._dateService.getViewBounds(this._selectedDate, this._currentView);

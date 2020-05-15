@@ -85,7 +85,7 @@ export class CalendarContainerComponent implements OnInit {
 
   // update the currently displayed date
   viewDateChange(set : Date) {
-    this.viewDate = set.toLocaleDateString("en-US", {month: 'long', year: 'numeric'});
+    if(set) this.viewDate = set.toLocaleDateString("en-US", {month: 'long', year: 'numeric'});
   }
 
   // change date span based on calendar controls
