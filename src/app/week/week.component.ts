@@ -7,6 +7,7 @@ import { CalendarDay } from '../services/event.service';
 import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import 'hammerjs';
 
 @Component({
   selector: 'app-week',
@@ -27,6 +28,9 @@ export class WeekComponent implements OnInit {
   // style variables
   private zIndexArray: { [id: number] : Number } = {};
   private scrollPosition: number = 0;
+
+  @Output("swipeLeft") swipeLeft: EventEmitter<any> = new EventEmitter();
+  @Output("swipeRight") swipeRight: EventEmitter<any> = new EventEmitter();
 
   constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
@@ -152,6 +156,16 @@ export class WeekComponent implements OnInit {
   eventTime(event: GeoJson): string{
     return this._dateService.formatTime(event.properties.start_time) +
       " - " + this._dateService.formatTime(event.properties.end_time);
+  }
+
+  onRight() {
+    console.log("Attempted swipe right")
+    this.swipeRight.emit();
+  }
+
+  onLeft() {
+    console.log("Attempted swipe left")
+    this.swipeLeft.emit();
   }
 
   // EVENT STYLING //
