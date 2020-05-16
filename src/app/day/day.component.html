@@ -1,3 +1,57 @@
-<p>
-  day works!
-</p>
+<div class="threedayview-container">
+  <!-- time bar -->
+  <div id="scrollable">
+  	<!-- day header -->
+  	<div class="day-header" id="{{'header'+day.dayOfMonth}}">
+  		<span class="day-of-week">{{day.dayOfWeek}},&nbsp;</span><span>{{day.month}} {{day.dayOfMonth}}</span>
+      <!--<span class="regular">{{day.dayOfWeek}}</span><span class="lower-case">{{day.dayOfWeek.toLowerCase()}}</span>
+      <span class="day-of-month">{{day.dayOfMonth}}</span>-->
+  	</div>
+    <div class="timebar">
+      <!--<div class="filler-block"></div>-->
+      <table class="time-of-day-bar" id="far-left">
+        <tr><td>12</td><td>AM</td></tr>
+        <tr><td>1</td><td>:00</td></tr><tr><td>2</td><td>:00</td></tr>
+        <tr><td>3</td><td>:00</td></tr><tr><td>4</td><td>:00</td></tr>
+        <tr><td>5</td><td>:00</td></tr><tr><td>6</td><td>:00</td></tr>
+        <tr><td>7</td><td>:00</td></tr><tr><td>8</td><td>:00</td></tr>
+        <tr><td>9</td><td>:00</td></tr><tr><td>10</td><td>:00</td></tr>
+        <tr><td>11</td><td>:00</td></tr><tr><td>12</td><td>PM</td></tr>
+        <tr><td>1</td><td>:00</td></tr><tr><td>2</td><td>:00</td></tr>
+        <tr><td>3</td><td>:00</td></tr><tr><td>4</td><td>:00</td></tr>
+        <tr><td>5</td><td>:00</td></tr><tr><td>6</td><td>:00</td></tr>
+        <tr><td>7</td><td>:00</td></tr><tr><td>8</td><td>:00</td></tr>
+        <tr><td>9</td><td>:00</td></tr><tr><td>10</td><td>:00</td></tr>
+        <tr><td>11</td><td>:00</td></tr><tr><td>12</td><td>AM</td></tr>
+      </table>
+    </div>
+    <!-- threeday days -->
+    <div class="day-blocks">
+      <div class="threeday-wrapper">
+        <div class="threedayview-day" (click)="onSelect(day)" [ngClass]="{'in-current-month': day.inCurrentMonth, 'today': day.isToday}">
+          
+          <!-- day divided by time -->
+          <table class="time-of-day" (swipeleft)="onPanLeft()" (swiperight)="onPanRight()">
+            <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+            <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+            <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+            <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+            <tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr>
+          </table>
+          <!-- current time bar -->
+          <div class="current-time" [ngClass]="{'today': day.isToday}" [style.top]="currentTime()"></div>
+          <!-- events in given day -->
+          <div class="threedayview-day-event" [ngClass]="{'in-current-month': day.inCurrentMonth}" id="{{'event-' + event.id}}"
+            *ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event,day.events)">
+            <div class="event-details">
+              <div class="event-name" [ngStyle]="styleEventName(event)">{{eventName(event)}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span class="helper-text">
+    Swipe left and right to change days!
+  </span>
+</div>

@@ -1,8 +1,8 @@
 <div class="calendar">
   <!-- desktop calendar header -->
   <div class="selector">
-    <!-- week enumeration (if week or threeday) -->
-    <div id="week-number" *ngIf="(currentView == 2) || (currentView == 1); else emptyBlock">
+    <!-- week enumeration (if week or threeday or day) -->
+    <div id="week-number" *ngIf="(currentView == 2) || (currentView == 1) || (currentView == 4); else emptyBlock">
       <span *ngIf="this.weekNumber">{{weekNumber}}</span>
     </div>
     <ng-template #emptyBlock><div id="empty-selector-block"></div></ng-template>
@@ -12,7 +12,7 @@
       <span>{{viewDate}}</span>
       <button class="custom-btn" id="right-caret"><i class="icon-caret-right" (click)="changeDateSpan(1,currentView)" aria-hidden="true"></i></button>
     </div>
-    <!-- buttons for changing between three-day, week, and month view -->
+    <!-- buttons for changing between day, three-day, week, and month view -->
     <div id="calendar-view-switch">
       <span class="view-switch-text" id="day-switch" routerLink="day" routerLinkActive="active" (click)="changeDateSpan(0,4)">Day</span>
       <span class="view-switch-text" id="three-day-switch" routerLink="three-day" routerLinkActive="active" (click)="changeDateSpan(0,1)">3-Day</span>

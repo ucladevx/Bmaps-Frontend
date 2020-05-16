@@ -1,0 +1,302 @@
+@import "../../gvars.scss";
+
+:host {
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.threedayview-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-header {
+  height: 11%;
+  width: 100%;
+  display: flex;
+  float: left;
+  clear: left;
+  background: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 150;
+  top: 0;
+  padding: 5% 0% 5% 5%;
+  border-top: 0px;
+  border-bottom: $default_border_style;
+  background-clip: padding-box;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 200;
+  font-size: 30px;
+  align-items: center;
+}
+
+.lower-case {
+  display: none;
+}
+
+#scrollable {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow-y: scroll;
+}
+
+.timebar {
+  width: 8%;
+  height: 200%;
+  background: white;
+  float: left;
+  left: 0;
+  position: -webkit-sticky;
+  position: sticky;
+  white-space: nowrap;
+  align-items: flex-start;
+  border-right: $default_border_style;
+}
+
+.filler-block {
+  height: 11%;
+  width: 100%;
+  background: inherit;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  overflow: visible;
+}
+
+.time-of-day {
+  width: 100%;
+  height: 89%;
+}
+
+.time-of-day-bar {
+  width: 100%;
+  height: 89%;
+  font-family: 'Roboto', sans-serif;
+}
+
+#far-left {
+  overflow-x: hidden;
+  table-layout: fixed;
+}
+
+.time-of-day tr {
+  width: 100%;
+  height: 4%;
+  color: black;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.time-of-day-bar tr {
+  width: 100%;
+  height: 4%;
+  color: black;
+}
+
+// Formatting timebar
+.time-of-day-bar tr td:first-child {
+  font-size: 15px;
+  text-align: right;
+  font-weight: 500;
+}
+
+.time-of-day-bar tr td:nth-child(2) {
+  top: 10px;
+  font-size: 10px;
+}
+
+.time-of-day-bar tr:first-child {
+  height: 3.25%;
+}
+
+.time-of-day-bar tr:nth-last-child(2) {
+  height: 3.25%;
+}
+
+.time-of-day-bar tr:last-child {
+  height: 1%
+}
+
+.threedayview-day .time-of-day tr:not(:last-child) {
+  border-bottom: 1px solid $default_border_color;
+}
+
+.threedayview-day .time-of-day-bar tr:not(:last-child) {
+  border-bottom: 1px solid $default_border_color;
+}
+
+.time-of-day td {
+  vertical-align: top;
+}
+
+.time-of-day-bar td {
+  vertical-align: top;
+}
+
+.day-blocks {
+  width: 92%;
+  height: 200%;
+  display: flex;
+  flex-direction: column;
+}
+
+.threeday-wrapper {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.threedayview-day {
+  width: 100%;
+  position: relative;
+  display: block;
+  background: #fff;
+  color: #bebebe;
+  align-items: flex-start;
+  cursor: default;
+  z-index: 1;
+  border-right: $default_border_style;
+}
+
+.threedayview-day.in-current-month {
+  color: inherit;
+}
+
+.threedayview-day.current-day {
+  background: #ececec;
+}
+
+.day-of-month {
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  display: block;
+}
+
+.day-of-week {
+  font-weight: 700;
+}
+
+.today span {
+  color: #59dbd6;
+}
+
+.threedayview-day-event {
+  width: 100%;
+  position: absolute;
+  clear: left;
+  float: left;
+  background: #29c2bd;
+  color: white;
+  font-size: 13px;
+  padding: 1% 3% 1% 3%;
+  margin: 0%;
+  cursor: pointer;
+  z-index: 2;
+  border-radius: 6px;
+  border: $default_border_width solid white;
+}
+
+.event-details {
+  width: 100%;
+  height: 100%;
+  margin: 0%;
+  padding: 0%;
+  overflow-y: hidden;
+}
+
+.event-time {
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0%;
+}
+
+.event-name {
+  width: 100%;
+  white-space: normal;
+  overflow: hidden;
+  padding: 0%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.current-time {
+  width: 100%;
+  height: 2%;
+  position: absolute;
+  top: 20%;
+  z-index: 10;
+  visibility: hidden;
+  border-top: 2px solid black;
+}
+
+.current-time.today {
+  visibility: visible;
+}
+
+.helper-text {
+  display: none;
+}
+
+/* mobile css */
+@media screen and (max-width: 768px) {
+  .day-header {
+    height: 3.75%;
+    background: #7B7B7B;
+    color: #fff;
+    border-bottom: 0px;
+    font-size: 16px;
+  }
+
+  .day-of-month {
+    font-size: 15px;
+  }
+
+  .threedayview-day {
+    border-right: 0px;
+  }
+
+  .threedayview-day tr {
+    border-right: $default_border_style;
+  }
+
+  .filler-block {
+    height: 3.75%;
+    background: #7B7B7B;
+    border-right: 5px solid #7B7B7B;
+  }
+
+  .time-of-day {
+    height: 96.25%;
+  }
+
+  .timebar {
+    width: 9%;
+  }
+
+  .time-of-day-bar {
+    height: 96.25%;
+    font-size: 10px;
+  }
+
+  .day-blocks {
+    width: 91%;
+  }
+
+  .helper-text {
+    border-top: $default_border_style;
+    display: block;
+    text-align: center;
+    color: #7B7B7B;
+  }
+}

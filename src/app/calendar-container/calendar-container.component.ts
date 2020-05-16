@@ -132,7 +132,7 @@ export class CalendarContainerComponent implements OnInit {
     this._eventService.changeDateSpan(newDate, calendarView);
     this.enumerateWeek(calendarView);
     // update scroll
-    if(calendarView == ViewState.week || calendarView == ViewState.threeday) {
+    if(calendarView == ViewState.week || calendarView == ViewState.threeday || calendarView == ViewState.day) {
       let _this = this;
       setTimeout(function(){
         this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
