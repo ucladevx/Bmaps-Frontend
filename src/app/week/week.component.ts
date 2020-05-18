@@ -160,14 +160,12 @@ export class WeekComponent implements OnInit {
   }
 
   onRight() {
-    console.log("right")
     if (window.outerWidth <= 768) {
       this.childSwipe.emit(-1)
     }
   }
 
   onLeft() {
-    console.log("left")
     if (window.outerWidth <= 768) {
       this.childSwipe.emit(1)
     }

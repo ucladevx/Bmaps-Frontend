@@ -123,7 +123,6 @@ export class MonthComponent implements OnInit {
 
   // handle right swipe
   onRight() {
-    console.log("right")
     if (window.outerWidth <= 768) {
       this.childSwipe.emit(-1)
     }
@@ -131,7 +130,6 @@ export class MonthComponent implements OnInit {
 
   // handle left swipe
   onLeft() {
-    console.log("left")
     if (window.outerWidth <= 768) {
       this.childSwipe.emit(1)
     }

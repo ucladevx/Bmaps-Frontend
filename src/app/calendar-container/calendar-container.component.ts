@@ -84,10 +84,11 @@ export class CalendarContainerComponent implements OnInit {
 
   // retrieves child and change date span on swipe
   onActivate(componentReference) {
-    componentReference.childSwipe.subscribe((direction) => {
-      console.log("HI!")
-      this.changeDateSpan(direction, this.currentView);
-   })
+    if (componentReference.childSwipe){
+        componentReference.childSwipe.subscribe((direction) => {
+          this.changeDateSpan(direction, this.currentView);
+       })
+    }
   }
 
   // update the currently displayed date
