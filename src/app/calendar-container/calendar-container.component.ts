@@ -133,23 +133,6 @@ export class CalendarContainerComponent implements OnInit {
     }
   }
 
-  // on swipe left
-  doSwipeLeft() {
-    console.log("Parent swipe left")
-    if (window.outerWidth <= 768) {
-      this.changeDateSpan(1, this.currentView);
-    }
-  }
-
-  // on swipe right
-  doSwipeRight() {
-    console.log("Parent swipe right")
-    if (window.outerWidth <= 768) {
-      this.changeDateSpan(-1, this.currentView);
-    }
-  }
-
-
   // calculate the week number
   enumerateWeek(view: ViewState){
     let firstDate = moment(this._eventService.getSelectedDate());
