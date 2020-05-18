@@ -1,9 +1,9 @@
-<div class="week-container" (panleft)="onLeft()"  (panright)="onRight()">
+<div class="week-container">
   <div class="week-summary">
     {{weekString()}}
   </div>
-  <div class="day-of-week">
-    <div class="row" *ngFor="let day of days">
+  <div class="day-of-week" >
+    <div class="row" *ngFor="let day of days" (panleft)="onLeft()"  (panright)="onRight()">
       <div class="day-slot">
         <div class="day-text">
           <span class="day-name">{{day.dayOfWeek}}</span>
