@@ -20,5 +20,5 @@
     </div>
   </div>
   <!-- where month and week and three-day view appear -->
-  <router-outlet class="router-flex" (swipeLeft)="doSwipeLeft($event)" (swipeRight)="doSwipeRight($event)"></router-outlet>
+  <router-outlet class="router-flex" (activate)="onActivate($event)"></router-outlet>
 </div>

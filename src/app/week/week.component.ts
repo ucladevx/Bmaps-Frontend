@@ -8,6 +8,7 @@ import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import 'hammerjs';
+import { Subject } from 'rxjs'; // toss into service???
 
 @Component({
   selector: 'app-week',
@@ -29,11 +30,11 @@ export class WeekComponent implements OnInit {
   private zIndexArray: { [id: number] : Number } = {};
   private scrollPosition: number = 0;
 
-  @Output("swipeLeft") swipeLeft: EventEmitter<any> = new EventEmitter();
-  @Output("swipeRight") swipeRight: EventEmitter<any> = new EventEmitter();
+  @Output() childSwipe: EventEmitter<any> = new EventEmitter();
 
   constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
+  // ngOnDestroy??? where????
   ngOnInit() {
 
     // whenever selected date changes, update calendar
@@ -159,13 +160,17 @@ export class WeekComponent implements OnInit {
   }
 
   onRight() {
-    console.log("Attempted swipe right")
-    this.swipeRight.emit();
+    console.log("right")
+    if (window.outerWidth <= 768) {
+      this.childSwipe.emit(-1)
+    }
   }
 
   onLeft() {
-    console.log("Attempted swipe left")
-    this.swipeLeft.emit();
+    console.log("left")
+    if (window.outerWidth <= 768) {
+      this.childSwipe.emit(1)
+    }
   }
 
   // EVENT STYLING //
