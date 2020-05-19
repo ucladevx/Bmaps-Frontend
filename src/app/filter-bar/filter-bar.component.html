@@ -85,20 +85,21 @@
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
               <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Month'}" (click)="setDateFilter('This Month')">This Month</a>
             </li>
-            <li *ngIf="!isMap" role="presentation">
+            <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
               <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Custom'}" (click)="openDateModal()">Custom Date</a>
             </li>
             <div>
               <jw-modal id="custom-modal-3">
                 <div class="pop-up-content">
-                  <h1 class="pop-up-header">Enter Date Span:</h1>
+                  <h1 *ngIf="!isMap" class="pop-up-header">Enter Date Span:</h1>
+                  <h1 *ngIf="isMap" class="pop-up-header">Enter Date:</h1>
                   <div class="selection-content">
                     <div class="selection-input">
                       <input #startDate type="date" class="short-input" id="start-date"
                       value="{{displayStartDate}}">
-                      <div class="to">to</div>
-                      <input #endDate type="date" class="short-input" id="end-date"
+                      <div [ngStyle]="{'visibility': 'hidden'}" class="to">to</div>
+                      <input [ngStyle]="{'visibility': 'hidden'}" #endDate type="date" class="short-input" id="end-date"
                       value="{{displayEndDate}}">
                     </div>
                     <a class="apply-btn" (click)="setCustomDateFilter(startDate.value, endDate.value)">APPLY</a>

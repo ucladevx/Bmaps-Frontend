@@ -138,7 +138,11 @@ export class FilterBarComponent implements OnInit {
   setCustomDateFilter(startDate: string, endDate: string) {
     let start = moment(startDate).toDate();
     let end = moment(endDate).toDate();
+    if(this.isMap)
+      end = moment(startDate).toDate();
     let tag = moment(start).format("MM/DD")+" - "+moment(end).format("MM/DD");
+    if(moment(start).isSame(moment(end),'d'))
+      tag = moment(start).format("MM/DD");
     this._eventService.setDateFilter("Custom",tag,start,end);
     this.closeModal('custom-modal-3');
   }

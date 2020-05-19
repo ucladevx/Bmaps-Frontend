@@ -737,7 +737,6 @@ export class EventService {
           return !this._locationService.isOnCampus(event.geometry.coordinates[1], event.geometry.coordinates[0]);
           break;
         case 'Custom':
-          return true;
           if(this._locFilter.location != ""){
             let eventLocation = event.properties.place.name;
             if(eventLocation){

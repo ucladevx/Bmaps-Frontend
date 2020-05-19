@@ -51,6 +51,8 @@ export class DateSelectorComponent implements OnInit {
       description = 'Today, ';
     else if (this._dateService.equalDates(date, tomorrow))
       description = 'Tomorrow, ';
+    else
+      description = moment(date).format('ddd') + ', ';
     return `${description} ${month} ${day}`
   }
 
