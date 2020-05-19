@@ -7,6 +7,7 @@
   <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
     <!-- filter dropdowns (location, date, time) -->
     <div class="filters-bar">
+      <div class="filters-row">
       <div class="dropdown clear-all-btn" dropdown id="clear-dropdown">
         <a class="filter-dropdown text-center btn btn-setting" (click)="clearFilters()">
           CLEAR ALL
@@ -54,6 +55,8 @@
             </div>
           </ul>
         </div>
+      </div>
+        <div class="filters-row">
         <!-- date span dropdown -->
         <div class="dropdown" dropdown id="date-dropdown">
           <!-- dropdown button -->
@@ -164,6 +167,7 @@
           </ul>
       </div>
     </div>
+  </div>
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">

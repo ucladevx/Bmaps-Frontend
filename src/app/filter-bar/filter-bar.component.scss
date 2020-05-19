@@ -20,12 +20,7 @@
 }
 
 .clear-all-btn {
-  float: right;
   color: #808080;
-  cursor: pointer;
-  padding-left: 3px;
-  padding-right: 3px;
-  margin-right: 15px;
 }
 
 .clear-all-btn:hover {
@@ -63,7 +58,7 @@
 .dropdown-content {
   display: block;
   flex: 1;
-  flex-basis: 170px;
+  flex-basis: 255px;
   top: 42px;
   background: white;
   z-index: 100;
@@ -73,20 +68,23 @@
 .filters-bar {
   background: white;
   border-bottom: $default_border_style;
-  height: 70px;
+  height: 120px;
   vertical-align: middle;
+  padding: 10px;
+}
+
+.filters-row {
+  height: 50px;
+  display: block;
+  vertical-align: middle;
+  align-items: center;
+  text-align: center;
   font-size: 16px;
   line-height: 50px;
-  padding: 10px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
 }
 
 .dropdown {
 	text-align: center;
-  float: left;
   display: inline-block;
   vertical-align: middle;
   margin-right: 5px;
@@ -149,26 +147,35 @@ li {
 
 
 .categories-wrapper {
-  padding: 10px;
+  padding-top: 10px;
+  height: 135px;
+  width: 42vw;
   overflow-x: scroll;
+  align-items: center;
+  text-align: center;
 }
 
-ul {
-  list-style-type: none;
+.categories-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.categories-wrapper {
+  -ms-overflow-style: none;
 }
 
 .categories-list {
-  max-width: 100%;
+  list-style-type: none;
   padding: 10px;
+  width: 620px;
+  display: inline-block;
+  white-space: nowrap;
+  align-items: center;
+  text-align: center;
   margin-bottom: 0px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
 }
 
 .categories-list li {
-  display: inline;
-  float: left;
+  display: inline-block;
 }
 
 .categ-icon {
@@ -190,10 +197,6 @@ ul {
   width: 100px;
   margin-top: 5px;
   text-align: center;
-}
-
-.categories-list {
-  cursor: pointer;
 }
 
 .categories-list li:hover {
@@ -366,72 +369,8 @@ a.apply-btn:active {
 /* mobile css */
 @media screen and (max-width: 768px) {
 
-  .dropdown-content {
-    flex-basis: 336px;
-  }
-
-  .section-header{
-    width: 20%;
-    font-size: 14px;
-    overflow-x: none;
-    white-space: nowrap;
-  }
-
-  .form-control{
-    width: 80%;
-    font-size: 14px;
-  }
-
-  .short-input{
-    width: 36%;
-    font-size: 14px;
-  }
-
-  .filters-wrapper{
-    width: 80%;
-  }
-
-  .filter-btn {
-    width: 33%;
-    display: block;
-    font-size: 14px;
-    overflow: hidden;
-    white-space: nowrap;
-    line-height:1em;
-  }
-
-  #loc-group {
-    display: none;
-  }
-
-  #loc-group-mobile {
-    display: flex;
-    width: 100%;
-  }
-
-  #food-group {
-    display: none;
-  }
-
-  #food-group-mobile {
-    display: flex;
-    width: 100%;
-  }
-
-  #mobile-only{
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-  }
-
-  #mobile-only p {
-    margin: 0;
-  }
-
-  #mobile-exclude{
-    display: none;
+  .categories-wrapper {
+    width: 100vw;
   }
 
 }
