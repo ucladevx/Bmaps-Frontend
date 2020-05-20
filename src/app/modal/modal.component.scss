@@ -19,6 +19,7 @@ jw-modal {
     /* margin exposes part of the modal background */
     .jw-modal-body {
       width: 30em;
+      max-width: 90vw;
       background: #fff;
       padding: 2em;
       margin: 10em auto;

@@ -24,6 +24,7 @@ export class FilterBarComponent implements OnInit {
   private categHash = {};
   // tag hash
   private locFilter = {};
+  private filterCount = 0;
   private locations = [];
   private dateFilter = {};
   private displayStartDate;
@@ -42,6 +43,7 @@ export class FilterBarComponent implements OnInit {
 
   ngOnInit() {
     // whenever categories or tags are updated, update local variables
+    this._eventService.filterCount$.subscribe(filterCount => { this.filterCount = filterCount; });
     this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
     this._eventService.locFilter$.subscribe(locInfo => { this.locFilter = locInfo; });
     this._eventService.locations$.subscribe(locOptions => { this.locations = locOptions; });
@@ -140,7 +142,7 @@ export class FilterBarComponent implements OnInit {
     let end = moment(endDate).toDate();
     if(this.isMap)
       end = moment(startDate).toDate();
-    let tag = moment(start).format("MM/DD")+" - "+moment(end).format("MM/DD");
+    let tag = moment(start).format("MM/DD")+"-"+moment(end).format("MM/DD");
     if(moment(start).isSame(moment(end),'d'))
       tag = moment(start).format("MM/DD");
     this._eventService.setDateFilter("Custom",tag,start,end);
@@ -174,7 +176,7 @@ export class FilterBarComponent implements OnInit {
     let start = parseInt(starttime[0])*60 + parseInt(starttime[1]);
     let endtime = endTime.split(":");
     let end = parseInt(endtime[0])*60 + parseInt(endtime[1]);
-    let tag = this._dateService.convertTo12Hour(startTime)+" - "+this._dateService.convertTo12Hour(endTime.toLocaleString());
+    let tag = this._dateService.convertTo12Hour(startTime)+"-"+this._dateService.convertTo12Hour(endTime.toLocaleString());
     this._eventService.setTimeFilter("Custom",tag,start,end);
     this.closeModal('custom-modal-4');
   }
@@ -256,7 +258,7 @@ export class FilterBarComponent implements OnInit {
     this.modalService.close(id);
     let _this = this;
     setTimeout(function(){
-      _this.showModal = false;
+      document.getElementById('toggle-btn').click();
     }, 0.1);
   }
 

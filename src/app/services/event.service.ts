@@ -72,6 +72,7 @@ export class EventService {
   private _sidebarEvent;              // current sidebar event (event expanded in sidebar)
 
   // FILTER VARIABLES
+  private _filterCount;               // count number of filters applied
   private _categHash;                 // maps event categories to selection status
   private _locFilter;                 // location string being applied as filter
   private _locations;
@@ -94,6 +95,7 @@ export class EventService {
   private hoveredEventSource: Subject <GeoJson>;
   private clickedEventSource: Subject <GeoJson>;
   private sidebarEventSource: Subject <GeoJson>;
+  private filterCountSource: BehaviorSubject<number>;
   private categHashSource: BehaviorSubject <any>;
   private locFilterSource: BehaviorSubject <any>;
   private locationsSource: BehaviorSubject <any>;
@@ -108,7 +110,7 @@ export class EventService {
   threeDayEvents$; filteredThreeDayEvents$;
   dayEvents$; filteredDayEvents$;
   hoveredEvent$; clickedEvent$; sidebarEvent$;
-  categHash$; locFilter$; locations$; dateFilter$; timeFilter$;
+  filterCount$; categHash$; locFilter$; locations$; dateFilter$; timeFilter$;
 
   // Constructor
   constructor(private router: Router, private http: HttpClient, private _dateService: DateService, private _locationService: LocationService) {
@@ -202,6 +204,11 @@ export class EventService {
     this.sidebarEventSource = new Subject <GeoJson> ();
     this.sidebarEvent$ = this.sidebarEventSource.asObservable();
     this.sidebarEvent$.subscribe(sidebarEventInfo => this._sidebarEvent = sidebarEventInfo);
+
+    // filterCount
+    this.filterCountSource = new BehaviorSubject <number> (0);
+    this.filterCount$ = this.filterCountSource.asObservable();
+    this.filterCount$.subscribe(filterCount => { this._filterCount = filterCount; })
 
     // categHash
     this.categHashSource = new BehaviorSubject <any> ({});
@@ -357,8 +364,7 @@ export class EventService {
       // reset certain filters
       this.resetDateFilter();
       if(newView == ViewState.map || prevView == ViewState.map) {
-        this.clearCategories();
-        this.resetCalendarFilters();
+        this.resetDateFilter();
       }
     }
   }

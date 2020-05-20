@@ -1,7 +1,7 @@
 <div id="filter-div" class="btn-group">
   <!-- filter visbility toggle button -->
   <button *ngIf="showToggleButton" id="toggle-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()">
-    Filters <span class="caret"></span>
+    Filters <span *ngIf="filterCount > 0">({{filterCount}})</span><span class="caret"></span>
   </button>
   <!-- filters menu -->
   <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
@@ -101,8 +101,8 @@
                     <div class="selection-input">
                       <input #startDate type="date" class="short-input" id="start-date"
                       value="{{displayStartDate}}">
-                      <div [ngStyle]="{'visibility': 'hidden'}" class="to">to</div>
-                      <input [ngStyle]="{'visibility': 'hidden'}" #endDate type="date" class="short-input" id="end-date"
+                      <div [ngStyle]="{'visibility': isMap ? 'hidden' : 'visible'}" class="to">to</div>
+                      <input [ngStyle]="{'visibility': isMap ? 'hidden' : 'visible'}" #endDate type="date" class="short-input" id="end-date"
                       value="{{displayEndDate}}">
                     </div>
                     <a class="apply-btn" (click)="setCustomDateFilter(startDate.value, endDate.value)">APPLY</a>
