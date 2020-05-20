@@ -25,13 +25,9 @@
   </button>
   <div class="collapse navbar-collapse d-lg-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
     <!-- map filters -->
-    <span *ngIf="this._eventService.isMapView(); else calendarView">
-      <app-filter-bar-map [showToggleButton]="false"></app-filter-bar-map>
-    </span>
-    <!-- calendar filters -->
-    <ng-template #calendarView>
+    <span>
       <app-filter-bar [showToggleButton]="false"></app-filter-bar>
-    </ng-template>
+    </span>
   </div>
   <!-- Desktop Navbar Controls -->
   <!-- brand info -->

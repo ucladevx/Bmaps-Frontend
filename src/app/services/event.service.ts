@@ -501,6 +501,9 @@ export class EventService {
       displayName: displayName,
       location: locSearch
     };
+    if(locTag == 'none' && this._locFilter.tag && this._locFilter.tag != 'none') this._filterCount--;
+    if(locTag != 'none' && this._locFilter.tag && this._locFilter.tag == 'none') this._filterCount++;
+    this.filterCountSource.next(this._filterCount);
     this._locFilter = tempFilter;
     this.locFilterSource.next(this._locFilter);
   } getLocFilter() { return this._locFilter; }
@@ -513,6 +516,9 @@ export class EventService {
       start: dateStart,
       end: dateEnd
     };
+    if(dateTag == 'none' && this._dateFilter.tag && this._dateFilter.tag != 'none') this._filterCount--;
+    if(dateTag != 'none' && this._dateFilter.tag && this._dateFilter.tag == 'none') this._filterCount++;
+    this.filterCountSource.next(this._filterCount);
     this._dateFilter = tempFilter;
     this.dateFilterSource.next(this._dateFilter);
     if(this._dateFilter && this._dateFilter.start) {
@@ -533,6 +539,9 @@ export class EventService {
       start: timeStart,
       end: timeEnd
     };
+    if(timeTag == 'none' && this._timeFilter.tag && this._timeFilter.tag != 'none') this._filterCount--;
+    if(timeTag != 'none' && this._timeFilter.tag && this._timeFilter.tag == 'none') this._filterCount++;
+    this.filterCountSource.next(this._filterCount);
     this._timeFilter = tempFilter;
     this.timeFilterSource.next(this._timeFilter);
   } getTimeFilter() { return this._timeFilter; }
@@ -612,9 +621,13 @@ export class EventService {
   // clear any selected category filters
   clearCategories() {
     this._categHash["all"].selected = true
-    for (let categ of this.categs.categories)
-      if(this._categHash.hasOwnProperty(categ.toLowerCase()))
+    for (let categ of this.categs.categories) {
+      if(this._categHash.hasOwnProperty(categ.toLowerCase())) {
+        if(this._categHash[categ.toLowerCase()].selected) this._filterCount--;
         this._categHash[categ.toLowerCase()].selected = false;
+      }
+    }
+    this.filterCountSource.next(this._filterCount);
     this.categHashSource.next(this._categHash);
   }
 
@@ -624,6 +637,8 @@ export class EventService {
       return
     // apply the category
     this._categHash[categ].selected = !this._categHash[categ].selected;
+    if(this._categHash[categ].selected) this._filterCount++;
+    else this._filterCount--;
     this._categHash['all'].selected = true;
     for (let categ of this.categs.categories) {
       if(this._categHash.hasOwnProperty(categ.toLowerCase()) && this._categHash[categ.toLowerCase()].selected) {
@@ -632,6 +647,7 @@ export class EventService {
       }
     }
     // update category hash
+    this.filterCountSource.next(this._filterCount);
     this.categHashSource.next(this._categHash);
   }
 

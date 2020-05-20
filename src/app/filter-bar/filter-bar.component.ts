@@ -43,7 +43,7 @@ export class FilterBarComponent implements OnInit {
 
   ngOnInit() {
     // whenever categories or tags are updated, update local variables
-    this._eventService.filterCount$.subscribe(filterCount => { this.filterCount = filterCount; });
+    this._eventService.filterCount$.subscribe(count => { this.filterCount = count; });
     this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
     this._eventService.locFilter$.subscribe(locInfo => { this.locFilter = locInfo; });
     this._eventService.locations$.subscribe(locOptions => { this.locations = locOptions; });
