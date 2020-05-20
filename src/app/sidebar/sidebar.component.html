@@ -1,15 +1,15 @@
 <div class="sidebar-outer flex flex-column">
   <!-- mobile sidebar swipe-up header -->
-  <div class="move-up d-md-none" (click)="toggleMobileSidebar()">
+  <div class="move-up d-lg-none" (click)="toggleMobileSidebar()">
     <i class="icon-lg" id="up" aria-hidden="true" [ngClass]="mobileSidebarVisible ? 'icon-chevron-down' : 'icon-chevron-up'"></i>
     <span class="up-text">Events List</span>
   </div>
   <!-- sidebar itself -->
-  <div class="sidebar flex flex-column" [ngClass]="{'d-none d-md-flex': !mobileSidebarVisible}">
+  <div class="sidebar flex flex-column" [ngClass]="{'d-none d-lg-flex': !mobileSidebarVisible}">
     <!-- date selector -->
-    <app-date-selector class="d-none d-md-block"></app-date-selector>
+    <app-date-selector class="d-none d-lg-block"></app-date-selector>
     <!-- filter dropdown -->
-    <app-filter-bar [showToggleButton]="true" class="d-none d-md-block"></app-filter-bar>
+    <app-filter-bar [showToggleButton]="true" class="d-none d-lg-block"></app-filter-bar>
     <!-- event list -->
     <div id="event-list" [ngClass]="mobileSidebarVisible ? 'event-list-show' : ''">
       <!-- placeholder if no events -->

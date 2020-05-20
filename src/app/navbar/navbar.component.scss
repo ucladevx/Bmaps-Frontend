@@ -7,7 +7,7 @@
   border-color: $default_border_color;
 }
 
-.d-md-none{
+.d-lg-none{
   width: 70%;
   position: relative;
   left: 15%;
@@ -174,7 +174,7 @@ li a {
 }
 
 /* exclusively desktop css */
-@media screen and (min-width: 768px){
+@media screen and (min-width: 992px){
 
   .navbar-toggler {
     display: none !important;
@@ -199,7 +199,7 @@ li a {
     padding: 0;
   }
 
-  .navbar-toggleable-md{
+  .navbar-toggleable-lg{
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
@@ -211,7 +211,7 @@ li a {
     align-items: center;
   }
 
-  .d-md-none-important {
+  .d-lg-none-important {
     display: none !important;
   }
 

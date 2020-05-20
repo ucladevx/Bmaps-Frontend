@@ -237,7 +237,7 @@ export class FilterBarComponent implements OnInit {
 
   @HostListener('document:click')
   clickout() {
-    if (!this.wasInside && !document.body.classList.contains('jw-modal-open')) {
+    if (this.showDropdown && !this.wasInside && !document.body.classList.contains('jw-modal-open')) {
       this.showDropdown = false;
     }
     this.wasInside = false;
