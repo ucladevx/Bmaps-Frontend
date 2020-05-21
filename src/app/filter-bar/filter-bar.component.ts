@@ -15,33 +15,31 @@ import * as moment from 'moment';
 })
 
 export class FilterBarComponent implements OnInit {
-  @Input() showToggleButton: boolean;
-  @ViewChildren('modal_2') modal_2: TemplateRef<any>;
-  @ViewChildren('vc') vc: ViewContainerRef;
-  private wasInside = false;
 
-  // category hash
-  private categHash = {};
-  // tag hash
-  private locFilter = {};
-  private filterCount = 0;
-  private locations = [];
-  private dateFilter = {};
-  private displayStartDate;
-  private displayEndDate;
-  private timeFilter = {};
-  private displayStartTime;
-  private displayEndTime;
-  // dropdown toggle
+  @Input() showToggleButton: boolean;
+  private wasInside = false;
   public showDropdown = false;
-  public showModal = false;
-  // calendar events
   public isMap = false;
   public events = [];
+
+  // filter objects
+  private filterCount = 0;
+  private categHash = {};
+  private locFilter = {};
+  private dateFilter = {};
+  private timeFilter = {};
+  private locations = [];
+
+  // start and end date
+  private displayStartDate;
+  private displayEndDate;
+  private displayStartTime;
+  private displayEndTime;
 
   constructor(private _eventService: EventService, private _dateService: DateService, private modalService: ModalService) {}
 
   ngOnInit() {
+
     // whenever categories or tags are updated, update local variables
     this._eventService.filterCount$.subscribe(count => { this.filterCount = count; });
     this._eventService.categHash$.subscribe(categHash => { this.categHash = categHash; });
@@ -58,6 +56,7 @@ export class FilterBarComponent implements OnInit {
       this.displayStartTime = this._dateService.convertNumToTime(timeInfo.start);
       this.displayEndTime = this._dateService.convertNumToTime(timeInfo.end);
     });
+
     // whenever calendar events change, update the local events variable
     this._eventService.monthEvents$.subscribe(events => {
       if(this._eventService.getCurrentView() == ViewState.month)
@@ -74,6 +73,52 @@ export class FilterBarComponent implements OnInit {
 
   }
 
+  // toggle dropdown on/off
+  toggleDropdown() { this.showDropdown = !this.showDropdown; }
+
+  // clear filters
+  clearFilters(): void { this._eventService.resetFilters(); }
+
+  // click behavior
+  @HostListener('click')
+  clickInside() {
+    this.wasInside = true;
+  }
+
+  // click behavior
+  @HostListener('document:click')
+  clickout() {
+    if (this.showDropdown && !this.wasInside && !document.body.classList.contains('jw-modal-open'))
+      this.showDropdown = false;
+    this.wasInside = false;
+  }
+
+  // LOCATION FILTER //
+
+  setLocFilter(locInput: string){
+    let tag = locInput;
+    if(this.locFilter.hasOwnProperty('tag') && this.locFilter['tag'] == locInput)
+      tag = 'none';
+    this._eventService.setLocFilter(tag,tag,'');
+  }
+
+  setCustomLocFilter(locSearch: string){
+    if(locSearch != ''){
+      let abbrev = locSearch.substring(0,10);
+      if(locSearch != abbrev) abbrev = abbrev+"...";
+      this._eventService.setLocFilter('Custom', abbrev, locSearch);
+    } else { this._eventService.setLocFilter('none','none',''); }
+    this.closeModal('custom-modal-2');
+  }
+
+  openLocModal() {
+    if(this.locFilter['tag'] != 'Custom') {
+      (<HTMLInputElement>document.getElementById('search')).value = '';
+      this.modalService.open('custom-modal-2');
+    } else { this._eventService.resetLocFilter(); }
+  }
+
+  // autofill the custom locations filter
   autofill() {
     let search = document.querySelector('#search');
     let results = document.querySelector('#searchresults');
@@ -91,20 +136,8 @@ export class FilterBarComponent implements OnInit {
     results.appendChild(set);
   }
 
-  // determine whether a category should be displayed
-  displayCategory(categKey: string){
-    switch(this._eventService.getCurrentView()){
-      case ViewState.month:
-        return (this.categHash[categKey].numEventsMonth > 0); break;
-      case ViewState.week:
-        return (this.categHash[categKey].numEventsWeek > 0); break;
-      case ViewState.threeday:
-        return (this.categHash[categKey].numEventsThreeDay > 0); break;
-    }
-    return false;
-  }
+  // DATE FILTER //
 
-  // update date filter
   setDateFilter(dateInput: string){
     let tag = dateInput;
     if(this.dateFilter.hasOwnProperty('tag') && this.dateFilter['tag'] == dateInput)
@@ -157,13 +190,11 @@ export class FilterBarComponent implements OnInit {
       this.displayEndDate= bounds.endDate.format('YYYY-MM-DD');
       (<HTMLInputElement>document.getElementById('end-date')).value = this.displayEndDate;
       this.modalService.open('custom-modal-3');
-      this.showModal = true;
-    } else {
-      this._eventService.resetDateFilter();
-    }
+    } else { this._eventService.resetDateFilter(); }
   }
 
-  // update time filter
+  // TIME FILTER //
+
   setTimeFilter(timeInput: string){
     let tag = timeInput;
     if(this.timeFilter.hasOwnProperty('tag') && this.timeFilter['tag'] == timeInput)
@@ -188,62 +219,24 @@ export class FilterBarComponent implements OnInit {
       this.displayEndTime = this._dateService.convertNumToTime(1439);
       (<HTMLInputElement>document.getElementById('end-time')).value = this.displayEndTime;
       this.modalService.open('custom-modal-4');
-      this.showModal = true;
-    } else {
-      this._eventService.resetTimeFilter();
+    } else { this._eventService.resetTimeFilter(); }
+  }
+
+  // CATEGORIES //
+
+  displayCategory(categKey: string){
+    switch(this._eventService.getCurrentView()){
+      case ViewState.month:
+        return (this.categHash[categKey].numEventsMonth > 0); break;
+      case ViewState.week:
+        return (this.categHash[categKey].numEventsWeek > 0); break;
+      case ViewState.threeday:
+        return (this.categHash[categKey].numEventsThreeDay > 0); break;
     }
+    return false;
   }
 
-  // update location filter
-  setLocFilter(locInput: string){
-    let tag = locInput;
-    if(this.locFilter.hasOwnProperty('tag') && this.locFilter['tag'] == locInput)
-      tag = 'none';
-    this._eventService.setLocFilter(tag,tag,'');
-  }
-  setCustomLocFilter(locSearch: string){
-    let abbrev = locSearch.substring(0,10);
-    if(locSearch != abbrev) abbrev = abbrev+"...";
-    this._eventService.setLocFilter('Custom', abbrev, locSearch);
-    this.closeModal('custom-modal-2');
-  }
-
-  openLocModal() {
-    if(this.locFilter['tag'] != 'Custom') {
-      (<HTMLInputElement>document.getElementById('search')).value = '';
-      this.modalService.open('custom-modal-2');
-      this.showModal = true;
-    } else {
-      this._eventService.resetLocFilter();
-    }
-  }
-
-
-  // update category
   categoryClicked(category: string): void { this._eventService.toggleCategory(category); }
-
-  // toggle dropdown on/off
-  toggleDropdown() { this.showDropdown = !this.showDropdown; }
-
-  // clear categories
-  resetCategories(): void { this._eventService.clearCategories(); }
-
-  // clear filters
-  clearFilters(): void { this._eventService.resetFilters(); }
-
-  // click behavior
-  @HostListener('click')
-  clickInside() {
-    this.wasInside = true;
-  }
-
-  @HostListener('document:click')
-  clickout() {
-    if (this.showDropdown && !this.wasInside && !document.body.classList.contains('jw-modal-open')) {
-      this.showDropdown = false;
-    }
-    this.wasInside = false;
-  }
 
   // helper function for returning object keys
   private objectKeys(obj) {
@@ -254,6 +247,7 @@ export class FilterBarComponent implements OnInit {
     return keys;
   }
 
+  // close a custom filter modal
   closeModal(id: string) {
     this.modalService.close(id);
     let _this = this;

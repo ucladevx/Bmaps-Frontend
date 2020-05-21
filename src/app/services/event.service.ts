@@ -72,10 +72,10 @@ export class EventService {
   private _sidebarEvent;              // current sidebar event (event expanded in sidebar)
 
   // FILTER VARIABLES
-  private _filterCount;               // count number of filters applied
+  private _filterCount;               // number of filters being applied
   private _categHash;                 // maps event categories to selection status
   private _locFilter;                 // location string being applied as filter
-  private _locations;
+  private _locations;                 // list of all possible locations
   private _dateFilter;                // range of dates being applied as filter
   private _timeFilter;                // range of times being applied as filter
 
@@ -235,7 +235,6 @@ export class EventService {
     this.timeFilter$ = this.timeFilterSource.asObservable();
     this.timeFilter$.subscribe(timeHash => { this._timeFilter = timeHash; this.applyAllFilters(); });
 
-
     this._selectedDate = new Date();
     // Initialize variables
     this.http.get <FeatureCollection> (this.getEventsURL()).subscribe(allEvents => {
@@ -363,9 +362,8 @@ export class EventService {
       this.setCurrentView(newView);
       // reset certain filters
       this.resetDateFilter();
-      if(newView == ViewState.map || prevView == ViewState.map) {
+      if(newView == ViewState.map || prevView == ViewState.map)
         this.resetDateFilter();
-      }
     }
   }
 
@@ -495,20 +493,27 @@ export class EventService {
     this.resetTimeFilter();
   }
 
+  // update the overall filter count when the given filter.tag is updated to newTag
+  private updateFilterCount(newTag, filter) {
+    if(newTag == 'none' && filter.tag && filter.tag != 'none') this._filterCount--;
+    if(newTag != 'none' && filter.tag && filter.tag == 'none') this._filterCount++;
+    this.filterCountSource.next(this._filterCount);
+  }
+
+  // methods for updating the location filter
   setLocFilter(locTag: string, displayName: string, locSearch: string){
     let tempFilter = {
       tag: locTag,
       displayName: displayName,
       location: locSearch
     };
-    if(locTag == 'none' && this._locFilter.tag && this._locFilter.tag != 'none') this._filterCount--;
-    if(locTag != 'none' && this._locFilter.tag && this._locFilter.tag == 'none') this._filterCount++;
-    this.filterCountSource.next(this._filterCount);
+    this.updateFilterCount(locTag, this._locFilter);
     this._locFilter = tempFilter;
     this.locFilterSource.next(this._locFilter);
   } getLocFilter() { return this._locFilter; }
   resetLocFilter() { this.setLocFilter('none','none',''); }
 
+  // methods for updating the date filter
   setDateFilter(dateTag: string, displayName: string, dateStart: Date, dateEnd: Date){
     let tempFilter = {
       tag: dateTag,
@@ -516,9 +521,7 @@ export class EventService {
       start: dateStart,
       end: dateEnd
     };
-    if(dateTag == 'none' && this._dateFilter.tag && this._dateFilter.tag != 'none') this._filterCount--;
-    if(dateTag != 'none' && this._dateFilter.tag && this._dateFilter.tag == 'none') this._filterCount++;
-    this.filterCountSource.next(this._filterCount);
+    this.updateFilterCount(dateTag, this._dateFilter);
     this._dateFilter = tempFilter;
     this.dateFilterSource.next(this._dateFilter);
     if(this._dateFilter && this._dateFilter.start) {
@@ -532,6 +535,7 @@ export class EventService {
     this.setDateFilter('none','none',bounds.startDate.toDate(),bounds.endDate.toDate());
   }
 
+  // methods for updating the time filter
   setTimeFilter(timeTag: string, displayName: string, timeStart: number, timeEnd: number){
     let tempFilter = {
       tag: timeTag,
@@ -539,9 +543,7 @@ export class EventService {
       start: timeStart,
       end: timeEnd
     };
-    if(timeTag == 'none' && this._timeFilter.tag && this._timeFilter.tag != 'none') this._filterCount--;
-    if(timeTag != 'none' && this._timeFilter.tag && this._timeFilter.tag == 'none') this._filterCount++;
-    this.filterCountSource.next(this._filterCount);
+    this.updateFilterCount(timeTag, this._timeFilter);
     this._timeFilter = tempFilter;
     this.timeFilterSource.next(this._timeFilter);
   } getTimeFilter() { return this._timeFilter; }
@@ -713,7 +715,9 @@ export class EventService {
   private passesDate(event: GeoJson): boolean {
     if(this._dateFilter.hasOwnProperty('tag') && this._dateFilter['tag'] != 'none') {
       let eventDate = moment(event.properties.start_time);
-      return this._dateService.isBetween(eventDate, moment(this._dateFilter.start).startOf('day'), moment(this._dateFilter.end).endOf('day'));
+      return this._dateService.isBetween(eventDate,
+        moment(this._dateFilter.start).startOf('day'),
+        moment(this._dateFilter.end).endOf('day'));
     }
     return true;
   }
@@ -729,7 +733,8 @@ export class EventService {
           return this._dateService.isBetween(moment(),eventStartTime,eventEndTime);
           break;
         case 'Upcoming':
-          return (minStart > this._dateService.convertTimeToNum(moment()) && minStart <= (this._dateService.convertTimeToNum(moment())+UPCOMING_LEN));
+          return (minStart > this._dateService.convertTimeToNum(moment()) &&
+            minStart <= (this._dateService.convertTimeToNum(moment())+UPCOMING_LEN));
           break;
         case 'Morning':
           return (minStart >= MORNING_START && minStart <= MORNING_END);
@@ -763,10 +768,8 @@ export class EventService {
             let eventLocation = event.properties.place.name;
             if(eventLocation){
               let inputVal = new RegExp(this._locFilter.location.trim(), 'i');
-              if(inputVal.test(eventLocation))
-                return true;
-            }
-          }
+              if(inputVal.test(eventLocation)) return true;
+          }}
           return false;
           break;
       }

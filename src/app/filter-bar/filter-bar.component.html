@@ -1,18 +1,18 @@
 <div id="filter-div" class="btn-group">
   <!-- filter visbility toggle button -->
   <button *ngIf="showToggleButton" id="toggle-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()">
-    Filters <span *ngIf="filterCount > 0">({{filterCount}})</span><span class="caret"></span>
+    Filters <span *ngIf="filterCount > 0">({{filterCount}})</span>
+    <span class="caret"></span>
   </button>
   <!-- filters menu -->
   <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
     <!-- filter dropdowns (location, date, time) -->
     <div class="filters-bar">
       <div class="filters-row" id="row-1">
-      <div class="dropdown clear-all-btn" dropdown id="clear-dropdown">
-        <a class="filter-dropdown text-center btn btn-setting" (click)="clearFilters()">
-          CLEAR ALL
-        </a>
-      </div>
+        <!-- clear all button -->
+        <div class="dropdown clear-all-btn" dropdown id="clear-dropdown">
+          <a class="filter-dropdown text-center btn btn-setting" (click)="clearFilters()">CLEAR ALL</a>
+        </div>
         <!-- location dropdown -->
         <div class="dropdown" dropdown id="loc-dropdown">
           <!-- dropdown button -->
@@ -42,10 +42,9 @@
                   <h1 class="pop-up-header">Enter Location:</h1>
                   <div class="selection-content">
                     <div class="selection-input">
-                      <input #locSearch id="search" tabindex="1" list="searchresults" name="places" class="places" placeholder="Enter a Location" (keyup)="autofill()" autocomplete="off">
-                      <template id="resultstemplate">
-                        <option *ngFor="let loc of locations">{{loc}}</option>
-                      </template>
+                      <input #locSearch id="search" tabindex="1" list="searchresults" name="places"
+                        class="places" placeholder="Enter a Location" (keyup)="autofill()" autocomplete="off">
+                      <template id="resultstemplate"><option *ngFor="let loc of locations">{{loc}}</option></template>
                       <datalist id="searchresults"></datalist>
                     </div>
                     <a class="apply-btn" (click)="setCustomLocFilter(locSearch.value)">APPLY</a>
@@ -56,7 +55,7 @@
           </ul>
         </div>
       </div>
-        <div class="filters-row" id="row-2">
+      <div class="filters-row" id="row-2">
         <!-- date span dropdown -->
         <div class="dropdown" dropdown id="date-dropdown">
           <!-- dropdown button -->
@@ -99,11 +98,10 @@
                   <h1 *ngIf="isMap" class="pop-up-header">Enter Date:</h1>
                   <div class="selection-content">
                     <div class="selection-input">
-                      <input #startDate type="date" class="short-input" id="start-date"
-                      value="{{displayStartDate}}">
+                      <input #startDate type="date" class="short-input" id="start-date" value="{{displayStartDate}}">
                       <div [ngStyle]="{'visibility': isMap ? 'hidden' : 'visible'}" class="to">to</div>
-                      <input [ngStyle]="{'visibility': isMap ? 'hidden' : 'visible'}" #endDate type="date" class="short-input" id="end-date"
-                      value="{{displayEndDate}}">
+                      <input [ngStyle]="{'visibility': isMap ? 'hidden' : 'visible'}" #endDate
+                        type="date" class="short-input" id="end-date" value="{{displayEndDate}}">
                     </div>
                     <a class="apply-btn" (click)="setCustomDateFilter(startDate.value, endDate.value)">APPLY</a>
                   </div>
@@ -153,11 +151,9 @@
                   <h1 class="pop-up-header">Enter Time Span:</h1>
                   <div class="selection-content">
                     <div class="selection-input">
-                      <input #startTime type="time" class="short-input" id="start-time"
-                      value="{{displayStartTime}}">
+                      <input #startTime type="time" class="short-input" id="start-time" value="{{displayStartTime}}">
                       <div class="to">to</div>
-                      <input #endTime type="time" class="short-input" id="end-time"
-                      value="{{displayEndTime}}">
+                      <input #endTime type="time" class="short-input" id="end-time" value="{{displayEndTime}}">
                     </div>
                     <a class="apply-btn" (click)="setCustomTimeFilter(startTime.value, endTime.value)">APPLY</a>
                   </div>
@@ -165,9 +161,9 @@
               </jw-modal>
             </div>
           </ul>
+        </div>
       </div>
     </div>
-  </div>
     <div *ngIf="categHash" class="categories-wrapper">
       <ul class="categories-list" role="menu">
         <li *ngFor="let categKey of objectKeys(categHash)">
@@ -180,9 +176,7 @@
                 <img class="categ-icon" width="60px" src="assets/images/categories/{{categKey}}.png"/>
               </div></ng-template>
             </div>
-            <div class="icon-label">
-              {{categHash[categKey].formattedCategory}}
-            </div>
+            <div class="icon-label">{{categHash[categKey].formattedCategory}}</div>
           </a>
         </li>
       </ul>
