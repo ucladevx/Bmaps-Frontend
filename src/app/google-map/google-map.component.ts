@@ -38,6 +38,7 @@ export class GoogleMapComponent implements OnInit {
   };
 
   markers = [];
+  markerDict = {};
   infoContent = "Hello";
 
   markerClicked: boolean = false;
@@ -68,6 +69,25 @@ export class GoogleMapComponent implements OnInit {
       console.log(eventCollection);
       this.updateSource(eventCollection);
     });
+
+    // whenever clicked event changes, ease to event pin
+    this._eventService.clickedEvent$.subscribe((clickedEventInfo) => {
+      // this.selectEvent(clickedEventInfo);
+      // if(clickedEventInfo == null){
+      //   this.map.easeTo({
+      //     center: [-118.445320, 34.066915],
+      //     zoom: 15,
+      //     pitch: 60,
+      //     bearing: 0
+      //   });
+      // }
+      console.log(clickedEventInfo);
+    });
+
+    // // whenever selected date changes, update calendar
+    // this._eventService.selectedDate$.subscribe(date => {
+    //   this.ngZone.run( () => { this.updateCalendar(date); });
+    // });
 
     // whenever clicked event changes, ease to event pin
     // this._eventService.clickedEvent$.subscribe(clickedEventInfo => {
@@ -133,7 +153,6 @@ export class GoogleMapComponent implements OnInit {
   }
 
   addMarker = (latitude: number, longitude: number, event: GeoJson) => {
-
     console.log("event");
     console.log(event);
 
@@ -180,7 +199,10 @@ export class GoogleMapComponent implements OnInit {
 
     this._eventService.updateClickedEvent(marker._title._value);
     this._eventService.updateSidebarEvent(marker._title._value);
-    this.router.navigate(['', {outlets: {sidebar: ['detail', marker._title._value.id]}}]);
+    this.router.navigate([
+      "",
+      { outlets: { sidebar: ["detail", marker._title._value.id] } },
+    ]);
   }
 
   mouseoverMarker(marker: MapMarker, content: string) {
