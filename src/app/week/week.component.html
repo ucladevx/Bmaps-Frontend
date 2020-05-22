@@ -4,11 +4,9 @@
   </div>
   <div class="day-of-week" >
     <div class="row" *ngFor="let day of days" (panleft)="onLeft()"  (panright)="onRight()">
-      <div class="day-slot">
-        <div class="day-text">
+      <div class="day-text">
           <span class="day-name">{{day.dayOfWeek}}</span>
           <span class="day-month">{{day.dayOfMonth}}</span>
-        </div>
       </div>
       <div class="weekview-day-event" id="{{'event-' + event.id}}"
       *ngFor="let event of day.events" (click)="openEvent(event)" [ngStyle]="styleEvent(event)">
