@@ -1,4 +1,4 @@
-<nav class="navbar navbar-toggleable-md">
+<nav class="navbar navbar-toggleable-lg">
   <!-- Mobile Navbar Controls -->
   <!-- menu dropdown -->
   <button (click)="toggleMenuCollapse()" class="navbar-toggler navbar-toggler-left" type="button"
@@ -7,12 +7,12 @@
       <i class="icon-times" aria-hidden="true" *ngIf="!isMenuCollapsed"></i>
   </button>
   <!-- date selector -->
-  <div *ngIf="isMapSelected; else calendarViewSelect" class="d-md-none">
+  <div *ngIf="isMapSelected; else calendarViewSelect" class="d-lg-none">
     <app-date-selector></app-date-selector>
   </div>
   <!-- calendar view select -->
   <ng-template #calendarViewSelect>
-    <div class="d-md-none mobile-calendar-view-switch">
+    <div class="d-lg-none mobile-calendar-view-switch">
       <span [ngClass]="currentView == 1 ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(1)">3-Day</span>
       <span [ngClass]="currentView == 2 ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(2)">Week</span>
       <span [ngClass]="currentView == 3 ? 'mobile-calendar-view-button active' : 'mobile-calendar-view-button'" (click)="changeView(3)">Month</span>
@@ -23,20 +23,16 @@
     <i class="icon-filter" id="filter-dropdown-toggle" aria-hidden="true" *ngIf="isFilterCollapsed"></i>
     <i class="icon-times" id="filter-dropdown-toggle-2" aria-hidden="true" *ngIf="!isFilterCollapsed"></i>
   </button>
-  <div class="collapse navbar-collapse d-md-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
+  <div class="collapse navbar-collapse d-lg-none-important filter" id="filter-collapse" [collapse]="isFilterCollapsed">
     <!-- map filters -->
-    <span *ngIf="this._eventService.isMapView(); else calendarView">
-      <app-filter-bar-map [showToggleButton]="false"></app-filter-bar-map>
+    <span>
+      <app-filter-bar [showToggleButton]="false"></app-filter-bar>
     </span>
-    <!-- calendar filters -->
-    <ng-template #calendarView>
-      <app-filter-bar-calendar [showToggleButton]="false"></app-filter-bar-calendar>
-    </ng-template>
   </div>
   <!-- Desktop Navbar Controls -->
   <!-- brand info -->
   <div class="navbar-brand">
-    <a class="d-none d-md-inline-block" id="navbar-brand" href="/">
+    <a class="d-none d-lg-inline-block" id="navbar-brand" href="/">
       <img class="nav-logo" src="/assets/images/map-icon-small.png" width="" height="30" class="align-top" alt="">
       <span id="brand-name">bmaps</span>
     </a>

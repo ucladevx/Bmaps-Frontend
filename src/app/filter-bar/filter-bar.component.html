@@ -1,0 +1,185 @@
+<div id="filter-div" class="btn-group">
+  <!-- filter visbility toggle button -->
+  <button *ngIf="showToggleButton" id="toggle-btn" type="button" class="btn dropdown-toggle" (click)="toggleDropdown()">
+    Filters <span *ngIf="filterCount > 0">({{filterCount}})</span>
+    <span class="caret"></span>
+  </button>
+  <!-- filters menu -->
+  <div *ngIf="showDropdown || !showToggleButton" class="dropdown-content" [ngClass]="{'show-toggle-btn': showToggleButton}">
+    <!-- filter dropdowns (location, date, time) -->
+    <div class="filters-bar">
+      <div class="filters-row" id="row-1">
+        <!-- clear all button -->
+        <div class="dropdown clear-all-btn" dropdown id="clear-dropdown">
+          <a class="filter-dropdown text-center btn btn-setting" (click)="clearFilters()">CLEAR ALL</a>
+        </div>
+        <!-- location dropdown -->
+        <div class="dropdown" dropdown id="loc-dropdown">
+          <!-- dropdown button -->
+          <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
+          [ngClass]="{'selected-dropdown' : locFilter.tag != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="locFilter.tag == 'none'">Location</span>
+            <span *ngIf="locFilter.tag != 'none'">{{locFilter.displayName}}</span>
+            <span class="caret"></span>
+          </a>
+          <!-- options -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter.tag == 'On Campus'}" (click)="setLocFilter('On Campus')">On Campus</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter.tag == 'Off Campus'}" (click)="setLocFilter('Off Campus')">Off Campus</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : locFilter.tag == 'Custom'}" (click)="openLocModal()">Custom Location</a>
+            </li>
+            <div>
+              <jw-modal id="custom-modal-2">
+                <div class="pop-up-content">
+                  <h1 class="pop-up-header">Enter Location:</h1>
+                  <div class="selection-content">
+                    <div class="selection-input">
+                      <input #locSearch id="search" tabindex="1" list="searchresults" name="places"
+                        class="places" placeholder="Enter a Location" (keyup)="autofill()" autocomplete="off">
+                      <template id="resultstemplate"><option *ngFor="let loc of locations">{{loc}}</option></template>
+                      <datalist id="searchresults"></datalist>
+                    </div>
+                    <a class="apply-btn" (click)="setCustomLocFilter(locSearch.value)">APPLY</a>
+                  </div>
+                </div>
+              </jw-modal>
+            </div>
+          </ul>
+        </div>
+      </div>
+      <div class="filters-row" id="row-2">
+        <!-- date span dropdown -->
+        <div class="dropdown" dropdown id="date-dropdown">
+          <!-- dropdown button -->
+          <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
+          [ngClass]="{'selected-dropdown' : dateFilter.tag != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="dateFilter.tag == 'none'">Date</span>
+            <span *ngIf="dateFilter.tag != 'none'">{{dateFilter.displayName}}</span>
+            <span class="caret dropdown-icon"></span>
+          </a>
+          <!-- options -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Today'}" (click)="setDateFilter('Today')">Today</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Tomorrow'}" (click)="setDateFilter('Tomorrow')">Tomorrow</a>
+            </li>
+            <li *ngIf="!isMap" role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Week'}" (click)="setDateFilter('This Week')">This Week</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Weekend'}" (click)="setDateFilter('This Weekend')">This Weekend</a>
+            </li>
+            <li *ngIf="!isMap" role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'This Month'}" (click)="setDateFilter('This Month')">This Month</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : dateFilter.tag == 'Custom'}" (click)="openDateModal()">Custom Date</a>
+            </li>
+            <div>
+              <jw-modal id="custom-modal-3">
+                <div class="pop-up-content">
+                  <h1 *ngIf="!isMap" class="pop-up-header">Enter Date Span:</h1>
+                  <h1 *ngIf="isMap" class="pop-up-header">Enter Date:</h1>
+                  <div class="selection-content">
+                    <div class="selection-input">
+                      <input #startDate type="date" class="short-input" id="start-date" value="{{displayStartDate}}">
+                      <div [ngStyle]="{'visibility': isMap ? 'hidden' : 'visible'}" class="to">to</div>
+                      <input [ngStyle]="{'visibility': isMap ? 'hidden' : 'visible'}" #endDate
+                        type="date" class="short-input" id="end-date" value="{{displayEndDate}}">
+                    </div>
+                    <a class="apply-btn" (click)="setCustomDateFilter(startDate.value, endDate.value)">APPLY</a>
+                  </div>
+                </div>
+              </jw-modal>
+            </div>
+          </ul>
+        </div>
+        <!-- time dropdown -->
+        <div class="dropdown" dropdown id="time-dropdown">
+          <!-- dropdown button -->
+          <a dropdownToggle class="filter-dropdown text-center btn btn-setting dropdown-toggle popupContainer"
+          [ngClass]="{'selected-dropdown' : timeFilter.tag != 'none'}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span *ngIf="timeFilter.tag == 'none'">Time</span>
+            <span *ngIf="timeFilter.tag != 'none'">{{timeFilter.displayName}}</span>
+            <span class="caret"></span>
+          </a>
+          <!-- options -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="menu1">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Happening Now'}" (click)="setTimeFilter('Happening Now')">Happening Now</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Upcoming'}" (click)="setTimeFilter('Upcoming')">Upcoming</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Morning'}" (click)="setTimeFilter('Morning')">Morning</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Afternoon'}" (click)="setTimeFilter('Afternoon')">Afternoon</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Evening'}" (click)="setTimeFilter('Evening')">Evening</a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#myModal"></a>
+              <a class="dd-item" [ngClass]="{'selected-dd-item' : timeFilter.tag == 'Custom'}" (click)="openTimeModal()">Custom Time</a>
+            </li>
+            <div>
+              <jw-modal id="custom-modal-4">
+                <div class="pop-up-content">
+                  <h1 class="pop-up-header">Enter Time Span:</h1>
+                  <div class="selection-content">
+                    <div class="selection-input">
+                      <input #startTime type="time" class="short-input" id="start-time" value="{{displayStartTime}}">
+                      <div class="to">to</div>
+                      <input #endTime type="time" class="short-input" id="end-time" value="{{displayEndTime}}">
+                    </div>
+                    <a class="apply-btn" (click)="setCustomTimeFilter(startTime.value, endTime.value)">APPLY</a>
+                  </div>
+                </div>
+              </jw-modal>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="categHash" class="categories-wrapper">
+      <ul class="categories-list" role="menu">
+        <li *ngFor="let categKey of objectKeys(categHash)">
+          <a (click)="categoryClicked(categKey)">
+            <div class="icon-container">
+              <div *ngIf="categHash[categKey].selected; else unchecked">
+                <img class="categ-icon" width="60px" src="assets/images/categories/{{categKey}}-1.png"/>
+              </div>
+              <ng-template #unchecked class="icon-container selected-icon"><div>
+                <img class="categ-icon" width="60px" src="assets/images/categories/{{categKey}}.png"/>
+              </div></ng-template>
+            </div>
+            <div class="icon-label">{{categHash[categKey].formattedCategory}}</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

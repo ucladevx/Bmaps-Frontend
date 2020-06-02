@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FilterBarCalendarComponent } from './filter-bar-calendar.component';
+import { FilterBarComponent } from './filter-bar.component';
 
-describe('FilterBarCalendarComponent', () => {
+describe('FilterBarComponent', () => {
 
-  let component: FilterBarCalendarComponent;
-  let fixture: ComponentFixture<FilterBarCalendarComponent>;
+  let component: FilterBarComponent;
+  let fixture: ComponentFixture<FilterBarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FilterBarCalendarComponent ]
+      declarations: [ FilterBarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FilterBarCalendarComponent);
+    fixture = TestBed.createComponent(FilterBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

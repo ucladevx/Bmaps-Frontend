@@ -60,13 +60,13 @@
   font-size: 14px;
 }
 
-.md-text {
+.lg-text {
   display: initial;
   font-size: 20px;
 }
 
 /* mobile css */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
 
   .selector {
     height: 40px;
@@ -78,7 +78,7 @@
     display: initial;
   }
 
-  .md-text {
+  .lg-text {
     display: none;
   }
 

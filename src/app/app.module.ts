@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 // import { AngularFontAwesomeModule } from 'angular-font-awesome';
-
 import { EventService } from './services/event.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -24,9 +23,7 @@ import { CalendarContainerComponent } from './calendar-container/calendar-contai
 import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { ThreeDayComponent } from './three-day/three-day.component';
-
-import { FilterBarMapComponent } from './filter-bar-map/filter-bar-map.component';
-import { FilterBarCalendarComponent } from './filter-bar-calendar/filter-bar-calendar.component';
+import { FilterBarComponent } from './filter-bar/filter-bar.component';
 import { ModalComponent } from './modal/modal.component';
 
 const appRoutes: Routes = [
@@ -56,8 +53,7 @@ const appRoutes: Routes = [
     MonthComponent,
     WeekComponent,
     ThreeDayComponent,
-    FilterBarMapComponent,
-    FilterBarCalendarComponent,
+    FilterBarComponent,
     ModalComponent
   ],
   imports: [
