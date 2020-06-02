@@ -4,6 +4,7 @@ $selector-padding: 9.7px;
 
 :host {
   flex: 1;
+  width: 100%;
 }
 
 router-outlet.router-flex + * {
@@ -99,9 +100,9 @@ router-outlet.router-flex + * {
   color: #fff;
 }
 
+
 /* mobile css */
 @media screen and (max-width: 992px) {
-
   .selector {
     display: none;
   }

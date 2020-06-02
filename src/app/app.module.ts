@@ -33,7 +33,7 @@ const appRoutes: Routes = [
     children: [
       {path: 'month', component: MonthComponent},
       {path: 'week', component: WeekComponent},
-      {path: 'three-day', component: ThreeDayComponent}
+      {path: 'three-day', component: ThreeDayComponent},
     ]
   },
   { path: 'list', outlet: 'sidebar', component: SidebarComponent },

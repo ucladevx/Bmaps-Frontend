@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, Output, EventEmitter } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { GeoJson } from '../map';
 import { EventService } from '../services/event.service';
@@ -23,6 +23,8 @@ export class MonthComponent implements OnInit {
   // events to display
   private filteredEvents: GeoJson[];
   private eventsByDay: { [day: number] : GeoJson[] } = {};
+
+  @Output() childSwipe: EventEmitter<any> = new EventEmitter();
 
   constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
@@ -117,6 +119,20 @@ export class MonthComponent implements OnInit {
     if(this._eventService.getSelectedDate() != day.date)
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
     this._eventService.changeDateSpan(day.date, ViewState.month);
+  }
+
+  // handle right swipe
+  onRight() {
+    if (window.outerWidth <= 768) {
+      this.childSwipe.emit(-1)
+    }
+  }
+
+  // handle left swipe
+  onLeft() {
+    if (window.outerWidth <= 768) {
+      this.childSwipe.emit(1)
+    }
   }
 
 }

@@ -46,7 +46,6 @@ export class CalendarContainerComponent implements OnInit {
   constructor(public router: Router, private _eventService: EventService, private _dateService: DateService, route: ActivatedRoute) { }
 
   ngOnInit() {
-
     // whenever current date changes, update view and week number
     this._eventService.selectedDate$.subscribe(date => {
       this.viewDateChange(date);
@@ -83,6 +82,15 @@ export class CalendarContainerComponent implements OnInit {
 
   }
 
+  // retrieves child and change date span on swipe
+  onActivate(componentReference) {
+    if (componentReference.childSwipe){
+        componentReference.childSwipe.subscribe((direction) => {
+          this.changeDateSpan(direction, this.currentView);
+       })
+    }
+  }
+
   // update the currently displayed date
   viewDateChange(set : Date) {
     if(set) this.viewDate = set.toLocaleDateString("en-US", {month: 'long', year: 'numeric'});
@@ -117,7 +125,7 @@ export class CalendarContainerComponent implements OnInit {
     this._eventService.changeDateSpan(newDate, calendarView);
     this.enumerateWeek(calendarView);
     // update scroll
-    if(calendarView == ViewState.week || calendarView == ViewState.threeday) {
+    if(calendarView == ViewState.threeday) {
       let _this = this;
       setTimeout(function(){
         this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;

@@ -34,6 +34,10 @@ app-navbar {
   height: 100%;
 }
 
+.max-width {
+  width: 100%;
+}
+
 /* exclusively desktop css */
 @media only screen and (min-width: 992px) {
   .sidebar-container, .map-container {

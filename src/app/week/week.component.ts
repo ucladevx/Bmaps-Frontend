@@ -7,6 +7,8 @@ import { CalendarDay } from '../services/event.service';
 import { ViewState } from '../view-enum';
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import 'hammerjs';
+import { Subject } from 'rxjs'; // toss into service???
 
 @Component({
   selector: 'app-week',
@@ -28,8 +30,11 @@ export class WeekComponent implements OnInit {
   private zIndexArray: { [id: number] : Number } = {};
   private scrollPosition: number = 0;
 
+  @Output() childSwipe: EventEmitter<any> = new EventEmitter();
+
   constructor(private _eventService: EventService, private _dateService: DateService, private router: Router, private ngZone: NgZone) {}
 
+  // ngOnDestroy??? where????
   ngOnInit() {
 
     // whenever selected date changes, update calendar
@@ -59,17 +64,17 @@ export class WeekComponent implements OnInit {
     // update sidebar
     if(this._eventService.getSidebarEvent() == null){
       this.router.navigate( ['', {outlets: {sidebar: ['list']}}]);
-    }
-
-    // set scroll
-    setTimeout(function(){
-      this.scrollPosition = document.getElementById("scrollable").scrollHeight*0.288;
-      document.getElementById("scrollable").scrollTop = this.scrollPosition;
-    }, 0.1);
+    }    
 
     // set current view
     this._eventService.setCurrentView(ViewState.week);
 
+  }
+
+  // return a string for the current week
+  weekString() {
+    let firstDay = moment(this.days[0].date)
+    return (firstDay.startOf('week').format("MMMM D") + " - " + firstDay.startOf('week').clone().add(6, 'day').format("MMMM D, YYYY"));
   }
 
   //display the calendar
@@ -127,7 +132,7 @@ export class WeekComponent implements OnInit {
     else return [];
   }
 
-  // highlight selected day
+  // highlight selected day -- currently not in use
   onSelect(day: CalendarDay): void{
     if(this._eventService.getClickedEvent() && this._eventService.getSelectedDate() != day.date &&
       moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth)
@@ -142,95 +147,94 @@ export class WeekComponent implements OnInit {
     this.router.navigate(['', {outlets: {sidebar: ['detail', event.id]}}]);
   }
 
-  // EVENT STYLING //
-
+  // return event name
+  // unnecessary... 
   eventName(event: GeoJson): string{
     return event.properties.name;
   }
 
+  // return event time
   eventTime(event: GeoJson): string{
     return this._dateService.formatTime(event.properties.start_time) +
       " - " + this._dateService.formatTime(event.properties.end_time);
   }
 
-  // determine the position of the current time bar
-  currentTime() {
-    let now = moment();
-    return this.convertTimeToPercent(now)+"%";
+  onRight() {
+    if (window.outerWidth <= 768) {
+      this.childSwipe.emit(-1)
+    }
   }
 
-  // convert time to top percentage in css
-  convertTimeToPercent(time: Moment) {
-    let increment = 0; let p = 0;
-    if (window.outerWidth <= 768){
-      p = 5; increment = 3.84;
-      if(time.format("A") == "PM")
-        p += 46; increment = 3.77;
-    } else {
-      p = 11; increment = 3.58;
-      if(time.format("A") == "PM")
-        p += 43; increment = 3.55;
+  onLeft() {
+    if (window.outerWidth <= 768) {
+      this.childSwipe.emit(1)
     }
-    p += (parseInt(time.format("H"))%12)*increment;
-    p += (parseInt(time.format("mm"))/15)*(increment/4);
-    return p;
   }
 
-  // position and size event to match actual start time and duration
-  styleEvent(event: GeoJson, events: GeoJson[]) {
-    // CALCULATE TOP //
-    let start = moment(event.properties.start_time);
-    let top = this.convertTimeToPercent(start);
-    // CALCULATE HEIGHT //
-    let temp = moment(event.properties.end_time);
-    let hours = moment.duration(temp.diff(start)).asHours();
-    if(hours>24){ hours = (hours%24)+1; }
-    let end = start.clone().add(hours,"hours");
-    let bottom = this.convertTimeToPercent(end)
-    let height = bottom-top;
-    if(height<0){ height = 100-top; }
-    // CALCULATE WIDTH AND LEFT //
-    let overlapped = [];
-    let eventIndex = 0;
-    //iterate through surrounding events
-    for(let j = 0; j < events.length; j++){
-      if(events[j] == event){ eventIndex = overlapped.length; }
-      //retrieve start and end time for new event
-      let s = moment(events[j].properties.start_time);
-      let t = moment(events[j].properties.end_time);
-      let h = moment.duration(t.diff(s)).asHours();
-      if(h>24){ h = (h%24)+1; }
-      let e = s.clone().add(h,"hours");
-      //determine whether events overlap
-      if(!s.isSame(end) && !e.isSame(start) &&
-        ((s.isSame(start) && e.isSame(end)) ||
-        (s.isSameOrAfter(start) && s.isBefore(end)) ||
-        (e.isSameOrAfter(start) && e.isBefore(end)) ||
-        (start.isSameOrAfter(s) && start.isBefore(e)) ||
-        (end.isSameOrAfter(s) && end.isBefore(e))))
-      { overlapped.push(events[j]); }
+  // EVENT STYLING //
+
+  // color events according to category
+  styleEvent(event: GeoJson){
+    let color = "#9FC0FF" // default color
+    // color code by first valid category in array
+    for(let i = 0; i < event.properties.categories.length; i++){
+      if (event.properties.categories[i] != null) {
+        color = this.getEventColor(event.properties.categories[i]);
+        break;
+      }
     }
-    // CALCULATE LEFT
-    let left = 2+((98/overlapped.length)*eventIndex);
-    // CALCULATE WIDTH
-    let width = 98-left-(5*(overlapped.length-1-eventIndex));
-    // CALCULATE ZINDEX
-    let z = eventIndex+1;
-    this.zIndexArray[event.id] = z;
-    // account for clicked event
-    let font = "normal";
-    if(this.clickedEvent && this.clickedEvent.id == event.id &&
-      moment(this._eventService.getSelectedDate()).isSame(moment(this.clickedEvent.properties.start_time), 'd')){
-      font = "bold";
-      z = 100;
-    }
-    // CREATE STYLE
     let style = {
-      'top' : top+"%", 'height' : height+"%",
-      'left' : left+"%", 'width' : width+"%",
-      'zIndex' : z, 'fontWeight' : font
+      "background-color" : color + "5F", 
+      'border-top' : '5px solid ' + color,
     }
     return style;
+  }
+
+  getEventColor(category: string): string {
+    if (!category.localeCompare("NETWORKING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("GARDENING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("FOOD"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("DANCE"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("ART"))
+      return'#BBA4FF';
+    else if (!category.localeCompare("HEALTH"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("SPORTS"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("MEETUP"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("COMEDY_PERFORMANCE"))
+      return '#78E6E6';
+    else if (!category.localeCompare("MUSIC"))
+      return '#78E6E6';
+    else if (!category.localeCompare("THEATER"))
+      return '#78E6E6';
+    else if (!category.localeCompare("PARTY"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("CAUSE"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("FILM"))
+      return '#78E6E6';
+    else if (!category.localeCompare("DRINKS"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("FITNESS"))
+      return '#BBA4FF';
+    else if (!category.localeCompare("GAMES"))
+      return '#9FC0FF';
+    else if (!category.localeCompare("LITERATURE"))
+      return '#78E6E6';
+    else if (!category.localeCompare("RELIGION"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("SHOPPING"))
+      return '#FFB5F8';
+    else if (!category.localeCompare("WELLNESS"))
+      return '#9FC0FF';
+    else
+      return '#FFB5F8';
   }
 
 }
