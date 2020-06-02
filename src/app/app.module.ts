@@ -23,8 +23,7 @@ import { CalendarContainerComponent } from './calendar-container/calendar-contai
 import { MonthComponent } from './month/month.component';
 import { WeekComponent } from './week/week.component';
 import { ThreeDayComponent } from './three-day/three-day.component';
-import { FilterBarMapComponent } from './filter-bar-map/filter-bar-map.component';
-import { FilterBarCalendarComponent } from './filter-bar-calendar/filter-bar-calendar.component';
+import { FilterBarComponent } from './filter-bar/filter-bar.component';
 import { ModalComponent } from './modal/modal.component';
 
 const appRoutes: Routes = [
@@ -54,8 +53,7 @@ const appRoutes: Routes = [
     MonthComponent,
     WeekComponent,
     ThreeDayComponent,
-    FilterBarMapComponent,
-    FilterBarCalendarComponent,
+    FilterBarComponent,
     ModalComponent
   ],
   imports: [
