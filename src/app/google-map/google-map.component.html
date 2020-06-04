@@ -8,13 +8,13 @@
   (mapClick)="click($event)">
   <map-marker
     #markerElem
-    *ngFor="let marker of markers"
-    [position]="marker.position"
-    [label]="marker.label"
-    [title]="marker.title"
-    [options]="marker.options"
-    (mapClick)="openInfo(markerElem, marker.info)"
-    (mapMouseover)="mouseoverMarker(markerElem, marker.info)"
+    *ngFor="let marker of markers | keyvalue"
+    [position]="marker.value.position"
+    [label]="marker.value.label"
+    [title]="marker.value.title"
+    [options]="marker.value.options"
+    (mapClick)="openInfo(markerElem, marker.value.info)"
+    (mapMouseover)="mouseoverMarker(markerElem, marker.value.info)"
     (mapMouseout)="mouseoutMarker(markerElem)"
   >
   </map-marker>

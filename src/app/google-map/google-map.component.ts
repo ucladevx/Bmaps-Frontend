@@ -37,7 +37,7 @@ export class GoogleMapComponent implements OnInit {
     },
   };
 
-  markers = [];
+  markers = {};
   markerDict = {};
   infoContent = "Hello";
 
@@ -82,6 +82,13 @@ export class GoogleMapComponent implements OnInit {
       //   });
       // }
       console.log(clickedEventInfo);
+      this.openInfo(this.markers[clickedEventInfo.id], this.markers[clickedEventInfo.id].info);
+      console.log(this.markers[clickedEventInfo.id]);
+      console.log(this.markers)
+    });
+
+    // whenever sidebar event changes, bold event popup
+    this._eventService.sidebarEvent$.subscribe(sidebarEventInfo => {
     });
 
     // // whenever selected date changes, update calendar
@@ -156,7 +163,7 @@ export class GoogleMapComponent implements OnInit {
     console.log("event");
     console.log(event);
 
-    this.markers.push({
+    this.markers[event.id] = {
       position: {
         lat: latitude,
         lng: longitude,
@@ -172,7 +179,7 @@ export class GoogleMapComponent implements OnInit {
       // event: event,
       // tag: event,
       // options: { animation: google.maps.Animation.BOUNCE },
-    });
+    };
   };
 
   click(event: google.maps.MouseEvent) {
@@ -240,7 +247,7 @@ export class GoogleMapComponent implements OnInit {
     // this.map.getSource('events').setData(this.events);
     this.events = eventCollection;
 
-    this.markers = [];
+    this.markers = {};
 
     let eventList = [];
     //iterate through all events

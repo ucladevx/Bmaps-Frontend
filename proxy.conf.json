@@ -1,10 +1,6 @@
 {
   "/api/*": {
-<<<<<<< HEAD
-    "target": "http://localhost:5000",
-=======
     "target": "https://www.bmaps.io/",
->>>>>>> master
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
