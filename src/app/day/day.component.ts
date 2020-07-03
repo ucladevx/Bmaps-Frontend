@@ -17,7 +17,7 @@ import { Moment } from 'moment';
 export class DayComponent implements OnInit {
 
   // visible days
-  public day: CalendarDay;
+  public days: CalendarDay[] = [];
   // view check
   public isDayView: boolean = true;
   // events to display
@@ -78,34 +78,39 @@ export class DayComponent implements OnInit {
       return;
     // compile calendar days according to range of days to be shown on calendar
     let bounds = this._dateService.getViewBounds(dateInMonth, ViewState.day);
-
-    let d: Moment = bounds.startDate.clone()
-
-  	//create CalendarDay object
-  	let weekDay: CalendarDay = {
+    this.days = [];
+    let d: Moment = bounds.startDate.clone();
+    //for (let d: Moment = bounds.startDate.clone(); d.isBefore(bounds.endDate); d.add(1, 'days')) {
+	  //create CalendarDay object
+	  let weekDay: CalendarDay = {
 	    date: d.toDate(),
 	    dayOfMonth: d.date(),
 	    dayOfWeek: d.format('dddd'),
-	    month: d.format('MMMM'),
+	    month: parseInt(d.format('M'))-1,
 	    year: parseInt(d.format('YYYY')),
 	    events: this.getEventsOnDate(d),
 	    isSelected: d.isSame(moment(dateInMonth), 'day'),
 	    isToday: this._dateService.isToday(d.toDate()),
 	    inCurrentMonth: this._dateService.inSameMonth(d,this._eventService.getSelectedDate())
-	};
-    
-    this.day = weekDay
+	  };
+	  this.days.push(weekDay);
+    //}
     // update visible days
-    this._eventService.setVisibleDays([this.day]);
+    this._eventService.setVisibleDays(this.days);
   }
 
-  //retrieve events for the given day
+  getMonthName(): string {
+  	return moment(this.days[0].month+1, 'M').format('MMMM');
+  }
+
+  //retrieve events for the given week
   fillEventsByDay(){
-    //clear events by day for the day
+    console.log(this.filteredEvents.length);
+    //clear events by day for the week
     this.eventsByDay = [];
     if(this.filteredEvents.length < 1)
       return;
-    //iterate through filteredEvents for the current day
+    //iterate through filteredEvents for the current month
     this.filteredEvents.forEach(el => {
       //determine dayOfYear
       let eventDate = moment(el.properties.start_time);
@@ -134,6 +139,9 @@ export class DayComponent implements OnInit {
       moment(this._eventService.getClickedEvent().properties.start_time).date() != day.dayOfMonth)
         this.router.navigate(['', {outlets: {sidebar: ['list']}}]);
     this._eventService.changeDateSpan(day.date, ViewState.day);
+
+    console.log(day.date);
+    console.log(ViewState.day);
   }
 
   // open event in sidebar
@@ -165,7 +173,8 @@ export class DayComponent implements OnInit {
     let today = new Date();
     newDate = this._dateService.getViewBounds(newDate,ViewState.day).startDate.startOf('d').add(delta,'d').toDate();
     if(this._dateService.equalDates(newDate, currDate)) newDate = currDate;
-      this._eventService.changeDateSpan(newDate, ViewState.day);
+    this._eventService.changeDateSpan(newDate, ViewState.day);
+
     // update scroll
     let _this = this;
     setTimeout(function(){

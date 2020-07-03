@@ -125,11 +125,14 @@ export class CalendarContainerComponent implements OnInit {
       // change to day view
       case ViewState.day :
         newDate = this._dateService.getViewBounds(newDate,calendarView).startDate.startOf('d').add(delta,'d').toDate();
+        console.log(newDate);
+        console.log(calendarView);
         if(this._dateService.equalDates(newDate, currDate)) newDate = currDate;
         break;
     }
     // update date span and week number
     this._eventService.changeDateSpan(newDate, calendarView);
+    //this._eventService.changeDateSpan(day.date, ViewState.day);
     this.enumerateWeek(calendarView);
     // update scroll
     if(calendarView == ViewState.week || calendarView == ViewState.threeday || calendarView == ViewState.day) {

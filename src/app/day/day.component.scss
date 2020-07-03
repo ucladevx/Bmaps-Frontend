@@ -14,7 +14,8 @@
 }
 
 .day-header {
-  height: 11%;
+  //height: 11%;
+  height: 7.125%;
   width: 100%;
   display: flex;
   float: left;
@@ -22,7 +23,7 @@
   background: #fff;
   position: -webkit-sticky;
   position: sticky;
-  z-index: 150;
+  z-index: 2;
   top: 0;
   padding: 5% 0% 5% 5%;
   border-top: 0px;
@@ -39,7 +40,8 @@
 }
 
 #scrollable {
-  height: 100%;
+  //height: 100%;
+  height: 87.875%;
   width: 100%;
   margin: 0;
   overflow-y: scroll;
@@ -47,7 +49,9 @@
 
 .timebar {
   width: 8%;
-  height: 200%;
+  //height: 178%;
+  //height: 196.25%;
+  height: 208.11%;
   background: white;
   float: left;
   left: 0;
@@ -70,12 +74,12 @@
 
 .time-of-day {
   width: 100%;
-  height: 89%;
+  height: 100%;
 }
 
 .time-of-day-bar {
   width: 100%;
-  height: 89%;
+  height: 100%;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -142,7 +146,8 @@
 
 .day-blocks {
   width: 92%;
-  height: 200%;
+  //height: 178%;
+  height: 208.11%;
   display: flex;
   flex-direction: column;
 }
@@ -251,7 +256,7 @@
 /* mobile css */
 @media screen and (max-width: 768px) {
   .day-header {
-    height: 3.75%;
+    //height: 3.75%;
     background: #7B7B7B;
     color: #fff;
     border-bottom: 0px;
@@ -277,23 +282,26 @@
   }
 
   .time-of-day {
-    height: 96.25%;
+    //height: 100%;
   }
 
   .timebar {
+    //height: 192.5%;
     width: 9%;
   }
 
   .time-of-day-bar {
-    height: 96.25%;
+    //height: 100%;
     font-size: 10px;
   }
 
   .day-blocks {
+    //height: 192.5%;
     width: 91%;
   }
 
   .helper-text {
+    height: 5%;
     border-top: $default_border_style;
     display: block;
     text-align: center;

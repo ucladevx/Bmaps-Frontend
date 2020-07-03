@@ -1,12 +1,13 @@
 <div class="threedayview-container">
-  <!-- time bar -->
+  <!-- day header -->
+  <div *ngFor="let day of days" class="day-header" id="{{'header'+day.dayOfMonth}}">
+    <span class="day-of-week">{{day.dayOfWeek}},&nbsp;</span><span>{{getMonthName()}} {{day.dayOfMonth}}</span>
+    <!--<span class="regular">{{day.dayOfWeek}}</span><span class="lower-case">{{day.dayOfWeek.toLowerCase()}}</span>
+    <span class="day-of-month">{{day.dayOfMonth}}</span>-->
+  </div>
+
   <div id="scrollable">
-  	<!-- day header -->
-  	<div class="day-header" id="{{'header'+day.dayOfMonth}}">
-  		<span class="day-of-week">{{day.dayOfWeek}},&nbsp;</span><span>{{day.month}} {{day.dayOfMonth}}</span>
-      <!--<span class="regular">{{day.dayOfWeek}}</span><span class="lower-case">{{day.dayOfWeek.toLowerCase()}}</span>
-      <span class="day-of-month">{{day.dayOfMonth}}</span>-->
-  	</div>
+  	<!-- time bar -->
     <div class="timebar">
       <!--<div class="filler-block"></div>-->
       <table class="time-of-day-bar" id="far-left">
@@ -28,7 +29,7 @@
     <!-- threeday days -->
     <div class="day-blocks">
       <div class="threeday-wrapper">
-        <div class="threedayview-day" (click)="onSelect(day)" [ngClass]="{'in-current-month': day.inCurrentMonth, 'today': day.isToday}">
+      	<div *ngFor="let day of days" class="threedayview-day" (click)="onSelect(day)" [ngClass]="{'in-current-month': day.inCurrentMonth, 'today': day.isToday}">
           
           <!-- day divided by time -->
           <table class="time-of-day" (swipeleft)="onPanLeft()" (swiperight)="onPanRight()">

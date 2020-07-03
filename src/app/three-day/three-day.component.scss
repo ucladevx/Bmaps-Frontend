@@ -303,7 +303,12 @@
     width: 91%;
   }
 
+  #scrollable {
+    height: 95%;
+  }
+
   .helper-text {
+    height: 5%;
     border-top: $default_border_style;
     display: block;
     text-align: center;
