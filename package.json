@@ -23,7 +23,7 @@
     "@angular/router": "^9.0.1",
     "@angular/service-worker": "^9.0.1",
     "@zeit/ng-deploy": "^0.3.0",
-    "ajv": "^6.11.0",
+    "ajv": "^6.12.3",
     "clamp-js-main": "^0.11.5",
     "clampify": "^1.2.1",
     "datebook": "^2.0.3",
